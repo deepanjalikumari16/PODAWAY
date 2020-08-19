@@ -1,0 +1,76 @@
+ID: podium
+_schema-version: '2.1'
+parameters:
+  deploy_mode: html5-repo
+version: 0.0.1
+modules:
+  - name: podium-approuter
+    type: approuter.nodejs
+    path: podium-approuter
+    parameters:
+      disk-quota: 256M
+      memory: 256M
+    requires:
+      - name: staging-podium-uaa
+      - name: podium_html5_repo_runtime
+      - name: portal_resources_podium
+        group: destinations
+        properties:
+          name: EXPO_PODIUM_API
+          url: 'https://staging-podium.cfapps.ap11.hana.ondemand.com/'
+          forwardAuthToken: true
+  - name: podium_ui_deployer
+    type: com.sap.html5.application-content
+    path: podium_ui_deployer
+    requires:
+      - name: podium_html5_repo_host
+    build-parameters:
+      requires:
+        - name: MAACDE
+          artifacts:
+            - './*'
+          target-path: resources/MAACDE
+  - name: MAACDE
+    type: html5
+    path: MAACDE
+    build-parameters:
+      builder: custom
+      commands:
+        - npm install
+        - npm run build
+      supported-platforms: []
+      build-result: dist
+  - name: launchpad
+    type: com.sap.portal.content
+    path: launchpad
+    parameters:
+      stack: cflinuxfs3
+      memory: 128M
+      buildpack: 'https://github.com/cloudfoundry/nodejs-buildpack/releases/download/v1.6.39/nodejs-buildpack-cflinuxfs3-v1.6.39.zip'
+    requires:
+      - name: portal_resources_podium
+      - name: staging-podium-uaa
+      - name: podium_html5_repo_host
+      - name: podium_ui_deployer
+resources:
+  - name: podium_html5_repo_runtime
+    parameters:
+      service-plan: app-runtime
+      service: html5-apps-repo
+    type: org.cloudfoundry.managed-service
+  - name: podium_html5_repo_host
+    parameters:
+      service-plan: app-host
+      service: html5-apps-repo
+    type: org.cloudfoundry.managed-service
+  - name: staging-podium-uaa
+    parameters:
+      path: ./xs-security.json
+      service-plan: application
+      service: xsuaa
+    type: org.cloudfoundry.managed-service    
+  - name: portal_resources_podium
+    parameters:
+      service-plan: standard
+      service: portal
+    type: org.cloudfoundry.managed-service

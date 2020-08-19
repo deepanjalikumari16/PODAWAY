@@ -1,0 +1,19 @@
+{
+	"welcomeFile": "/index.html",
+	"authenticationMethod": "route",
+	"logout": {
+		"logoutEndpoint": "/do/logout"
+	},
+	"routes": [{
+			"source": "^/EXPO_PODIUM_API/(.*)$",
+			"target": "$1",
+			"destination": "EXPO_PODIUM_API"
+		}, {
+			"source": "^(.*)$",
+			"target": "$1",
+			"service": "html5-apps-repo-rt",
+			"authenticationType": "xsuaa"
+		}
+
+	]
+}

@@ -1,0 +1,78 @@
+{
+	"_version": "3.0.0",
+	"identification": {
+		"id": "d787fb58-6dd9-4041-aa80-31600fd13bf7-1597667509332",
+		"entityType": "bundle"
+	},
+	"payload": {
+		"catalogs": [{
+			"_version": "3.0.0",
+			"identification": {
+				"id": "defaultCatalogId",
+				"title": "{{title}}",
+				"entityType": "catalog",
+				"i18n": "i18n/defaultCatalogId.properties"
+			},
+			"payload": {
+				"viz": []
+			}
+		}],
+		"groups": [{
+			"_version": "3.0.0",
+			"identification": {
+				"id": "defaultGroupId",
+				"title": "{{title}}",
+				"entityType": "group",
+				"i18n": "i18n/defaultGroupId.properties"
+			},
+			"payload": {
+				"viz": [{
+					"id": "com.coil.podium.MAACDE-0-1597672368722",
+					"appId": "com.coil.podium.MAACDE",
+					"vizId": "manage-device"
+				}, {
+					"id": "com.coil.podium.MAACDE-1-1597672368722",
+					"appId": "com.coil.podium.MAACDE",
+					"vizId": "manage-place"
+				}, {
+					"id": "com.coil.podium.MAACDE-2-1597672368722",
+					"appId": "com.coil.podium.MAACDE",
+					"vizId": "manage-condition"
+				}]
+			}
+		}],
+		"sites": [{
+			"_version": "3.0.0",
+			"identification": {
+				"id": "af70f3c8-1c13-4cb1-8fa6-fed946126cb9-1597667509332",
+				"entityType": "site",
+				"title": "SAP Fiori launchpad site on Cloud Foundry",
+				"description": "SAP Fiori launchpad site on Cloud Foundry, deployed from SAP Web IDE"
+			},
+			"payload": {
+				"config": {
+					"ushellConfig": {
+						"renderers": {
+							"fiori2": {
+								"componentData": {
+									"config": {
+										"applications": {
+											"Shell-home": {}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				"groupsOrder": ["defaultGroupId"],
+				"sap.cloud.portal": {
+					"config": {
+						"theme.id": "sap_fiori_3",
+						"theme.active": ["sap_fiori_3", "sap_fiori_3_dark", "sap_belize_hcb", "sap_belize_hcw"]
+					}
+				}
+			}
+		}]
+	}
+}
