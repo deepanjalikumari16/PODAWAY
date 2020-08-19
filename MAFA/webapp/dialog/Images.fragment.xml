@@ -1,0 +1,11 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+	<Dialog  title="{i18n>TtlImages}" class="sapUiResponsiveContentPadding"  contentWidth="auto" contentHeight="auto" afterOpen="bindDialog" >
+		<Carousel visible="{worklistView>/bImages}" class="sapUiContentPadding" loop="true">
+		</Carousel>
+		<BusyIndicator visible="{worklistView>/bLoadingImages}" />
+		<Title text="{i18n>TxtNoImagesFound}" visible="{= !(${worklistView>/bImages}) &amp;&amp; !(${worklistView>/bLoadingImages}) }"  />
+		<buttons>
+			<Button press="onCancelImage"  text="{i18n>btnClose}"/>
+		</buttons>
+	</Dialog>
+</core:FragmentDefinition>
