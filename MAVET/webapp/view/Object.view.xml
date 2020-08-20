@@ -1,0 +1,141 @@
+<mvc:View controllerName="com.coil.podium.MAEVAT.controller.Object" xmlns:core="sap.ui.core" xmlns:form="sap.ui.layout.form" xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc" xmlns:u="sap.ui.unified">
+	<Page showHeader="false" showFooter="true" class="sapUiResponsiveContentPadding" busy="{objectView>/busy}"
+		busyIndicatorDelay="{objectView>/delay}">
+		<form:Form editable="true" binding="{objectView>/oDetails}">
+			<form:title>
+				<core:Title text="{= ${objectView>/sMode} === 'C' ? ${i18n>TtlCreateEvent} : ${i18n>TtlEditEventDetails} }"/>
+			</form:title>
+			<form:layout>
+				<form:ResponsiveGridLayout labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
+					emptySpanL="4" emptySpanM="0" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1" singleContainerFullSize="false"/>
+			</form:layout>
+			<form:formContainers>
+				<form:FormContainer title="{i18n>TtlEventdetails}">
+					<form:formElements>
+						<form:FormElement label="{i18n>LblType}">
+							<form:fields>
+								<ComboBox enabled="false" selectedKey="{objectView>EventAttractionTypeId}" items="{ path: '/MasterEventAttractionTypeSet' }">
+									<core:Item key="{Id}" text="{EventAttractionType}"/>
+								</ComboBox>
+							</form:fields>
+						</form:FormElement>
+						<form:FormElement label="{i18n>LblTitle}">
+							<form:fields>
+								<Input value="{objectView>Title}"/>
+							</form:fields>
+						</form:FormElement>
+						<form:FormElement label="{i18n>LblDescription}">
+							<form:fields>
+								<TextArea value="{objectView>Description}" rows="6" cols="45"/>
+							</form:fields>
+						</form:FormElement>
+						<form:FormElement visible="{= ${objectView>EventAttractionTypeId} === 1 }" label="{i18n>colTheme}">
+							<form:fields>
+								<ComboBox selectedKey="{objectView>ThemeId}" items="{/ThemeSet}">
+									<core:Item key="{Id}" text="{Theme}"/>
+								</ComboBox>
+							</form:fields>
+						</form:FormElement>
+						<form:FormElement visible="{= ${objectView>EventAttractionTypeId} === 1 }" label="{i18n>LblCategory}">
+							<form:fields>
+								<MultiComboBox selectedKeys="{objectView>Categories}"
+									items="{ path: '/CategorySet', filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : 'false' } ], parameters : { 'select' : 'Id,Category' } }">
+									<core:Item key="{Id}" text="{Category}"/>
+								</MultiComboBox>
+							</form:fields>
+						</form:FormElement>
+						<form:FormElement visible="{= ${objectView>EventAttractionTypeId} === 1 }" label="{i18n>LblAccessibilityEquipmentRequired}">
+							<form:fields>
+								<MultiComboBox selectedKeys="{objectView>AccessibilityDevices}"
+									items="{ path: '/AccessibilityItemSet', filters : [ { path : 'AccessibilityId' , operator : 'EQ' , value1 : '1' }, { path : 'IsArchived' , operator : 'EQ' , value1 : 'false' } ], parameters : { 'select' : 'Id,Title' } }">
+									<core:Item key="{Id}" text="{Title}"/>
+								</MultiComboBox>
+							</form:fields>
+						</form:FormElement>
+						<form:FormElement visible="{= ${objectView>EventAttractionTypeId} === 1 }" label="{i18n>LblHighlights}">
+							<form:fields>
+								<List items="{objectView>Highlights}" mode="Delete" delete="onDelHighlight" >
+									<headerToolbar>
+										<Toolbar>
+											<ToolbarSpacer />
+											<Button icon="sap-icon://add" press="onAddHighlight" />
+										</Toolbar>
+									</headerToolbar>
+									<InputListItem>
+										<Input placeholder="Add Highlight text" value="{objectView>Highlight}"/>
+									</InputListItem>
+								</List>
+							</form:fields>
+						</form:FormElement>
+					</form:formElements>
+				</form:FormContainer>
+				<form:FormContainer title="{i18n>LblLocation}">
+					<form:formElements>
+						<form:FormElement label="{i18n>LblCoordinates}">
+							<form:fields>
+								<VBox>
+									<Input width="100%" description="latitude" value="{objectView>Latitude}" showValueHelp="true" valueHelpRequest="onMap"/>
+									<Input width="100%" description="longitude" value="{objectView>Longitude}" showValueHelp="true" valueHelpRequest="onMap"/>
+								</VBox>
+							</form:fields>
+						</form:FormElement>
+						<form:FormElement label="{i18n>LblBuildingName}">
+							<form:fields>
+								<ComboBox items="{/BuildingSet}" selectedKey="{objectView>BuildingId}">
+									<core:Item key="{Id}" text="{BuildingName}"/>
+								</ComboBox>
+							</form:fields>
+						</form:FormElement>
+						<form:FormElement label="{i18n>LblUploadPlan}">
+							<form:fields>
+								<VBox>
+									<HBox width="100%" visible="{= ${objectView>/oPlan} === null ? false:true }"><Link text="{objectView>/oPlan/FileName}" press="onLnkPlan"/><Button press="onDeletePlan" icon="sap-icon://delete" type="Transparent"/>
+									</HBox>
+									<u:FileUploader visible="{= ${objectView>/oPlan} === null ? true:false }" maximumFileSize="2" fileAllowed="onUpload"
+										tooltip="Upload your file"/>
+								</VBox>
+							</form:fields>
+						</form:FormElement>
+						<form:FormElement label="{i18n>LblUploadImages}">
+							<form:fields>
+								<VBox>
+									<List delete="onDelete"
+										items="{ path : 'objectView>/oImages' , templateShareable:true, filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false } ]}"
+										noDataText="{i18n>TxtNoFileUpload}" mode="Delete">
+										<headerToolbar>
+											<Toolbar>
+												<ToolbarSpacer/>
+												<u:FileUploader maximumFileSize="2" fileAllowed="onUpload" tooltip="Upload your file" buttonOnly="true" buttonText="{i18n>btnAdd}"/>
+											</Toolbar>
+										</headerToolbar>
+										<!--										<StandardListItem title="{objectView>FileName}" icon="{  parts :  [{ path: 'objectView>__metadata' }, { path: 'objectView>Image' } ], formatter : '.formatter.giveImage'      }"
+											iconDensityAware="false" iconInset="false"/>-->
+										<CustomListItem >
+											<FlexBox alignItems="Start" justifyContent="SpaceBetween">
+												<HBox>
+													<Image height="5rem" width="5rem"
+														src="{ parts : [{ path: 'objectView>__metadata' }, { path: 'objectView>Image' } ], formatter : '.formatter.giveImage' }"/>
+													<Text class="sapUiTinyMargin" text="{objectView>FileName}"/>
+												</HBox>
+												<RadioButton text="{i18n>TxtCoverImage}" groupName="g1" selected="{objectView>IsCoverImage}"/>
+											</FlexBox>
+										</CustomListItem>
+									</List>
+								</VBox>
+							</form:fields>
+						</form:FormElement>
+					</form:formElements>
+				</form:FormContainer>
+			</form:formContainers>
+		</form:Form>
+		<!-- Pavillion details fragment -->
+		<footer>
+			<Toolbar>
+				<ToolbarSpacer/>
+				<Button text="{i18n>btnCancel}" press="onCancel"/>
+				<Button text="{i18n>btnSave}" type="Emphasized" press="onSave"/>
+			</Toolbar>
+		</footer>
+	</Page>
+</mvc:View>

@@ -10,7 +10,7 @@ sap.ui.define([
 	// shortcut for sap.m.URLHelper
 	var URLHelper = mobileLibrary.URLHelper;
 
-	return Controller.extend("com.coil.podium.MAFA.controller.BaseController", {
+	return Controller.extend("com.coil.podium.MAEVAT.controller.BaseController", {
 		/**
 		 * Convenience method for accessing the router.
 		 * @public
@@ -29,17 +29,7 @@ sap.ui.define([
 		getModel : function (sName) {
 			return this.getView().getModel(sName);
 		},
-		
-		giveImage : function(oMetadata, ImageData){
-			if(oMetadata)
-			{   
-				var sPathname = new URL(oMetadata.media_src).pathname;
-				return ("/EXPO_PODIUM_API").concat(sPathname);
-			}
-			return ("data:image/png;base64,").concat(ImageData);
-		},
-		
-		
+
 		/**
 		 * Convenience method for setting the view model.
 		 * @public
@@ -72,6 +62,46 @@ sap.ui.define([
 				oViewModel.getProperty("/shareSendEmailMessage")
 			);
 		},
+		/*
+		 * Common function for showing warning dialogs
+		 * @param sMsgTxt : i18n Key string
+		 * @param _fnYes : Optional: function to be called for Yes response
+		 */
+		showWarning : function(sMsgTxt, _fnYes, sType){
+		var that = this;
+		//Polyfill for previous calls
+		sType = sType === undefined ? "warning" : sType;
+		var	aActions = sType === "warning" ? 
+			[sap.m.MessageBox.Action.NO , sap.m.MessageBox.Action.YES] : [sap.m.MessageBox.Action.OK];
+		
+		
+		MessageBox[sType].call(MessageBox,this.getResourceBundle().getText(sMsgTxt) , 
+		{
+			actions : aActions,
+			onClose : function(sAction){
+				if(sAction === "YES")
+				{
+					_fnYes && _fnYes.apply(that);
+				}
+			}
+		} );
+
+	/*
+		MessageBox.warning(this.getResourceBundle().getText(sMsgTxt) , 
+		{
+			actions : [sap.m.MessageBox.Action.NO , sap.m.MessageBox.Action.YES],
+			onClose : function(sAction){
+				if(sAction === "YES")
+				{
+					_fnYes && _fnYes.apply(that);
+				}
+			}
+		}
+		);	
+		*/
+		
+			
+		},
 
 		/**
 		* Adds a history entry in the FLP page history
@@ -99,7 +129,6 @@ sap.ui.define([
 				}
 			};
 		})(),
-		
 		/** 
 		 * 
 		 * @param oFile
@@ -122,47 +151,10 @@ sap.ui.define([
 			});
 		},
 		
-		/*
-		 * Common function for showing warning dialogs
-		 * @param sMsgTxt : i18n Key string
-		 * @param _fnYes : Optional: function to be called for Yes response
-		 */
-		showWarning : function(sMsgTxt, _fnYes){
-		var that = this;
-		MessageBox.warning(this.getResourceBundle().getText(sMsgTxt) , 
-		{
-			actions : [sap.m.MessageBox.Action.NO , sap.m.MessageBox.Action.YES],
-			onClose : function(sAction){
-				if(sAction === "YES")
-				{
-					_fnYes && _fnYes.apply(that);
-				}
-			}
-		}
-		);	
+		_fnSuccessToast: function(sMsg){
+			MessageToast.show( this.getResourceBundle().getText(sMsg) );
 			
-		},
-		
-		showError : function(sMsg){
-			var that = this;
-			MessageBox.error(sMsg , 
-		{
-			title: that.getResourceBundle().getText("TtlError")
 		}
-		);		
-			
-		},
-		
-		
-		
-		/*
-		 * Common function for showing toast messages
-		 * @param sMsgTxt: i18n Key string
-		 */
-		showToast : function(sMsgTxt){
-			MessageToast.show(this.getResourceBundle().getText(sMsgTxt));                       
-		}
-		
 
 	});
 

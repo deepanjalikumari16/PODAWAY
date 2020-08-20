@@ -1,0 +1,131 @@
+<mvc:View controllerName="com.coil.podium.ManageVisitor.controller.Object" xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:uxap="sap.uxap"
+	xmlns:mvc="sap.ui.core.mvc">
+	<uxap:ObjectPageLayout id="ObjectPageLayout" subSectionLayout="TitleOnLeft" showTitleInHeaderContent="true">
+		<uxap:headerTitle>
+			<uxap:ObjectPageHeader objectImageShape="Square" objectTitle="{FirstName} {LastName}" objectSubtitle="" id="ObjectPageLayoutHeaderTitle"
+				isObjectTitleAlwaysVisible="false" objectImageURI="{PhotoURL}" isObjectSubtitleAlwaysVisible="false" isActionAreaAlwaysVisible="true"
+				showPlaceholder="true">
+				<uxap:actions>
+					<uxap:ObjectPageHeaderActionButton press="onCall" icon="sap-icon://call" hideText="false" type="Emphasized"  text="{i18n>btnCall}"/>
+					<uxap:ObjectPageHeaderActionButton press="onSMS" icon="sap-icon://letter" hideText="false" type="Emphasized" text="{i18n>btnMessage}"/>
+				</uxap:actions>
+			</uxap:ObjectPageHeader>
+		</uxap:headerTitle>
+		<uxap:headerContent>
+			<l:VerticalLayout>
+				<ObjectAttribute title="{i18n>colNationality}" text="{Country}"/>
+				<ObjectAttribute title="{i18n>LblAddress}" text="{Address} , {City}"/>
+			</l:VerticalLayout>
+			<l:VerticalLayout>
+				<Label text="{i18n>LblContactDetails}" design="Bold"/>
+				<!--<ObjectAttribute title="{i18n>LblEmail}" text="{Email}"/>-->
+				<Link text="{Email}" press="onEmail"/>
+				<Link text="{DialCode}{Mobile}" press="onTel"/>
+				<Link text="{EmergencyDialCode}{EmergencyMobile}" press="onTel"/>
+				<!--<ObjectAttribute title="{i18n>LblContact}" text="{DialCode}{Mobile}" />-->
+				<!--<ObjectAttribute title="{i18n>colEmergencyContact}" text="{EmergencyDialCode}{EmergencyMobile}" />-->
+			</l:VerticalLayout>
+			<l:VerticalLayout>
+				<Label text="{i18n>LblThingsAvoided}" design="Bold"/>
+				<Text text="{ parts : [ { path : 'UserPreference/UserAccessibilityList' },{ path : 'i18n>Three'} ], formatter : '.AccessibiltyItems' }"/>
+			</l:VerticalLayout>
+			<l:VerticalLayout>
+				<Label text="{i18n>colAccessibilityNeeds}" design="Bold"/>
+				<ObjectAttribute
+					text="{ parts : [ { path : 'UserPreference/UserAccessibilityList' },{ path : 'i18n>One'} ], formatter : '.AccessibiltyItems' }"/>
+			</l:VerticalLayout>
+		</uxap:headerContent>
+		<uxap:sections>
+			<uxap:ObjectPageSection title="{i18n>TtlNewRequests}">
+				<uxap:subSections>
+					<uxap:ObjectPageSubSection>
+						<Table id="newReqs" width="auto" busy="{objectView>/btableBusy}" noDataText="{i18n>TxtNoNewReqs}"
+							busyIndicatorDelay="{objectView>/tableBusyDelay}" growing="true" growingScrollToLoad="true" growingThreshold="20"
+							updateFinished=".onUpdateFinished">
+							<columns>
+								<!--<Column>-->
+								<!--	<Text text="{i18n>colPODsName}"/>-->
+								<!--</Column>-->
+								<Column >
+									<Text text="{i18n>colRequest}"/>
+								</Column>
+								<Column >
+									<Text text="{i18n>colIncidentType}"/>
+								</Column>
+								<Column >
+									<Text text="{i18n>colRequestedDevice}"/>
+								</Column>
+								<Column>
+									<Text text="{i18n>colAssistance}"/>
+								</Column>
+								<Column column="7%">
+									<Text text="{i18n>colNavigate}"/>
+								</Column>
+							</columns>
+						</Table>
+					</uxap:ObjectPageSubSection>
+				</uxap:subSections>
+			</uxap:ObjectPageSection>
+			<uxap:ObjectPageSection title="{i18n>TtlOngoingRequests}">
+				<uxap:subSections>
+					<uxap:ObjectPageSubSection>
+						<Table id="OngReqs" width="auto" busy="{objectView>/btableBusy}" noDataText="{i18n>TxtNoPndgReqs}"
+							busyIndicatorDelay="{objectView>/tableBusyDelay}" growing="true" growingScrollToLoad="true" growingThreshold="20"
+							updateFinished=".onUpdateFinished">
+							<columns>
+								<!--<Column>-->
+								<!--	<Text text="{i18n>colPODsName}"/>-->
+								<!--</Column>-->
+								<Column >
+									<Text text="{i18n>colRequest}"/>
+								</Column>
+								<Column >
+									<Text text="{i18n>colIncidentType}"/>
+								</Column>
+								<Column >
+									<Text text="{i18n>colRequestedDevice}"/>
+								</Column>
+								<Column>
+									<Text text="{i18n>colAssistance}"/>
+								</Column>
+								<Column column="7%">
+									<Text text="{i18n>colNavigate}"/>
+								</Column>
+							</columns>
+						</Table>
+					</uxap:ObjectPageSubSection>
+				</uxap:subSections>
+			</uxap:ObjectPageSection>
+			<uxap:ObjectPageSection title="{i18n>TtlCompletedRequests}">
+				<uxap:subSections>
+					<uxap:ObjectPageSubSection>
+						<Table id="CompReqs" width="auto" busy="{objectView>/btableBusy}" headerText="" noDataText="{i18n>NoCompReqs}"
+							busyIndicatorDelay="{objectView>/tableBusyDelay}" growing="true" growingScrollToLoad="true" growingThreshold="20"
+							updateFinished=".onUpdateFinished">
+							<columns>
+								<!--<Column>-->
+								<!--	<Text text="{i18n>colPODsName}"/>-->
+								<!--</Column>-->
+								<Column >
+									<Text text="{i18n>colRequest}"/>
+								</Column>
+								<Column >
+									<Text text="{i18n>colIncidentType}"/>
+								</Column>
+								<Column >
+									<Text text="{i18n>colRequestedDevice}"/>
+								</Column>
+								<Column>
+									<Text text="{i18n>colAssistance}"/>
+								</Column>
+								<Column column="7%">
+									<Text text="{i18n>colNavigate}"/>
+								</Column>
+							</columns>
+						</Table>
+					</uxap:ObjectPageSubSection>
+				</uxap:subSections>
+			</uxap:ObjectPageSection>
+		</uxap:sections>
+	</uxap:ObjectPageLayout>
+</mvc:View>

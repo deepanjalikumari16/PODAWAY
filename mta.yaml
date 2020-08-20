@@ -50,6 +50,14 @@ modules:
           artifacts:
             - './*'
           target-path: resources/Manage_Event_Info          
+        - name: MAVET
+          artifacts:
+            - './*'
+          target-path: resources/MAVET          
+        - name: ManageVisitor
+          artifacts:
+            - './*'
+          target-path: resources/ManageVisitor          
   - name: MAACDE
     type: html5
     path: MAACDE
@@ -103,6 +111,26 @@ modules:
   - name: Manage_Event_Info
     type: html5
     path: Manage_Event_Info
+    build-parameters:
+      builder: custom
+      commands:
+        - npm install
+        - npm run build
+      supported-platforms: []
+      build-result: dist      
+  - name: MAVET
+    type: html5
+    path: MAVET
+    build-parameters:
+      builder: custom
+      commands:
+        - npm install
+        - npm run build
+      supported-platforms: []
+      build-result: dist      
+  - name: ManageVisitor
+    type: html5
+    path: ManageVisitor
     build-parameters:
       builder: custom
       commands:

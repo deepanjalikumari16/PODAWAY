@@ -1,0 +1,105 @@
+<mvc:View controllerName="com.coil.podium.ManageVisitor.controller.Worklist" xmlns:core="sap.ui.core" xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc" xmlns:f="sap.f" xmlns:fb="sap.ui.comp.filterbar">
+	<f:DynamicPage id="page">
+		<f:title>
+			<f:DynamicPageTitle>
+				<f:heading>
+					<Title text="{i18n>worklistTitle}"/>
+				</f:heading>
+			</f:DynamicPageTitle>
+		</f:title>
+		<f:header>
+			<f:DynamicPageHeader pinnable="true">
+				<f:content>
+					<!-- TODO: filter functionality -->
+					<fb:FilterBar id="filterbar" reset="onReset" search="onSearch" useToolbar="false" showGoOnFB="true">
+						<fb:filterGroupItems>
+							<fb:FilterGroupItem visibleInFilterBar="true" groupName="A" name="Country" groupTitle="Filters" label="{i18n>LblNationality}">
+								<fb:control>
+									<ComboBox items="{ path: '/MasterCountrySet' }">
+										<core:Item key="{Country}" text="{Country}"/>
+									</ComboBox>
+								</fb:control>
+							</fb:FilterGroupItem>
+							<fb:FilterGroupItem visibleInFilterBar="true" groupName="A" name="Category" groupTitle="Filters" label="{i18n>colPODCategory}">
+								<fb:control>
+									<ComboBox
+										items="{path: '/AccessibilityItemSet', filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path: 'AccessibilityId' , operator : 'EQ' , value1 : 2 } ], parameters : { select : 'Title' } }">
+										<core:Item key="{Id}" text="{Title}"/>
+									</ComboBox>
+								</fb:control>
+							</fb:FilterGroupItem>
+							<fb:FilterGroupItem visibleInFilterBar="true" groupName="A" name="Things" groupTitle="Filters" label="{i18n>LblThingsAvoided}">
+								<fb:control>
+									<ComboBox
+										items="{path: '/AccessibilityItemSet', filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path: 'AccessibilityId' , operator : 'EQ' , value1 : 3 } ], parameters : { select : 'Title' } }">
+										<core:Item key="{Id}" text="{Title}"/>
+									</ComboBox>
+								</fb:control>
+							</fb:FilterGroupItem>
+						</fb:filterGroupItems>
+					</fb:FilterBar>
+				</f:content>
+			</f:DynamicPageHeader>
+		</f:header>
+		<f:content>
+			<!--  	sorter: {
+						path: 'Description',
+						descending: false
+					}, -->
+			<!-- TODO: JSON binding due to filter -->
+			<!-- 	items="{ path: '/UserSet', parameters : { expand : 'UserPreference/UserAccessibilityList/AccessiblityItem,UserPreference/UserAccessibilityList' }, filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false } 
+				, { path: 'RoleId' , operator : 'EQ' , value1: 3  }  ] }"  -->
+			<Table id="table" busy="{worklistView>/btableBusy}" headerText="{worklistView>/worklistTableTitle}"
+				noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
+				growingThreshold="20" updateFinished=".onUpdateFinished">
+				<!--	<headerToolbar>
+					<OverflowToolbar>
+						<Title id="tableHeader" text="{worklistView>/worklistTableTitle}" level="H3"/>
+					
+					</OverflowToolbar>
+				</headerToolbar>-->
+				<items>
+					<ColumnListItem type="Navigation"  press="onPress">
+						<cells>
+							<Text text="{worklistView>FirstName} {worklistView>LastName}"/>
+							<Text
+								text="{ parts : [ { path : 'worklistView>UserPreference/UserAccessibilityList/results' },{ path : 'i18n>Two'} ], formatter : '.AccessibiltyItems' }"/>
+							<Text
+								text="{ parts : [ { path : 'worklistView>UserPreference/UserAccessibilityList/results' },{ path : 'i18n>One'} ], formatter : '.AccessibiltyItems' }"/>
+							<Text
+								text="{parts : [ {path : 'worklistView>EmergencyDialCode' } , {path : 'worklistView>EmergencyMobile' } ] , formatter : '.formatter.EmergencyNumber' }"/>
+							<Text text="{worklistView>Country}"/>
+							<Text
+								text="{ parts : [ { path : 'worklistView>UserPreference/UserAccessibilityList/results' },{ path : 'i18n>Three'} ], formatter : '.AccessibiltyItems' }"/>
+							<Button type="Transparent" icon="sap-icon://locate-me"/>
+						</cells>
+					</ColumnListItem>
+				</items>
+				<columns>
+					<Column>
+						<Text text="{i18n>colPODsName}"/>
+					</Column>
+					<Column >
+						<Text text="{i18n>colPODCategory}"/>
+					</Column>
+					<Column >
+						<Text text="{i18n>colAccessibilityNeeds}"/>
+					</Column>
+					<Column width="12%" >
+						<Text text="{i18n>colEmergencyContact}"/>
+					</Column>
+					<Column width="10%" >
+						<Text text="{i18n>colNationality}"/>
+					</Column >
+					<Column >
+						<Text text="{i18n>colThingsIAvoid}"/>
+					</Column>
+					<Column width="7%" >
+						<Text text="{i18n>colNavigate}"/>
+					</Column>
+				</columns>
+			</Table>
+		</f:content>
+	</f:DynamicPage>
+</mvc:View>

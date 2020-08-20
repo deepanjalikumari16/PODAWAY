@@ -1,0 +1,110 @@
+<mvc:View controllerName="com.coil.podium.MAEVAT.controller.Worklist"  xmlns:fb="sap.ui.comp.filterbar" xmlns:core="sap.ui.core" 	xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc"	xmlns:f="sap.f"	>
+<f:DynamicPage>
+	<f:title>
+			<f:DynamicPageTitle>
+				<f:heading>
+					<Title text="{=  ${worklistView>/iEvtType} === 1  ?  ${i18n>worklistViewTitle1} :  ${i18n>worklistViewTitle2} }"/>
+				</f:heading>
+			</f:DynamicPageTitle>
+		</f:title>
+		<f:header>
+			<f:DynamicPageHeader pinnable="true">
+				<f:content>
+					<fb:FilterBar id="filterbar" reset="onReset" search="onSearch" useToolbar="false" basicSearch="sfld" showGoOnFB="true">
+						<fb:filterGroupItems>
+							<!--<fb:FilterGroupItem visibleInFilterBar="true" groupName="A" name="EventAttractionTypeId" groupTitle="Filters" label="{i18n>colFacilityType}">
+								<fb:control>
+									<ComboBox items="{/MasterEventAttractionTypeSet}">
+										<core:Item key="{Id}" text="{EventAttractionType}"/>
+									</ComboBox>
+								</fb:control>
+							</fb:FilterGroupItem>-->
+							<fb:FilterGroupItem visibleInFilterBar="true" groupName="A" name="BuildingId" groupTitle="Filters" label="{i18n>colLocation}">
+								<fb:control>
+									<ComboBox items="{/BuildingSet}">
+										<core:Item key="{Id}" text="{BuildingName}"/>
+									</ComboBox>
+								</fb:control>
+							</fb:FilterGroupItem>
+						</fb:filterGroupItems>
+					</fb:FilterBar>
+				</f:content>
+			</f:DynamicPageHeader>
+		</f:header>
+		<f:content>
+			<!--  
+			
+			items="{ path: '/EventAttractionSet', parameters : { expand : 'Theme,EventAttractionType,Building,AccessibilityDevices' }, filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false } ] }"
+			
+			-->
+				<Table id="table" width="auto" 	
+				noDataText="{worklistView>/tableNoDataText}" busy="{worklistView>/bTableBusy}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
+				updateFinished=".onUpdateFinished">
+				<headerToolbar>
+					<OverflowToolbar>
+						<Title id="tableHeader" text="{worklistView>/worklistTableTitle}" level="H3"/>
+						<ToolbarSpacer/>
+						<Button press="onOrderPref"  text="{i18n>btnEventPreferences}" >	
+						<layoutData>
+								<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
+							</layoutData></Button>
+						<Button text="{i18n>btnAdd}" icon="sap-icon://add" press="onAdd">
+							<layoutData>
+								<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
+							</layoutData>
+						</Button>
+					</OverflowToolbar>
+				</headerToolbar>
+				<columns>
+					<Column>
+						<Text text="{i18n>TitleLabel}"/>
+					</Column>
+					<Column>
+						<Text text="{i18n>colType}"/>
+					</Column>
+					<Column visible="{= ${worklistView>/iEvtType} === 1 }" >
+						<Text text="{i18n>colTheme}"  />
+					</Column>
+					<Column visible="{= ${worklistView>/iEvtType} === 1 }" >
+						<Text text="{i18n>colLocation}"/>
+					</Column>
+					<Column visible="{= ${worklistView>/iEvtType} === 1 }" >
+						<Text text="{i18n>colEquipments}"/>
+					</Column>
+					<Column width="7rem" >
+						<Text text="{i18n>colImages}"/>
+					</Column>
+					<Column width="7rem" >
+						<Text text="{i18n>colPlan}"/>
+					</Column>
+					<Column width="5rem">
+						<Text text="{i18n>colEdit}"/>
+					</Column>
+					<Column width="5rem">
+						<Text text="{i18n>colRemove}"/>
+					</Column>
+				</columns>
+				<items>
+					<ColumnListItem>
+						<cells>
+							<Text text="{Title}" />
+							<Text text="{EventAttractionType/EventAttractionType}"/>
+							<Text text="{Theme/Theme}"  />
+							<Text text="{Building/BuildingName}"/>
+							<HBox items="{path: 'AccessibilityDevices', templateShareable: true }"  ><Image width="2rem" class="sapUiTinyMargin" height="2rem" src="{ path : '__metadata' , formatter : '.formatter.giveImage' }" /></HBox>
+							<!--Button as per comment by QA Issue #10-->
+							<!--<Link text="{i18n>LnkViewImage}"  press=".onViewImage($event, 'I')"  />
+							<Link text="{i18n>LnkViewPlan}"  press=".onViewImage($event, 'P')" />-->
+							
+							<Button text="{i18n>LnkViewImage}"  press=".onViewImage($event, 'I')"  />
+							<Button text="{i18n>LnkViewPlan}"  press=".onViewImage($event, 'P')" />
+							
+							<Button icon="sap-icon://edit" press="onEdit" type="Transparent"/>
+							<Button icon="sap-icon://delete" press="onDelete" type="Transparent"/>
+						</cells>
+					</ColumnListItem>
+				</items>
+				</Table>
+		</f:content>
+</f:DynamicPage>	
+</mvc:View>
