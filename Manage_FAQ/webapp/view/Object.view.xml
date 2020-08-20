@@ -1,0 +1,51 @@
+<mvc:View controllerName="com.coil.podium.Manage_FAQ.controller.Object" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core" xmlns:form="sap.ui.layout.form" xmlns:u="sap.ui.unified">
+	<Page showHeader="false" showFooter="true" busy="false" busyIndicatorDelay="0" class="sapUiResponsiveContentPadding">
+		<form:Form editable="true" binding="{objectView>/oDetails}">
+			<form:title>
+				<core:Title text="{= ${objectView>/sMode} === 'C' ? ${i18n>TtlAddFaq} : ${i18n>TtlEditFaq} }"/>
+			</form:title>
+			<form:layout>
+				<form:ResponsiveGridLayout labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
+					emptySpanL="4" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1" singleContainerFullSize="false"/>
+			</form:layout>
+			<form:formContainers>
+				<form:FormContainer title="">
+					<form:formElements>
+						<form:FormElement label="{i18n>colFaqCategory}">
+							<form:fields>
+								<ComboBox selectedKey="{objectView>FaqCategoryId}" items="{ path: '/MasterFaqCategorySet' }" required="true">
+									<core:Item key="{Id}" text="{FaqCategory}"/>
+								</ComboBox>
+							</form:fields>
+						</form:FormElement>
+						<form:FormElement label="{i18n>colQuestion}">
+							<form:fields>
+								<Input value="{objectView>Question}" required="true" maxLength="150"/>
+							</form:fields>
+						</form:FormElement>
+						<form:FormElement label="{i18n>colAnswer}">
+							<form:fields>
+								<TextArea value="{objectView>Answer}" rows="6" required="true" maxLength="300"/>
+							</form:fields>
+						</form:FormElement>
+						<form:FormElement label="{i18n>colNavigation}">
+							<form:fields>
+								<ComboBox selectedKey="{objectView>NavigationId}" items="{ path: '/MasterNavigationTypeSet' }">
+									<core:Item key="{Id}" text="{NavigationTypeName}"/>
+								</ComboBox>
+							</form:fields>
+						</form:FormElement>
+					</form:formElements>
+				</form:FormContainer>
+			</form:formContainers>
+		</form:Form>
+		<footer>
+			<Toolbar>
+				<ToolbarSpacer/>
+				<Button text="{i18n>btnCancel}" press="onCancel"/>
+				<Button text="{i18n>btnSave}" type="Emphasized" press="onSave"/>
+			</Toolbar>
+		</footer>
+	</Page>
+</mvc:View>

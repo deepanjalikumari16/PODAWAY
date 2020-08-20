@@ -38,6 +38,10 @@
 					"id": "com.coil.podium.MAACDE-2-1597672368722",
 					"appId": "com.coil.podium.MAACDE",
 					"vizId": "manage-condition"
+				}, {
+					"id": "com.coil.podium.MAFA-3-1597842948147",
+					"appId": "com.coil.podium.MAFA",
+					"vizId": "Manage-Facility"
 				}]
 			}
 		}],

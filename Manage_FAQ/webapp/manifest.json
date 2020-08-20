@@ -1,7 +1,7 @@
 {
 	"_version": "1.12.0",
 	"sap.app": {
-		"id": "com.coil.podium.MAFA",
+		"id": "com.coil.podium.Manage_FAQ",
 		"type": "application",
 		"i18n": "i18n/i18n.properties",
 		"title": "{{appTitle}}",
@@ -22,7 +22,7 @@
 		},
 		"sourceTemplate": {
 			"id": "sap.ui.ui5-template-plugin.1worklist",
-			"version": "1.77.2"
+			"version": "1.79.1"
 		},
 		"crossNavigation": {
 			"inbounds": {
@@ -32,9 +32,9 @@
 						"additionalParameters": "allowed"
 					},
 					"semanticObject": "Manage",
-					"action": "Facility",
-					"title": "Manage Facilities",
-					"icon": "sap-icon://building"
+					"action": "FAQ",
+					"title": "Manage FAQ",
+					"icon": "sap-icon://message-popup"
 				}
 			}
 		}
@@ -57,7 +57,7 @@
 	},
 	"sap.ui5": {
 		"rootView": {
-			"viewName": "com.coil.podium.MAFA.view.App",
+			"viewName": "com.coil.podium.Manage_FAQ.view.App",
 			"type": "XML",
 			"async": true,
 			"id": "app"
@@ -82,7 +82,7 @@
 			"i18n": {
 				"type": "sap.ui.model.resource.ResourceModel",
 				"settings": {
-					"bundleName": "com.coil.podium.MAFA.i18n.i18n"
+					"bundleName": "com.coil.podium.Manage_FAQ.i18n.i18n"
 				}
 			},
 			"": {
@@ -110,7 +110,7 @@
 			"config": {
 				"routerClass": "sap.m.routing.Router",
 				"viewType": "XML",
-				"viewPath": "com.coil.podium.MAFA.view",
+				"viewPath": "com.coil.podium.Manage_FAQ.view",
 				"controlId": "app",
 				"controlAggregation": "pages",
 				"bypassed": {
@@ -123,12 +123,12 @@
 				"name": "worklist",
 				"target": ["worklist"]
 			}, {
-				"pattern": "Facility/{objectId}",
+				"pattern": "FaqSet/{objectId}",
 				"name": "object",
 				"target": ["object"]
 			}, {
 				"name": "createObject",
-				"pattern": "Facility",
+				"pattern": "FaqSet",
 				"titleTarget": "",
 				"greedy": false,
 				"target": ["object"]
@@ -138,12 +138,13 @@
 					"viewName": "Worklist",
 					"viewId": "worklist",
 					"viewLevel": 1,
-					"title": "{i18n>worklistTitle}"
+					"title": "{i18n>worklistViewTitle}"
 				},
 				"object": {
 					"viewName": "Object",
 					"viewId": "object",
-					"viewLevel": 2
+					"viewLevel": 2,
+					"title": "{i18n>objectViewTitle}"
 				},
 				"objectNotFound": {
 					"viewName": "ObjectNotFound",
@@ -155,15 +156,7 @@
 				}
 			}
 		},
-		"flexEnabled": true,
-		"resources": {
-			"css": [{
-				"uri": "css/style.css"
-			}, {
-				"uri": "css/mapsjs-ui.css",
-				"id": ""
-			}]
-		}
+		"flexEnabled": true
 	},
 	"sap.platform.hcp": {
 		"uri": "webapp",

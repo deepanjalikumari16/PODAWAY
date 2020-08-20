@@ -30,6 +30,14 @@ modules:
           artifacts:
             - './*'
           target-path: resources/MAACDE
+        - name: Manage_FAQ
+          artifacts:
+            - './*'
+          target-path: resources/Manage_FAQ
+        - name: MAFA
+          artifacts:
+            - './*'
+          target-path: resources/MAFA          
   - name: MAACDE
     type: html5
     path: MAACDE
@@ -40,6 +48,26 @@ modules:
         - npm run build
       supported-platforms: []
       build-result: dist
+  - name: MAFA
+    type: html5
+    path: MAFA
+    build-parameters:
+      builder: custom
+      commands:
+        - npm install
+        - npm run build
+      supported-platforms: []
+      build-result: dist
+  - name: Manage_FAQ
+    type: html5
+    path: Manage_FAQ
+    build-parameters:
+      builder: custom
+      commands:
+        - npm install
+        - npm run build
+      supported-platforms: []
+      build-result: dist      
   - name: launchpad
     type: com.sap.portal.content
     path: launchpad

@@ -1,6 +1,6 @@
 specVersion: '1.0'
 metadata:
-  name: MAFA
+  name: Manage_FAQ
 type: application
 resources:
   configuration:
