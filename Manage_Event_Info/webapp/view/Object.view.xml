@@ -1,0 +1,131 @@
+<mvc:View controllerName="com.coil.podium.Manage_Event_Info.controller.Object" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core" xmlns:form="sap.ui.layout.form" xmlns:u="sap.ui.unified">
+	<Page showHeader="false" showFooter="true" busy="false" busyIndicatorDelay="0" class="sapUiResponsiveContentPadding">
+		<form:Form editable="true" binding="{objectView>/oDetails}">
+			<form:title>
+				<core:Title text="{= ${objectView>/sMode} === 'C' ? ${i18n>TtlAddEvent} : ${i18n>TtlEditEvent} }"/>
+			</form:title>
+			<form:layout>
+				<form:ResponsiveGridLayout labelSpanXL="4" labelSpanL="3" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0"
+					emptySpanL="4" emptySpanM="0" emptySpanS="0" columnsXL="2" columnsL="1" columnsM="1" singleContainerFullSize="false"/>
+			</form:layout>
+			<form:formContainers>
+				<form:FormContainer title="{i18n>eventInfo}">
+					<form:formElements>
+						<form:FormElement label="{i18n>colName}">
+							<form:fields>
+								<Input value="{objectView>Name}" required="true" maxLength="50"/>
+							</form:fields>
+						</form:FormElement>
+						<form:FormElement label="{i18n>colStartDate}">
+							<form:fields>
+								<DatePicker id="DP_START" valueFormat="dd MMM yyyy" displayFormat="dd MMM yyyy" value="{objectView>StartDate}" change="onStartDateChange"
+									required="true"/>
+							</form:fields>
+						</form:FormElement>
+						<form:FormElement label="{i18n>colEndDate}">
+							<form:fields>
+								<DatePicker id="DP_END" valueFormat="dd MMM yyyy" displayFormat="dd MMM yyyy" value="{objectView>EndDate}" change="onEndDateChange"
+									required="true"/>
+							</form:fields>
+						</form:FormElement>
+						<form:FormElement label="{i18n>colStartTime}">
+							<form:fields>
+								<TimePicker id="TP_STARTTIME" valueFormat="HH:mm" displayFormat="hh:mm a" change="handleChange" value="{objectView>StartTime}"
+									required="true"/>
+							</form:fields>
+						</form:FormElement>
+						<form:FormElement label="{i18n>colEndTime}">
+							<form:fields>
+								<TimePicker id="TP_ENDTIME" valueFormat="HH:mm" displayFormat="hh:mm a" change="handleChange" value="{objectView>EndTime}" required="true"/>
+							</form:fields>
+						</form:FormElement>
+						<form:FormElement label="{i18n>colUrl}">
+							<form:fields>
+								<Input id="urlInput" value="{objectView>Url}" type="Url" change="onUrlValidate" maxLength="300"/>
+							</form:fields>
+						</form:FormElement>
+					</form:formElements>
+				</form:FormContainer>
+				<form:FormContainer title="{i18n>addressInfo}">
+					<form:formElements>
+						<form:FormElement label="{i18n>colLocation}">
+							<form:fields>
+								<TextArea value="{objectView>Location}" rows="2" maxLength="200"/>
+							</form:fields>
+						</form:FormElement>
+						<form:FormElement label="{i18n>colCoOrdinates}">
+							<form:fields>
+								<VBox>
+									<!--<Label text="{i18n>colLocation}"/>-->
+									<Input width="100%" description="latitude" value="{objectView>Latitude}" showValueHelp="true" valueHelpRequest="onMap"/>
+									<Input width="100%" description="longitude" value="{objectView>Longitude}" showValueHelp="true" valueHelpRequest="onMap"/>
+								</VBox>
+							</form:fields>
+						</form:FormElement>
+						<form:FormElement label="{i18n>colCity}">
+							<form:fields>
+								<Input value="{objectView>City}" maxLength="30"/>
+							</form:fields>
+						</form:FormElement>
+						<form:FormElement label="{i18n>colCountry}">
+							<form:fields>
+								<ComboBox id="CountryDropdownId" selectedKey="{objectView>CountryId}"
+									items="{ path: '/MasterCountrySet' , filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false } ], parameters : { expand : 'Timezones' } }"
+									change="onCountryChange">
+									<core:Item key="{Id}" text="{Country}"/>
+								</ComboBox>
+							</form:fields>
+						</form:FormElement>
+						<form:FormElement label="{i18n>colTimeZone}">
+							<form:fields>
+								<ComboBox id="TimezoneDropdownId" selectedKey="{objectView>TimezoneId}" items="{ path: 'objectView>/aTimezones' }" change="onTimeZoneChange">
+									<core:Item key="{objectView>Id}" text="{objectView>ZoneName}"/>
+								</ComboBox>
+							</form:fields>
+						</form:FormElement>
+					</form:formElements>
+				</form:FormContainer>
+				<form:FormContainer title="{i18n>aboutUs}">
+					<form:formElements>
+						<form:FormElement label="{i18n>colTitle}">
+							<form:fields>
+								<Input value="{objectView>Title}" maxLength="200"/>
+							</form:fields>
+						</form:FormElement>
+						<form:FormElement label="{i18n>colDescription}">
+							<form:fields>
+								<TextArea value="{objectView>Description}" rows="3" maxLength="500"/>
+							</form:fields>
+						</form:FormElement>
+						<form:FormElement label="{i18n>colHighlights}">
+							<form:fields>
+								<VBox>
+									<List id="List" mode="Delete" delete="handleDelete" enableBusyIndicator="true" headerText="{i18n>colHighlights}" growing="true"
+										items="{path: 'objectView>Highlights' , filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false } ] }">
+										<headerToolbar>
+											<Toolbar>
+												<ToolbarSpacer/>
+												<Button press="addHighligt" text="{i18n>btnAdd}"/>
+											</Toolbar>
+										</headerToolbar>
+										<CustomListItem>
+											<Input value="{objectView>Highlight}" width="100%" visible="{= ${objectView>/IsArchived} !== true }"/>
+										</CustomListItem>
+									</List>
+								</VBox>
+							</form:fields>
+						</form:FormElement>
+					</form:formElements>
+				</form:FormContainer>
+			</form:formContainers>
+		</form:Form>
+		<footer>
+			<Toolbar>
+				<ToolbarSpacer/>
+				<Button text="{i18n>btnCancel}" press="onCancel"/>
+				<Button text="{i18n>btnSave}" type="Emphasized" press="onSave"/>
+			</Toolbar>
+		</footer>
+	</Page>
+</mvc:View>

@@ -1,0 +1,273 @@
+<mvc:View controllerName="Assignment_List.Assignment_List.controller.Worklist" xmlns:core="sap.ui.core" xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc" xmlns:f="sap.f" xmlns:fb="sap.ui.comp.filterbar">
+	<f:DynamicPage id="page">
+		<f:title>
+			<f:DynamicPageTitle>
+				<f:heading>
+					<Title text="{i18n>worklistTitle}"/>
+				</f:heading>
+			</f:DynamicPageTitle>
+		</f:title>
+		<f:header>
+			<f:DynamicPageHeader pinnable="true">
+				<f:content>
+					<fb:FilterBar id="filterbar" reset="onReset" search="onSearch" useToolbar="false" basicSearch="sfld" showGoOnFB="true">
+						<fb:filterGroupItems>
+							<!--<fb:FilterGroupItem visibleInFilterBar="true" groupName="A" name="PODVisitor/PODVisitorId" groupTitle="Filters" label="{i18n>colPodCategory}">-->
+							<!--	<fb:control>-->
+							<!--		<ComboBox items="{ path: '/AccessibilityItemSet', -->
+							<!--		          filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false },-->
+							<!--		                      { path : 'AccessibilityId' , operator : 'EQ' , value1 : 2 } ] }">-->
+							<!--			<core:Item key="{Id}" text="{Title}"/>-->
+							<!--		</ComboBox>-->
+							<!--	</fb:control>-->
+							<!--</fb:FilterGroupItem>-->
+							<fb:FilterGroupItem visibleInFilterBar="true" groupName="A" name="ServiceType/IncidentTypeId" groupTitle="Filters"
+								label="{i18n>colIncidentType}">
+								<fb:control>
+									<ComboBox items="{ path: '/MasterIncidentTypeSet', filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false } ] }">
+										<core:Item key="{Id}" text="{IncidentType}"/>
+									</ComboBox>
+								</fb:control>
+							</fb:FilterGroupItem>
+						</fb:filterGroupItems>
+					</fb:FilterBar>
+				</f:content>
+			</f:DynamicPageHeader>
+		</f:header>
+		<f:content>
+			<IconTabBar id="idIconTabBar3" expanded="{device>/isNoPhone}" class="sapUiResponsiveContentPadding">
+				<items>
+					<IconTabFilter text="{worklistView>/pending}">
+						<Table id="table" width="auto"
+							items="{ path: '/AssignmentSet', parameters : { expand : 'PODVisitor,Assignee,AssignmentStatus,ServiceType/IncidentType,PODConditions' }, filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path : 'AssignmentStatusId' , operator : 'EQ' , value1 : 1 }] }"
+							noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
+							updateFinished=".onUpdateFinished">
+							<headerToolbar>
+								<OverflowToolbar>
+									<Title id="tableHeader" text="{worklistView>/worklistTableTitle}" level="H3"/>
+									<ToolbarSpacer/>
+								</OverflowToolbar>
+							</headerToolbar>
+							<columns>
+								<Column >
+									<Text text="{i18n>colAssignment}"/>
+								</Column>
+								<Column >
+									<Text text="{i18n>colPodName}"/>
+								</Column>
+								<Column >
+									<Text text="{i18n>colPodCategory}"/>
+								</Column>
+								<Column >
+									<Text text="{i18n>colIncidentType}"/>
+								</Column>
+								<Column >
+									<Text text="{i18n>colAssignVolManager}"/>
+								</Column>
+								<Column>
+									<Text text="{i18n>colStatus}"/>
+								</Column>
+								<Column >
+									<Text text="{i18n>colNavigate}"/>
+								</Column>
+								<Column >
+									<Text text="{i18n>colMessage}"/>
+								</Column>
+								<Column >
+									<Text text="{i18n>colComment}"/>
+								</Column>
+							</columns>
+							<items>
+								<ColumnListItem>
+									<cells>
+										<Text text="{ServiceType/ServiceType}"/>
+										<Text text="{PODVisitor/FirstName} {PODVisitor/LastName}"/>
+										<Button text="{= ${PODConditions}.length }" press="onPodCategory"/>
+										<ObjectStatus text="{ServiceType/IncidentType/IncidentType}"
+											state="{= ${ServiceType/IncidentType/IncidentType} === 'Emergency' ? 'Error' : 'Success' }"/>
+										<Text text="{Assignee/FirstName} {Assignee/LastName}"/>
+										<!--If loggedIn user is a Volunteer Manager button text will be Start Assignment otherwise Assign Now-->
+										<!--Very Important: Never change Pushbutton Text, as It is being used in "onAssignNow" event-->
+										<Button text="{= ${worklistView>/loggedUserId} === ${Id} ? 'Start Assignment' : 'Assign Now' }" press="onAssignNow"
+											class="sapUiSmallMarginBottom"/>
+										<Button icon="sap-icon://map" press="onNavigate" type="Transparent"/>
+										<Button icon="sap-icon://paper-plane" press="onMessage" type="Transparent"/>
+										<Button icon="sap-icon://notification-2" press="onComment" type="Transparent"/>
+									</cells>
+								</ColumnListItem>
+							</items>
+						</Table>
+					</IconTabFilter>
+					<IconTabFilter text="{worklistView>/ongoing}">
+						<Table id="table1" width="auto"
+							items="{ path: '/AssignmentSet', parameters : { expand : 'PODVisitor,Assignee,AssignmentStatus,ServiceType/IncidentType,PODConditions' }, filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path : 'AssignmentStatusId' , operator : 'EQ' , value1 : 2 } ] }"
+							noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
+							updateFinished=".onUpdateFinished1">
+							<headerToolbar>
+								<OverflowToolbar>
+									<Title id="tableHeader1" text="{worklistView>/worklistTableTitle}" level="H3"/>
+									<ToolbarSpacer/>
+								</OverflowToolbar>
+							</headerToolbar>
+							<columns>
+								<Column >
+									<Text text="{i18n>colAssignment}"/>
+								</Column>
+								<Column >
+									<Text text="{i18n>colPodName}"/>
+								</Column>
+								<Column >
+									<Text text="{i18n>colPodCategory}"/>
+								</Column>
+								<Column >
+									<Text text="{i18n>colIncidentType}"/>
+								</Column>
+								<Column>
+									<Text text="{i18n>colStatus}"/>
+								</Column>
+								<Column>
+									<Text text=""/>
+								</Column>
+								<Column >
+									<Text text="{i18n>colNavigate}"/>
+								</Column>
+								<Column >
+									<Text text="{i18n>colMessage}"/>
+								</Column>
+								<Column >
+									<Text text="{i18n>colComment}"/>
+								</Column>
+							</columns>
+							<items>
+								<ColumnListItem>
+									<cells>
+										<Text text="{ServiceType/ServiceType}"/>
+										<Text text="{PODVisitor/FirstName} {PODVisitor/LastName}"/>
+										<Button text="{= ${PODConditions}.length }" press="onPodCategory"/>
+										<ObjectStatus text="{ServiceType/IncidentType/IncidentType}"
+											state="{= ${ServiceType/IncidentType/IncidentType} === 'Emergency' ? 'Error' : 'Success' }"/>
+										<Button text="Reassign" press="onAssignNow"/>
+										<Button text="Mark Complete" press="onMarkasComplete"/>
+										<Button icon="sap-icon://map" press="onNavigate" type="Transparent"/>
+										<Button icon="sap-icon://paper-plane" press="onMessage" type="Transparent"/>
+										<Button icon="sap-icon://notification-2" press="onComment" type="Transparent"/>
+									</cells>
+								</ColumnListItem>
+							</items>
+						</Table>
+					</IconTabFilter>
+					<IconTabFilter text="{worklistView>/completed}">
+						<Table id="table2" width="auto"
+							items="{ path: '/AssignmentSet', parameters : { expand : 'PODVisitor,Assignee,AssignmentStatus,ServiceType/IncidentType,PODConditions' }, filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path : 'AssignmentStatusId' , operator : 'EQ' , value1 : 3 } ] }"
+							noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
+							updateFinished=".onUpdateFinished2">
+							<headerToolbar>
+								<OverflowToolbar>
+									<Title id="tableHeader2" text="{worklistView>/worklistTableTitle}" level="H3"/>
+									<ToolbarSpacer/>
+								</OverflowToolbar>
+							</headerToolbar>
+							<columns>
+								<Column >
+									<Text text="{i18n>colAssignment}"/>
+								</Column>
+								<Column >
+									<Text text="{i18n>colPodName}"/>
+								</Column>
+								<Column >
+									<Text text="{i18n>colPodCategory}"/>
+								</Column>
+								<Column >
+									<Text text="{i18n>colIncidentType}"/>
+								</Column>
+								<Column >
+									<Text text="{i18n>colStatus}"/>
+								</Column>
+								<Column >
+									<Text text="{i18n>colNavigate}"/>
+								</Column>
+								<Column >
+									<Text text="{i18n>colMessage}"/>
+								</Column>
+								<Column >
+									<Text text="{i18n>colComment}"/>
+								</Column>
+							</columns>
+							<items>
+								<ColumnListItem>
+									<cells>
+										<Text text="{ServiceType/ServiceType}"/>
+										<Text text="{PODVisitor/FirstName} {PODVisitor/LastName}"/>
+										<Button text="{= ${PODConditions}.length }" press="onPodCategory"/>
+										<ObjectStatus text="{ServiceType/IncidentType/IncidentType}"
+											state="{= ${ServiceType/IncidentType/IncidentType} === 'Emergency' ? 'Error' : 'Success' }"/>
+										<ObjectStatus text="{i18n>colCompleted}" state="Success"/>
+										<Button icon="sap-icon://map" press="onNavigate" type="Transparent"/>
+										<Button icon="sap-icon://paper-plane" press="onMessage" type="Transparent"/>
+										<Button icon="sap-icon://notification-2" press="onComment" type="Transparent"/>
+									</cells>
+								</ColumnListItem>
+							</items>
+						</Table>
+					</IconTabFilter>
+					<IconTabFilter text="{worklistView>/cancelled}">
+						<Table id="table3" width="auto"
+							items="{ path: '/AssignmentSet', parameters : { expand : 'PODVisitor,Assignee,AssignmentStatus,ServiceType/IncidentType,PODConditions' }, filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path : 'AssignmentStatusId' , operator : 'EQ' , value1 : 4 } ] }"
+							noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
+							updateFinished=".onUpdateFinished3">
+							<headerToolbar>
+								<OverflowToolbar>
+									<Title id="tableHeader3" text="{worklistView>/worklistTableTitle}" level="H3"/>
+									<ToolbarSpacer/>
+								</OverflowToolbar>
+							</headerToolbar>
+							<columns>
+								<Column >
+									<Text text="{i18n>colAssignment}"/>
+								</Column>
+								<Column >
+									<Text text="{i18n>colPodName}"/>
+								</Column>
+								<Column >
+									<Text text="{i18n>colPodCategory}"/>
+								</Column>
+								<Column >
+									<Text text="{i18n>colIncidentType}"/>
+								</Column>
+								<Column >
+									<Text text="{i18n>colStatus}"/>
+								</Column>
+								<Column >
+									<Text text="{i18n>colNavigate}"/>
+								</Column>
+								<Column >
+									<Text text="{i18n>colMessage}"/>
+								</Column>
+								<Column >
+									<Text text="{i18n>colComment}"/>
+								</Column>
+							</columns>
+							<items>
+								<ColumnListItem>
+									<cells>
+										<Text text="{ServiceType/ServiceType}"/>
+										<Text text="{PODVisitor/FirstName} {PODVisitor/LastName}"/>
+										<!--<Button text="{PODConditions/$count}"/>-->
+										<Button text="{= ${PODConditions}.length }" press="onPodCategory"/>
+										<ObjectStatus text="{ServiceType/IncidentType/IncidentType}"
+											state="{= ${ServiceType/IncidentType/IncidentType} === 'Emergency' ? 'Error' : 'Success' }"/>
+										<ObjectStatus text="{i18n>colCancelled}" state="Error"/>
+										<Button icon="sap-icon://map" press="onNavigate" type="Transparent"/>
+										<Button icon="sap-icon://paper-plane" press="onMessage" type="Transparent"/>
+										<Button icon="sap-icon://notification-2" press="onComment" type="Transparent"/>
+									</cells>
+								</ColumnListItem>
+							</items>
+						</Table>
+					</IconTabFilter>
+				</items>
+			</IconTabBar>
+		</f:content>
+	</f:DynamicPage>
+</mvc:View>

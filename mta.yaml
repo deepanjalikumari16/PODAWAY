@@ -38,6 +38,18 @@ modules:
           artifacts:
             - './*'
           target-path: resources/MAFA          
+        - name: Assignment_List
+          artifacts:
+            - './*'
+          target-path: resources/Assignment_List          
+        - name: MAAD
+          artifacts:
+            - './*'
+          target-path: resources/MAAD          
+        - name: Manage_Event_Info
+          artifacts:
+            - './*'
+          target-path: resources/Manage_Event_Info          
   - name: MAACDE
     type: html5
     path: MAACDE
@@ -61,6 +73,36 @@ modules:
   - name: Manage_FAQ
     type: html5
     path: Manage_FAQ
+    build-parameters:
+      builder: custom
+      commands:
+        - npm install
+        - npm run build
+      supported-platforms: []
+      build-result: dist      
+  - name: Assignment_List
+    type: html5
+    path: Assignment_List
+    build-parameters:
+      builder: custom
+      commands:
+        - npm install
+        - npm run build
+      supported-platforms: []
+      build-result: dist     
+  - name: MAAD
+    type: html5
+    path: MAAD
+    build-parameters:
+      builder: custom
+      commands:
+        - npm install
+        - npm run build
+      supported-platforms: []
+      build-result: dist      
+  - name: Manage_Event_Info
+    type: html5
+    path: Manage_Event_Info
     build-parameters:
       builder: custom
       commands:
