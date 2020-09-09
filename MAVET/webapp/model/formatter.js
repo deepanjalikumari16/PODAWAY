@@ -23,8 +23,8 @@ sap.ui.define([], function () {
 		giveImage : function(oMetadata, ImageData){
 			if(oMetadata)
 			{   
-				var sPathname = new URL(oMetadata.media_src).pathname;
-				return ("/EXPO_PODIUM_API").concat(sPathname);
+				var sPathname = new URL(oMetadata.media_src).pathname
+				return ("/EXPO_PODIUM_API").concat(sPathname) ;
 			}
 			return ("data:image/png;base64,").concat(ImageData);
 		}

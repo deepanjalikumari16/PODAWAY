@@ -91,7 +91,7 @@ sap.ui.define([
 			this.addHistoryEntry({
 				title: this.getResourceBundle().getText("worklistViewTitle"),
 				icon: "sap-icon://table-view",
-				intent: "#AssignmentList-display"
+				intent: "#Manage-Assignment"
 			}, true);
 
 			/*var sPendingTitle = this.getResourceBundle().getText("pending");

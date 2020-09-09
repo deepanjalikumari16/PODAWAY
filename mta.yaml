@@ -58,6 +58,18 @@ modules:
           artifacts:
             - './*'
           target-path: resources/ManageVisitor          
+        - name: Dashboard
+          artifacts:
+            - './*'
+          target-path: resources/Dashboard          
+        - name: VisitorJourney
+          artifacts:
+            - './*'
+          target-path: resources/VisitorJourney          
+        - name: MDM_Data
+          artifacts:
+            - './*'
+          target-path: resources/MDM_Data          
   - name: MAACDE
     type: html5
     path: MAACDE
@@ -131,6 +143,36 @@ modules:
   - name: ManageVisitor
     type: html5
     path: ManageVisitor
+    build-parameters:
+      builder: custom
+      commands:
+        - npm install
+        - npm run build
+      supported-platforms: []
+      build-result: dist      
+  - name: Dashboard
+    type: html5
+    path: Dashboard
+    build-parameters:
+      builder: custom
+      commands:
+        - npm install
+        - npm run build
+      supported-platforms: []
+      build-result: dist      
+  - name: VisitorJourney
+    type: html5
+    path: VisitorJourney
+    build-parameters:
+      builder: custom
+      commands:
+        - npm install
+        - npm run build
+      supported-platforms: []
+      build-result: dist      
+  - name: MDM_Data
+    type: html5
+    path: MDM_Data
     build-parameters:
       builder: custom
       commands:

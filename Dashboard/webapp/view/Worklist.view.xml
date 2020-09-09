@@ -1,0 +1,155 @@
+<mvc:View controllerName="com.coil.podium.Dashboard.controller.Worklist" xmlns:chart="sap.suite.ui.microchart" xmlns:core="sap.ui.core"
+	xmlns:l="sap.ui.layout" xmlns:viz="sap.viz.ui5.controls" xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+	xmlns:viz.data="sap.viz.ui5.data" xmlns="sap.m" xmlns:cards="sap.f.cards" xmlns:u="sap.ui.unified" xmlns:f="sap.f"
+	xmlns:mvc="sap.ui.core.mvc" xmlns:html="http://www.w3.org/1999/xhtml" >
+	<Page title="{i18n>worklistViewTitle}" class="sapUiResponsivePadding" showHeader="false" showFooter="false">
+	<!--	<Toolbar>
+			<Button press="onObject" text="go to object" />
+		</Toolbar>-->
+		<l:Grid defaultSpan="XL4 L4 M6 S12" defaultIndent="XL0 L0 M0 S0" class="sapUiResponsiveMargin" >
+			<f:Card >
+				<f:header>
+					<cards:Header subtitle="Since: 12 October. 2020" title="Total POD Visitors"/>
+				</f:header>
+				<f:content>
+					<HBox>
+						<Image class="sapUiSmallMargin" id="card1Image" width="3rem" height="3rem"
+							src="{= $.sap.getModulePath('com/coil/podium/Dashboard', '/css/wheelchair@3x.png') }"/>
+						<ObjectIdentifier class="sapUiSmallMargin large-font" text="POD Visitors" title="4278"/>
+					</HBox>
+				</f:content>
+			</f:Card>
+			<f:Card>
+				<f:header>
+					<cards:Header subtitle="Total POD Users: 4278" title="POD Initiative Ranking"/>
+				</f:header>
+				<f:content>
+					<chart:ColumnMicroChart width="100%" class="sapUiSmallMargin" columns="{dashboard>/PODCatergory}" allowColumnLabels="true">
+						<chart:columns>
+							<chart:ColumnMicroChartData value="{dashboard>value}" label="{dashboard>name}" color="Neutral"/>
+						</chart:columns>
+					</chart:ColumnMicroChart>
+				</f:content>
+			</f:Card>
+			
+			<!--<f:Card>
+				<f:header>
+					<cards:Header subtitle="3729 Survey Results" title="Overall POD Satisfaction Index"/>
+				</f:header>
+				<f:content>
+					<chart:RadialMicroChart width="100%" alignContent="Center" size="M" percentage="75" class="sapUiSmallMarginTopBottom"/>
+				</f:content>
+			</f:Card>
+			<f:Card>
+				<f:header>
+					<cards:Header subtitle="3326 Survey Results" title="Ease of PODium App Usage"/>
+				</f:header>
+				<f:content>
+					<chart:RadialMicroChart width="100%" alignContent="Center" size="M" percentage="75" class="sapUiSmallMarginTopBottom"/>
+				</f:content>
+			</f:Card>
+			<f:Card>
+				<f:header>
+					<cards:Header subtitle="3497 Survey Results" title="Services and Facilities Survey Results"/>
+				</f:header>
+				<f:content>
+					<chart:RadialMicroChart width="100%" alignContent="Center" size="M" percentage="75" class="sapUiSmallMarginTopBottom"/>
+				</f:content>
+			</f:Card>
+			<f:Card>
+				<f:header>
+					<cards:Header subtitle="8697 Survey Results" title="POD Visitor 'Net Promoter Score' (NPS)"/>
+				</f:header>
+				<f:content>
+					<VBox width="100%">
+						<chart:StackedBarMicroChart width="90%" size="M" precision="0" class="sapUiSmallMargin">
+							<chart:bars>
+								<chart:StackedBarMicroChartBar valueColor="Good" value="80"/>
+								<chart:StackedBarMicroChartBar valueColor="Critical" value="10"/>
+								<chart:StackedBarMicroChartBar valueColor="Error" value="10"/>
+							</chart:bars>
+						</chart:StackedBarMicroChart>
+						<u:CalendarLegend id="legend2" standardItems="">
+							<u:items>
+								<u:CalendarLegendItem color="#3fa45b" text="Promoter"/>
+								<u:CalendarLegendItem color="#de890d" text="Neutral"/>
+								<u:CalendarLegendItem color="#dc0d0e" text="Detractor"/>
+							</u:items>
+						</u:CalendarLegend>
+					</VBox>
+				</f:content>
+			</f:Card>
+			<f:Card>
+				<f:header>
+					<cards:Header subtitle="Total POD Users: 4278" title="POD Initiative Ranking"/>
+				</f:header>
+				<f:content>
+					<chart:ColumnMicroChart width="100%" class="sapUiSmallMargin" columns="{dashboard>/PODCatergory}" allowColumnLabels="true">
+						<chart:columns>
+							<chart:ColumnMicroChartData value="{dashboard>value}" label="{dashboard>name}" color="Neutral"/>
+						</chart:columns>
+					</chart:ColumnMicroChart>
+				</f:content>
+			</f:Card>
+			<f:Card >
+				<f:header>
+					<cards:Header title="Top 5 Pavilion Rating"/>
+				</f:header>
+				<f:content>
+					<Table showSeparators="None" items="{dashboard>/Top5Ratings}">
+						<columns>
+							<Column/>
+							<Column/>
+							<Column/>
+						</columns>
+						<items>
+							<ColumnListItem >
+								<Text text="{dashboard>pav}"/>
+								<RatingIndicator id="RI_M" maxValue="5" class="sapUiSmallMarginBottom" value="{dashboard>value}" iconSize="22px" tooltip="Rating Tooltip"/>
+								<Text text="{dashboard>votes}"/>
+							</ColumnListItem>
+						</items>
+					</Table>
+				</f:content>
+			</f:Card>
+			<f:Card >
+				<f:header>
+					<cards:Header title="Total Reported Incidents" subtitle="This Month"/>
+				</f:header>
+				<f:content>
+					<VBox>
+						<chart:InteractiveDonutChart selectionEnabled="false">
+							<chart:segments>
+								<chart:InteractiveDonutChartSegment color="Neutral" label="Normal" value="469"/>
+								<chart:InteractiveDonutChartSegment color="Critical" label="Emergency" value="120"/>
+							</chart:segments>
+						</chart:InteractiveDonutChart>
+						<ProgressIndicator class="sapUiSmallMarginBottom" percentValue="65"  displayValue="110" showValue="true" state="Warning" displayOnly="true"/>
+						<ProgressIndicator class="sapUiSmallMarginBottom" percentValue="70"  displayValue="140" showValue="true" state="Success" displayOnly="true"/>
+					</VBox>
+				</f:content>
+			</f:Card>-->
+		</l:Grid>
+		<!--<l:Grid busy="{dashboard>/bMapBusy}" width="100%" defaultSpan="XL12 L12 M12 S12" defaultIndent="XL0 L0 M0 S0"  >-->
+			<html:div id="map" class="MapContainer" >
+				
+			</html:div>
+		<!--</l:Grid>-->
+	</Page>
+</mvc:View>
+<!--<viz:VizFrame  height="50%" width="50%" id="idVizFrame" uiConfig="{applicationSet:'fiori'}" vizType='column'>
+						<viz:dataset>
+							<viz.data:FlattenedDataset data="{dashboard>/PODCatergory}">
+								<viz.data:dimensions>
+									<viz.data:DimensionDefinition name="name"  value="{dashboard>name}"/>
+								</viz.data:dimensions>
+								<viz.data:measures>
+									<viz.data:MeasureDefinition name="value" value="{dashboard>value}"/>
+								</viz.data:measures>
+							</viz.data:FlattenedDataset>
+						</viz:dataset>
+						<viz:feeds>
+							<viz.feeds:FeedItem id='valueAxisFeed' uid="valueAxis" type="Measure" values="value"/>
+							<viz.feeds:FeedItem id='categoryAxisFeed' uid="categoryAxis" type="Dimension" values="name"/>
+						</viz:feeds>
+					</viz:VizFrame>-->

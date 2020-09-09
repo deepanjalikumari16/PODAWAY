@@ -56,7 +56,7 @@ sap.ui.define([
 			this.addHistoryEntry({
 				title: this.getResourceBundle().getText("worklistViewTitle"),
 				icon: "sap-icon://table-view",
-				intent: "#ManageEventInfo-display"
+				intent: "#Manage-Info"
 			}, true);
 
 			var myModel = this.getOwnerComponent().getModel();

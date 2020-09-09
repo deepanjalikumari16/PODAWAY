@@ -56,13 +56,15 @@ sap.ui.define([
 			this.addHistoryEntry({
 				title: this.getResourceBundle().getText("worklistViewTitle"),
 				icon: "sap-icon://table-view",
-				intent: "#manage-events"
+				intent:  this.getIntent() //"#Manage-Event"
 			}, true);
 			
 			//Table items binding	
 			this.getOwnerComponent().getModel().metadataLoaded().then(this._fnInitialBindings.bind(this));
 		},
-
+		getIntent : function(){
+			return this.getOwnerComponent().iEvtType === 1 ? "#Manage-Event" : "#Manage-Offer";
+		},
 		/* =========================================================== */
 		/* event handlers                                              */
 		/* =========================================================== */

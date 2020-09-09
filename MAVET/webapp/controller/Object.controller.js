@@ -224,7 +224,7 @@ sap.ui.define([
 				});
 				this.getModel().read(sObjectPath, {
 					urlParameters: {
-						"$expand": "Images,Categories,Plans,AccessibilityDevices"
+						"$expand": "Images,Categories,Plans,AccessibilityDevices,Highlights"
 					},
 					success: this._setView.bind(this)
 				});
@@ -440,7 +440,7 @@ sap.ui.define([
 				aProms.push(that._fnCrOp.call(that, "/EventAttractionPlanSet", oPlanData));
 			}
 
-			//collect all request and show success/failure
+			//Collect all request and show success/failure
 			Promise.all(aProms).then(
 				function () {
 					oViewModel.setProperty("/busy", false);

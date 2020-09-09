@@ -1,0 +1,346 @@
+<mvc:View controllerName="com.coil.podium.MDM_Data.controller.Worklist" xmlns:core="sap.ui.core" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc"
+	xmlns:f="sap.f" xmlns:fb="sap.ui.comp.filterbar">
+	<f:DynamicPage id="page">
+		<f:title>
+			<f:DynamicPageTitle>
+				<f:heading>
+					<Title text="{i18n>worklistTitle}"/>
+				</f:heading>
+			</f:DynamicPageTitle>
+		</f:title>
+		<f:content>
+			<IconTabBar id="idIconTabBar3" expanded="{device>/isNoPhone}" class="sapUiResponsiveContentPadding">
+				<items>
+					<IconTabFilter text="{worklistView>/masterService}" key="Service">
+						<Table id="table" width="auto"
+							items="{ path: '/MasterServiceTypeSet', parameters : { expand : 'Navigation,IncidentType' }, filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false } ] }"
+							noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
+							updateFinished=".onUpdateFinished">
+							<headerToolbar>
+								<OverflowToolbar>
+									<Title id="tableHeader" text="{worklistView>/worklistTableTitle}" level="H3"/>
+									<ToolbarSpacer/>
+								</OverflowToolbar>
+							</headerToolbar>
+							<columns>
+								<Column width="5%">
+									<Text text=""/>
+								</Column>
+								<Column width="18%">
+									<Text text="{i18n>colServiceType}"/>
+								</Column>
+								<Column width="31%">
+									<Text text="{i18n>colServiceMessage}"/>
+								</Column>
+								<Column width="12%">
+									<Text text="{i18n>colContactNumber}"/>
+								</Column>
+								<Column width="9%">
+									<Text text="{i18n>colIsCancelable}"/>
+								</Column>
+								<Column width="9%">
+									<Text text="{i18n>colIncidentTypeId}"/>
+								</Column>
+								<Column width="9%">
+									<Text text="{i18n>colNavigationId}"/>
+								</Column>
+								<Column width="5%">
+									<Text text="{i18n>colEdit}"/>
+								</Column>
+							
+							</columns>
+							<items>
+								<ColumnListItem>
+									<cells>
+										<Image width="2rem" class="sapUiTinyMargin" height="2rem" src="{ path : '__metadata' , formatter : '.formatter.giveImage' }"/>
+										<Text text="{ServiceType}"/>
+										<Text text="{ServiceMessage}"/>
+										<Text text="{ContactNumber}"/>
+										<CheckBox selected="{IsCancelable}" editable="false"/>
+										<ObjectStatus text="{IncidentType/IncidentType}" state="{= ${IncidentType/IncidentType} === 'Emergency' ? 'Error' : 'Success' }"/>
+										<Text text="{Navigation/NavigationTypeName}"/>
+										<Button icon="sap-icon://edit" press="onEdit" type="Transparent"/>
+									</cells>
+								</ColumnListItem>
+							</items>
+						</Table>
+					</IconTabFilter>
+					<IconTabFilter text="{worklistView>/masterFacility}" key="Facility">
+						<Table id="table1" width="auto"
+							items="{ path: '/MasterFacilityTypeSet', filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false } ] }"
+							noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
+							updateFinished=".onUpdateFinished1">
+							<headerToolbar>
+								<OverflowToolbar>
+									<Title id="tableHeader1" text="{worklistView>/worklistTableTitle}" level="H3"/>
+									<ToolbarSpacer/>
+								</OverflowToolbar>
+							</headerToolbar>
+							<columns>
+								<Column width="95%">
+									<Text text="{i18n>colFacilityType}"/>
+								</Column>
+								<Column width="5%">
+									<Text text="{i18n>colEdit}"/>
+								</Column>
+							</columns>
+							<items>
+								<ColumnListItem>
+									<cells>
+										<Text text="{FacilityType}"/>
+										<Button icon="sap-icon://edit" press="onEdit" type="Transparent"/>
+									</cells>
+								</ColumnListItem>
+							</items>
+						</Table>
+					</IconTabFilter>
+					<IconTabFilter text="{worklistView>/masterRelationship}" key="Relationship">
+						<Table id="table2" width="auto"
+							items="{ path: '/MasterRelationshipSet', filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false } ] }"
+							noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
+							updateFinished=".onUpdateFinished2">
+							<headerToolbar>
+								<OverflowToolbar>
+									<Title id="tableHeader2" text="{worklistView>/worklistTableTitle}" level="H3"/>
+									<ToolbarSpacer/>
+								</OverflowToolbar>
+							</headerToolbar>
+							<columns>
+								<Column width="95%">
+									<Text text="{i18n>colRelationship}"/>
+								</Column>
+								<Column width="5%">
+									<Text text="{i18n>colEdit}"/>
+								</Column>
+							</columns>
+							<items>
+								<ColumnListItem>
+									<cells>
+										<Text text="{Relationship}"/>
+										<Button icon="sap-icon://edit" press="onEdit" type="Transparent"/>
+									</cells>
+								</ColumnListItem>
+							</items>
+						</Table>
+					</IconTabFilter>
+					<IconTabFilter text="{worklistView>/masterFaqCategory}" key="FAQ">
+						<Table id="table3" width="auto"
+							items="{ path: '/MasterFaqCategorySet', filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false } ] }"
+							noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
+							updateFinished=".onUpdateFinished3">
+							<headerToolbar>
+								<OverflowToolbar>
+									<Title id="tableHeader3" text="{worklistView>/worklistTableTitle}" level="H3"/>
+									<ToolbarSpacer/>
+								</OverflowToolbar>
+							</headerToolbar>
+							<columns>
+								<Column width="5%">
+									<Text text=""/>
+								</Column>
+								<Column width="90%">
+									<Text text="{i18n>colFaqCategory}"/>
+								</Column>
+								<Column width="5%">
+									<Text text="{i18n>colEdit}"/>
+								</Column>
+							</columns>
+							<items>
+								<ColumnListItem>
+									<cells>
+										<Image width="2rem" class="sapUiTinyMargin" height="2rem" src="{ path : '__metadata' , formatter : '.formatter.giveImage' }"/>
+										<Text text="{FaqCategory}"/>
+										<Button icon="sap-icon://edit" press="onEdit" type="Transparent"/>
+									</cells>
+								</ColumnListItem>
+							</items>
+						</Table>
+					</IconTabFilter>
+					<IconTabFilter text="{worklistView>/masterEventAttraction}" key="Event">
+						<Table id="table4" width="auto"
+							items="{ path: '/MasterEventAttractionTypeSet', filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false } ] }"
+							noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
+							updateFinished=".onUpdateFinished4">
+							<headerToolbar>
+								<OverflowToolbar>
+									<Title id="tableHeader4" text="{worklistView>/worklistTableTitle}" level="H3"/>
+									<ToolbarSpacer/>
+								</OverflowToolbar>
+							</headerToolbar>
+							<columns>
+								<Column width="15%">
+									<Text text="{i18n>colEventAttractionType}"/>
+								</Column>
+								<Column width="50%">
+									<Text text="{i18n>colDescription}"/>
+								</Column>
+								<Column width="7%">
+									<Text text="{i18n>colBuilding}"/>
+								</Column>
+								<Column width="7%">
+									<Text text="{i18n>colCategory}"/>
+								</Column>
+								<Column width="6%">
+									<Text text="{i18n>colTheme}"/>
+								</Column>
+								<Column width="10%">
+									<Text text="{i18n>colImage}"/>
+								</Column>
+								<Column width="5%">
+									<Text text="{i18n>colEdit}"/>
+								</Column>
+							</columns>
+							<items>
+								<ColumnListItem>
+									<cells>
+										<Text text="{EventAttractionType}"/>
+										<Text text="{Description}"/>
+										<CheckBox selected="{Building}" editable="false"/>
+										<CheckBox selected="{Category}" editable="false"/>
+										<CheckBox selected="{Theme}" editable="false"/>
+										<Button text="{i18n>LnkViewImage}" press=".onViewImage($event, 'I')"/>
+										<Button icon="sap-icon://edit" press="onEdit" type="Transparent"/>
+									</cells>
+								</ColumnListItem>
+							</items>
+						</Table>
+					</IconTabFilter>
+					<IconTabFilter text="{worklistView>/masterNavigation}" key="Navigation">
+						<Table id="table5" width="auto"
+							items="{ path: '/MasterNavigationTypeSet', filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false } ] }"
+							noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
+							updateFinished=".onUpdateFinished5">
+							<headerToolbar>
+								<OverflowToolbar>
+									<Title id="tableHeader5" text="{worklistView>/worklistTableTitle}" level="H3"/>
+									<ToolbarSpacer/>
+								</OverflowToolbar>
+							</headerToolbar>
+							<columns>
+								<Column width="5%">
+									<Text text=""/>
+								</Column>
+								<Column width="15%">
+									<Text text="{i18n>colNavigationGroupId}"/>
+								</Column>
+								<Column width="15%">
+									<Text text="{i18n>colNavigationTypeId}"/>
+								</Column>
+								<Column width="60%">
+									<Text text="{i18n>colNavigationTypeName}"/>
+								</Column>
+								<Column width="5%">
+									<Text text="{i18n>colEdit}"/>
+								</Column>
+							</columns>
+							<items>
+								<ColumnListItem>
+									<cells>
+										<Image width="2rem" class="sapUiTinyMargin" height="2rem" src="{ path : '__metadata' , formatter : '.formatter.giveImage' }"/>
+										<!--<Text text="{NavigationGroupId}"/>-->
+										<Text text="{= ${NavigationGroupId} === 0 ? 'Event Attraction' : 'Facility' }"/>
+										<Text text="{NavigationTypeId}"/>
+										<Text text="{NavigationTypeName}"/>
+										<Button icon="sap-icon://edit" press="onEdit" type="Transparent"/>
+									</cells>
+								</ColumnListItem>
+							</items>
+						</Table>
+					</IconTabFilter>
+					<IconTabFilter text="{worklistView>/building}" key="Building">
+						<Table id="table6" width="auto" items="{ path: '/BuildingSet', filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false } ] }"
+							noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
+							updateFinished=".onUpdateFinished6">
+							<headerToolbar>
+								<OverflowToolbar>
+									<Title id="tableHeader6" text="{worklistView>/worklistTableTitle}" level="H3"/>
+									<ToolbarSpacer/>
+								</OverflowToolbar>
+							</headerToolbar>
+							<columns>
+								<Column width="55%">
+									<Text text="{i18n>colBuildingName}"/>
+								</Column>
+								<Column width="20%">
+									<Text text="{i18n>colLatitude}"/>
+								</Column>
+								<Column width="20%">
+									<Text text="{i18n>colLongitude}"/>
+								</Column>
+								<Column width="5%">
+									<Text text="{i18n>colEdit}"/>
+								</Column>
+							</columns>
+							<items>
+								<ColumnListItem>
+									<cells>
+										<Text text="{BuildingName}"/>
+										<Text text="{Latitude}"/>
+										<Text text="{Longitude}"/>
+										<Button icon="sap-icon://edit" press="onEdit" type="Transparent"/>
+									</cells>
+								</ColumnListItem>
+							</items>
+						</Table>
+					</IconTabFilter>
+					<IconTabFilter text="{worklistView>/theme}" key="Theme">
+						<Table id="table7" width="auto" items="{ path: '/ThemeSet', filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false } ] }"
+							noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
+							updateFinished=".onUpdateFinished7">
+							<headerToolbar>
+								<OverflowToolbar>
+									<Title id="tableHeader7" text="{worklistView>/worklistTableTitle}" level="H3"/>
+									<ToolbarSpacer/>
+								</OverflowToolbar>
+							</headerToolbar>
+							<columns>
+								<Column width="95%">
+									<Text text="{i18n>colTheme}"/>
+								</Column>
+								<Column width="5%">
+									<Text text="{i18n>colEdit}"/>
+								</Column>
+							</columns>
+							<items>
+								<ColumnListItem>
+									<cells>
+										<Text text="{Theme}"/>
+										<Button icon="sap-icon://edit" press="onEdit" type="Transparent"/>
+									</cells>
+								</ColumnListItem>
+							</items>
+						</Table>
+					</IconTabFilter>
+					<IconTabFilter text="{worklistView>/category}" key="Category">
+						<Table id="table8" width="auto" items="{ path: '/CategorySet', filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false } ] }"
+							noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
+							updateFinished=".onUpdateFinished8">
+							<headerToolbar>
+								<OverflowToolbar>
+									<Title id="tableHeader8" text="{worklistView>/worklistTableTitle}" level="H3"/>
+									<ToolbarSpacer/>
+								</OverflowToolbar>
+							</headerToolbar>
+							<columns>
+								<Column width="95%">
+									<Text text="{i18n>colCategory}"/>
+								</Column>
+								<Column width="5%">
+									<Text text="{i18n>colEdit}"/>
+								</Column>
+							</columns>
+							<items>
+								<ColumnListItem>
+									<cells>
+										<Text text="{Category}"/>
+										<Button icon="sap-icon://edit" press="onEdit" type="Transparent"/>
+									</cells>
+								</ColumnListItem>
+							</items>
+						</Table>
+					</IconTabFilter>
+				</items>
+			</IconTabBar>
+		</f:content>
+	</f:DynamicPage>
+</mvc:View>

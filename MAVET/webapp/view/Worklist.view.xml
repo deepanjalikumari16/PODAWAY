@@ -44,10 +44,11 @@
 					<OverflowToolbar>
 						<Title id="tableHeader" text="{worklistView>/worklistTableTitle}" level="H3"/>
 						<ToolbarSpacer/>
-						<Button press="onOrderPref"  text="{i18n>btnEventPreferences}" >	
+						<!--<Button press="onOrderPref"  text="{i18n>btnEventPreferences}" >	
 						<layoutData>
 								<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
-							</layoutData></Button>
+							</layoutData>
+						</Button>-->
 						<Button text="{i18n>btnAdd}" icon="sap-icon://add" press="onAdd">
 							<layoutData>
 								<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
