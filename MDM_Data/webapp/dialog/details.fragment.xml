@@ -76,25 +76,40 @@
 			</VBox>
 			<VBox>
 				<Label text="{i18n>colCategory}"/>
-				<CheckBox selected="{worklistView>Category}"/>
+				<CheckBox selected="{path : 'worklistView>Category', formatter : '.formatter.giveOnlyBoolean' }"/>
 			</VBox>
 			<VBox>
 				<Label text="{i18n>colTheme}"/>
-				<CheckBox selected="{worklistView>Theme}"/>
+				<CheckBox selected="{path : 'worklistView>Theme' , formatter : '.formatter.giveOnlyBoolean' }"/>
 			</VBox>
 		</l:Grid>
 		<l:Grid visible="{worklistView>/bEditOptions/Navigation}"  hSpacing="2" defaultSpan="XL5 L5 M5 S12" defaultIndent="XL0 L0 M1 S1">
 			<VBox>
 				<Label text="{i18n>colNavigationGroupId}"/>
-				<Input value="{worklistView>NavigationGroupId}"/>
+			<!--	<Input value="{worklistView>NavigationGroupId}"/>-->
+				<ComboBox selectedKey="{path: 'worklistView>NavigationGroupId', type: 'sap.ui.model.type.Integer' }" change="onChangeNavId" >
+					<core:Item key="0" text="{i18n>litmEventAttaction}" />					
+					<core:Item key="1" text="{i18n>litmFacility}"  />
+				</ComboBox>
+			
 			</VBox>
 			<VBox>
 				<Label text="{i18n>colNavigationTypeId}"/>
-				<Input value="{worklistView>NavigationTypeId}"/>
+			<!--	<ComboBox id="cbNavType" />-->
+			<!--	<Input value="{worklistView>NavigationTypeId}"/>-->
+				<ComboBox visible="{= ${worklistView>NavigationGroupId} === 0 }" selectedKey="{path : 'worklistView>NavigationTypeId' , type: 'sap.ui.model.type.Integer'}" change="onChangeNavType" items="{/MasterEventAttractionTypeSet}" >
+					<core:Item key="{Id}" text= "{EventAttractionType}"/>
+				</ComboBox>
+				<ComboBox visible="{= ${worklistView>NavigationGroupId} === 1 }" selectedKey="{path : 'worklistView>NavigationTypeId' , type: 'sap.ui.model.type.Integer'}" change="onChangeNavType" items="{/MasterFacilityTypeSet}" >
+					<core:Item key="{Id}" text= "{FacilityType}"/>
+				</ComboBox>
+<!--				<ComboBox selectedKey="{path : 'worklistView>NavigationTypeId' ,  type: 'sap.ui.model.type.Integer'}"  change="onChangeSelected" items="{/MasterFacilityTypeSet}" >
+-->			
+				
 			</VBox>
 			<VBox>
 				<Label text="{i18n>colNavigationTypeName}"/>
-				<Input value="{worklistView>NavigationTypeName}"/>
+				<Input editable="false" value="{worklistView>NavigationTypeName}"/>
 			</VBox>
 			<VBox>
 				<Label text="{i18n>colIcon}"/>

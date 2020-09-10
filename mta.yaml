@@ -201,6 +201,7 @@ resources:
   - name: podium_html5_repo_host
     parameters:
       service-plan: app-host
+      path: ./app-host.json
       service: html5-apps-repo
     type: org.cloudfoundry.managed-service
   - name: staging-podium-uaa

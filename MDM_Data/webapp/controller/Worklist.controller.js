@@ -104,7 +104,7 @@ sap.ui.define([
 			this.addHistoryEntry({
 				title: this.getResourceBundle().getText("worklistViewTitle"),
 				icon: "sap-icon://table-view",
-				intent: "#Manage-MasterData"
+				intent: "#MasterDataManagement-display"
 			}, true);
 		},
 
@@ -265,7 +265,11 @@ sap.ui.define([
 			// The source is the list item that got pressed
 			this._showObject(oEvent.getSource());
 		},
-
+		onChangeNavType: function(oEvent){
+		//	var oSelectedItem = oEvent.getSource().getSelectecdItem();
+			this.getModel("worklistView").setProperty("/oEditData/NavigationTypeName", oEvent.getParameter("newValue") );
+		},
+		
 		/**
 		 * @param oMetadata : Image metadata
 		 * @param ImageData : base64 data

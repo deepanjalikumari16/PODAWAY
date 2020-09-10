@@ -16,6 +16,10 @@ sap.ui.define([], function () {
 			return parseFloat(sValue).toFixed(2);
 		},
 		
+		giveOnlyBoolean : function(sValue){
+			return !!sValue;
+		},
+		
 		giveImage : function(oMetadata, ImageData){
             if(oMetadata && oMetadata.media_src && !ImageData  )
             {  
