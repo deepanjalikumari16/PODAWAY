@@ -23,30 +23,6 @@
 		"sourceTemplate": {
 			"id": "sap.ui.ui5-template-plugin.1worklist",
 			"version": "1.77.2"
-		},
-		"crossNavigation": {
-			"inbounds": {
-				"intent1": {
-					"signature": {
-						"parameters": {},
-						"additionalParameters": "allowed"
-					},
-					"semanticObject": "Manage",
-					"action": "Event",
-					"title": "Manage Events and attractions",
-					"icon": "sap-icon://create-leave-request"
-				},
-				"intent2": {
-					"signature": {
-						"parameters": {},
-						"additionalParameters": "allowed"
-					},
-					"semanticObject": "Manage",
-					"action": "Offer",
-					"title": "Manage Offers",
-					"icon": "sap-icon://money-bills"
-				}
-			}
 		}
 	},
 	"sap.ui": {
@@ -127,12 +103,12 @@
 				"name": "worklist",
 				"target": ["worklist"]
 			}, {
-				"pattern": "EventAttraction/{objectId}",
+				"pattern": "Event/{objectId}",
 				"name": "object",
 				"target": ["object"]
 			}, {
 				"name": "createObject",
-				"pattern": "EventAttraction",
+				"pattern": "Event",
 				"greedy": false,
 				"target": ["object"]
 			}],

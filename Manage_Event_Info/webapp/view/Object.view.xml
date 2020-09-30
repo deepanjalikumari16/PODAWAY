@@ -54,13 +54,14 @@
 								<TextArea value="{objectView>Location}" rows="2" maxLength="200"/>
 							</form:fields>
 						</form:FormElement>
-						<form:FormElement label="{i18n>colCoOrdinates}">
+						<form:FormElement label="{i18n>colLat}">
 							<form:fields>
-								<VBox>
-									<!--<Label text="{i18n>colLocation}"/>-->
-									<Input width="100%" description="latitude" value="{objectView>Latitude}" showValueHelp="true" valueHelpRequest="onMap"/>
-									<Input width="100%" description="longitude" value="{objectView>Longitude}" showValueHelp="true" valueHelpRequest="onMap"/>
-								</VBox>
+									<Input width="40%" value="{objectView>Latitude}" required="true" showValueHelp="true" valueHelpRequest="onMap"/>
+							</form:fields>
+						</form:FormElement>
+						<form:FormElement label="{i18n>colLong}">
+							<form:fields>
+									<Input width="40%" value="{objectView>Longitude}" required="true" showValueHelp="true" valueHelpRequest="onMap"/>
 							</form:fields>
 						</form:FormElement>
 						<form:FormElement label="{i18n>colCity}">
@@ -72,7 +73,7 @@
 							<form:fields>
 								<ComboBox id="CountryDropdownId" selectedKey="{objectView>CountryId}"
 									items="{ path: '/MasterCountrySet' , filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false } ], parameters : { expand : 'Timezones' } }"
-									change="onCountryChange">
+									change="onCountryChange" required="true">
 									<core:Item key="{Id}" text="{Country}"/>
 								</ComboBox>
 							</form:fields>

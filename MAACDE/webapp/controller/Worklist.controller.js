@@ -30,7 +30,16 @@ sap.ui.define([
 			//	iOriginalBusyDelay = oPage.getBusyIndicatorDelay();
 			// keeps the search state
 			this._aTableSearchState = [];
-
+			
+			var sTypeString ;
+			switch(this.getOwnerComponent().sAccType)
+			{
+				case 1 : sTypeString = this.getResourceBundle().getText("Device") ; break;
+				case 2 : sTypeString = this.getResourceBundle().getText("Condition") ; break;
+				case 3 : sTypeString = this.getResourceBundle().getText("Place") ;
+				
+			}
+			
 			// Model used to manipulate control states
 			oViewModel = new JSONModel({
 				//	worklistTableTitle : this.getResourceBundle().getText("worklistTableTitle"),
@@ -41,7 +50,8 @@ sap.ui.define([
 				shareSendEmailSubject: this.getResourceBundle().getText("shareSendEmailWorklistSubject"),
 				shareSendEmailMessage: this.getResourceBundle().getText("shareSendEmailWorklistMessage", [location.href]),
 				//	tableNoDataText : this.getResourceBundle().getText("tableNoDataText"),
-				tableBusyDelay: 0
+				tableBusyDelay: 0,
+				appType : sTypeString
 			});
 			this.setModel(oViewModel, "worklistView");
 
@@ -148,7 +158,8 @@ sap.ui.define([
 				Title: "",
 				AccessibilityId: this.getOwnerComponent().sAccType,
 				Icon: null,
-				TextAllowed: false
+				TextAllowed: false,
+				IsEnabled : false
 			});
 
 			that.getModel("worklistView").setProperty("/sDialogMode", "C");
@@ -179,11 +190,22 @@ sap.ui.define([
 				});
 			oShareDialog.open();
 		},
+		
+		
 		onSaveAddOption: function () {
-
-			this.getImageBinary().then(this._fnCreateOption.bind(this));
-
+			var oImageEditorCtrl = this._oDlgAddOption.getContent()[1].getImageEditor();
+			
+			//Validations
+			if(this._bNotValid(oImageEditorCtrl))
+			{
+				return;
+			}
+		
+			oImageEditorCtrl.getImageAsBlob()
+							.then(this._imageBlob.bind(this));
+		
 		},
+		
 
 		onSearch: function (oEvent) {
 			if (oEvent.getParameters().refreshButtonPressed) {
@@ -234,7 +256,8 @@ sap.ui.define([
 			var sBtnType = oEvent.getSource().getType(),
 				sPath = oEvent.getSource().getBindingContext().getPath(),
 				that = this;
-
+			
+			//pressed "Delete"
 			if (sBtnType === "Reject") {
 				//	that.getModel().remove(sPath,  {  success : that._fnSuccessToast.bind(that , "MSG_SUCCESS_DEVICE_REMOVE")  }       );
 				var sMsg = {};
@@ -265,23 +288,13 @@ sap.ui.define([
 				);
 
 			} else {
-
-		
-				//	
-				var oClone = $.extend(true, {}, oEvent.getSource().getBindingContext().getObject());
-				that.getModel("worklistView").setProperty("/bDeviceItemsBusy", true);	
-				this.toDataURL(oClone.__metadata.media_src, function (dataUrl) {
-					that.getModel("worklistView").setProperty("/bDeviceItemsBusy" ,false);
-					oClone.Icon = dataUrl.replace("text", "jpg");
+				//Pressed Edit
+				var oClone = $.extend(true, {}, oEvent.getSource().getBindingContext().getObject()),
+					oUrl = new URL(oClone.__metadata.media_src);
+					oClone.Icon = "/EXPO_PODIUM_API"+ oUrl.pathname;
 					that.getModel("worklistView").setProperty("/oAddOption", oClone);
 					that.getModel("worklistView").setProperty("/sDialogMode", "E");
 					that._DeviceAccessibilityDialog();
-					
-				});
-
-			
-
-				
 			}
 
 		},
@@ -298,23 +311,6 @@ sap.ui.define([
 		/* =========================================================== */
 		/* internal methods                                            */
 		/* =========================================================== */
-
-		toDataURL: function (url, callback) {
-			var xhr = new XMLHttpRequest();
-			xhr.onload = function () {
-				var reader = new FileReader();
-				reader.onloadend = function () {
-					callback(reader.result);
-				};
-				reader.readAsDataURL(xhr.response);
-			};
-			
-			var oUrl = new URL(url);
-			
-			xhr.open("GET", oUrl.pathname);
-			xhr.responseType = "blob";
-			xhr.send();
-		},
 		_DeviceAccessibilityDialog: function () {
 			var oView = this.getView(),
 				that = this;
@@ -335,11 +331,56 @@ sap.ui.define([
 				that._oDlgAddOption.open();
 			}
 		},
-
+		
+		_bNotValid: function(oImageEditorCtrl){
+			if(this.getModel("worklistView").getProperty("/oAddOption/Title").length === 0)
+			{
+				this._fnSuccessToast("MSG_ERR_TITLE");
+				return true;
+			}
+			
+			if(!oImageEditorCtrl.getLoaded())
+			{
+				this._fnSuccessToast("MSG_ERR_IMAGE");
+				return true;
+			}
+			
+			return false;
+		},
+		
 		//Get image editor control from Button
 		getImageEditorControl: function (oCtrl) {
 			return oCtrl.getParent().getImageEditor();
 		},
+		_imageBlob: function(imageData){
+		
+		this._fnCreateOption().then(this._uplaodImage.bind(this,imageData));
+		
+		},
+		_uplaodImage: function(imageData, data){
+		var oUrl = new URL(data.__metadata.media_src),
+		    oViewModel = this.getModel("worklistView"),
+		    that = this,
+		    settings = {
+		 			url : "/EXPO_PODIUM_API" + oUrl.pathname,
+		 			data: imageData,
+		 			method: "PUT",
+		 			headers : this.getModel().getHeaders(),
+		 			contentType:"multipart/form-data",
+		 			processData : false,
+		 			success : function(){
+		 				var sMsg = oViewModel.getProperty("/sDialogMode") === "C" ? "MSG_SUCCESS_OPTION_CREATE" : "MSG_SUCCESS_EDIT";
+		 				that._fnCreateOptionSuccess.call(that,sMsg);
+		 				that.getModel().refresh(true);
+		 			},
+		 			error: function(){
+		 				that._fnSuccessToast.call(that, "MSG_ERR_IMAGE_UPLOAD")  ;                           
+		 			}
+		 		};
+		 		
+		 		$.ajax(settings).always(function(){ 	oViewModel.setProperty("/bBusyDialog", false); });	
+		},
+		
 		getImageBinary: function () {
 			var oFile = this.getModel("worklistView").getProperty("/oAddOption/Icon"),
 				oFileReader = new FileReader();
@@ -359,33 +400,40 @@ sap.ui.define([
 
 		},
 		_fnCreateOption: function (oImagedata) {
-
 			var oViewModel = this.getModel("worklistView"),
+				that = this,
+			    oPayload = oViewModel.getProperty("/oAddOption");
+	
+			oViewModel.setProperty("/bBusyDialog", true);
+	
+			delete oPayload.Icon;
 
-				oPayload = oViewModel.getProperty("/oAddOption");
-			//remove image metadata using slice
-			var iSliceIndex = oImagedata.indexOf("base64") + 7;
-			oPayload.Icon = oImagedata.slice(iSliceIndex);
-
-			if (oViewModel.getProperty("/sDialogMode") === "C") {
-				this.getModel().create("/AccessibilityItemSet", oPayload, {
-					success: this._fnCreateOptionSuccess.bind(this)
+			return new Promise(function(res,rej){
+				if (oViewModel.getProperty("/sDialogMode") === "C") {
+				that.getModel().create("/AccessibilityItemSet", oPayload, {
+					success:  function(data){ res(data); } ,
+					error: function(){  rej.call(that); } 
 				});
 			} else {
 
-				var sKey = this.getModel().createKey("/AccessibilityItemSet", {
+				var sKey = that.getModel().createKey("/AccessibilityItemSet", {
 					Id: oPayload.Id
 				});
-				this.getModel().update(sKey, oPayload, {
-					success: this._fnCreateOptionSuccess.bind(this)
+				that.getModel().update(sKey, oPayload, {
+					success: function(data){ res(oPayload); },
+					error: function(){  rej(); }
 				});
 
 			}
+			});
+
+
+		
 
 		},
 		_fnCreateOptionSuccess: function (sMsg) {
 			this.onCancelAddOption();
-			this._fnSuccessToast("MSG_SUCCESS_OPTION_CREATE");
+			this._fnSuccessToast(sMsg);
 		}
 
 	});

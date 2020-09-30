@@ -159,10 +159,12 @@ sap.ui.define([
 			var oNewReqTable = this.getView().byId("newReqs"),
 				oOngReqs = this.getView().byId("OngReqs"),
 				oCompReqs = this.getView().byId("CompReqs")	;
+				oCanclReqs = this.getView().byId("CanclReqs")	;
 
 			this._bindTables(oNewReqTable, +sPODId,1);
 			this._bindTables(oOngReqs, +sPODId,2);
 			this._bindTables(oCompReqs, +sPODId,3);
+			this._bindTables(oCanclReqs, +sPODId,4);
 
 		},
 
@@ -187,17 +189,19 @@ sap.ui.define([
 			var oColumnListTemplate = new sap.m.ColumnListItem();
 
 			oColumnListTemplate.addCell(new sap.m.Text({
-				text: "{Comments}"
+				text:  "{ServiceType/ServiceType}" 
 			}));
+			
+			oColumnListTemplate.addCell(new sap.m.Text({
+				text: "{ServiceType/IncidentType/ServiceMessage}"
+			}));
+			
 			oColumnListTemplate.addCell(new sap.m.Text({
 				text: "{ServiceType/IncidentType/IncidentType}"
 			}));
-			oColumnListTemplate.addCell(new sap.m.Text({
-				text: "{ServiceType/ServiceType}"
-			}));
 
 			oColumnListTemplate.addCell(new sap.m.Text({
-				text: ""
+				text: "{Comments}"
 			}));
 
 			oColumnListTemplate.addCell(new sap.m.Button({

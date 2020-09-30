@@ -23,20 +23,6 @@
 		"sourceTemplate": {
 			"id": "sap.ui.ui5-template-plugin.1worklist",
 			"version": "1.78.1"
-		},
-		"crossNavigation": {
-			"inbounds": {
-				"intent1": {
-					"signature": {
-						"parameters": {},
-						"additionalParameters": "allowed"
-					},
-					"semanticObject": "Manage",
-					"action": "Assignment",
-					"title": "Assignment List",
-					"icon": "sap-icon://activity-assigned-to-goal"
-				}
-			}
 		}
 	},
 	"sap.ui": {
@@ -114,19 +100,28 @@
 				"controlId": "app",
 				"controlAggregation": "pages",
 				"bypassed": {
-					"target": ["notFound"]
+					"target": [
+						"notFound"
+					]
 				},
 				"async": true
 			},
-			"routes": [{
-				"pattern": "",
-				"name": "worklist",
-				"target": ["worklist"]
-			}, {
-				"pattern": "AssignmentSet/{objectId}",
-				"name": "object",
-				"target": ["object"]
-			}],
+			"routes": [
+				{
+					"pattern": "",
+					"name": "worklist",
+					"target": [
+						"worklist"
+					]
+				},
+				{
+					"pattern": "AssignmentSet/{objectId}",
+					"name": "object",
+					"target": [
+						"object"
+					]
+				}
+			],
 			"targets": {
 				"worklist": {
 					"viewName": "Worklist",
@@ -151,14 +146,16 @@
 			}
 		},
 		"resources": {
-			"css": [{
-				"uri": "css/style.css"
-			}, {
-				"uri": "css/mapsjs-ui.css",
-				"id": ""
-			}]
-		},
-		"flexEnabled": true
+			"css": [
+				{
+					"uri": "css/style.css"
+				},
+				{
+					"uri": "css/mapsjs-ui.css",
+					"id": ""
+				}
+			]
+		}
 	},
 	"sap.platform.hcp": {
 		"uri": "webapp",

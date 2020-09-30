@@ -103,7 +103,6 @@ sap.ui.define([
 		_fnSuccessToast: function(sText){
 						MessageToast.show(this.getResourceBundle().getText(sText));
 					},
-					
 		_fnWarningMessageBox : function(sMsg, _fnSuccess, _fnError ){
 			var bCompact = !!this.getView().$().closest(".sapUiSizeCompact").length;
 			MessageBox.warning(

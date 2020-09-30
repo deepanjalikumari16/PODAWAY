@@ -270,8 +270,6 @@ sap.ui.define([
 		onSave: function () {
 			var oViewModel = this.getModel("objectView");
 			var oPayload = oViewModel.getProperty("/oDetails");
-			// oPayload.Highlights = oPayload.Highlights.results;
-
 			var oValid = this._fnValidation(oPayload);
 
 			if (oValid.IsNotValid) {
@@ -311,15 +309,9 @@ sap.ui.define([
 
 		onUrlValidate: function () {
 			var url = this.getView().byId("urlInput").getValue();
-			// var urlregex = /^(?:([A-Za-z]+):)?(\/{0,3})([0-9.\-A-Za-z]+)(?::(\d+))?(?:\/([^?#]*))?(?:\?([^#]*))?(?:#(.*))?$/;
-			// if (!urlregex.test(url)) {
-			// 	this.showToast.call(this, "MSG_INVALID_URL");
-			// }
-			var expression = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
-			var regex = new RegExp(expression);
-			if (url.match(regex)) {
-				// alert("Successful match");
-			} else {
+			var regex =
+				/((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/;
+			if (url.match(regex)) {} else {
 				this.showToast.call(this, "MSG_INVALID_URL");
 			}
 		},
@@ -365,21 +357,21 @@ sap.ui.define([
 				IsNotValid: false,
 				sMsg: []
 			};
-			if (data.Name === null) {
+			if (data.Name === "") {
 				oReturn.IsNotValid = true;
 				oReturn.sMsg.push("Please enter Name");
 			} else if (data.StartDate === "") {
 				oReturn.IsNotValid = true;
-				oReturn.sMsg.push("Please enter StartDate");
+				oReturn.sMsg.push("Please enter Start Date");
 			} else if (data.EndDate === "") {
 				oReturn.IsNotValid = true;
-				oReturn.sMsg.push("Please enter EndDate");
+				oReturn.sMsg.push("Please enter End Date");
 			} else if (data.StartTime === "") {
 				oReturn.IsNotValid = true;
-				oReturn.sMsg.push("Please enter StartTime");
+				oReturn.sMsg.push("Please enter Start Time");
 			} else if (data.EndTime === "") {
 				oReturn.IsNotValid = true;
-				oReturn.sMsg.push("Please enter EndTime");
+				oReturn.sMsg.push("Please enter End Time");
 			} else if (+data.Latitude < -90 || +data.Latitude > 90) {
 				oReturn.IsNotValid = true;
 				oReturn.sMsg.push("Latitude must be between -90 and 90 degrees inclusive.");
@@ -389,11 +381,25 @@ sap.ui.define([
 			} else if (data.Longitude === "" || data.Latitude === "") {
 				oReturn.IsNotValid = true;
 				oReturn.sMsg.push("Enter a valid Latitude or Longitude!");
-			} else if (data.Highlights !== null && data.Highlights.length > 0) {
+			} else if (data.CountryId === "") {
+				oReturn.IsNotValid = true;
+				oReturn.sMsg.push("Please enter Country");
+			} else if (data.Url !== "") {
+				var url = data.Url;
+				var regex =
+					/((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/;
+				if (!url.match(regex)) {
+					oReturn.IsNotValid = true;
+					oReturn.sMsg.push("Please enter valid URL");
+				}
+			}
+			if (data.Highlights !== null && data.Highlights.length > 0) {
+				var error = false;
 				for (var i = 0; i < data.Highlights.length; i++) {
 					var oHighlight = data.Highlights[i];
-					if (oHighlight.Highlight === "") {
+					if (oHighlight.Highlight === "" && error === false) {
 						oReturn.IsNotValid = true;
+						error = true;
 						oReturn.sMsg.push("Dont save with empty Highlight");
 					}
 				}

@@ -75,11 +75,15 @@ sap.ui.define([
 		 * @returns commma (,) sperated string Accessiblity items text
 		 */
 		AccessibiltyItems : function(aItems, sType){
-			if( !aItems || !aItems.length){
+			if( !aItems || !aItems.length ){
 				return "";
 			}
 			return aItems.filter(
-				function(ele){ 
+				function(ele){
+					if(ele.AccessiblityItem == null)
+					{
+						return false;
+					}
 					return ele.AccessiblityItem.AccessibilityId === +sType;
 					}).map( function(ele) { return ele.AccessiblityItem.Title; }  ).join(",");
 		},

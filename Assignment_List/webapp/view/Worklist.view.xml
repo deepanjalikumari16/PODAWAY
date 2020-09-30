@@ -50,31 +50,31 @@
 								</OverflowToolbar>
 							</headerToolbar>
 							<columns>
-								<Column >
+								<Column width="18%">
 									<Text text="{i18n>colAssignment}"/>
 								</Column>
-								<Column >
+								<Column width="13%">
 									<Text text="{i18n>colPodName}"/>
 								</Column>
-								<Column >
+								<Column width="10%">
 									<Text text="{i18n>colPodCategory}"/>
 								</Column>
-								<Column >
+								<Column width="10%">
 									<Text text="{i18n>colIncidentType}"/>
 								</Column>
-								<Column >
-									<Text text="{i18n>colAssignVolManager}"/>
+								<Column width="14%">
+									<Text text="{i18n>colAssignTeamManager}"/>
 								</Column>
-								<Column>
+								<Column width="11%">
 									<Text text="{i18n>colStatus}"/>
 								</Column>
-								<Column >
+								<Column width="8%">
 									<Text text="{i18n>colNavigate}"/>
 								</Column>
-								<Column >
+								<Column width="8%">
 									<Text text="{i18n>colMessage}"/>
 								</Column>
-								<Column >
+								<Column width="8%">
 									<Text text="{i18n>colComment}"/>
 								</Column>
 							</columns>
@@ -87,19 +87,18 @@
 										<ObjectStatus text="{ServiceType/IncidentType/IncidentType}"
 											state="{= ${ServiceType/IncidentType/IncidentType} === 'Emergency' ? 'Error' : 'Success' }"/>
 										<Text text="{Assignee/FirstName} {Assignee/LastName}"/>
-										<!--If loggedIn user is a Volunteer Manager button text will be Start Assignment otherwise Assign Now-->
+										<!--If loggedIn user is a Team Manager button text will be Start Assignment otherwise Assign Now-->
 										<!--Very Important: Never change Pushbutton Text, as It is being used in "onAssignNow" event-->
-										<Button text="{= ${worklistView>/loggedUserId} === ${Id} ? 'Start Assignment' : 'Assign Now' }" press="onAssignNow"
-											class="sapUiSmallMarginBottom"/>
-										<Button icon="sap-icon://map" press="onNavigate" type="Transparent"/>
-										<Button icon="sap-icon://paper-plane" press="onMessage" type="Transparent"/>
-										<Button icon="sap-icon://notification-2" press="onComment" type="Transparent"/>
+										<Button text="{= ${worklistView>/loggedUserId} === ${AssigneeId} ? 'Start Assignment' : 'Assign Now' }" press="onAssignNow"/>
+										<Button icon="sap-icon://locate-me" press="onNavigate" type="Transparent"/>
+										<Button icon="sap-icon://message-popup" press="onMessage" type="Transparent"/>
+										<Button icon="sap-icon://comment" press="onComment" type="Transparent"/>
 									</cells>
 								</ColumnListItem>
 							</items>
 						</Table>
 					</IconTabFilter>
-					<IconTabFilter text="{worklistView>/ongoing}">
+					<IconTabFilter text="{worklistView>/inprogress}">
 						<Table id="table1" width="auto"
 							items="{ path: '/AssignmentSet', parameters : { expand : 'PODVisitor,Assignee,AssignmentStatus,ServiceType/IncidentType,PODConditions' }, filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path : 'AssignmentStatusId' , operator : 'EQ' , value1 : 2 } ] }"
 							noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
@@ -111,31 +110,28 @@
 								</OverflowToolbar>
 							</headerToolbar>
 							<columns>
-								<Column >
+								<Column width="18%">
 									<Text text="{i18n>colAssignment}"/>
 								</Column>
-								<Column >
+								<Column width="15%">
 									<Text text="{i18n>colPodName}"/>
 								</Column>
-								<Column >
+								<Column width="10%">
 									<Text text="{i18n>colPodCategory}"/>
 								</Column>
-								<Column >
+								<Column width="10%">
 									<Text text="{i18n>colIncidentType}"/>
 								</Column>
-								<Column>
+								<Column width="22%">
 									<Text text="{i18n>colStatus}"/>
 								</Column>
-								<Column>
-									<Text text=""/>
-								</Column>
-								<Column >
+								<Column width="8%">
 									<Text text="{i18n>colNavigate}"/>
 								</Column>
-								<Column >
+								<Column width="8%">
 									<Text text="{i18n>colMessage}"/>
 								</Column>
-								<Column >
+								<Column width="9%">
 									<Text text="{i18n>colComment}"/>
 								</Column>
 							</columns>
@@ -147,11 +143,14 @@
 										<Button text="{= ${PODConditions}.length }" press="onPodCategory"/>
 										<ObjectStatus text="{ServiceType/IncidentType/IncidentType}"
 											state="{= ${ServiceType/IncidentType/IncidentType} === 'Emergency' ? 'Error' : 'Success' }"/>
-										<Button text="Reassign" press="onAssignNow"/>
-										<Button text="Mark Complete" press="onMarkasComplete"/>
-										<Button icon="sap-icon://map" press="onNavigate" type="Transparent"/>
-										<Button icon="sap-icon://paper-plane" press="onMessage" type="Transparent"/>
-										<Button icon="sap-icon://notification-2" press="onComment" type="Transparent"/>
+										<HBox>
+											<Button text="Reassign" press="onAssignNow" visible="{= ${worklistView>/loggedUserRoleId} === 1 }" class="sapUiSmallMarginEnd"/>
+											<Button text="Mark as Complete" press="onMarkasComplete"/>
+										</HBox>
+										
+										<Button icon="sap-icon://locate-me" press="onNavigate" type="Transparent"/>
+										<Button icon="sap-icon://message-popup" press="onMessage" type="Transparent"/>
+										<Button icon="sap-icon://comment" press="onComment" type="Transparent"/>
 									</cells>
 								</ColumnListItem>
 							</items>
@@ -169,28 +168,28 @@
 								</OverflowToolbar>
 							</headerToolbar>
 							<columns>
-								<Column >
+								<Column width="20%">
 									<Text text="{i18n>colAssignment}"/>
 								</Column>
-								<Column >
+								<Column width="15%">
 									<Text text="{i18n>colPodName}"/>
 								</Column>
-								<Column >
+								<Column width="12%">
 									<Text text="{i18n>colPodCategory}"/>
 								</Column>
-								<Column >
+								<Column width="12%">
 									<Text text="{i18n>colIncidentType}"/>
 								</Column>
-								<Column >
+								<Column width="11%">
 									<Text text="{i18n>colStatus}"/>
 								</Column>
-								<Column >
+								<Column width="10%">
 									<Text text="{i18n>colNavigate}"/>
 								</Column>
-								<Column >
+								<Column width="10%">
 									<Text text="{i18n>colMessage}"/>
 								</Column>
-								<Column >
+								<Column width="10%">
 									<Text text="{i18n>colComment}"/>
 								</Column>
 							</columns>
@@ -203,9 +202,9 @@
 										<ObjectStatus text="{ServiceType/IncidentType/IncidentType}"
 											state="{= ${ServiceType/IncidentType/IncidentType} === 'Emergency' ? 'Error' : 'Success' }"/>
 										<ObjectStatus text="{i18n>colCompleted}" state="Success"/>
-										<Button icon="sap-icon://map" press="onNavigate" type="Transparent"/>
-										<Button icon="sap-icon://paper-plane" press="onMessage" type="Transparent"/>
-										<Button icon="sap-icon://notification-2" press="onComment" type="Transparent"/>
+										<Button icon="sap-icon://locate-me" press="onNavigate" type="Transparent"/>
+										<Button icon="sap-icon://message-popup" press="onMessage" type="Transparent"/>
+										<Button icon="sap-icon://comment" press="onComment" type="Transparent"/>
 									</cells>
 								</ColumnListItem>
 							</items>
@@ -223,28 +222,28 @@
 								</OverflowToolbar>
 							</headerToolbar>
 							<columns>
-								<Column >
+								<Column width="20%">
 									<Text text="{i18n>colAssignment}"/>
 								</Column>
-								<Column >
+								<Column width="15%">
 									<Text text="{i18n>colPodName}"/>
 								</Column>
-								<Column >
+								<Column width="12%">
 									<Text text="{i18n>colPodCategory}"/>
 								</Column>
-								<Column >
+								<Column width="12%">
 									<Text text="{i18n>colIncidentType}"/>
 								</Column>
-								<Column >
+								<Column width="11%">
 									<Text text="{i18n>colStatus}"/>
 								</Column>
-								<Column >
+								<Column width="10%">
 									<Text text="{i18n>colNavigate}"/>
 								</Column>
-								<Column >
+								<Column width="10%">
 									<Text text="{i18n>colMessage}"/>
 								</Column>
-								<Column >
+								<Column width="10%">
 									<Text text="{i18n>colComment}"/>
 								</Column>
 							</columns>
@@ -258,9 +257,9 @@
 										<ObjectStatus text="{ServiceType/IncidentType/IncidentType}"
 											state="{= ${ServiceType/IncidentType/IncidentType} === 'Emergency' ? 'Error' : 'Success' }"/>
 										<ObjectStatus text="{i18n>colCancelled}" state="Error"/>
-										<Button icon="sap-icon://map" press="onNavigate" type="Transparent"/>
-										<Button icon="sap-icon://paper-plane" press="onMessage" type="Transparent"/>
-										<Button icon="sap-icon://notification-2" press="onComment" type="Transparent"/>
+										<Button icon="sap-icon://locate-me" press="onNavigate" type="Transparent"/>
+										<Button icon="sap-icon://message-popup" press="onMessage" type="Transparent"/>
+										<Button icon="sap-icon://comment" press="onComment" type="Transparent"/>
 									</cells>
 								</ColumnListItem>
 							</items>

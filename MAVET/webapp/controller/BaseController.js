@@ -74,8 +74,7 @@ sap.ui.define([
 		var	aActions = sType === "warning" ? 
 			[sap.m.MessageBox.Action.NO , sap.m.MessageBox.Action.YES] : [sap.m.MessageBox.Action.OK];
 		
-		
-		MessageBox[sType].call(MessageBox,this.getResourceBundle().getText(sMsgTxt) , 
+		MessageBox[sType].call(MessageBox,this.getResourceBundle().getText(sMsgTxt, [this.getModel("appView").getProperty("/sAppName")]) , 
 		{
 			actions : aActions,
 			onClose : function(sAction){
@@ -152,8 +151,7 @@ sap.ui.define([
 		},
 		
 		_fnSuccessToast: function(sMsg){
-			MessageToast.show( this.getResourceBundle().getText(sMsg) );
-			
+			MessageToast.show( this.getResourceBundle().getText(sMsg, [this.getModel("appView").getProperty("/sAppName")] ) );
 		}
 
 	});

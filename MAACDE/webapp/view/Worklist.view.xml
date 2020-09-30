@@ -35,10 +35,10 @@
 					busyIndicatorDelay="0">
 					<VBox class="card sapFCard">
 						<Image class="iconImg" src="{ path: '__metadata' , formatter : '.formatter.giveImage' }" alt="Image" height="100px"/>
-						<Text text="{Title}" class="sapUiTinyMarginTopBottom" textAlign="Center" width="100%"/>
+						<Text text="{Title}" wrapping="true" maxLines="1" wrappingType="Normal" class="sapUiTinyMarginTopBottom" textAlign="Center" width="100%"/>
 						<HBox class="container">
 							<Button press="onDevice" class="sapUiTinyMargin" text="{i18n>btnEdit}" type="Emphasized"/>
-							<Button press="onDevice" class="sapUiTinyMargin" text="{i18n>btnRemove}" type="Reject"/>
+							<Button enabled="{= !${IsDefault} }" press="onDevice" class="sapUiTinyMargin" text="{i18n>btnRemove}" type="Reject"/>
 						</HBox>
 					</VBox>
 				</l:Grid>

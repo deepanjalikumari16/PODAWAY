@@ -42,7 +42,7 @@ sap.ui.define([
 				tableBusyDelay : 0
 			});
 			this.setModel(oViewModel, "worklistView");
-
+			
 			// Make sure, busy indication is showing immediately so there is no
 			// break after the busy indication for loading the view's meta data is
 			// ended (see promise 'oWhenMetadataIsLoaded' in AppController)
@@ -231,7 +231,6 @@ sap.ui.define([
 			if(customQuery && Object.keys(customQuery).length )
 			{
 				Object.assign(urlParameters, customQuery )
-		//	urlParameters.custom = customQuery;
 				 }
 			
 			

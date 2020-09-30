@@ -35,10 +35,10 @@ sap.ui.define([
 			
 			//Determine event type s
 			this.iEvtType = 1;
-			if (window.location.hash.search("Event") >= 0) {
+		
+			if (window.location.hash.search("Initiative") >= 0) {
 					this.iEvtType = 1;
-					
-			} else if (window.location.hash.search("Offer") >= 0) {
+			} else if (window.location.hash.search("Attraction") >= 0) {
 					this.iEvtType = 2;
 			} 
 		},

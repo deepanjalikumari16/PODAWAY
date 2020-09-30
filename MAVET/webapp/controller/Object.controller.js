@@ -193,7 +193,7 @@ sap.ui.define([
 			if (!(oViewModel.getProperty("/oDetails/Highlights"))) oViewModel.setProperty("/oDetails/Highlights", []);
 			oViewModel.getProperty("/oDetails/Highlights").push({
 				Highlight: "",
-				EventAttractionId : oViewModel.getProperty("/oDetails/Id")
+				EventAttractionId: oViewModel.getProperty("/oDetails/Id")
 			});
 			oViewModel.refresh();
 		},
@@ -296,7 +296,7 @@ sap.ui.define([
 			//Reset del array 
 			this._pendingDelOps = [];
 			this._delPlanId = "";
-
+			this.coverImageId = null;
 			var oViewModel = this.getModel("objectView");
 			oViewModel.setProperty("/busy", false);
 			if (data) {
@@ -330,7 +330,6 @@ sap.ui.define([
 				ThemeId: -1,
 				//Issue #18, Manage Event Attraction: Add and edit there is no option to add highlights
 				Highlights: []
-
 			});
 
 		},
@@ -412,7 +411,8 @@ sap.ui.define([
 			var aProms = [],
 				that = this,
 				oDataModel = this.getModel(),
-				oViewModel = this.getModel("objectView");
+				oViewModel = this.getModel("objectView"),
+				sCoverImageId = null;
 
 			//Deletion Operation : if Any
 			if (this._pendingDelOps.length) {
@@ -428,10 +428,12 @@ sap.ui.define([
 			//Upload Files check if Id is present
 			oViewModel.getProperty("/oImages").forEach(function (ele) {
 				ele.EventAttractionId = data.Id;
+
 				if (ele.Id === undefined) {
 					aProms.push(that._fnCrOp.call(that, "/EventAttractionImageSet", ele));
+				} else {
+					sCoverImageId = ele.IsCoverImage ? ele.Id : sCoverImageId;
 				}
-
 			});
 
 			if (oViewModel.getProperty("/oPlan") && oViewModel.getProperty("/oPlan/Id") === undefined) {
@@ -441,16 +443,33 @@ sap.ui.define([
 			}
 
 			//Collect all request and show success/failure
-			Promise.all(aProms).then(
-				function () {
-					oViewModel.setProperty("/busy", false);
-					that.onCancel.apply(that);
-					that._fnSuccessToast.call(that, "MSG_SUCCESS_EVENTDETAILS");
-				},
-				function () {
-					oViewModel.setProperty("/busy", false);
-				}
-			);
+			Promise.all(aProms)
+				.then(new Promise(function (res, rej) {
+					if (sCoverImageId) {
+						oDataModel.callFunction("/UpdateEventAttractionCoverImage", {
+							urlParameters: {
+								ImageId: sCoverImageId,
+								EventAttactionId: data.Id
+							},
+							success: function () {
+								res();
+							},
+							error: function () {
+								rej();
+							}
+						});
+
+					}
+				}))
+				.then(function () {
+						oViewModel.setProperty("/busy", false);
+						that.onCancel.apply(that);
+						that._fnSuccessToast.call(that, "MSG_SUCCESS_EVENTDETAILS");
+					},
+					function () {
+						oViewModel.setProperty("/busy", false);
+					}
+				);
 
 		},
 		/** 
@@ -496,7 +515,8 @@ sap.ui.define([
 				oData = data;
 			return new Promise(function (res, rej) {
 				that.getModel().create(ssEntitySet, oData, {
-					success: function () {
+					success: function (data1) {
+						that.coverImageId = data1.IsCoverImage ? data1.Id : that.coverImageId;
 						res();
 					},
 					error: function () {
@@ -509,20 +529,62 @@ sap.ui.define([
 
 		_fnValidate: function (data) {
 			//	var oValidate = { status : true , sMsg : "" }
-			if (!(data.Highlights.every(function (ele) {
-					return !!(ele.Highlight);
-				}))) {
-				return {
-					status: false,
-					sMsg: "ERR_HIGHLIGHTS"
-				};
-			}
+			var appViewModel = this.getModel("appView");
+
 			if (!(data.Title.length)) {
 				return {
 					status: false,
 					sMsg: "MSG_ERR_TITLE"
 				};
 			}
+
+			if (!(data.Description.length)) {
+				return {
+					status: false,
+					sMsg: "MSG_ERR_DSC"
+				};
+			}
+			
+			if (data.Longitude === "" || data.Latitude === "") {
+
+				return {
+					status: false,
+					sMsg: "MSG_LAT_LNG"
+				};
+
+			} else 	if (+data.Latitude < -90 || +data.Latitude > 90) {
+				return {
+					status: false,
+					sMsg: "MSG_ERR_LAT"
+				};
+
+			} else if (+data.Longitude < -180 || +data.Longitude > 180) {
+
+				return {
+					status: false,
+					sMsg: "MSG_ERR_LNG"
+				};
+
+			}  
+
+			/*	if (!(data.Highlights.every(function (ele) {
+						return !!(ele.Highlight);
+					}))) {
+					return {
+						status: false,
+						sMsg: "ERR_HIGHLIGHTS"
+					};
+				}*/
+
+			//Only check if option is there
+			/*	if( appViewModel.getProperty("/EvtTypeConfig/Building") && !(data.BuildingId.length))
+				{
+					return {
+						status: false,
+						sMsg: "MSG_ERR_BULDNG"
+					};	
+				}*/
+
 			//add Validations here
 			return {
 				status: true,

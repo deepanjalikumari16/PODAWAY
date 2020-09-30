@@ -27,7 +27,21 @@ sap.ui.define([], function () {
 				return "";
 			}
 			return code.concat(num); 
-	}
+	},
+		/** 
+		 * 
+		 * @param oMetadata
+		 * @param ImageData
+		 * @return parsed image url to avoid CORS
+		 */
+		giveImage : function(oMetadata, ImageData){
+			if(oMetadata)
+			{   
+				var sPathname = new URL(oMetadata.media_src).pathname
+				return ("/EXPO_PODIUM_API").concat(sPathname) ;
+			}
+			return ("data:image/png;base64,").concat(ImageData);
+		},
 	};
 
 });

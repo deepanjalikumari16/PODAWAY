@@ -30,13 +30,17 @@ sap.ui.define([], function () {
 		 */
 		giveImage : function(oMetadata, ImageData){
 			if(oMetadata)
-			{   
+			{  
 				var sPathname = new URL(oMetadata.media_src).pathname;
-				return ("/EXPO_PODIUM_API").concat(sPathname);
+				return ("/EXPO_PODIUM_API").concat(sPathname) ;
 			}
 			return ("data:image/png;base64,").concat(ImageData);
+		},
+		
+		getDialogTitle : function(cDialog, sApp)
+		{
+			return cDialog === "C" ? ("Add").concat(" ", sApp) : ("Edit").concat(" ",sApp);
 		}
-
 	};
 
 });

@@ -195,9 +195,9 @@
 									<cells>
 										<Text text="{EventAttractionType}"/>
 										<Text text="{Description}"/>
-										<CheckBox selected="{Building}" editable="false"/>
-										<CheckBox selected="{Category}" editable="false"/>
-										<CheckBox selected="{Theme}" editable="false"/>
+										<CheckBox selected="{IsBuilding}" editable="false"/>
+										<CheckBox selected="{IsCategory}" editable="false"/>
+										<CheckBox selected="{IsTheme}" editable="false"/>
 										<Button text="{i18n>LnkViewImage}" press=".onViewImage($event, 'I')"/>
 										<Button icon="sap-icon://edit" press="onEdit" type="Transparent"/>
 									</cells>
@@ -223,9 +223,9 @@
 								<Column width="15%">
 									<Text text="{i18n>colNavigationGroupId}"/>
 								</Column>
-								<Column width="15%">
-									<Text text="{i18n>colNavigationTypeId}"/>
-								</Column>
+								<!--<Column width="15%">-->
+								<!--	<Text text="{i18n>colNavigationTypeId}"/>-->
+								<!--</Column>-->
 								<Column width="60%">
 									<Text text="{i18n>colNavigationTypeName}"/>
 								</Column>
@@ -237,9 +237,8 @@
 								<ColumnListItem>
 									<cells>
 										<Image width="2rem" class="sapUiTinyMargin" height="2rem" src="{ path : '__metadata' , formatter : '.formatter.giveImage' }"/>
-										<!--<Text text="{NavigationGroupId}"/>-->
 										<Text text="{= ${NavigationGroupId} === 0 ? 'Event Attraction' : 'Facility' }"/>
-										<Text text="{NavigationTypeId}"/>
+										<!--<Text text="{NavigationTypeId}"/>-->
 										<Text text="{NavigationTypeName}"/>
 										<Button icon="sap-icon://edit" press="onEdit" type="Transparent"/>
 									</cells>

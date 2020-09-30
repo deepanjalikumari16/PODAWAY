@@ -1,14 +1,107 @@
-.sapMObjectIdentifierTitle>.sapUiSelectable {
+.sapMObjStatusIcon > .sapUiIcon 
+{
+	font-size : xx-large;	
+}
+
+
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  border-radius: 5px 5px 5px 5px;
+  transition: 0.3s;
+  text-align: center;
+  padding-top: 1rem;
+  overflow: auto;
+  white-space: nowrap;
+  height: 10rem;
+}
+
+.sapUiBlockCellContent
+{
+	padding : 1rem 1rem !important; 
+	
+}
+
+.chartScroll
+{
+	 overflow: auto;
+  white-space: nowrap;
+}
+
+.large-font
+{	
+ 	font-weight: bold;
 	font-size : xx-large;
+}
+.transform
+{
+	transform : translateY(3rem);
+	
+}
+.MapBorder{
+border-style: solid;
 }
 
 .MapContainer {
-width:90%; 
+width:100%; 
 height: 25rem;
-margin-left: 3rem;
 box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
 border-radius: 5px 5px 5px 5px;
 transition: 0.3s;
 }
-
+/*Podium custom css*/
+.podium-dashboard .sapUiBlockCellContent {
+	border-radius: 4px;
+	box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1) !important;
+	border: 2px solid #d9d9d9 !important;
+	background-color: #ffffff;
+}
+.podium-dashboard_grid .sapUiBlockCellContent .sapUiBlockCellTitle {
+	font-size: 18px;
+	font-weight: 600;
+	font-stretch: normal;
+	font-style: normal;
+	line-height: normal;
+	letter-spacing: -0.36px;
+	text-align: left;
+	color: #333333;
+}
+.podium-dashboard_grid .podium-dashboard_item .large-font {
+	display: flex;
+    align-items: center;
+	font-size: 39px !important;
+	font-weight: 500 !important;
+}
+.podium-dashboard_grid .podium-dashboard_item .large-font .sapMObjStatusIcon {
+	font-size: 33px !important;
+}
+.total-incident {
+	font-size: 17.5px;
+	font-weight: 600;
+	letter-spacing: -0.35px;
+	text-align: left;
+	color: #333333;
+	display: block;
+}
+.pod-users {
+	font-size: 14px;
+    font-weight: normal;
+    text-align: left;
+    color: #5f6265;
+    top: -1px;
+    position: relative;
+}
+.cust-legend-grid {
+	margin-left: 0 !important;
+}
+.cust-legend {
+    margin-right: 30px;
+}
+.cust-legend1 {
+	display: flex;
+	flex-flow: column;
+	margin-right: 80px;
+}
+.incident-text .sapMObjStatusText {
+	color: #333333 !important;
+}
 

@@ -9,20 +9,39 @@ sap.ui.define([
 		onInit: function () {
 			var oViewModel,
 				fnSetAppNotBusy,
-				iOriginalBusyDelay = this.getView().getBusyIndicatorDelay();
+				iOriginalBusyDelay = this.getView().getBusyIndicatorDelay(),
+				that = this,
+				oModel = this.getOwnerComponent().getModel()	;
 
 			oViewModel = new JSONModel({
 				busy: true,
 				delay: 0
 			});
 			this.setModel(oViewModel, "appView");
-			var that = this;
+		
+			
 			fnSetAppNotBusy = function () {
 				
 				that.setAppTitle.apply(that);
+				//Load Event Type Config from Master Set
+				var sKey = oModel.createKey("/MasterEventAttractionTypeSet", {
+					"Id" : that.getOwnerComponent().iEvtType
+				});
+				oModel.read(sKey, {
+					success : function(data){
+					oViewModel.setProperty("/EvtTypeConfig", data);	
+					oViewModel.setProperty("/busy", false);
+					oViewModel.setProperty("/delay", iOriginalBusyDelay);
 				
-				oViewModel.setProperty("/busy", false);
-				oViewModel.setProperty("/delay", iOriginalBusyDelay);
+					
+					}.bind(that)
+				});
+				
+				var sAppName =  that.getOwnerComponent().iEvtType == 1 ?
+				that.getOwnerComponent().getModel("i18n").getResourceBundle().getText("POD Initiative") :
+				that.getOwnerComponent().getModel("i18n").getResourceBundle().getText("Attraction");
+				
+				oViewModel.setProperty("/sAppName", sAppName );
 			};
 
 			// disable busy indication when the metadata is loaded and in case of errors

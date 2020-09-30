@@ -5,7 +5,7 @@
 				labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="4" emptySpanL="4" emptySpanM="4" emptySpanS="0" columnsXL="1"
 				columnsL="1" columnsM="1" singleContainerFullSize="false">
 				<f:content>
-					<TextArea value="{worklistView>/comments}" rows="8" maxLength="500"/>
+					<TextArea value="{worklistView>/comments}" rows="8" maxLength="500" showExceededText="true"/>
 				</f:content>
 			</f:SimpleForm>
 		</VBox>

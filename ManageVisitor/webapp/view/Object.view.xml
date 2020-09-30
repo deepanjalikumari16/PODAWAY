@@ -3,7 +3,7 @@
 	<uxap:ObjectPageLayout id="ObjectPageLayout" subSectionLayout="TitleOnLeft" showTitleInHeaderContent="true">
 		<uxap:headerTitle>
 			<uxap:ObjectPageHeader objectImageShape="Square" objectTitle="{FirstName} {LastName}" objectSubtitle="" id="ObjectPageLayoutHeaderTitle"
-				isObjectTitleAlwaysVisible="false" objectImageURI="{PhotoURL}" isObjectSubtitleAlwaysVisible="false" isActionAreaAlwaysVisible="true"
+				isObjectTitleAlwaysVisible="false" objectImageURI="{path: 'PhotoURL', formatter : '.formatter.giveImage' }" isObjectSubtitleAlwaysVisible="false" isActionAreaAlwaysVisible="true"
 				showPlaceholder="true">
 				<uxap:actions>
 					<uxap:ObjectPageHeaderActionButton press="onCall" icon="sap-icon://call" hideText="false" type="Emphasized"  text="{i18n>btnCall}"/>
@@ -52,9 +52,14 @@
 								<Column >
 									<Text text="{i18n>colIncidentType}"/>
 								</Column>
-								<Column >
-									<Text text="{i18n>colRequestedDevice}"/>
+								
+							<Column >
+									<Text text="{i18n>colServiceMessage}"/>
 								</Column>
+								
+							<!--	<Column >
+									<Text text="{i18n>colRequestedDevice}"/>
+								</Column>-->
 								<Column>
 									<Text text="{i18n>colAssistance}"/>
 								</Column>
@@ -82,9 +87,12 @@
 								<Column >
 									<Text text="{i18n>colIncidentType}"/>
 								</Column>
-								<Column >
-									<Text text="{i18n>colRequestedDevice}"/>
+									<Column >
+									<Text text="{i18n>colServiceMessage}"/>
 								</Column>
+							<!--	<Column >
+									<Text text="{i18n>colRequestedDevice}"/>
+								</Column>-->
 								<Column>
 									<Text text="{i18n>colAssistance}"/>
 								</Column>
@@ -112,9 +120,12 @@
 								<Column >
 									<Text text="{i18n>colIncidentType}"/>
 								</Column>
-								<Column >
-									<Text text="{i18n>colRequestedDevice}"/>
+									<Column >
+									<Text text="{i18n>colServiceMessage}"/>
 								</Column>
+							<!--	<Column >
+									<Text text="{i18n>colRequestedDevice}"/>
+								</Column>-->
 								<Column>
 									<Text text="{i18n>colAssistance}"/>
 								</Column>
@@ -126,6 +137,40 @@
 					</uxap:ObjectPageSubSection>
 				</uxap:subSections>
 			</uxap:ObjectPageSection>
+			<uxap:ObjectPageSection title="{i18n>TtlCancelledRequest}">
+				<uxap:subSections>
+					<uxap:ObjectPageSubSection>
+						<Table id="CanclReqs" width="auto" busy="{objectView>/btableBusy}" headerText="" noDataText="{i18n>TxtNoCancelledRequest}"
+							busyIndicatorDelay="{objectView>/tableBusyDelay}" growing="true" growingScrollToLoad="true" growingThreshold="20"
+							updateFinished=".onUpdateFinished">
+							<columns>
+								<!--<Column>-->
+								<!--	<Text text="{i18n>colPODsName}"/>-->
+								<!--</Column>-->
+								<Column >
+									<Text text="{i18n>colRequest}"/>
+								</Column>
+								<Column >
+									<Text text="{i18n>colIncidentType}"/>
+								</Column>
+									<Column >
+									<Text text="{i18n>colServiceMessage}"/>
+								</Column>
+							<!--	<Column >
+									<Text text="{i18n>colRequestedDevice}"/>
+								</Column>-->
+								<Column>
+									<Text text="{i18n>colAssistance}"/>
+								</Column>
+								<Column column="7%">
+									<Text text="{i18n>colNavigate}"/>
+								</Column>
+							</columns>
+						</Table>
+					</uxap:ObjectPageSubSection>
+				</uxap:subSections>
+			</uxap:ObjectPageSection>
+	
 		</uxap:sections>
 	</uxap:ObjectPageLayout>
 </mvc:View>

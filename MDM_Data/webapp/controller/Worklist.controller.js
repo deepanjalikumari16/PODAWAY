@@ -11,7 +11,7 @@ sap.ui.define([
 	"../libs/mapsjs-service",
 	"../libs/mapsjs-ui",
 	"../libs/mapsjs-mapevents"
-], function (BaseController, JSONModel, formatter, Filter, FilterOperator, Fragment,MessageToast) {
+], function (BaseController, JSONModel, formatter, Filter, FilterOperator, Fragment, MessageToast) {
 	"use strict";
 
 	return BaseController.extend("com.coil.podium.MDM_Data.controller.Worklist", {
@@ -55,7 +55,7 @@ sap.ui.define([
 				shareSendEmailMessage: this.getResourceBundle().getText("shareSendEmailWorklistMessage", [location.href]),
 				tableNoDataText: this.getResourceBundle().getText("tableNoDataText"),
 				tableBusyDelay: 0
-				
+
 			});
 			this.setModel(oViewModel, "worklistView");
 
@@ -66,7 +66,7 @@ sap.ui.define([
 				// Restore original busy indicator delay for worklist's table
 				oViewModel.setProperty("/tableBusyDelay", iOriginalBusyDelay);
 			});
-			
+
 			//Event name is same for every table,  "updateFinished"
 			oTable1.attachEventOnce("updateFinished1", function () {
 				// Restore original busy indicator delay for worklist's table
@@ -265,11 +265,20 @@ sap.ui.define([
 			// The source is the list item that got pressed
 			this._showObject(oEvent.getSource());
 		},
-		onChangeNavType: function(oEvent){
-		//	var oSelectedItem = oEvent.getSource().getSelectecdItem();
-			this.getModel("worklistView").setProperty("/oEditData/NavigationTypeName", oEvent.getParameter("newValue") );
+		onChangeNavType: function (oEvent) {
+			//	var oSelectedItem = oEvent.getSource().getSelectecdItem();
+			this.getModel("worklistView").setProperty("/oEditData/NavigationTypeName", oEvent.getParameter("newValue"));
 		},
-		
+
+		// Below function triggers when user enter any value in Contact field
+		onMobileValidate: function () {
+			var mobile = this.getView().byId("mobileInput").getValue();
+			var mobileregex = /^[0-9,+]{5,15}$/;
+			if (!mobileregex.test(mobile)) {
+				this.showToast.call(this, "MSG_INVALID_MOBILE");
+			}
+		},
+
 		/**
 		 * @param oMetadata : Image metadata
 		 * @param ImageData : base64 data
@@ -358,6 +367,8 @@ sap.ui.define([
 				var maptypes = platform.createDefaultLayers();
 				//24.962762, 55.147110
 				// Instantiate (and display) a map object:
+				this.getView().byId("map");
+				debugger;
 				var map = new H.Map(
 					document.getElementById("map"),
 					maptypes.vector.normal.map, {
@@ -420,8 +431,8 @@ sap.ui.define([
 
 				if (target instanceof H.map.Marker) {
 					behavior.enable();
-					oViewModel.setProperty("/Longitude", target.getGeometry().lng.toString());
-					oViewModel.setProperty("/Latitude", target.getGeometry().lat.toString());
+					oViewModel.setProperty("/oEditData/Longitude", target.getGeometry().lng.toString());
+					oViewModel.setProperty("/oEditData/Latitude", target.getGeometry().lat.toString());
 				}
 			}, false);
 
@@ -435,35 +446,35 @@ sap.ui.define([
 				}
 			}, false);
 		},
-		
+
 		onEdit: function (oEvent) {
 			//Determine selected Tab
 			var sSelectedKey = this.getView().byId("idIconTabBar3").getSelectedKey(),
 				oViewModel = this.getModel("worklistView");
 			//Set Visible flag 
 			var bEditOptions = {
-					Service: false,
-					Facility: false,
-					Relationship : false,
-					FAQ : false,
-					Event : false,
-					Navigation : false,
-					Building: false,
-					Theme: false,
-					Category: false
-				};
+				Service: false,
+				Facility: false,
+				Relationship: false,
+				FAQ: false,
+				Event: false,
+				Navigation: false,
+				Building: false,
+				Theme: false,
+				Category: false
+			};
 			bEditOptions[sSelectedKey] = true;
-			oViewModel.setProperty("/bEditOptions", bEditOptions );
+			oViewModel.setProperty("/bEditOptions", bEditOptions);
 			//Set Data to dialog
 			var data = oEvent.getSource().getBindingContext().getObject();
-		
-			oViewModel.setProperty("/oEditData", data );
+
+			oViewModel.setProperty("/oEditData", data);
 			oViewModel.setProperty("/sEditPath", oEvent.getSource().getBindingContext().getPath());
-			
+
 			oViewModel.setProperty("/sDialogTitle", sSelectedKey);
-			
+
 			var oView = this.getView();
-	
+
 			if (!this.byId("detailsDialog")) {
 				// load asynchronous XML fragment
 				Fragment.load({
@@ -483,11 +494,12 @@ sap.ui.define([
 		 * Event handler when the share in JAM button has been clicked
 		 * @public
 		 */
-		 onClose : function(oEvent){
-		 	this.byId("detailsDialog").close();
+		onClose: function (oEvent) {
+			this.byId("detailsDialog").close();
+			this.getModel().refresh(true);
 			this.getModel("worklistView").setProperty("/oImage", null);
-		 },
-		 
+		},
+
 		/** 
 		 * 
 		 * @param oEvent: having source and file info 
@@ -496,80 +508,84 @@ sap.ui.define([
 			var oFile = oEvent.getSource().FUEl.files[0];
 			this.getImageBinary(oFile).then(this._fnAddFile.bind(this));
 		},
-		 
-		 onSave: function(oEvent){
-		 var oViewModel = this.getModel("worklistView"),
-		 	 data =	oViewModel.getProperty("/oEditData"),
-		 	 sPath = oViewModel.getProperty("/sEditPath");
-		 	
-		 	delete data.CreatedBy;
-		 	delete data.UpdatedAt;
-		 	delete data.UpdatedBy;
-		 	delete data.CreatedAt;
-		 	delete data.IncidentType;
-		 	delete data.Navigation;
-		 	delete data.Icon;
-		 	delete data.__metadata;
-		 	delete data.Id;
-		 	
-		 	this.getModel().update(sPath, data, {
-		 		success : this._UploadImage(sPath,oViewModel.getProperty("/oImage")).then(this._Success.bind(this,oEvent), this._Error.bind(this)),
-		 		error : this._Error.bind(this)
-		 	});
-		 	
-		 //	this._UpdateData().then(this._UploadImage.bind(this), this._Error.bind(this)).then(this._Success.bind(this), this._Error.bind(this));
-		 //	this._UploadImage(sPath,oViewModel.getProperty("/oImage")).then(this._Success.bind(this,oEvent), this._Error.bind(this)), 	
-		 //this._Success.bind(this),
-		 	//this._Success.bind(this)
-		 	
-		 },
-		 
-		 _UploadImage  : function(sPath,oImage){
-		 	var that = this;
-		 	
-		
-		 	return new Promise(function(res,rej){
-		 
-		 		
-		 		 	if(!oImage)
-		 	{
-		 		res();
-		 		return;
-		 	}
-		 	
-		 		/*	that.getModel().update(sPath + "/$value",  oImage.Image, {
-		 			success : function(){
-		 				res.apply(that);
-		 			},
-		 			error: function(){
-		 				rej.apply(that);
-		 			}
-		 			
-		 		});*/
-		 		
-		 	
-	/*	 var fd = new FormData();
-		 	fd.append("file", oImage.Image );*/
-		 	
-		 		var settings = {
-		 			url : "/EXPO_PODIUM_API" + sPath + "/$value",
-		 		//	data : fd,
-		 			data: oImage.Image,
-		 			method: "PUT",
-		 			contentType:"multipart/form-data",
-		 			processData : false,
-		 			success : function(){
-		 				res.apply(that);
-		 			},
-		 			error: function(){
-		 				rej.apply(that);
-		 			}
-		 		};
-		 		
-		 		$.ajax(settings);
-		 	});
-		 },
-	
+
+		onSave: function (oEvent) {
+			var oViewModel = this.getModel("worklistView"),
+				data = oViewModel.getProperty("/oEditData"),
+				sPath = oViewModel.getProperty("/sEditPath");
+
+			delete data.CreatedBy;
+			delete data.UpdatedAt;
+			delete data.UpdatedBy;
+			delete data.CreatedAt;
+			delete data.IncidentType;
+			delete data.Navigation;
+			delete data.Icon;
+			delete data.__metadata;
+			delete data.Id;
+
+			if (data.ContactNumber !== "" && typeof data.ContactNumber !== "undefined") {
+				var mobile = this.getView().byId("mobileInput").getValue();
+				var mobileregex = /^[0-9,+]{5,15}$/;
+				if (!mobileregex.test(mobile)) {
+					this.showToast.call(this, "MSG_INVALID_MOBILE");
+				} else {
+					this.getModel().update(sPath, data, {
+						success: this._UploadImage(sPath, oViewModel.getProperty("/oImage")).then(this._Success.bind(this, oEvent), this._Error.bind(
+							this)),
+						error: this._Error.bind(this)
+					});
+				}
+			} else {
+				this.getModel().update(sPath, data, {
+					success: this._UploadImage(sPath, oViewModel.getProperty("/oImage")).then(this._Success.bind(this, oEvent), this._Error.bind(
+						this)),
+					error: this._Error.bind(this)
+				});
+			}
+		},
+
+		_UploadImage: function (sPath, oImage) {
+			var that = this;
+
+			return new Promise(function (res, rej) {
+				if (!oImage) {
+					res();
+					return;
+				}
+
+				/*	that.getModel().update(sPath + "/$value",  oImage.Image, {
+					success : function(){
+						res.apply(that);
+					},
+					error: function(){
+						rej.apply(that);
+					}
+					
+				});*/
+
+				/*	 var fd = new FormData();
+					 	fd.append("file", oImage.Image );*/
+
+				var settings = {
+					url: "/EXPO_PODIUM_API" + sPath + "/$value",
+					//	data : fd,
+					data: oImage.Image,
+					method: "PUT",
+					contentType: "multipart/form-data",
+					processData: false,
+					success: function () {
+						res.apply(that);
+					},
+					error: function () {
+						rej.apply(that);
+					}
+				};
+
+				$.ajax(settings);
+			});
+		},
+
 		onShareInJamPress: function () {
 			var oViewModel = this.getModel("worklistView"),
 				oShareDialog = sap.ui.getCore().createComponent({
@@ -640,16 +656,16 @@ sap.ui.define([
 				objectId: oItem.getBindingContext().getProperty("Id")
 			});
 		},
-		
-		_Success : function(oEvent){
+
+		_Success: function (oEvent) {
 			MessageToast.show(this.getResourceBundle().getText("MSG_SUCCESS"));
 			this.onClose(oEvent);
 		},
-		
-		_Error : function(error){
-			MessageToast.show(error.toString());	
+
+		_Error: function (error) {
+			MessageToast.show(error.toString());
 		},
-		
+
 		/**
 		 * Internal helper method to apply both filter and search state together on the list binding
 		 * @param {sap.ui.model.Filter[]} aTableSearchState An array of filters for the search
@@ -680,9 +696,9 @@ sap.ui.define([
 		 * @returns  Image Binary from file 
 		 */
 		getImageBinary: function (oFile) {
-		var	oFileReader = new FileReader() ;
-		var	sFileName = oFile.name;
-				return new Promise(function (res, rej) {
+			var oFileReader = new FileReader();
+			var sFileName = oFile.name;
+			return new Promise(function (res, rej) {
 
 				if (!(oFile instanceof File)) {
 					res(oFile);
@@ -690,32 +706,34 @@ sap.ui.define([
 				}
 
 				oFileReader.onload = function () {
-					res( { Image : oFileReader.result, name:  sFileName} );
+					res({
+						Image: oFileReader.result,
+						name: sFileName
+					});
 				};
-		//	oFileReader.readAsDataURL(oFile);
-			//	oFileReader.readAsBinaryString(oFile)
-		//	oFileReader.readAsArrayBuffer(oFile);
-			res({ Image : oFile, name:  sFileName}) ;
-				
-			});
-			
-			
-			
-		
-		},
-		
-		_fnAddFile: function (oItem) {
-		//	var iIndex = oItem.Image.search(",") + 1;
-		
-			this.getModel("worklistView").setProperty("/oImage", {
-					Image: oItem.Image,//.slice(iIndex),
-					FileName: oItem.name,
-					IsArchived: false
+				//	oFileReader.readAsDataURL(oFile);
+				//	oFileReader.readAsBinaryString(oFile)
+				//	oFileReader.readAsArrayBuffer(oFile);
+				res({
+					Image: oFile,
+					name: sFileName
 				});
-			
+
+			});
+
+		},
+
+		_fnAddFile: function (oItem) {
+			//	var iIndex = oItem.Image.search(",") + 1;
+
+			this.getModel("worklistView").setProperty("/oImage", {
+				Image: oItem.Image, //.slice(iIndex),
+				FileName: oItem.name,
+				IsArchived: false
+			});
+
 			this.getModel("worklistView").refresh();
 		}
-		
 
 	});
 });

@@ -42,6 +42,7 @@ sap.ui.define([
 				tableNoDataText : this.getResourceBundle().getText("tableNoDataText"),
 				tableBusyDelay : 0,
 				iEvtType : 1
+		
 			});
 			this.setModel(oViewModel, "worklistView");
 
@@ -52,19 +53,10 @@ sap.ui.define([
 				// Restore original busy indicator delay for worklist's table
 				oViewModel.setProperty("/tableBusyDelay", iOriginalBusyDelay);
 			});
-			// Add the worklist page to the flp routing history
-			this.addHistoryEntry({
-				title: this.getResourceBundle().getText("worklistViewTitle"),
-				icon: "sap-icon://table-view",
-				intent:  this.getIntent() //"#Manage-Event"
-			}, true);
-			
 			//Table items binding	
 			this.getOwnerComponent().getModel().metadataLoaded().then(this._fnInitialBindings.bind(this));
 		},
-		getIntent : function(){
-			return this.getOwnerComponent().iEvtType === 1 ? "#Manage-Event" : "#Manage-Offer";
-		},
+
 		/* =========================================================== */
 		/* event handlers                                              */
 		/* =========================================================== */
@@ -111,6 +103,7 @@ sap.ui.define([
 			oShareDialog.open();
 		},
 		
+		//START: Image and Plan Life cycle
 		onViewImage: function (oEvent, sDialogType) {
 
 			var oView = this.getView(),
@@ -167,28 +160,10 @@ sap.ui.define([
 				}
 			});
 		},
-
 		onCancelImage: function () {
 			this._oDlgAddOption.close();
 		},
-		
-		onOrderPref: function(){
-			this._openPrefDialog();
-	
-		
-	
-		this.getModel().read("/EventAttractionSet", 
-		{
-			filters: [new Filter("EventAttractionTypeId", FilterOperator.EQ, this.getOwnerComponent().iEvtType),
-					new Filter("IsArchived", FilterOperator.EQ, false)	],
-			success : this._openPrefDialog.bind(this)
-		});
-		
-		
-		
-	
-		},
-		
+		//END: Image and Plan Life cycle
 		onSearch: function () {
 			var aFilters = this.getFiltersfromFB(),
 				oTable = this.getView().byId("table");
@@ -266,42 +241,12 @@ sap.ui.define([
 		/* =========================================================== */
 		/* internal methods                                            */
 		/* =========================================================== */
-		_openPrefDialog : function(){
-				if (!that._oPrefDialog) {
-				// load asynchronous XML fragment
-				Fragment.load({
-					id: oView.getId(),
-					name: "com.coil.podium.MAEVAT.dialog.OrderPref",
-					controller: that
-				}).then(function (oDialog) {
-					that._oPrefDialog = oDialog;
-					// connect dialog to the root view of this component (models, lifecycle)
-					oView.addDependent(oDialog);
-					oDialog.open();
-				});
-			} else {
-				that._oPrefDialog.open();
-			}
-		},
 		/** 
 		 * Binding based with dynamic parameters 
 		 * @constructor 
 		 */
 		_fnInitialBindings: function () {
 			var oTable = this.byId("table"), oTemplate = oTable.getItems()[0].clone();
-
-		/*	oGridCtrl.bindAggregation("content", {
-				template: oTemplate,
-				path: "/AccessibilityItemSet",
-				events: {
-					dataRequested: this._fnbusyItems.bind(this),
-					dataReceived: this._fnbusyItems.bind(this)
-				},
-				filters: [new Filter("AccessibilityId", FilterOperator.EQ, this.getOwnerComponent().sAccType),
-					new Filter("IsArchived", FilterOperator.EQ, false)
-				],
-				templateShareable: true
-			});*/
 		
 		this.getModel("worklistView").setProperty("/iEvtType",this.getOwnerComponent().iEvtType);
 		
@@ -311,6 +256,8 @@ sap.ui.define([
 			parameters : {
 					expand : "Theme,EventAttractionType,Building,AccessibilityDevices"
 				},
+			sorter: [ new sap.ui.model.Sorter("Index"),
+					   new sap.ui.model.Sorter("CreatedAt") ],
 			events: {
 					dataRequested: this._fnbusyItems.bind(this),
 					dataReceived: this._fnbusyItems.bind(this)

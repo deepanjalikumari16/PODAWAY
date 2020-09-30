@@ -68,7 +68,7 @@ sap.ui.define([
 			this.addHistoryEntry({
 				title: this.getResourceBundle().getText("worklistViewTitle"),
 				icon: "sap-icon://table-view",
-				intent: "#Manage-User"
+				intent: "#ManageAdmin-display"
 			}, true);
 		},
 
@@ -171,25 +171,32 @@ sap.ui.define([
 			this.byId("commentDialog").close();
 		},
 		comment: function () {
-			if (this.getModel("worklistView").getProperty("/comments") === null) {
+			var enteredComment = this.getModel("worklistView").getProperty("/comments");
+			var enteredCommentLength = enteredComment.length;
+			if (enteredComment === null || enteredComment === "") {
 				this.showToast.call(this, "MSG_ENTER_COMMENT");
 			} else {
-				var dat = this;
-				var oModel = dat.getModel();
-				oModel.callFunction("/CommentUser", {
-					method: "GET",
-					urlParameters: {
-						UserId: this.getModel("worklistView").getProperty("/userId"),
-						Comments: this.getModel("worklistView").getProperty("/comments")
-					},
-					success: function (data) {
-						dat.showToast.call(dat, "MSG_SUCCESS_COMMENT");
-						dat.byId("commentDialog").close();
-						oModel.refresh(true);
-					}
-				});
+				if (enteredCommentLength > 500) {
+					this.showToast.call(this, "MSG_EXCEEDED_COMMENT_LENGTH");
+				} else {
+					var dat = this;
+					var oModel = dat.getModel();
+					oModel.callFunction("/CommentUser", {
+						method: "GET",
+						urlParameters: {
+							UserId: this.getModel("worklistView").getProperty("/userId"),
+							Comments: this.getModel("worklistView").getProperty("/comments")
+						},
+						success: function (data) {
+							dat.showToast.call(dat, "MSG_SUCCESS_COMMENT");
+							dat.byId("commentDialog").close();
+							oModel.refresh(true);
+						}
+					});
+				}
 			}
 		},
+
 		/**
 		 * Event handler when a table item gets pressed
 		 * @param {sap.ui.base.Event} oEvent the table selectionChange event

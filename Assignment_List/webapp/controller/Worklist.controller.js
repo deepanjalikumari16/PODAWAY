@@ -72,6 +72,7 @@ sap.ui.define([
 					method: "GET",
 					success: function (data) {
 						oViewModel.setProperty("/loggedUserId", data.results[0].Id);
+						oViewModel.setProperty("/loggedUserRoleId", data.results[0].RoleId);
 					}
 				});
 			});
@@ -91,14 +92,14 @@ sap.ui.define([
 			this.addHistoryEntry({
 				title: this.getResourceBundle().getText("worklistViewTitle"),
 				icon: "sap-icon://table-view",
-				intent: "#Manage-Assignment"
+				intent: "#AssignmentList-display"
 			}, true);
 
 			/*var sPendingTitle = this.getResourceBundle().getText("pending");
 			this.getModel("worklistView").setProperty("/pending", sPendingTitle);
 
-			var sOngoingTitle = this.getResourceBundle().getText("ongoing");
-			this.getModel("worklistView").setProperty("/ongoing", sOngoingTitle);
+			var sinprogressTitle = this.getResourceBundle().getText("inprogress");
+			this.getModel("worklistView").setProperty("/inprogress", sinprogressTitle);
 
 			var sCompletedTitle = this.getResourceBundle().getText("completed");
 			this.getModel("worklistView").setProperty("/completed", sCompletedTitle);
@@ -140,17 +141,17 @@ sap.ui.define([
 
 		onUpdateFinished1: function (oEvent) {
 			// update the worklist's object counter after the table update
-			var sOngoingTitle,
+			var sinprogressTitle,
 				oTable1 = oEvent.getSource(),
 				iTotalItems1 = oEvent.getParameter("total");
 			// only update the counter if the length is final and
 			// the table is not empty
 			if (iTotalItems1 && oTable1.getBinding("items").isLengthFinal()) {
-				sOngoingTitle = this.getResourceBundle().getText("ongoingCount", [iTotalItems1]);
+				sinprogressTitle = this.getResourceBundle().getText("inprogressCount", [iTotalItems1]);
 			} else {
-				sOngoingTitle = this.getResourceBundle().getText("ongoing");
+				sinprogressTitle = this.getResourceBundle().getText("inprogress");
 			}
-			this.getModel("worklistView").setProperty("/ongoing", sOngoingTitle);
+			this.getModel("worklistView").setProperty("/inprogress", sinprogressTitle);
 		},
 
 		onUpdateFinished2: function (oEvent) {

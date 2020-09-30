@@ -1,11 +1,11 @@
-<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout" xmlns:u="sap.ui.unified" xmlns:html="http://www.w3.org/1999/xhtml" >
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout" xmlns:u="sap.ui.unified"
+	xmlns:html="http://www.w3.org/1999/xhtml">
 	<Dialog id="detailsDialog" title="{i18n>colEdit} {worklistView>/sDialogTitle}" class="sapUiResponsiveContentPadding"
 		binding="{worklistView>/oEditData}">
 		<l:Grid visible="{worklistView>/bEditOptions/Service}" hSpacing="2" defaultSpan="XL5 L5 M5 S12" defaultIndent="XL0 L0 M1 S1">
 			<VBox>
 				<Label text="{i18n>colServiceType}"/>
 				<Input value="{worklistView>ServiceType}"/>
-			
 			</VBox>
 			<VBox>
 				<Label text="{i18n>colServiceMessage}"/>
@@ -13,7 +13,7 @@
 			</VBox>
 			<VBox>
 				<Label text="{i18n>colContactNumber}"/>
-				<Input value="{worklistView>ContactNumber}"/>
+				<Input id="mobileInput" value="{worklistView>ContactNumber}" type="Tel" change="onMobileValidate"/>
 			</VBox>
 			<VBox>
 				<Label text="{i18n>colIsCancelable}"/>
@@ -21,7 +21,7 @@
 			</VBox>
 			<VBox>
 				<Label text="{i18n>colIncidentTypeId}"/>
-				<Select selectedKey="{worklistView>IncidentTypeId}" items="{/MasterIncidentTypeSet}">
+				<Select selectedKey="{ path: 'worklistView>IncidentTypeId', type : 'sap.ui.model.odata.type.Int32' }" items="{/MasterIncidentTypeSet}">
 					<core:Item key="{Id}" text="{IncidentType}"/>
 				</Select>
 			</VBox>
@@ -34,31 +34,35 @@
 			</VBox>
 			<VBox>
 				<Label text="{i18n>colIcon}"/>
-				<Image width="5rem" class="sapUiTinyMargin" height="5rem" src="{ parts : [{path : 'worklistView>__metadata'}, { path : 'worklistView>/oImage'  } ] , formatter : '.formatter.giveImage' }"/>
-				<u:FileUploader maximumFileSize="2" fileAllowed="onUpload" tooltip="{i18n>btnChangeImage}" buttonOnly="true" buttonText="{i18n>btnChangeImage}"/>
+				<Image width="5rem" class="sapUiTinyMargin" height="5rem"
+					src="{ parts : [{path : 'worklistView>__metadata'}, { path : 'worklistView>/oImage' } ] , formatter : '.formatter.giveImage' }"/>
+				<u:FileUploader maximumFileSize="2" fileAllowed="onUpload" tooltip="{i18n>btnChangeImage}" buttonOnly="true"
+					buttonText="{i18n>btnChangeImage}"/>
 			</VBox>
 		</l:Grid>
 		<l:Grid visible="{worklistView>/bEditOptions/Facility}" defaultSpan="XL12 L12 M12 S12" defaultIndent="XL0 L0 M1 S1">
-			<VBox width="100%" >
+			<VBox width="100%">
 				<Label text="{i18n>colFacilityType}"/>
 				<Input value="{worklistView>FacilityType}"/>
 			</VBox>
 		</l:Grid>
-		<l:Grid visible="{worklistView>/bEditOptions/Relationship}"   defaultSpan="XL12 L12 M12 S12" defaultIndent="XL0 L0 M1 S1">
+		<l:Grid visible="{worklistView>/bEditOptions/Relationship}" defaultSpan="XL12 L12 M12 S12" defaultIndent="XL0 L0 M1 S1">
 			<VBox>
 				<Label text="{i18n>colRelationship}"/>
 				<Input value="{worklistView>Relationship}"/>
 			</VBox>
 		</l:Grid>
-		<l:Grid visible="{worklistView>/bEditOptions/FAQ}"   defaultSpan="XL6 L6 M6 S12" defaultIndent="XL0 L0 M1 S1">
+		<l:Grid visible="{worklistView>/bEditOptions/FAQ}" defaultSpan="XL6 L6 M6 S12" defaultIndent="XL0 L0 M1 S1">
 			<VBox>
 				<Label text="{i18n>colFaqCategory}"/>
 				<Input value="{worklistView>FaqCategory}"/>
 			</VBox>
 			<VBox>
 				<Label text="{i18n>colIcon}"/>
-				<Image width="5rem" class="sapUiTinyMargin" height="5rem" src="{ parts : [{path : 'worklistView>__metadata'}, { path : 'worklistView>/oImage'  } ] , formatter : '.formatter.giveImage' }"/>
-				<u:FileUploader maximumFileSize="2" fileAllowed="onUpload" tooltip="{i18n>btnChangeImage}" buttonOnly="true" buttonText="{i18n>btnChangeImage}"/>
+				<Image width="5rem" class="sapUiTinyMargin" height="5rem"
+					src="{ parts : [{path : 'worklistView>__metadata'}, { path : 'worklistView>/oImage' } ] , formatter : '.formatter.giveImage' }"/>
+				<u:FileUploader maximumFileSize="2" fileAllowed="onUpload" tooltip="{i18n>btnChangeImage}" buttonOnly="true"
+					buttonText="{i18n>btnChangeImage}"/>
 			</VBox>
 		</l:Grid>
 		<l:Grid visible="{worklistView>/bEditOptions/Event}" hSpacing="2" defaultSpan="XL5 L5 M5 S12" defaultIndent="XL0 L0 M1 S1">
@@ -72,52 +76,63 @@
 			</VBox>
 			<VBox>
 				<Label text="{i18n>colBuilding}"/>
-				<CheckBox selected="{worklistView>Building}"/>
+				<CheckBox selected="{worklistView>IsBuilding}"/>
 			</VBox>
 			<VBox>
 				<Label text="{i18n>colCategory}"/>
-				<CheckBox selected="{path : 'worklistView>Category', formatter : '.formatter.giveOnlyBoolean' }"/>
+				<CheckBox selected="{worklistView>IsCategory}"/>
 			</VBox>
 			<VBox>
 				<Label text="{i18n>colTheme}"/>
-				<CheckBox selected="{path : 'worklistView>Theme' , formatter : '.formatter.giveOnlyBoolean' }"/>
-			</VBox>
-		</l:Grid>
-		<l:Grid visible="{worklistView>/bEditOptions/Navigation}"  hSpacing="2" defaultSpan="XL5 L5 M5 S12" defaultIndent="XL0 L0 M1 S1">
-			<VBox>
-				<Label text="{i18n>colNavigationGroupId}"/>
-			<!--	<Input value="{worklistView>NavigationGroupId}"/>-->
-				<ComboBox selectedKey="{path: 'worklistView>NavigationGroupId', type: 'sap.ui.model.type.Integer' }" change="onChangeNavId" >
-					<core:Item key="0" text="{i18n>litmEventAttaction}" />					
-					<core:Item key="1" text="{i18n>litmFacility}"  />
-				</ComboBox>
-			
-			</VBox>
-			<VBox>
-				<Label text="{i18n>colNavigationTypeId}"/>
-			<!--	<ComboBox id="cbNavType" />-->
-			<!--	<Input value="{worklistView>NavigationTypeId}"/>-->
-				<ComboBox visible="{= ${worklistView>NavigationGroupId} === 0 }" selectedKey="{path : 'worklistView>NavigationTypeId' , type: 'sap.ui.model.type.Integer'}" change="onChangeNavType" items="{/MasterEventAttractionTypeSet}" >
-					<core:Item key="{Id}" text= "{EventAttractionType}"/>
-				</ComboBox>
-				<ComboBox visible="{= ${worklistView>NavigationGroupId} === 1 }" selectedKey="{path : 'worklistView>NavigationTypeId' , type: 'sap.ui.model.type.Integer'}" change="onChangeNavType" items="{/MasterFacilityTypeSet}" >
-					<core:Item key="{Id}" text= "{FacilityType}"/>
-				</ComboBox>
-<!--				<ComboBox selectedKey="{path : 'worklistView>NavigationTypeId' ,  type: 'sap.ui.model.type.Integer'}"  change="onChangeSelected" items="{/MasterFacilityTypeSet}" >
--->			
-				
-			</VBox>
-			<VBox>
-				<Label text="{i18n>colNavigationTypeName}"/>
-				<Input editable="false" value="{worklistView>NavigationTypeName}"/>
+				<!--<CheckBox selected="{path : 'worklistView>Theme' , formatter : '.formatter.giveOnlyBoolean' }"/>-->
+				<CheckBox selected="{worklistView>IsTheme}"/>
 			</VBox>
 			<VBox>
 				<Label text="{i18n>colIcon}"/>
-				<Image width="5rem" class="sapUiTinyMargin" height="5rem" src="{ parts : [{path : 'worklistView>__metadata'}, { path : 'worklistView>/oImage'  } ] , formatter : '.formatter.giveImage' }"/>
-				<u:FileUploader maximumFileSize="2" fileAllowed="onUpload" tooltip="{i18n>btnChangeImage}" buttonOnly="true" buttonText="{i18n>btnChangeImage}"/>
+				<Image width="5rem" class="sapUiTinyMargin" height="5rem"
+					src="{ parts : [{path : 'worklistView>__metadata'}, { path : 'worklistView>/oImage' } ] , formatter : '.formatter.giveImage' }"/>
+				<u:FileUploader maximumFileSize="2" fileAllowed="onUpload" tooltip="{i18n>btnChangeImage}" buttonOnly="true"
+					buttonText="{i18n>btnChangeImage}"/>
 			</VBox>
 		</l:Grid>
-		<l:Grid visible="{worklistView>/bEditOptions/Building}"  hSpacing="2" defaultSpan="XL5 L5 M5 S12" defaultIndent="XL0 L0 M1 S1">
+		<l:Grid visible="{worklistView>/bEditOptions/Navigation}" hSpacing="2" defaultSpan="XL5 L5 M5 S12" defaultIndent="XL0 L0 M1 S1">
+			<VBox>
+				<Label text="{i18n>colNavigationGroupId}"/>
+				<!--	<Input value="{worklistView>NavigationGroupId}"/>-->
+				<ComboBox selectedKey="{path: 'worklistView>NavigationGroupId', type: 'sap.ui.model.type.Integer' }" change="onChangeNavId">
+					<core:Item key="0" text="{i18n>litmEventAttaction}"/>
+					<core:Item key="1" text="{i18n>litmFacility}"/>
+				</ComboBox>
+			</VBox>
+			<!--<VBox>-->
+			<!--	<Label text="{i18n>colNavigationTypeId}"/>-->
+				<!--	<ComboBox id="cbNavType" />-->
+				<!--	<Input value="{worklistView>NavigationTypeId}"/>-->
+			<!--	<ComboBox visible="{= ${worklistView>NavigationGroupId} === 0 }"-->
+			<!--		selectedKey="{path : 'worklistView>NavigationTypeId' , type: 'sap.ui.model.type.Integer'}" change="onChangeNavType"-->
+			<!--		items="{/MasterEventAttractionTypeSet}">-->
+			<!--		<core:Item key="{Id}" text="{EventAttractionType}"/>-->
+			<!--	</ComboBox>-->
+			<!--	<ComboBox visible="{= ${worklistView>NavigationGroupId} === 1 }"-->
+			<!--		selectedKey="{path : 'worklistView>NavigationTypeId' , type: 'sap.ui.model.type.Integer'}" change="onChangeNavType"-->
+			<!--		items="{/MasterFacilityTypeSet}">-->
+			<!--		<core:Item key="{Id}" text="{FacilityType}"/>-->
+			<!--	</ComboBox>-->
+				<!--<ComboBox selectedKey="{path : 'worklistView>NavigationTypeId' ,  type: 'sap.ui.model.type.Integer'}"  change="onChangeSelected" items="{/MasterFacilityTypeSet}" >-->
+			<!--</VBox>-->
+			<VBox>
+				<Label text="{i18n>colNavigationTypeName}"/>
+				<Input value="{worklistView>NavigationTypeName}"/>
+			</VBox>
+			<VBox>
+				<Label text="{i18n>colIcon}"/>
+				<Image width="5rem" class="sapUiTinyMargin" height="5rem"
+					src="{ parts : [{path : 'worklistView>__metadata'}, { path : 'worklistView>/oImage' } ] , formatter : '.formatter.giveImage' }"/>
+				<u:FileUploader maximumFileSize="2" fileAllowed="onUpload" tooltip="{i18n>btnChangeImage}" buttonOnly="true"
+					buttonText="{i18n>btnChangeImage}"/>
+			</VBox>
+		</l:Grid>
+		<l:Grid visible="{worklistView>/bEditOptions/Building}" hSpacing="2" defaultSpan="XL5 L5 M5 S12" defaultIndent="XL0 L0 M1 S1">
 			<VBox>
 				<Label text="{i18n>colBuildingName}"/>
 				<Input value="{worklistView>BuildingName}"/>
@@ -127,13 +142,13 @@
 				<Input width="100%" description="longitude" value="{worklistView>Longitude}" showValueHelp="true" valueHelpRequest="onMap"/>
 			</VBox>
 		</l:Grid>
-		<l:Grid visible="{worklistView>/bEditOptions/Theme}"  hSpacing="2" defaultSpan="XL12 L12 M12 S12" defaultIndent="XL0 L0 M1 S1">
+		<l:Grid visible="{worklistView>/bEditOptions/Theme}" hSpacing="2" defaultSpan="XL12 L12 M12 S12" defaultIndent="XL0 L0 M1 S1">
 			<VBox>
 				<Label text="{i18n>colTheme}"/>
 				<Input value="{worklistView>Theme}"/>
 			</VBox>
 		</l:Grid>
-		<l:Grid visible="{worklistView>/bEditOptions/Category}"  hSpacing="2" defaultSpan="XL12 L12 M12 S12" defaultIndent="XL0 L0 M1 S1">
+		<l:Grid visible="{worklistView>/bEditOptions/Category}" hSpacing="2" defaultSpan="XL12 L12 M12 S12" defaultIndent="XL0 L0 M1 S1">
 			<VBox>
 				<Label text="{i18n>colCategory}"/>
 				<Input value="{worklistView>Category}"/>
