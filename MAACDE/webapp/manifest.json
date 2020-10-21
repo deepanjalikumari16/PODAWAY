@@ -33,7 +33,7 @@
 					},
 					"semanticObject": "Manage",
 					"action": "Place",
-					"title": "Manage Places to Avoid"
+					"title": "Places to Avoid"
 				},
 				"intent2": {
 					"signature": {
@@ -42,7 +42,7 @@
 					},
 					"semanticObject": "Manage",
 					"action": "Condition",
-					"title": "Manage Accessibility Conditions"
+					"title": "Accessibility Conditions"
 				},
 				"intent3": {
 					"signature": {
@@ -51,7 +51,7 @@
 					},
 					"semanticObject": "Manage",
 					"action": "Device",
-					"title": "Manage Accessibility Devices"
+					"title": "Accessibility Devices"
 				}
 			}
 		}
@@ -73,7 +73,7 @@
 		}
 	},
 	"sap.ui5": {
-		"handleValidation" : true,  
+		"handleValidation": true,
 		"rootView": {
 			"viewName": "com.coil.podium.MAACDE.view.App",
 			"type": "XML",
