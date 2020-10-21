@@ -1,6 +1,6 @@
 <mvc:View controllerName="com.coil.podium.ManageVisitor.controller.Object" xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:uxap="sap.uxap"
 	xmlns:mvc="sap.ui.core.mvc">
-	<uxap:ObjectPageLayout id="ObjectPageLayout" subSectionLayout="TitleOnLeft" showTitleInHeaderContent="true">
+	<uxap:ObjectPageLayout   id="ObjectPageLayout" subSectionLayout="TitleOnLeft" showTitleInHeaderContent="true">
 		<uxap:headerTitle>
 			<uxap:ObjectPageHeader objectImageShape="Square" objectTitle="{FirstName} {LastName}" objectSubtitle="" id="ObjectPageLayoutHeaderTitle"
 				isObjectTitleAlwaysVisible="false" objectImageURI="{path: 'PhotoURL', formatter : '.formatter.giveImage' }" isObjectSubtitleAlwaysVisible="false" isActionAreaAlwaysVisible="true"
@@ -63,7 +63,7 @@
 								<Column>
 									<Text text="{i18n>colAssistance}"/>
 								</Column>
-								<Column column="7%">
+								<Column width="7%">
 									<Text text="{i18n>colNavigate}"/>
 								</Column>
 							</columns>
@@ -96,7 +96,7 @@
 								<Column>
 									<Text text="{i18n>colAssistance}"/>
 								</Column>
-								<Column column="7%">
+								<Column  width="7%">
 									<Text text="{i18n>colNavigate}"/>
 								</Column>
 							</columns>
@@ -129,7 +129,7 @@
 								<Column>
 									<Text text="{i18n>colAssistance}"/>
 								</Column>
-								<Column column="7%">
+								<Column  width="7%">
 									<Text text="{i18n>colNavigate}"/>
 								</Column>
 							</columns>
@@ -162,7 +162,7 @@
 								<Column>
 									<Text text="{i18n>colAssistance}"/>
 								</Column>
-								<Column column="7%">
+								<Column  width="7%">
 									<Text text="{i18n>colNavigate}"/>
 								</Column>
 							</columns>

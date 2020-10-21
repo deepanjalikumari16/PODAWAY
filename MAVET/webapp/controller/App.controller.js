@@ -32,13 +32,24 @@ sap.ui.define([
 					oViewModel.setProperty("/EvtTypeConfig", data);	
 					oViewModel.setProperty("/busy", false);
 					oViewModel.setProperty("/delay", iOriginalBusyDelay);
-				
-					
 					}.bind(that)
+				});
+				//Load Event Location
+				var EventId = "bfed13c1-6cfd-4c77-9a62-cdbf500d0800" ;
+				sKey = oModel.createKey("/EventInfoSet", {
+					"Id" : EventId
+				});
+				oModel.read(sKey, {
+					success: function (response) {
+						oViewModel.setProperty("/EventLocation", {
+							lat: response.Latitude,
+							lng: response.Longitude
+						});
+					}
 				});
 				
 				var sAppName =  that.getOwnerComponent().iEvtType == 1 ?
-				that.getOwnerComponent().getModel("i18n").getResourceBundle().getText("POD Initiative") :
+				that.getOwnerComponent().getModel("i18n").getResourceBundle().getText("PODInitiative") :
 				that.getOwnerComponent().getModel("i18n").getResourceBundle().getText("Attraction");
 				
 				oViewModel.setProperty("/sAppName", sAppName );

@@ -73,6 +73,7 @@
 		}
 	},
 	"sap.ui5": {
+		"handleValidation" : true,  
 		"rootView": {
 			"viewName": "com.coil.podium.MAACDE.view.App",
 			"type": "XML",

@@ -11,7 +11,7 @@
 					<uxap:ObjectPageSubSection>
 						<l:Grid width="100%" defaultSpan="XL6 L6 M6 S12">
 							<VBox>
-								<Label text="{i18n>colFacilityType}"/>
+								<Label required="true" text="{i18n>colFacilityType}"/>
 								<ComboBox width="100%" selectedKey="{objectView>FacilityTypeId}" items="{ path: '/MasterFacilityTypeSet' }">
 									<core:Item key="{Id}" text="{FacilityType}"/>
 								</ComboBox>
@@ -24,12 +24,12 @@
 							</VBox>
 						
 							<VBox>
-								<Label text="{i18n>DescriptionLabel}"/>
+								<Label  required="true" text="{i18n>DescriptionLabel}"/>
 								<TextArea width="100%" value="{objectView>Description}" rows="6" cols="45"/>
 							</VBox>
 							<VBox>
 								
-								<Label text="{i18n>colLocation}"/>
+								<Label  required="true" text="{i18n>colLocation}"/>
 								<Input width="100%" description="latitude" value="{objectView>Latitude}" showValueHelp="true" valueHelpRequest="onMap"/>
 								<Input width="100%" description="longitude" value="{objectView>Longitude}" showValueHelp="true" valueHelpRequest="onMap"/>
 							</VBox>

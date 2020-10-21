@@ -22,7 +22,7 @@
 							</VBox>
 							<VBox>
 								<Label required="true" text="{i18n>LblDescription}"/>
-								<TextArea value="{objectView>Description}" rows="6" cols="45"/>
+								<TextArea  value="{objectView>Description}" width="100%" rows="6" cols="45"/>
 							</VBox>
 							<VBox visible="{appView>/EvtTypeConfig/Theme}" >
 								<Label text="{i18n>colTheme}"/>
@@ -60,7 +60,6 @@
 							</VBox>
 						</l:Grid>
 					</uxap:ObjectPageSubSection>
-				
 				</uxap:subSections>
 			</uxap:ObjectPageSection>
 			<uxap:ObjectPageSection title="{i18n>LblLocation}">

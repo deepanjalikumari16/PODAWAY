@@ -37,29 +37,42 @@ sap.ui.define([
 			this.getOwnerComponent().getModel().metadataLoaded().then(function () {
 				// Restore original busy indicator delay for the object view
 				oViewModel.setProperty("/delay", iOriginalBusyDelay);
+
 			});
+		},
+
+		onAfterRendering: function () {
+			var oStartUpParams = this.getOwnerComponent().oStartUpParams;
+			if (oStartUpParams.bWithParams) {
+				this.getModel().metadataLoaded().then(function () {
+					var sObjectPath = this.getModel().createKey("UserSet", {
+						Id: oStartUpParams.VisitorId
+					});
+					this._bindView("/" + sObjectPath, oStartUpParams.VisitorId);
+				}.bind(this));
+
+			}
 		},
 
 		/* =========================================================== */
 		/* event handlers                                              */
 		/* =========================================================== */
-		
-		
-		onEmail : function(oEvent){
-		sap.m.URLHelper.triggerEmail(oEvent.getSource().getText());
+
+		onEmail: function (oEvent) {
+			sap.m.URLHelper.triggerEmail(oEvent.getSource().getText());
 		},
-		onTel : function(oEvent){
-		sap.m.URLHelper.triggerTel(oEvent.getSource().getText());
+		onTel: function (oEvent) {
+			sap.m.URLHelper.triggerTel(oEvent.getSource().getText());
 		},
-		
-		onCall : function(){
+
+		onCall: function () {
 			var oContext = this.getView().getBindingContext();
-			sap.m.URLHelper.triggerTel( oContext.getProperty("DialCode").concat(oContext.getProperty("Mobile")));
+			sap.m.URLHelper.triggerTel(oContext.getProperty("DialCode").concat(oContext.getProperty("Mobile")));
 		},
-		
-		onSMS: function(){
+
+		onSMS: function () {
 			var oContext = this.getView().getBindingContext();
-			sap.m.URLHelper.triggerSms( oContext.getProperty("DialCode").concat(oContext.getProperty("Mobile")));
+			sap.m.URLHelper.triggerSms(oContext.getProperty("DialCode").concat(oContext.getProperty("Mobile")));
 		},
 		/**
 		 * Event handler when the share in JAM button has been clicked
@@ -116,7 +129,6 @@ sap.ui.define([
 					expand: "UserPreference/UserAccessibilityList/AccessiblityItem"
 				},
 				events: {
-					change: this._onBindingChange.bind(this),
 					dataRequested: function () {
 						oDataModel.metadataLoaded().then(function () {
 							// Busy indicator on view should only be set if metadata is loaded,
@@ -158,13 +170,13 @@ sap.ui.define([
 		_bindTabs: function (sPODId) {
 			var oNewReqTable = this.getView().byId("newReqs"),
 				oOngReqs = this.getView().byId("OngReqs"),
-				oCompReqs = this.getView().byId("CompReqs")	;
-				oCanclReqs = this.getView().byId("CanclReqs")	;
+				oCompReqs = this.getView().byId("CompReqs"),
+				oCanclReqs = this.getView().byId("CanclReqs");
 
-			this._bindTables(oNewReqTable, +sPODId,1);
-			this._bindTables(oOngReqs, +sPODId,2);
-			this._bindTables(oCompReqs, +sPODId,3);
-			this._bindTables(oCanclReqs, +sPODId,4);
+			this._bindTables(oNewReqTable, +sPODId, 1);
+			this._bindTables(oOngReqs, +sPODId, 2);
+			this._bindTables(oCompReqs, +sPODId, 3);
+			this._bindTables(oCanclReqs, +sPODId, 4);
 
 		},
 
@@ -189,15 +201,16 @@ sap.ui.define([
 			var oColumnListTemplate = new sap.m.ColumnListItem();
 
 			oColumnListTemplate.addCell(new sap.m.Text({
-				text:  "{ServiceType/ServiceType}" 
-			}));
-			
-			oColumnListTemplate.addCell(new sap.m.Text({
-				text: "{ServiceType/IncidentType/ServiceMessage}"
+				text: "{ServiceType/ServiceType}"
 			}));
 			
 			oColumnListTemplate.addCell(new sap.m.Text({
 				text: "{ServiceType/IncidentType/IncidentType}"
+			}));
+			
+			
+			oColumnListTemplate.addCell(new sap.m.Text({
+				text: "{ServiceType/IncidentType/ServiceMessage}"
 			}));
 
 			oColumnListTemplate.addCell(new sap.m.Text({
@@ -206,13 +219,13 @@ sap.ui.define([
 
 			oColumnListTemplate.addCell(new sap.m.Button({
 				type: "Transparent",
-				icon: "sap-icon://locate-me"
+				icon: "sap-icon://locate-me",
+				press: this.onNavigate.bind(this)
 			}));
 
 			return oColumnListTemplate;
 
-		},
-
+		}/*,
 		_onBindingChange: function () {
 			var oView = this.getView(),
 				oViewModel = this.getModel("objectView"),
@@ -243,7 +256,7 @@ sap.ui.define([
 				oResourceBundle.getText("shareSendEmailObjectSubject", [sObjectId]));
 			oViewModel.setProperty("/shareSendEmailMessage",
 				oResourceBundle.getText("shareSendEmailObjectMessage", [sObjectName, sObjectId, location.href]));
-		}
+		}*/
 
 	});
 

@@ -57,7 +57,7 @@ sap.ui.define([
 			this.addHistoryEntry({
 				title: this.getResourceBundle().getText("worklistTitle"),
 				icon: "sap-icon://table-view",
-				intent: "#Manage-Facility"
+				intent: "#manage-facilities"
 			}, true);
 
 		},

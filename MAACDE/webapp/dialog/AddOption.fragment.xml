@@ -6,7 +6,8 @@
 -->
 		<f:SimpleForm editable="true" title="{i18n>TtlAddOptnDs}" 	layout="ResponsiveGridLayout" singleContainerFullSize="true" >
 			<Label required="true" text="{i18n>LblAccessibilityDeviceTitle}"/>
-			<Input value="{worklistView>Title}"/>
+			<!-- , type: 'sap.ui.model.odata.type.String' , constraints : { nullable : false  } -->
+			<Input  value="{ path:  'worklistView>Title' }"/>
 			<Label visible="{=  ${worklistView>AccessibilityId} === 2  }" text="{i18n>LblIsTextAllowed}" />
 			<CheckBox visible="{=  ${worklistView>AccessibilityId} === 2 }" selected="{worklistView>TextAllowed}"   />
 			<Label text="{i18n>LblEnabled}" />	
@@ -17,7 +18,7 @@
 		<imgEditor:ImageEditorResponsiveContainer  mode="Crop" enabledButtons="Crop,Transform">
 			<imgEditor:customToolbarControls>
 				<!--  fileType="[ 'jpg' , 'jpeg' , 'png' , 'svg' , 'ico', 'bmp' ]" -->
-				<unified:FileUploader id="updAddOptn" change="onFileChange"  />
+				<unified:FileUploader id="updAddOptn" fileType="jpg,bmp,png,ico,svg" change="onFileChange"  />
 			</imgEditor:customToolbarControls>
 			<imgEditor:ImageEditor src="{worklistView>Icon}" loaded="onImageLoaded" />
 		</imgEditor:ImageEditorResponsiveContainer>

@@ -71,7 +71,7 @@
 						</form:FormElement>
 						<form:FormElement label="{i18n>colCountry}">
 							<form:fields>
-								<ComboBox id="CountryDropdownId" selectedKey="{objectView>CountryId}"
+								<ComboBox  id="CountryDropdownId" selectedKey="{objectView>CountryId}"
 									items="{ path: '/MasterCountrySet' , filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false } ], parameters : { expand : 'Timezones' } }"
 									change="onCountryChange" required="true">
 									<core:Item key="{Id}" text="{Country}"/>
@@ -80,8 +80,9 @@
 						</form:FormElement>
 						<form:FormElement label="{i18n>colTimeZone}">
 							<form:fields>
-								<ComboBox id="TimezoneDropdownId" selectedKey="{objectView>TimezoneId}" items="{ path: 'objectView>/aTimezones' }" change="onTimeZoneChange">
-									<core:Item key="{objectView>Id}" text="{objectView>ZoneName}"/>
+								<ComboBox id="TimezoneDropdownId" busy="{objectView>/bTimeZonesItemsBusy}" busyIndicatorDelay="0" selectedKey="{objectView>TimezoneId}" >
+								<!-- items="{ path: 'objectView>/aTimezones' }"	<core:Item key="{objectView>Id}" text="{objectView>ZoneName}"/>-->
+									<!--<core:Item key="{Id}" text="{ZoneName}"/>-->
 								</ComboBox>
 							</form:fields>
 						</form:FormElement>

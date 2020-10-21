@@ -2,13 +2,9 @@ sap.ui.define([
 	"sap/ui/core/mvc/Controller",
 	"sap/ui/core/UIComponent",
 	"sap/m/library",
-	"sap/ui/core/Fragment",
-//---- HERE Maps API , add AMD libraries above------	
-	"../libs/mapsjs-core",
-	"../libs/mapsjs-service",
-	"../libs/mapsjs-ui",
-	"../libs/mapsjs-mapevents"
-], function (Controller, UIComponent, mobileLibrary,Fragment) {
+	"sap/ui/core/Fragment"
+
+], function (Controller, UIComponent, mobileLibrary, Fragment) {
 	"use strict";
 
 	// shortcut for sap.m.URLHelper
@@ -20,7 +16,7 @@ sap.ui.define([
 		 * @public
 		 * @returns {sap.ui.core.routing.Router} the router for this component
 		 */
-		getRouter : function () {
+		getRouter: function () {
 			return UIComponent.getRouterFor(this);
 		},
 
@@ -30,7 +26,7 @@ sap.ui.define([
 		 * @param {string} [sName] the model name
 		 * @returns {sap.ui.model.Model} the model instance
 		 */
-		getModel : function (sName) {
+		getModel: function (sName) {
 			return this.getView().getModel(sName);
 		},
 
@@ -41,7 +37,7 @@ sap.ui.define([
 		 * @param {string} sName the model name
 		 * @returns {sap.ui.mvc.View} the view instance
 		 */
-		setModel : function (oModel, sName) {
+		setModel: function (oModel, sName) {
 			return this.getView().setModel(oModel, sName);
 		},
 
@@ -50,7 +46,7 @@ sap.ui.define([
 		 * @public
 		 * @returns {sap.ui.model.resource.ResourceModel} the resourceModel of the component
 		 */
-		getResourceBundle : function () {
+		getResourceBundle: function () {
 			return this.getOwnerComponent().getModel("i18n").getResourceBundle();
 		},
 
@@ -58,7 +54,7 @@ sap.ui.define([
 		 * Event handler when the share by E-Mail button has been clicked
 		 * @public
 		 */
-		onShareEmailPress : function () {
+		onShareEmailPress: function () {
 			var oViewModel = (this.getModel("objectView") || this.getModel("worklistView"));
 			URLHelper.triggerEmail(
 				null,
@@ -66,7 +62,7 @@ sap.ui.define([
 				oViewModel.getProperty("/shareSendEmailMessage")
 			);
 		},
-		
+
 		/*
 		 * 
 		 * @constructor 
@@ -74,59 +70,55 @@ sap.ui.define([
 		 * @param sType, Accessiblity to be filters for
 		 * @returns commma (,) sperated string Accessiblity items text
 		 */
-		AccessibiltyItems : function(aItems, sType){
-			if( !aItems || !aItems.length ){
+		AccessibiltyItems: function (aItems, sType) {
+			if (!aItems || !aItems.length) {
 				return "";
 			}
 			return aItems.filter(
-				function(ele){
-					if(ele.AccessiblityItem == null)
-					{
+				function (ele) {
+					if (ele.AccessiblityItem == null) {
 						return false;
 					}
 					return ele.AccessiblityItem.AccessibilityId === +sType;
-					}).map( function(ele) { return ele.AccessiblityItem.Title; }  ).join(",");
+				}).map(function (ele) {
+				return ele.AccessiblityItem.Title;
+			}).join(",");
 		},
-		
-		
-		
-		/** 
-		 * Open Map and choose latitude/longitude for a given facility
-		 */
-		onNavigate: function (oEvent) {
-			var oBindingContext = oEvent.getSource().getBindingContext("worklistView"), that=this,
-			//POD User Location
-				oLatLong = {
-					lat : oBindingContext.getProperty("Latitude"),
-					lng: oBindingContext.getProperty("Longitude")
-				};
-					/*	
-			// To get EXPO Latitude and Longitude
-			var that = this;
-			this.getView().getModel().read("/EventInfoSet", {
-				filters: [new Filter("Id", FilterOperator.EQ, 'bfed13c1-6cfd-4c77-9a62-cdbf500d0800')],
-				success: function (response) {
-					that.getModel("worklistView").setProperty("/EXPO_Latitude", response.results[0].Latitude);
-					that.getModel("worklistView").setProperty("/EXPO_Longitude", response.results[0].Longitude);
-				}
-			});*/
 
+		getPodLocation: function (oCtrl) {
+			//get the correct model name
+			var sModel = this.getModel("worklistView") ? "worklistView" : "objectView",
+				oBindingContext = oCtrl.getBindingContext(sModel)
+
+			return {
+				lat: oBindingContext.getProperty("Latitude") ? oBindingContext.getProperty("Latitude") : "24.962762",
+				lng: oBindingContext.getProperty("Longitude") ? oBindingContext.getProperty("Longitude") : "55.147110"
+			};
+		},
+
+		onNavigate: function (oEvent) {
+			
+			if(!(this.getModel("appView").getProperty("/bHEREMapsLibLoaded") )) this.loadHERELibs();
+			
+			var that = this,
+				oLatLong = this.getPodLocation(oEvent.getSource());
 			Fragment.load({
 				id: that.getView().getId(),
 				type: "HTML",
 				name: "com.coil.podium.ManageVisitor.dialog.HEREMaps",
 				controller: that
 			}).then(function (oDialog) {
-				//that._oDlgAddOption = oDialog;
 				// connect dialog to the root view of this component (models, lifecycle)
 				var platform = new H.service.Platform({
 					'apikey': 'BbN_bDCaLx6-5GZou8CHRvPWpf9CoDtVbMK4w-OTAxM'
 				});
-				
 				// Obtain the default map types from the platform object
 				var maptypes = platform.createDefaultLayers();
-				//24.962762, 55.147110
-				// Instantiate (and display) a map object:
+			//IMP: FIX to be use for normal.map error ...
+			/*	maptypes.vector.normal.map.getProvider().setStyle(
+					new H.map.Style('https://js.api.here.com/v3/3.1/styles/omv/normal.day.yaml')
+				);*/
+			// Instantiate (and display) a map object:
 				var map = new H.Map(
 					document.getElementById("map"),
 					maptypes.vector.normal.map, {
@@ -141,15 +133,18 @@ sap.ui.define([
 
 				var ui = H.ui.UI.createDefault(map, maptypes);
 
-			//	that.calcRoute(platform, map, oData);
+				var oCordinates = {
+					Expo: that.getModel("appView").getProperty("/EventLocation/lat").concat(",", that.getModel("appView").getProperty(
+						"/EventLocation/lng")),
+					Pod: oLatLong.lat.toString().concat(",", oLatLong.lng)
+				}
 
-				that.addDraggableMarker(map, behavior, oLatLong);
+				that.calcRoute(platform, map, oCordinates);
 
 				that.getView().addDependent(oDialog);
 				oDialog.open();
 			}.bind(this));
-			
-			
+
 		},
 
 		onCloseMaps: function () {
@@ -188,35 +183,33 @@ sap.ui.define([
 		 *  @param platform , {H.service.Platform} platform A stub class to access HERE services
 		 *	@param oRowData , Binding data object 
 		 */
-		calcRoute: function (platform, map, oData) {
+		calcRoute: function (platform, map, oCordinates) {
 			var that = this;
-			var POD_LatLong = that.getModel("worklistView").getProperty("/POD_Latitude") + "," + that.getModel("worklistView").getProperty(
-				"/POD_Longitude");
-			var EXPO_LatLong = that.getModel("worklistView").getProperty("/EXPO_Latitude") + "," + that.getModel("worklistView").getProperty(
-				"/EXPO_Longitude");
-			// TODO: Get from location from ODATA entity call, using test location for now lng: 55.147110, lat: 24.962762
-			//	debugger;
 			var router = platform.getRoutingService();
 			var routeRequestParams = {
 				mode: 'shortest;pedestrian',
 				representation: 'display',
 				routeattributes: 'waypoints,summary,shape,legs',
 				maneuverattributes: 'direction,action',
-				waypoint0: EXPO_LatLong,
-				waypoint1: POD_LatLong
+				waypoint0: oCordinates.Expo,
+				waypoint1: oCordinates.Pod
 			};
 
 			function onSuccess(result) {
 				// ensure that at least one route was found
-				var route = result.response.route[0];
-				/*
-				 * The styling of the route response on the map is entirely under the developer's control.
-				 * A representitive styling can be found the full JS + HTML code of this example
-				 * in the functions below:
-				 */
-				that.addRouteShapeToMap(route, map);
-				that.addManueversToMap(route, map);
-
+				try {
+					var route = result.response.route[0];
+					/*
+					 * The styling of the route response on the map is entirely under the developer's control.
+					 * A representitive styling can be found the full JS + HTML code of this example
+					 * in the functions below:
+					 */
+					that.addRouteShapeToMap(route, map);
+					that.addManueversToMap(route, map);
+				} catch (err) {
+					sap.m.MessageToast.show("Could not found route.");
+					console.log(err);
+				}
 				//	that.addWaypointsToPanel(route.waypoint,map);
 				//	that.addManueversToPanel(route,map);
 				//	that.addSummaryToPanel(route.summary,map);
@@ -272,8 +265,7 @@ sap.ui.define([
 			// Add the maneuvers group to the map
 			map.addObject(group);
 		},
-		
-		
+
 		/** 
 		 * 
 		 * @param map , Here API map Object	
@@ -287,31 +279,42 @@ sap.ui.define([
 				// mark the object as volatile for the smooth dragging
 				volatility: false
 			});
-				map.addObject(marker);
+			map.addObject(marker);
 		},
 		
+		//load HERE Maps Libs in sync
+		loadHERELibs: function () {
+			
+			this.getModel("appView").setProperty("/bHEREMapsLibLoaded" ,  true);
+			
+			jQuery.sap.require("com.coil.podium.ManageVisitor.libs.mapsjs-core");
+			jQuery.sap.require("com.coil.podium.ManageVisitor.libs.mapsjs-service");
+			jQuery.sap.require("com.coil.podium.ManageVisitor.libs.mapsjs-ui");
+			jQuery.sap.require("com.coil.podium.ManageVisitor.libs.mapsjs-mapevents");
+		
+		},
 
 		/**
-		* Adds a history entry in the FLP page history
-		* @public
-		* @param {object} oEntry An entry object to add to the hierachy array as expected from the ShellUIService.setHierarchy method
-		* @param {boolean} bReset If true resets the history before the new entry is added
-		*/
-		addHistoryEntry: (function() {
+		 * Adds a history entry in the FLP page history
+		 * @public
+		 * @param {object} oEntry An entry object to add to the hierachy array as expected from the ShellUIService.setHierarchy method
+		 * @param {boolean} bReset If true resets the history before the new entry is added
+		 */
+		addHistoryEntry: (function () {
 			var aHistoryEntries = [];
 
-			return function(oEntry, bReset) {
+			return function (oEntry, bReset) {
 				if (bReset) {
 					aHistoryEntries = [];
 				}
 
-				var bInHistory = aHistoryEntries.some(function(oHistoryEntry) {
+				var bInHistory = aHistoryEntries.some(function (oHistoryEntry) {
 					return oHistoryEntry.intent === oEntry.intent;
 				});
 
 				if (!bInHistory) {
 					aHistoryEntries.push(oEntry);
-					this.getOwnerComponent().getService("ShellUIService").then(function(oService) {
+					this.getOwnerComponent().getService("ShellUIService").then(function (oService) {
 						oService.setHierarchy(aHistoryEntries);
 					});
 				}

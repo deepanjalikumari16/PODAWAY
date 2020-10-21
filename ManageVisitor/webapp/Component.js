@@ -2,7 +2,7 @@ sap.ui.define([
 	"sap/ui/core/UIComponent",
 	"sap/ui/Device",
 	"./model/models",
-	"./controller/ErrorHandler"
+	"./controller/ErrorHandler" 
 ], function (UIComponent, Device, models, ErrorHandler) {
 	"use strict";
 
@@ -29,6 +29,16 @@ sap.ui.define([
 			this.setModel(models.createDeviceModel(), "device");
 			// set the FLP model
 			this.setModel(models.createFLPModel(), "FLP");
+			
+		
+			this.oStartUpParams = this.getComponentData().startupParameters;
+		
+			if(Object.entries(this.oStartUpParams).length > 0 && this.oStartUpParams.hasOwnProperty("VisitorId") )
+			{
+			this.oStartUpParams.bWithParams = true;
+			this.getRouter().getTarget("object").display();
+			return;
+			}
 			
 
 			// create the views based on the url/hash

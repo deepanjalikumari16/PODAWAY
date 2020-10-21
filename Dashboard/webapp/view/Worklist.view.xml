@@ -1,176 +1,95 @@
 <mvc:View controllerName="com.coil.podium.Dashboard.controller.Worklist" xmlns:chart="sap.suite.ui.microchart" xmlns:core="sap.ui.core"
 	xmlns:l="sap.ui.layout" xmlns:micro="sap.suite.ui.microchart" xmlns="sap.m" xmlns:cards="sap.f.cards" xmlns:u="sap.ui.unified"
 	xmlns:f="sap.f" xmlns:mvc="sap.ui.core.mvc" xmlns:html="http://www.w3.org/1999/xhtml">
-	<Page title="{i18n>worklistViewTitle}" class="sapUiResponsivePadding" showHeader="false" showFooter="false">
-	<!--	<l:Grid defaultSpan="XL4 L4 M6 S12" width="100%" defaultIndent="XL0 L0 M0 S0" class="sapUiResponsiveMargin">
-			<f:Card>
-				<f:header>
-					<cards:Header title="{i18n>TtlPODCategory}"/>
-				</f:header>
-				<f:content>
-					<HBox>
-						<VBox class="sapUiSmallMarginBegin transform">
-							<Text class="large-font" text="{dashboard>/iTotalPOD}"/>
-							<Label text="{i18n>TxtTotalPODUsers}"/>
-						</VBox>
-						<micro:ColumnMicroChart  width="100%" size="L" columns="{dashboard>/PODByCatrgory}" class="sapUiSmallMargin chartScroll" allowColumnLabels="true">
-							<micro:columns>
-								<micro:ColumnMicroChartData value="{dashboard>Total}" label="{dashboard>Name}"/>
-							</micro:columns>
-						</micro:ColumnMicroChart>
-					</HBox>
-				</f:content>
-			</f:Card>
-		<GenericTile header="{i18n>TtlEmergencyIncidents}">
-				<tileContent>
-					<TileContent footer="{i18n>NeedImmidiateattention}">
-						<ObjectStatus class="sapUiSmallMarginBottom large-font" text="{dashboard>/EmergecnyIncidents}" icon="sap-icon://alert" state="Error"/>
-					</TileContent>
-				</tileContent>
-				<layoutData>
-					<l:GridData span="XL2 L2 M6 S12"/>
-				</layoutData>
-			</GenericTile>
-			<GenericTile header="{i18n>TtlTotalIncidents}">
-				<tileContent>
-					<TileContent footer="{i18n>TxtIncidents}">
-						<ObjectStatus class="sapUiSmallMarginBottom large-font" text="{dashboard>/TotalIncidents}"/>
-					</TileContent>
-				</tileContent>
-				<layoutData>
-					<l:GridData span="XL2 L2 M6 S12"/>
-				</layoutData>
-			</GenericTile>
-			<f:Card>
-				<f:header>
-					<cards:Header title="{i18n>TtlAssignmentStatus}" subtitle="35"/>
-				</f:header>
-				<f:content>
-					<FlexBox class="sapUiTinyMargin" alignItems="Start">
-						<FlexBox alignContent="SpaceBetween" direction="Column">
-							<Text text="{i18n>TxtPending}"/>
-							<Text class="sapUiSmallMarginTop" text="{i18n>TxtInprogress}"/>
-							<Text class="sapUiSmallMarginTop" text="{i18n>TxtCompleted}"/>
-							<layoutData>
-								<FlexItemData growFactor="0.2"/>
-							</layoutData>
-						</FlexBox>
-						<FlexBox direction="Column">
-							<layoutData>
-								<FlexItemData growFactor="2.1"/>
-							</layoutData>
-							<ProgressIndicator displayValue="{dashboard>/AssignmentStatues/pending}"
-								percentValue="{parts : [ {path : 'dashboard>/AssignmentStatues/pending' }, { path : 'dashboard>/TotalAssignments' } ], formatter : '.formatter.givePercentValue'}"
-								state="Error"/>
-							<ProgressIndicator displayValue="{dashboard>/AssignmentStatues/inprogress}"
-								percentValue="{parts : [ {path : 'dashboard>/AssignmentStatues/inprogress' }, { path : 'dashboard>/TotalAssignments' } ], formatter : '.formatter.givePercentValue'}"
-								state="Warning"/>
-							<ProgressIndicator displayValue="{dashboard>/AssignmentStatues/inprogress}"
-								percentValue="{parts : [ {path : 'dashboard>/AssignmentStatues/inprogress' }, { path : 'dashboard>/TotalAssignments' } ], formatter : '.formatter.givePercentValue'}"
-								state="Success"/>
-						</FlexBox>
-					</FlexBox>
-			
-				</f:content>
-			</f:Card>-->
-<!--			<VBox class="card sapFCard">
-				<Title text="{i18n>TtlPODCategory}" />
-				<VBox >
-					<Text class="large-font" text="{dashboard>/iTotalPOD}"/>
-					<Label text="{i18n>TxtTotalPODUsers}"/>
-				</VBox>
-						<micro:ColumnMicroChart  width="100%" size="L" columns="{dashboard>/PODByCatrgory}" class="sapUiSmallMargin chartScroll" allowColumnLabels="true">
-							<micro:columns>
-								<micro:ColumnMicroChartData value="{dashboard>Total}" label="{dashboard>Name}"/>
-							</micro:columns>
-						</micro:ColumnMicroChart>	
-		
-			
-			
-			<VBox>
-				<HBox class="sapUiResponsiveMargin">
-					<Text text="Total Incidents of POD users"/>
-					<HBox >
-						<core:Icon class="sapUiLargeMarginBegin sapUiTinyMarginEnd" src="sap-icon://color-fill" color="green"/>
-						<Text text="Density of POD Users"/>
-					</HBox>
-					<HBox >
-						<core:Icon class="sapUiTinyMarginBeginEnd" src="sap-icon://color-fill" color="red"/>
-						<Text text="Emergency Incidents"/>
-					</HBox>
-				</HBox>
-				<html:div id="map" class="MapContainer"></html:div>
-				<layoutData>
-					<l:GridData span="XL12 L12 M12 S12"/>
-				</layoutData>
-			</VBox>
-		</l:Grid>-->
+	<Page title="{i18n>worklistViewTitle}" busy="{dashboard>/bViewBusy}" busyIndicatorDelay="0" class="sapUiResponsivePadding"
+		showHeader="false" showFooter="false">
 		<l:BlockLayout background="Dashboard" class="podium-dashboard">
 			<l:BlockLayoutRow scrollable="true" class="podium-dashboard_grid">
-					<l:BlockLayoutCell class="podium-dashboard_item" titleLevel="H4" width="30%" title="{i18n>TtlPODCategory}" >
-						<FlexBox class="chartScroll" alignItems="End" height="auto"	justifyContent="Start">
-							<items> 
-								<VBox class="sapUiTinyMarginEnd" >
+				<l:BlockLayoutCell class="podium-dashboard_item" titleLevel="H4" width="30%">
+					<l:titleLink>
+						<Link press="toPODVisitors" text="{i18n>TtlPODCategory}"/>
+					</l:titleLink>
+					<FlexBox alignItems="End" height="auto" justifyContent="Start">
+						<items>
+							<!-- height="10px" width="10px" -->
+							<VBox class="sapUiTinyMarginEnd">
+								<HBox renderType="Bare">
+									<Image class="wheelchair" src="{dashboard>/logo}"/>
 									<Text class="large-font" text="{dashboard>/iTotalPOD}"/>
-									<Label text="{i18n>TxtTotalPODUsers}"/>
-								</VBox>
-								<micro:ColumnMicroChart  width="100%" size="L" columns="{dashboard>/PODByCatrgory}" allowColumnLabels="true">
-									<micro:columns>
-										<micro:ColumnMicroChartData value="{dashboard>Total}" label="{dashboard>Name}"/>
-									</micro:columns>
-								</micro:ColumnMicroChart>
-							</items>
-						</FlexBox>
-					</l:BlockLayoutCell>
-					<l:BlockLayoutCell class="podium-dashboard_item" titleLevel="H5" width="20%" title="{i18n>TtlEmergencyIncidents}" >
-							<FlexBox alignItems="Center" height="90%"
-								justifyContent="Start">
-								<items>
-										<FlexBox direction="Column"		alignItems="Start">
-										<ObjectStatus class="large-font" text="{dashboard>/EmergecnyIncidents}" press="Navigate" icon="sap-icon://alert" state="Error"/>
-										<Link text="{i18n>NeedImmidiateattention}" press="Navigate"  />
-										</FlexBox>
-								</items>
-						</FlexBox>
-					</l:BlockLayoutCell>
-					<l:BlockLayoutCell class="podium-dashboard_item" titleLevel="H6" width="20%" title="{i18n>TtlTotalIncidents}" >
-						<FlexBox alignItems="Center" height="90%"
-							justifyContent="Start">
-							<items>
-								<ObjectStatus class="large-font incident-text" text="{dashboard>/TotalIncidents}"/>
-							</items>
-						</FlexBox>
-					</l:BlockLayoutCell>
-					<l:BlockLayoutCell class="podium-dashboard_item" width="30%" title="{i18n>TtlAssignmentStatus}" >
-						<FlexBox alignItems="Start">
-						<FlexBox alignContent="SpaceBetween" direction="Column">
-							<Text text="{i18n>TxtPending}"/>
-							<Text class="sapUiSmallMarginTop" text="{i18n>TxtInprogress}"/>
-							<Text class="sapUiSmallMarginTop" text="{i18n>TxtCompleted}"/>
-							<Text class="sapUiSmallMarginTop" text="{i18n>TxtCancelled}"/>
-							<layoutData>
-								<FlexItemData growFactor="0.2"/>
-							</layoutData>
-						</FlexBox>
-						<FlexBox direction="Column">
-							<layoutData>
-								<FlexItemData growFactor="2.1"/>
-							</layoutData>
-							<ProgressIndicator displayValue="{dashboard>/AssignmentStatues/pending}"
+								</HBox>
+								<Label text="{i18n>TxtTotalPODUsers}"/>
+							</VBox>
+							<micro:ColumnMicroChart class="chartScroll" width="100%" size="L" columns="{dashboard>/PODByCatrgory}" allowColumnLabels="true">
+								<micro:columns>
+									<micro:ColumnMicroChartData value="{dashboard>Total}" label="{dashboard>Name}"/>
+								</micro:columns>
+							</micro:ColumnMicroChart>
+						</items>
+					</FlexBox>
+				</l:BlockLayoutCell>
+				<l:BlockLayoutCell class="podium-dashboard_item" titleLevel="H5" width="20%">
+					<l:titleLink>
+						<Link press="toAssignments" text="{i18n>TtlEmergencyIncidents}"/>
+					</l:titleLink>
+					<FlexBox alignItems="Center" height="90%" justifyContent="Start">
+						<items>
+							<FlexBox direction="Column" alignItems="Start">
+								<ObjectStatus class="large-font" text="{dashboard>/EmergecnyIncidents}" press="Navigate" icon="sap-icon://alert" state="Error"/>
+								<Text class="pod-users pod-user-text" text="{i18n>NeedImmidiateattention}"/>
+							</FlexBox>
+						</items>
+					</FlexBox>
+				</l:BlockLayoutCell>
+				<l:BlockLayoutCell class="podium-dashboard_item" titleLevel="H6" width="20%">
+					<l:titleLink>
+						<Link press="toAssignments" text="{i18n>TtlTotalIncidents}"/>
+					</l:titleLink>
+					<FlexBox alignItems="Center" height="90%" justifyContent="Start">
+						<items>
+							<FlexBox direction="Column" alignItems="Start">
+								<HBox renderType="Bare">
+									<Image class="wheelchair" src="{dashboard>/EmergencyLogo}"/>
+									<ObjectStatus class="large-font incident-text" text="{dashboard>/TotalIncidents}"/>
+								</HBox>
+								<Text class="pod-users pod-user-text" text="{i18n>TxtIncidents}"/>
+							</FlexBox>
+						</items>
+					</FlexBox>
+				</l:BlockLayoutCell>
+				<l:BlockLayoutCell class="podium-dashboard_item" width="30%">
+					<l:titleLink>
+						<Link press="toAssignments" text="{i18n>TtlAssignmentStatus}"/>
+					</l:titleLink>
+					<FlexBox direction="Column">
+						<layoutData>
+							<FlexItemData growFactor="2.1"/>
+						</layoutData>
+						<FlexBox fitContainer="true" justifyContent="SpaceBetween" alignItems="Start" renderType="Bare">
+							<Text text="{i18n>TxtPending}" class="sapUiTinyMarginEnd sapUiTinyMarginTop"/>
+							<ProgressIndicator width="80%" displayValue="{dashboard>/AssignmentStatues/pending}"
 								percentValue="{parts : [ {path : 'dashboard>/AssignmentStatues/pending' }, { path : 'dashboard>/TotalAssignments' } ], formatter : '.formatter.givePercentValue'}"
 								state="Error"/>
-							<ProgressIndicator displayValue="{dashboard>/AssignmentStatues/inprogress}"
+						</FlexBox>
+						<FlexBox fitContainer="true" alignItems="Start" justifyContent="SpaceBetween" renderType="Bare">
+							<Text wrapping="false" text="{i18n>TxtInprogress}" class="sapUiTinyMarginEnd sapUiTinyMarginTop"/>
+							<ProgressIndicator width="80%" displayValue="{dashboard>/AssignmentStatues/inprogress}"
 								percentValue="{parts : [ {path : 'dashboard>/AssignmentStatues/inprogress' }, { path : 'dashboard>/TotalAssignments' } ], formatter : '.formatter.givePercentValue'}"
 								state="Warning"/>
-							<ProgressIndicator displayValue="{dashboard>/AssignmentStatues/inprogress}"
+						</FlexBox>
+						<FlexBox fitContainer="true" alignItems="Start" justifyContent="SpaceBetween" renderType="Bare">
+							<Text wrapping="false" text="{i18n>TxtCompleted}" class="sapUiTinyMarginEnd sapUiTinyMarginTop"/>
+							<ProgressIndicator width="80%" displayValue="{dashboard>/AssignmentStatues/inprogress}"
 								percentValue="{parts : [ {path : 'dashboard>/AssignmentStatues/inprogress' }, { path : 'dashboard>/TotalAssignments' } ], formatter : '.formatter.givePercentValue'}"
 								state="Success"/>
-							<ProgressIndicator displayValue="{dashboard>/AssignmentStatues/cancelled}"
+						</FlexBox>
+						<FlexBox fitContainer="true" alignItems="Start" justifyContent="SpaceBetween" renderType="Bare">
+							<Text wrapping="false" text="{i18n>TxtCancelled}" class="sapUiTinyMarginEnd sapUiTinyMarginTop"/>
+							<ProgressIndicator width="80%" displayValue="{dashboard>/AssignmentStatues/cancelled}"
 								percentValue="{parts : [ {path : 'dashboard>/AssignmentStatues/cancelled' }, { path : 'dashboard>/TotalAssignments' } ], formatter : '.formatter.givePercentValue'}"
-								state=""/>
+								state="None"/>
 						</FlexBox>
 					</FlexBox>
-					</l:BlockLayoutCell>
+				</l:BlockLayoutCell>
 			</l:BlockLayoutRow>
 			<l:BlockLayoutRow class="podium-dashboard_graph">
 				<l:BlockLayoutCell>
@@ -189,9 +108,19 @@
 								<Text class="pod-users" text="Emergency Incidents"/>
 							</HBox>
 						</HBox>
-						<html:div id="map" class="MapContainer"></html:div>
+						<HBox  renderType="Bare" >
+						<VBox renderType="Bare" width="45%" class="sapUiSmallMargin"  >
+						<Text  text="Heat Map" class="tempFont sapUiTinyMarginBottom" />
+						<HBox id="heatMap"  class=" MapContainer" renderType="Bare" />
+						</VBox>
+						<VBox renderType="Bare"   width="45%" class="sapUiSmallMargin" >
+						<Text text="Cluster Map" class="tempFont sapUiTinyMarginBottom" />
+						<HBox id="map" class="MapContainer" renderType="Bare" />
+						</VBox>
+						</HBox>
+						
 					</VBox>
-				</l:BlockLayoutCell>	
+				</l:BlockLayoutCell>
 			</l:BlockLayoutRow>
 		</l:BlockLayout>
 	</Page>

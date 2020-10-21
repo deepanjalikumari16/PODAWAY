@@ -30,6 +30,20 @@ sap.ui.define([
 				// An entity that was not found in the service is also throwing a 404 error in oData.
 				// We already cover this case with a notFound target so we skip it here.
 				// A request that cannot be sent to the server is a technical error that we have to handle though
+				if (oParams.response.statusCode == "403") {
+					this._showServiceError("You are not authorized to perform this action. Please contact the administrator.");
+					return;
+					// Unauthorized
+				}
+				if (oParams.response.statusCode == "500") {
+					this._showServiceError("An unexpected error has occurred. Please contact the administrator.");
+					return;
+					// Error
+				}
+				if (oParams.response.statusCode == "503") {
+					this._showServiceError("Server Under Maintenance, Please stay tuned for the updates.");
+					return;
+				}
 				if (oParams.response.statusCode !== "404" || (oParams.response.statusCode === 404 && oParams.response.responseText.indexOf("Cannot POST") === 0)) {
 					this._showServiceError(oParams.response);
 				}

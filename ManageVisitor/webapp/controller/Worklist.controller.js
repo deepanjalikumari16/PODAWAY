@@ -62,13 +62,13 @@ sap.ui.define([
 			this._setSearchField();
 			
 		},
-
+		
 		/* =========================================================== */
 		/* event handlers                                              */
 		/* =========================================================== */
 		
 		_onHomeMatched : function(){
-				this.getModel().metadataLoaded().then(this._getViewData.bind(this));
+				this.getModel().metadataLoaded().then(this._getViewData.bind(this, false, false));
 		},
 		
 		/**
@@ -146,8 +146,6 @@ sap.ui.define([
 				
 					this._addFilterBarItems(aTableSearchState, aCustomQuery );
 				}
-				
-		//		this._applySearch(aTableSearchState,aCustomQuery);
 		
 				this._getViewData(aTableSearchState, aCustomQuery	);
 		
@@ -172,23 +170,20 @@ sap.ui.define([
 			var oFilterBar = this.getView().byId("filterbar");
 				
 			oFilterBar.getFilterGroupItems().forEach(function(ele){
-				
+				if(ele.getControl().getSelectedKey())
 				switch(ele.getName()){
 					
 					case "Country" : 
-						aFilters.push(new Filter( "Country" , FilterOperator.EQ, ele.getControl().getSelectedKey()    ));	
+						 aFilters.push(new Filter( "Country" , FilterOperator.EQ, ele.getControl().getSelectedItem().getText()    ));	
 						break;
 					case "Category" :
-						if(ele.getControl().getSelectedKey()) aCustomQuery["ConditionId"]	= 	ele.getControl().getSelectedKey();		
+					 aCustomQuery["ConditionId"]	= 	ele.getControl().getSelectedKey();		
 						break;
 					case "Things" :
-						if(ele.getControl().getSelectedKey()) aCustomQuery["PlaceId"]	= 	ele.getControl().getSelectedKey();		
+					aCustomQuery["PlaceId"]	= 	ele.getControl().getSelectedKey();		
 						break;
 					
-				}
-				
-		
-				
+				};
 			});	
 		
 		
@@ -225,15 +220,13 @@ sap.ui.define([
 		
 			if(filters)
 			{
-				defaultFilters.concat(filters);
+			 defaultFilters = defaultFilters.concat(filters);
 			}
 			
 			if(customQuery && Object.keys(customQuery).length )
 			{
-				Object.assign(urlParameters, customQuery )
-				 }
-			
-			
+				Object.assign(urlParameters, customQuery );
+			}
 			
 			this.getModel().read("/UserSet", {
 				filters : defaultFilters,

@@ -69,8 +69,8 @@
 							<Text text="{LastName}"/>
 							<Text text="{Mobile}"/>
 							<Text text="{Email}"/>
-							<Button icon="sap-icon://paper-plane" press="onMessage" type="Transparent"/>
-							<Button icon="sap-icon://notification-2" press="onComment" type="Transparent"/>
+							<Button icon="sap-icon://message-popup" press="onMessage" type="Transparent"/>
+							<Button icon="sap-icon://comment" press="onComment" type="Transparent"/>
 							<Button icon="sap-icon://edit" enabled="{= ${worklistView>/selectId} !== '3' }" press="onEdit" type="Transparent"/>
 							<Button icon="sap-icon://delete" enabled="{= ${worklistView>/loggedUserId} !== ${Id} }" press="onDelete" type="Transparent" tooltip="remove"/>
 						</cells>

@@ -1,7 +1,9 @@
 sap.ui.define([
 	"sap/ui/core/mvc/Controller",
 	"sap/ui/core/UIComponent",
-	"sap/m/library"
+	"sap/m/library",
+		//---- HERE Maps API , add AMD libraries above------	
+	"../libs/mapsjs-core"
 ], function (Controller, UIComponent, mobileLibrary) {
 	"use strict";
 

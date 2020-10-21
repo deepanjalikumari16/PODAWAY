@@ -23,6 +23,28 @@
 		"sourceTemplate": {
 			"id": "sap.ui.ui5-template-plugin.1worklist",
 			"version": "1.77.2"
+		},
+		"crossNavigation": {
+			"inbounds": {
+				"intent1": {
+					"signature": {
+						"parameters": {},
+						"additionalParameters": "allowed"
+					},
+					"semanticObject": "Manage",
+					"action": "Initiative",
+					"title": "Manage POD Initiatives"
+				},
+				"intent2": {
+					"signature": {
+						"parameters": {},
+						"additionalParameters": "allowed"
+					},
+					"semanticObject": "Manage",
+					"action": "Attraction",
+					"title": "Manage Attractions"
+				}
+			}
 		}
 	},
 	"sap.ui": {
@@ -43,6 +65,7 @@
 		}
 	},
 	"sap.ui5": {
+	 
 		"rootView": {
 			"viewName": "com.coil.podium.MAEVAT.view.App",
 			"type": "XML",

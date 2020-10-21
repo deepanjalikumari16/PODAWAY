@@ -62,6 +62,14 @@ sap.ui.define([
 				oViewModel.getProperty("/shareSendEmailMessage")
 			);
 		},
+		
+		showErrorMessageBox : function(sMsgTxt){
+			var that = this;
+			
+			MessageBox.error(sMsgTxt) ;
+			
+		},
+		
 		/*
 		 * Common function for showing warning dialogs
 		 * @param sMsgTxt : i18n Key string

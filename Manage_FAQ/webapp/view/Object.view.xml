@@ -14,19 +14,19 @@
 					<form:formElements>
 						<form:FormElement label="{i18n>colFaqCategory}">
 							<form:fields>
-								<ComboBox selectedKey="{objectView>FaqCategoryId}" items="{ path: '/MasterFaqCategorySet' }" required="true">
+								<ComboBox selectedKey="{objectView>FaqCategoryId}" items="{ path: '/MasterFaqCategorySet' }" required="true" >
 									<core:Item key="{Id}" text="{FaqCategory}"/>
 								</ComboBox>
 							</form:fields>
 						</form:FormElement>
 						<form:FormElement label="{i18n>colQuestion}">
 							<form:fields>
-								<Input value="{objectView>Question}" required="true" maxLength="150"/>
+								<Input value="{objectView>Question}" required="true" maxLength="300"/>
 							</form:fields>
 						</form:FormElement>
 						<form:FormElement label="{i18n>colAnswer}">
 							<form:fields>
-								<TextArea value="{objectView>Answer}" rows="6" required="true" maxLength="300"/>
+								<TextArea value="{objectView>Answer}" rows="6" required="true" maxLength="600"/>
 							</form:fields>
 						</form:FormElement>
 						<form:FormElement label="{i18n>colNavigation}">

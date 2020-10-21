@@ -3,12 +3,15 @@ sap.ui.define([
 	"sap/ui/model/json/JSONModel",
 	"../model/formatter",
 	"sap/ui/core/Fragment",
+	"sap/ui/model/Filter",
+	"sap/ui/model/FilterOperator",
+	
 	//---- HERE Maps API , add AMD libraries above------	
 	"../libs/mapsjs-core",
 	"../libs/mapsjs-service",
 	"../libs/mapsjs-ui",
 	"../libs/mapsjs-mapevents"
-], function (BaseController, JSONModel, formatter, Fragment) {
+], function (BaseController, JSONModel, formatter, Fragment,Filter,FilterOperator) {
 	"use strict";
 
 	return BaseController.extend("com.coil.podium.Manage_Event_Info.controller.Object", {
@@ -119,6 +122,7 @@ sap.ui.define([
 		 * @param data: will only be there for edit Event scenerios
 		 * @returns to terminate further execution
 		 */
+		 
 		_setView: function (data) {
 			var oViewModel = this.getModel("objectView");
 			oViewModel.setProperty("/busy", false);
@@ -127,7 +131,7 @@ sap.ui.define([
 				oViewModel.setProperty("/oDetails", data);
 				oViewModel.setProperty("/oDetails/Highlights", data.Highlights.results);
 
-				function explicitFireChange() {
+				/*function explicitFireChange() {
 					if (this.getView().byId("CountryDropdownId").getSelectedItem() === null) {
 						setTimeout(explicitFireChange.bind(this), 2000);
 						return;
@@ -135,12 +139,24 @@ sap.ui.define([
 					this.getView().byId("CountryDropdownId").fireChange({
 						selectedItem: this.getView().byId("CountryDropdownId").getSelectedItem()
 					});
-
 				};
 
-				explicitFireChange.call(this);
+				explicitFireChange.call(this);*/
+			/*	
+				this.getView().byId("CountryDropdownId").fireChange({
+					//	selectedItem: this.getView().byId("CountryDropdownId").getSelectedItem()
+					value : data.CountryId ,         
+					itemPressed : false
+					
+				});*/
+		
+				//TimeZoneFlow
+			
+				this.setInitTimeZones(data.CountryId);
+				
+				
 
-				oViewModel.setProperty("/oDetails", data);
+//				oViewModel.setProperty("/oDetails", data);
 				return;
 			}
 			// oViewModel.setProperty("/oHighlights", []);
@@ -163,7 +179,51 @@ sap.ui.define([
 			});
 
 		},
+		
+		_fnbusyItems: function (oEvent) {
+			var oViewModel = this.getModel("objectView");
+			if (oEvent.getId() === "dataRequested") {
+				oViewModel.setProperty("/bTimeZonesItemsBusy", true);
+			} else {
+				oViewModel.setProperty("/bTimeZonesItemsBusy", false);
+			}
 
+		},
+		
+		bindTimeZoneCtrl : function(sIsoCode){
+		
+		var oCtrl = this.getView().byId("TimezoneDropdownId");
+		
+		oCtrl.bindItems({
+				template: new sap.ui.core.Item({
+					key : "{Id}",
+					text : "{ZoneName}"
+				}),
+				path: "/MasterTimezoneSet",
+				events: {
+					dataRequested: this._fnbusyItems.bind(this),
+					dataReceived: this._fnbusyItems.bind(this)
+				},
+				filters: [ new Filter("IsArchived", FilterOperator.EQ, false), new Filter("CountryCode", FilterOperator.EQ, sIsoCode)	],
+				templateShareable: true
+			});
+			
+		},
+		
+		setInitTimeZones : function(sCountryId){
+			this._fnbusyItems({
+					getId : function(){return "dataRequested" ;}
+				});
+			var sKey = this.getModel().createKey("/MasterCountrySet", {
+				Id :  sCountryId
+			});
+			var that = this;
+			this.getModel().read(sKey, {
+				success : function(data){
+					that.bindTimeZoneCtrl(data.IsoCode);
+				}
+			})
+		},
 		/** 
 		 * Open Map and choose latitude/longitude for a given facility
 		 */
@@ -281,14 +341,15 @@ sap.ui.define([
 		},
 
 		onCountryChange: function (oEvent) {
-			var oSelectedItem = oEvent.getSource().getSelectedItem();
+			
+	/*		var oSelectedItem = oEvent.getSource().getSelectedItem();
 			var oObject = oSelectedItem.getBindingContext().getObject();
 			this.getModel("objectView").setProperty("/oDetails/CountryId", oObject.Id);
 			var aTimezones = [];
 			var selectedTimezoneId = this.getModel("objectView").getProperty("/oDetails/TimezoneId");
 			var isFound = false;
-			for (var i = 0; i < oObject.Timezones.__list.length; i++) {
 
+			for (var i = 0; i < oObject.Timezones.__list.length; i++) {
 				var sPath = oObject.Timezones.__list[i];
 				aTimezones.push(this.getModel().getData("/" + sPath));
 				if (selectedTimezoneId == aTimezones[i].Id) {
@@ -296,15 +357,15 @@ sap.ui.define([
 				}
 			}
 			if (isFound == false && aTimezones.length > 0) {
+				// this.getModel("objectView").setProperty("/oDetails/TimezoneId", null);
+			// 	this.getModel("objectView").refresh();
 				this.getModel("objectView").setProperty("/oDetails/TimezoneId", aTimezones[0].Id);
 			}
-			this.getModel("objectView").setProperty("/aTimezones", aTimezones);
-		},
-
-		onTimeZoneChange: function (oEvent) {
+			this.getModel("objectView").setProperty("/aTimezones", aTimezones);*/
 			var oSelectedItem = oEvent.getSource().getSelectedItem();
 			var oObject = oSelectedItem.getBindingContext().getObject();
-			this.getModel("objectView").setProperty("/oDetails/TimezoneId", oObject.Id);
+			this.bindTimeZoneCtrl(oObject.IsoCode);
+			this.getModel("objectView").setProperty("/oDetails/TimezoneId", null);
 		},
 
 		onUrlValidate: function () {
@@ -355,8 +416,13 @@ sap.ui.define([
 		_fnValidation: function (data) {
 			var oReturn = {
 				IsNotValid: false,
-				sMsg: []
+				sMsg: [],
 			};
+
+			var url = data.Url,
+				regex =
+				/((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/;
+
 			if (data.Name === "") {
 				oReturn.IsNotValid = true;
 				oReturn.sMsg.push("Please enter Name");
@@ -366,12 +432,21 @@ sap.ui.define([
 			} else if (data.EndDate === "") {
 				oReturn.IsNotValid = true;
 				oReturn.sMsg.push("Please enter End Date");
+			} else if (data.EndDate !== "" && data.EndDate < data.StartDate) {
+				oReturn.IsNotValid = true;
+				oReturn.sMsg.push("End date should be greater than or equal to Start date");
 			} else if (data.StartTime === "") {
 				oReturn.IsNotValid = true;
 				oReturn.sMsg.push("Please enter Start Time");
 			} else if (data.EndTime === "") {
 				oReturn.IsNotValid = true;
 				oReturn.sMsg.push("Please enter End Time");
+			} else if (data.EndTime !== "" && data.EndDate === data.StartDate) {
+				oReturn.IsNotValid = true;
+				oReturn.sMsg.push("End time should be greater than Start time");
+			} else if (data.Url !== "" && !url.match(regex)) {
+				oReturn.IsNotValid = true;
+				oReturn.sMsg.push("Please enter valid URL");
 			} else if (+data.Latitude < -90 || +data.Latitude > 90) {
 				oReturn.IsNotValid = true;
 				oReturn.sMsg.push("Latitude must be between -90 and 90 degrees inclusive.");
@@ -384,14 +459,6 @@ sap.ui.define([
 			} else if (data.CountryId === "") {
 				oReturn.IsNotValid = true;
 				oReturn.sMsg.push("Please enter Country");
-			} else if (data.Url !== "") {
-				var url = data.Url;
-				var regex =
-					/((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/;
-				if (!url.match(regex)) {
-					oReturn.IsNotValid = true;
-					oReturn.sMsg.push("Please enter valid URL");
-				}
 			}
 			if (data.Highlights !== null && data.Highlights.length > 0) {
 				var error = false;

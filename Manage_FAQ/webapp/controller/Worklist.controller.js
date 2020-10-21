@@ -53,8 +53,8 @@ sap.ui.define([
 			// Add the worklist page to the flp routing history
 			this.addHistoryEntry({
 				title: this.getResourceBundle().getText("worklistViewTitle"),
-				icon: "sap-icon://message-popup",
-				intent: "#Manage-FAQ"
+				icon: "sap-icon://table-view",
+				intent: "#ManageFAQ-display"
 			}, true);
 		},
 

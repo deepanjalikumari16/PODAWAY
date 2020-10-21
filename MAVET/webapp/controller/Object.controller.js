@@ -2,12 +2,7 @@ sap.ui.define([
 	"./BaseController",
 	"sap/ui/model/json/JSONModel",
 	"../model/formatter",
-	"sap/ui/core/Fragment",
-	//---- HERE Maps API , add AMD libraries above------	
-	"../libs/mapsjs-core",
-	"../libs/mapsjs-service",
-	"../libs/mapsjs-ui",
-	"../libs/mapsjs-mapevents"
+	"sap/ui/core/Fragment"
 ], function (BaseController, JSONModel, formatter, Fragment) {
 	"use strict";
 
@@ -46,6 +41,10 @@ sap.ui.define([
 			});
 
 		},
+		onAfterRendering: function () {
+			//Init Validation framework
+			this._initMessage();
+		},
 
 		/* =========================================================== */
 		/* event handlers                                              */
@@ -79,46 +78,65 @@ sap.ui.define([
 		 * Open Map and choose latitude/longitude for a given facility
 		 */
 		onMap: function () {
+			
+			if(!(this.getModel("appView").getProperty("/bHEREMapsLibLoaded"))) this.loadHERELibs() ;
+			
 			var that = this,
 				oViewModel = this.getModel("objectView");
+		
+			//Open dialog, if already open once open before
+			if(that._oDlgAddOption)	
+			{	
+				//remove all the previous Markers
+				if(that.marker)	that.map.removeObject(that.marker);
+				that.map.setCenter( that._getLocation(), true);
+				that.addDraggableMarker(that.map, that.behavior, that._getLocation());
+				that._oDlgAddOption.open();
+				return;
+			}
+			
+			
 			Fragment.load({
 				id: that.getView().getId(),
 				type: "HTML",
 				name: "com.coil.podium.MAEVAT.dialog.HEREMaps",
 				controller: that
 			}).then(function (oDialog) {
-				//that._oDlgAddOption = oDialog;
-				// connect dialog to the root view of this component (models, lifecycle)
-				var platform = new H.service.Platform({
+				
+				that._oDlgAddOption = oDialog;
+				var	oCurrentLocation = this._getLocation(),
+				platform = new H.service.Platform({
 					'apikey': 'BbN_bDCaLx6-5GZou8CHRvPWpf9CoDtVbMK4w-OTAxM'
 				});
 
 				// Obtain the default map types from the platform object
 				var maptypes = platform.createDefaultLayers();
-				//24.962762, 55.147110
 				// Instantiate (and display) a map object:
 				var map = new H.Map(
 					document.getElementById("map"),
 					maptypes.vector.normal.map, {
 						zoom: 15,
 						center: {
-							lng: oViewModel.getProperty("/oDetails/Longitude") ? +oViewModel.getProperty("/oDetails/Longitude") : 55.147110,
-							lat: oViewModel.getProperty("/oDetails/Latitude") ? +oViewModel.getProperty("/oDetails/Latitude") : 24.962762
-						}
+							lng: oCurrentLocation.lng,
+							lat: oCurrentLocation.lat}
 					});
-				var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+				that.behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
 
 				var ui = H.ui.UI.createDefault(map, maptypes);
-
+			
+				that.map = map;
+				// connect dialog to the root view of this component (models, lifecycle)
 				that.getView().addDependent(oDialog);
-				that.addDraggableMarker(map, behavior);
+				that.addDraggableMarker(map, that.behavior,oCurrentLocation );
 				oDialog.open();
 			}.bind(this));
+			
+			
 		},
 
 		onCloseMaps: function () {
-			this.getView().byId("MapDialog").close();
-			this.getView().byId("MapDialog").destroy();
+			this._oDlgAddOption.close();
+			//this.getView().byId("MapDialog").destroy();
 		},
 		/**
 		 * Event handler when the share in JAM button has been clicked
@@ -143,8 +161,8 @@ sap.ui.define([
 
 			var oValidate = this._fnValidate(oData);
 
-			if (!(oValidate.status)) {
-				this.showWarning(oValidate.sMsg, null, "error");
+			if (oValidate.IsNotValid) {
+				this.showErrorMessageBox( this._fnMsgConcatinator(oValidate.sMsg));
 				return;
 			}
 
@@ -235,20 +253,22 @@ sap.ui.define([
 		 * 
 		 * @param map , Here API map Object	
 		 * @param behavior,   HERE map interaction Object API 
+		 * @param oCurrentLocation, marker latitude/longitude
 		 */
-		addDraggableMarker: function (map, behavior) {
+		addDraggableMarker: function (map, behavior, oCurrentLocation) {
 			var oViewModel = this.getModel("objectView");
-
-			//restore marker from model
 			var marker = new H.map.Marker({
-				lng: oViewModel.getProperty("/oDetails/Longitude") ? +oViewModel.getProperty("/oDetails/Longitude") : 55.147110,
-				lat: oViewModel.getProperty("/oDetails/Latitude") ? +oViewModel.getProperty("/oDetails/Latitude") : 24.962762
+				lng: oCurrentLocation.lng,
+				lat: oCurrentLocation.lat
 			}, {
 				// mark the object as volatile for the smooth dragging
 				volatility: true
 			});
 			// Ensure that the marker can receive drag events
 			marker.draggable = true;
+
+			this.marker = marker;
+
 			map.addObject(marker);
 
 			// disable the default draggability of the underlying map
@@ -293,6 +313,7 @@ sap.ui.define([
 		 * @returns to terminate further execution
 		 */
 		_setView: function (data) {
+			this._oMessageManager.removeAllMessages();
 			//Reset del array 
 			this._pendingDelOps = [];
 			this._delPlanId = "";
@@ -318,7 +339,7 @@ sap.ui.define([
 			oViewModel.setProperty("/oImages", []);
 			oViewModel.setProperty("/oPlan", null);
 			oViewModel.setProperty("/oDetails", {
-				BuildingId: "",
+				BuildingId: null,
 				EventAttractionTypeId: this.getOwnerComponent().iEvtType,
 				Latitude: "",
 				Longitude: "",
@@ -327,7 +348,7 @@ sap.ui.define([
 				AccessibilityDevices: [],
 				Categories: [],
 				Title: "",
-				ThemeId: -1,
+				ThemeId: null,
 				//Issue #18, Manage Event Attraction: Add and edit there is no option to add highlights
 				Highlights: []
 			});
@@ -526,71 +547,129 @@ sap.ui.define([
 			});
 
 		},
-
-		_fnValidate: function (data) {
-			//	var oValidate = { status : true , sMsg : "" }
-			var appViewModel = this.getModel("appView");
-
-			if (!(data.Title.length)) {
+		/** 
+		 * 
+		 * @constructor 
+		 * @returns location object
+		 */
+		_getLocation: function () {
+			var oViewModel = this.getModel("objectView");
+			if (+(oViewModel.getProperty("/oDetails/Latitude")) && +(oViewModel.getProperty("/oDetails/Longitude"))) {
 				return {
-					status: false,
-					sMsg: "MSG_ERR_TITLE"
+					lat: +(oViewModel.getProperty("/oDetails/Latitude")),
+					lng: +(oViewModel.getProperty("/oDetails/Longitude"))
 				};
+			}
+
+			return {
+				lat: +(this.getModel("appView").getProperty("/EventLocation/lat")),
+				lng: +(this.getModel("appView").getProperty("/EventLocation/lng"))
+			};
+		},
+		_initMessage: function () {
+			//MessageProcessor could be of two type, Model binding based and Control based
+			//we are using Model-binding based here
+			var oMessageProcessor = this.getModel("objectView");
+			this._oMessageManager = sap.ui.getCore().getMessageManager();
+			this._oMessageManager.registerMessageProcessor(oMessageProcessor);
+		},
+		
+		_genCtrlMessages: function (aCtrlMsgs) {
+			var that = this,
+				oViewModel = that.getModel("objectView");
+			aCtrlMsgs.forEach(function (ele) {
+				that._oMessageManager.addMessages(
+					new sap.ui.core.message.Message({
+						message: that.getResourceBundle().getText(ele.message),
+						type: sap.ui.core.MessageType.Error,
+						target: ele.target,
+						processor: oViewModel,
+						persistent: true
+					}));
+			});
+		},
+		
+		_fnValidate: function (data) {
+			this._oMessageManager.removeAllMessages();
+			var oReturn = {
+					IsNotValid: false,
+					sMsg: []
+				},
+				aCtrlMessage = [];
+				
+			if (!(data.Title.length)) {
+				oReturn.IsNotValid = true;
+				oReturn.sMsg.push("MSG_ERR_TITLE");
+				aCtrlMessage.push({
+					message: "MSG_ERR_TITLE",
+					target: "/oDetails/Title"
+				});
+				
 			}
 
 			if (!(data.Description.length)) {
-				return {
-					status: false,
-					sMsg: "MSG_ERR_DSC"
-				};
+				oReturn.IsNotValid = true;
+				oReturn.sMsg.push("MSG_ERR_DSC");
+				aCtrlMessage.push({
+					message: "MSG_ERR_DSC",
+					target: "/oDetails/Description"
+				});
 			}
-			
-			if (data.Longitude === "" || data.Latitude === "") {
 
-				return {
-					status: false,
-					sMsg: "MSG_LAT_LNG"
-				};
-
-			} else 	if (+data.Latitude < -90 || +data.Latitude > 90) {
-				return {
-					status: false,
-					sMsg: "MSG_ERR_LAT"
-				};
+			if (+data.Longitude == 0 || +data.Latitude == 0) {
+				oReturn.IsNotValid = true;
+				oReturn.sMsg.push("MSG_LAT_LNG");
+				aCtrlMessage.push({
+					message: "MSG_LAT_LNG",
+					target: "/oDetails/Longitude"
+				});
+				aCtrlMessage.push({
+					message: "MSG_LAT_LNG",
+					target: "/oDetails/Latitude"
+				});
+			} else	if (+data.Latitude < -90 || +data.Latitude > 90) {
+				oReturn.IsNotValid = true;
+				oReturn.sMsg.push("MSG_ERR_LAT");
+				
+				aCtrlMessage.push({
+					message: "MSG_ERR_LAT",
+					target: "/oDetails/Latitude"
+				});
 
 			} else if (+data.Longitude < -180 || +data.Longitude > 180) {
+				oReturn.IsNotValid = true;
+				oReturn.sMsg.push("MSG_ERR_LNG");
+				aCtrlMessage.push({
+					message: "MSG_ERR_LNG",
+					target: "/oDetails/Longitude"
+				});
 
-				return {
-					status: false,
-					sMsg: "MSG_ERR_LNG"
-				};
+			}
 
-			}  
+			if (aCtrlMessage.length) this._genCtrlMessages(aCtrlMessage);
 
-			/*	if (!(data.Highlights.every(function (ele) {
-						return !!(ele.Highlight);
-					}))) {
-					return {
-						status: false,
-						sMsg: "ERR_HIGHLIGHTS"
-					};
-				}*/
+			return oReturn;
 
-			//Only check if option is there
-			/*	if( appViewModel.getProperty("/EvtTypeConfig/Building") && !(data.BuildingId.length))
-				{
-					return {
-						status: false,
-						sMsg: "MSG_ERR_BULDNG"
-					};	
-				}*/
+		},
+		
+		_fnMsgConcatinator: function (aMsgs) {
+			//	var sFnMsg = "";
+			var that = this;
+			return aMsgs.map(function (x) {
+				return that.getResourceBundle().getText(x);
+			}).join("\n");
 
-			//add Validations here
-			return {
-				status: true,
-				sMsg: ""
-			};
-
+		},
+		//load HERE Maps Libs in sync
+		loadHERELibs: function () {
+			
+			this.getModel("appView").setProperty("/bHEREMapsLibLoaded" ,  true);
+			
+			jQuery.sap.require("com.coil.podium.MAEVAT.libs.mapsjs-core");
+			jQuery.sap.require("com.coil.podium.MAEVAT.libs.mapsjs-service");
+			jQuery.sap.require("com.coil.podium.MAEVAT.libs.mapsjs-ui");
+			jQuery.sap.require("com.coil.podium.MAEVAT.libs.mapsjs-mapevents");
+		
 		}
 
 	});

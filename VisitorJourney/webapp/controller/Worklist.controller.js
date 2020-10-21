@@ -25,8 +25,7 @@
  		onInit: function () {
  			var oViewModel,
  				iOriginalBusyDelay, oTable = this.getView().byId("table");
-
- 			// Put down worklist table's original value for busy indicator delay,
+ 				 			// Put down worklist table's original value for busy indicator delay,
  			// so it can be restored later on. Busy handling on the table is
  			// taken care of by the table itself.
  			iOriginalBusyDelay = oTable.getBusyIndicatorDelay();
@@ -60,13 +59,28 @@
  			// Add the worklist page to the flp routing history
  			this.addHistoryEntry({
  				title: this.getResourceBundle().getText("worklistViewTitle"),
- 				icon: "sap-icon://table-view",
  				intent: "#Manage-Journey"
  			}, true);
 
  		},
 
  		onAfterRendering: function () {
+ 			
+ 		if(!(this.getModel("device").getProperty("/system/desktop"))){
+ 			
+ 			var bCompact = !!this.getView().$().closest(".sapUiSizeCompact").length;
+			sap.m.MessageBox.error(	this.getResourceBundle().getText("ERR_DEVICE"),
+				{
+					styleClass: bCompact ? "sapUiSizeCompact" : "",
+					onClose: function() {
+						this.getView().setBlocked(true);
+					}.bind(this)
+				}
+			);
+ 			
+ 			return;
+ 		}
+ 			
  			this.getModel().metadataLoaded().then(this._loadConfigData.bind(this));
  		},
 
@@ -79,7 +93,7 @@
 
  			//Load appConfig only for first time
  			if (!(this.getModel("worklistView").getProperty("/appConfig")))
- 				aPromises.push(
+ 			aPromises.push(
  					new Promise(function (res, rej) {
  						that.getModel().read("/MasterApplicationConfigSet(1)", {
  							success: function (data) {
