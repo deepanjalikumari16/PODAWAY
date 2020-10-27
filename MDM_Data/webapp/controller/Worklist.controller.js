@@ -1,3 +1,8 @@
+jQuery.sap.require("com.coil.podium.MDM_Data.libs.mapsjs-core");
+jQuery.sap.require("com.coil.podium.MDM_Data.libs.mapsjs-service");
+jQuery.sap.require("com.coil.podium.MDM_Data.libs.mapsjs-ui");
+jQuery.sap.require("com.coil.podium.MDM_Data.libs.mapsjs-mapevents");
+
 sap.ui.define([
 	"./BaseController",
 	"sap/ui/model/json/JSONModel",
@@ -5,12 +10,7 @@ sap.ui.define([
 	"sap/ui/model/Filter",
 	"sap/ui/model/FilterOperator",
 	"sap/ui/core/Fragment",
-	"sap/m/MessageToast",
-	//---- HERE Maps API , add AMD libraries above------	
-	"../libs/mapsjs-core",
-	"../libs/mapsjs-service",
-	"../libs/mapsjs-ui",
-	"../libs/mapsjs-mapevents"
+	"sap/m/MessageToast"
 ], function (BaseController, JSONModel, formatter, Filter, FilterOperator, Fragment, MessageToast) {
 	"use strict";
 
@@ -573,7 +573,6 @@ sap.ui.define([
 					data: oImage.Image,
 					method: "PUT",
 					contentType: "multipart/form-data",
-					headers : that.getModel().getHeaders(),
 					processData: false,
 					success: function () {
 						res.apply(that);

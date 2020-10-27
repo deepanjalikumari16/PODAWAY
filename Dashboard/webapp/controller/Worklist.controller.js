@@ -42,11 +42,9 @@ sap.ui.define([
 		},
 		onAfterRendering: function () {
 			this.getModel().metadataLoaded().then(this._getUsers.bind(this));
-
-			//Add event handling
-			$(".sapUiBlockCellTitle ").click(function () {
-				debugger;
-			});
+			//Auto refresh in every 30 secs
+			setInterval(this._getUsers.bind(this),30000)
+			
 
 		},
 		/* =========================================================== */
@@ -76,61 +74,56 @@ sap.ui.define([
 				bViewBusy: false,
 				logo: sap.ui.require.toUrl("com/coil/podium/Dashboard/css/wheelchair.svg"),
 				EmergencyLogo: sap.ui.require.toUrl("com/coil/podium/Dashboard/css/wheelchair_1.svg"),
-				bHeapMap : false
+				bHeapMap: false
 			});
 
 			this.setModel(oDashboardModel, "dashboard");
 
 		},
 
-		toAssignments: function () {
-			this.Navigate({
-				obj: "Manage",
-				action: "Assignment"
-			});
+		toAssignments: function (bisEmergency) {
+		
+		var oNavObject = {
+				target: {
+					semanticObject: "Manage",
+					action: "Assignment"
+				}
+		};
+		
+		if(bisEmergency)
+		{
+			oNavObject.params = {	isEmergency: true };
+		}
+		
+			this.Navigate(oNavObject);
 		},
 
 		toPODVisitors: function () {
 			this.Navigate({
-				obj: "Manage",
-				action: "Visitor"
+				target: {
+					semanticObject: "Manage",
+					action: "Visitor"
+				}
 			});
 		},
 
-		Navigate: function (oSemObj, sParams) {
+		Navigate: function (oSemAct) {
 			var oCrossAppNav = sap.ushell.Container.getService("CrossApplicationNavigation");
 
 			oCrossAppNav.isNavigationSupported([{
 				target: {
-					shellHash: oSemObj.obj.concat("-", oSemObj.action)
+					shellHash: oSemAct.target.semanticObject.concat("-", oSemAct.target.action)
 				}
 			}]).done(function (aResponse) {
 				if (!(aResponse[0].supported)) return;
-
-				if (sParams) {
-					var appHash = oCrossAppNav.hrefForAppSpecificHash("UserSet/" + sParams);
-					appHash = appHref.replace("Dashboard", "Manage");
-					appHash = appHref.replace("Display", "Visitor");
-					oCrossAppNav.toExternal({
-						target: {
-							shellHash: appHash
-						}
-					});
-					return;
-				}
-
-				oCrossAppNav.toExternal({
-					target: {
-						semanticObject: oSemObj.obj,
-						action: oSemObj.action
-					}
-				});
+				
+				oCrossAppNav.toExternal(oSemAct);
 
 			});
 
 		},
-		
-		changeMap : function(){
+
+		changeMap: function () {
 			this.getModel("dashboard").setProperty("/bHeapMap", !(this.getModel("dashboard").getProperty("/bHeapMap")));
 		},
 
@@ -215,54 +208,54 @@ sap.ui.define([
 
 		},
 		_setD3Chart: function (data) {
-/*
-			var domRef = this.getView().byId("d3chart").getDomRef()
-			dataset = data.TotalVisitorsByCategory.results;
+			/*
+						var domRef = this.getView().byId("d3chart").getDomRef()
+						dataset = data.TotalVisitorsByCategory.results;
 
-			var width = 200;
+						var width = 200;
 
-			var dimensions = {
-				width: width,
-				height: width * 0.6,
-				margin: {
-					left: 50,
-					right: 10,
-					top: 30,
-					bottom: 50
-				}
-			};
+						var dimensions = {
+							width: width,
+							height: width * 0.6,
+							margin: {
+								left: 50,
+								right: 10,
+								top: 30,
+								bottom: 50
+							}
+						};
 
-			dimensions.boundedWidth = width - dimensions.margin.left - dimensions.margin.right;
-			dimensions.boundedHeight = dimensions.height - dimensions.margin.top - dimensions.margin.bottom;
+						dimensions.boundedWidth = width - dimensions.margin.left - dimensions.margin.right;
+						dimensions.boundedHeight = dimensions.height - dimensions.margin.top - dimensions.margin.bottom;
 
-			var metricAccessor = function (d) {
-					return d.Name;
-				},
-				yAccessor = function (d) {
-					return d.Total
-				};
+						var metricAccessor = function (d) {
+								return d.Name;
+							},
+							yAccessor = function (d) {
+								return d.Total
+							};
 
-			var svg = d3.select("#" + domRef.id).append("svg")
-				.attr("height", dimensions.height)
-				.attr("width", dimensions.width);;
+						var svg = d3.select("#" + domRef.id).append("svg")
+							.attr("height", dimensions.height)
+							.attr("width", dimensions.width);;
 
-			var bounds = svg.append("g")
-				.style("transform", `translate(${dimensions.margin.left}px,${dimensions.margin.top}px)`);
+						var bounds = svg.append("g")
+							.style("transform", `translate(${dimensions.margin.left}px,${dimensions.margin.top}px)`);
 
-			var xScale = d3.scaleLinear()
-				.domain(d3.extent(dataset, metricAccessor))
-				.range([0, dimensions.boundedWidth])
-				.nice();
+						var xScale = d3.scaleLinear()
+							.domain(d3.extent(dataset, metricAccessor))
+							.range([0, dimensions.boundedWidth])
+							.nice();
 
-			var yScale = d3.scaleLinear()
-				.domain(d3.extent(dataset, yAccessor));
+						var yScale = d3.scaleLinear()
+							.domain(d3.extent(dataset, yAccessor));
 
-			bounds.append("g").data(dataset)
-				.enter()
-				.append("rect")
-				.attr("x", function (d, i) {
-					debugger;
-				})*/
+						bounds.append("g").data(dataset)
+							.enter()
+							.append("rect")
+							.attr("x", function (d, i) {
+								debugger;
+							})*/
 
 		},
 
@@ -276,7 +269,6 @@ sap.ui.define([
 				});
 
 			//set HERE Map and Add user markers
-			//TODO:  Marker interation pending
 			that._setMap(aUsers, aEmUsers);
 
 			//set DashBoard KPIs
@@ -293,22 +285,7 @@ sap.ui.define([
 			aEmUsers.forEach(function (ele) {
 				oUserSet.add(ele);
 			});
-			/*	var platform = new H.service.Platform({
-					'apikey': 'BbN_bDCaLx6-5GZou8CHRvPWpf9CoDtVbMK4w-OTAxM'
-				});
-				var maptypes = platform.createDefaultLayers();
-				var map = new H.Map(
-					this.getView().byId("map").getDomRef(),
-					maptypes.vector.normal.map, {
-						zoom: 15,
-						center: {
-							lng: 55.147110,
-							lat: 24.962762
-						}
-					});
-				var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
-
-				var ui = H.ui.UI.createDefault(map, maptypes);*/
+		
 			this._setHeatMap(aUsers, aEmUsers, oUserSet);
 
 			var map = this._initMap("map");
@@ -328,16 +305,9 @@ sap.ui.define([
 				// show info bubble
 				map[1].addBubble(bubble);
 			}, false);
-			var html, oCrossAppNav;
+			var html,
+				oCrossAppNav = sap.ushell.Container.getService("CrossApplicationNavigation") ;
 
-			try {
-				oCrossAppNav = sap.ushell.Container.getService("CrossApplicationNavigation");
-				window.toApp = function (oUserId) {
-					that.Navigate.call(that);
-				}
-			} catch (err) {
-				console.log(err);
-			}
 			aEmUsers.forEach(function (oUser) {
 				if (!!oUser) {
 					html = that.getHTMLPart(oCrossAppNav, oUser);
@@ -354,30 +324,31 @@ sap.ui.define([
 				}
 
 			});
-			
-		//	this.bindMapProperties();
-			
+
+			//	this.bindMapProperties();
+
 			oViewModel.setProperty("/bMapBusy", false);
 		},
-		
-		bindMapProperties : function(){
-		
-		var oView = this.getView();
-		
-		oView.byId("map").bindProperty("visible", {
-		path : "/bHeapMap",
-		model : "dashboard",
-		formatter : function(bValue) { return !bValue}
-		});
-		
-		oView.byId("heatMap").bindProperty("visible", {
-		path : "/bHeapMap",
-		model : "dashboard"
-		});
-		
-			
+
+		bindMapProperties: function () {
+
+			var oView = this.getView();
+
+			oView.byId("map").bindProperty("visible", {
+				path: "/bHeapMap",
+				model: "dashboard",
+				formatter: function (bValue) {
+					return !bValue
+				}
+			});
+
+			oView.byId("heatMap").bindProperty("visible", {
+				path: "/bHeapMap",
+				model: "dashboard"
+			});
+
 		},
-		
+
 		_setHeatMap: function (aUsers, aEmUsers, oUserSet) {
 			var map = this._initMap("heatMap");
 
@@ -396,20 +367,27 @@ sap.ui.define([
 			var heatData = []
 			aUsers.forEach(function (oUser) {
 				if (!(oUserSet.has(oUser))) {
-					if(+(oUser.Latitude) && +(oUser.Longitude))
-					{
-						heatData.push({lat: +(oUser.Latitude),	lng: +(oUser.Longitude),	value: 0.5});
+					if (+(oUser.Latitude) && +(oUser.Longitude)) {
+						heatData.push({
+							lat: +(oUser.Latitude),
+							lng: +(oUser.Longitude),
+							value: 0.5
+						});
 					}
 				}
 			});
-			
+
 			aEmUsers.forEach(function (oUser) {
 				if (!!oUser && +(oUser.Latitude) && +(oUser.Longitude)) {
-					heatData.push({lat: +(oUser.Latitude),	lng: +(oUser.Longitude),	value: 1});
+					heatData.push({
+						lat: +(oUser.Latitude),
+						lng: +(oUser.Longitude),
+						value: 1
+					});
 				}
 
 			});
-			
+
 			heatmapProvider.addData(heatData);
 			// Add a layer for the heatmap provider to the map:
 			map[0].addLayer(new H.map.layer.TileLayer(heatmapProvider));
@@ -417,25 +395,18 @@ sap.ui.define([
 		},
 
 		getHTMLPart: function (oCrossAppNav, oUser) {
-				if (oCrossAppNav) {
-					/*var appHref = oCrossAppNav.hrefForExternal({
+		var appHref = "";
+			if (oCrossAppNav) {
+				window.toExtFrmdashBoard = function (userid) {
+					oCrossAppNav.toExternal({
 						target: {
-							semanticObject: "Manage",
-							action: "Visitor"
+							shellHash: "Manage-Visitor&/UserSet/" + userid
 						}
-
-					});*/
-					window.toExtFrmdashBoard = function (userid) {
-							oCrossAppNav.toExternal({
-								target: { shellHash : "Manage-Visitor&/UserSet/" + userid }
-							});
-						};
-						// /, context  : "&/UserSet/" + oUser.Id	
-						//{ shellHash : "Manage-Visitor&/UserSet/" + oUser.Id }
-						//	appHref = (" href='").concat(appHref, "&/UserSet/", oUser.Id, "'");
-				var	appHref = "href='#'  onclick='toExtFrmdashBoard( " + oUser.Id + ")'"
+					});
+				};
+				appHref = "href='#'  onclick='toExtFrmdashBoard( " + oUser.Id + ")'" ;
 			}
-				return "<div style='white-space: nowrap;'  > " + oUser.FirstName + " " +
+			return "<div style='white-space: nowrap;'  > " + oUser.FirstName + " " +
 				oUser.LastName + "<br><a target='_self' " + appHref + ">More details</a> </div>";
 		},
 
@@ -443,6 +414,17 @@ sap.ui.define([
 			var platform = new H.service.Platform({
 				'apikey': 'BbN_bDCaLx6-5GZou8CHRvPWpf9CoDtVbMK4w-OTAxM'
 			});
+			
+			if(id === "map" &&  this.map ) 
+			{
+				return [this.map, this.mapUi ];
+			}
+			if(id === "heatMap" &&  this.heatMap ) 
+			{
+				return [this.heatMap, this.heatMapUi ];
+			}
+			
+			
 			var maptypes = platform.createDefaultLayers();
 			var map = new H.Map(
 				this.getView().byId(id).getDomRef(),
@@ -456,7 +438,19 @@ sap.ui.define([
 			var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
 
 			var ui = H.ui.UI.createDefault(map, maptypes);
-		
+			
+			
+			switch(id)
+			{
+				case  "map" : 
+					this.map = map;
+					this.mapUi = ui;
+				break;
+				case "heatMap" :
+					this.heatMap = map;
+					this.heatMapUi = ui;
+			}
+			
 			return [map, ui];
 		},
 
@@ -465,7 +459,7 @@ sap.ui.define([
 		 * @param map , Here API map Object	
 		 * @param behavior,   HERE map interaction Object API 
 		 */
-			addDraggableMarker: function (group, html, lat, lng, isEmergency) {
+		addDraggableMarker: function (group, html, lat, lng, isEmergency) {
 			var oOptions = {
 				volatility: false
 			};

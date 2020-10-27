@@ -26,9 +26,12 @@
 							</VBox>
 							<VBox visible="{appView>/EvtTypeConfig/Theme}" >
 								<Label text="{i18n>colTheme}"/>
-								<ComboBox selectedKey="{objectView>ThemeId}" items="{/ThemeSet}">
+							<!--	<HBox renderType="Bare">-->
+								<ComboBox change="onComboBoxChange" selectedKey="{path:'objectView>ThemeId', type: 'sap.ui.model.odata.type.String', constraints : {  nullable : false } }" items="{/ThemeSet}">
 									<core:Item key="{Id}" text="{Theme}"/>
 								</ComboBox>
+							<!--	<Button class="sapUiTinyMarginBegin" icon="sap-icon://delete" press="onDelTheme" type="Transparent" tooltip="{i18n>TxtClearSelections}" />
+								</HBox>-->
 							</VBox>
 							<VBox visible="{appView>/EvtTypeConfig/Category}" >
 								<Label text="{i18n>LblCategory}"/>
@@ -46,7 +49,7 @@
 							</VBox>
 							<VBox>
 								<Label text="{i18n>LblHighlights}"/>
-								<List items="{objectView>Highlights}" mode="Delete" delete="onDelHighlight" >
+								<List items="{path: 'objectView>Highlights', filters : [  {  path : 'IsArchived', operator: 'EQ' , value1: false }  ]}" mode="Delete" delete="onDelHighlight" >
 									<headerToolbar>
 										<Toolbar>
 											<ToolbarSpacer />
@@ -54,7 +57,7 @@
 										</Toolbar>
 									</headerToolbar>
 									<CustomListItem>
-										<Input placeholder="Add Highlight text" value="{objectView>Highlight}"/>
+										<Input placeholder="{i18n>PhdHighlights}" value="{objectView>Highlight}"/>
 									</CustomListItem>
 								</List>
 							</VBox>
@@ -75,12 +78,16 @@
 							</VBox>
 							<VBox visible="{appView>/EvtTypeConfig/Building}" >
 								<Label text="{i18n>LblBuildingName}" />
-								<ComboBox items="{/BuildingSet}" selectedKey="{objectView>BuildingId}">
+								<ComboBox change="onComboBoxChange" items="{/BuildingSet}" selectedKey="{objectView>BuildingId}">
 									<core:Item key="{Id}" text="{BuildingName}"/>
 								</ComboBox>
 							</VBox>
 							<VBox>
-								<Label text="{i18n>LblUploadPlan}" />
+								<HBox renderType="Bare" >
+										<Label text="{i18n>LblUploadPlan}" />
+										<core:Icon class="sapUiTinyMarginBegin" src="sap-icon://message-information" tooltip="{i18n>TxtFileSizeLimit}" />
+								</HBox>
+							
 								<HBox width="100%" visible="{= ${objectView>/oPlan} === null ? false:true }">
 										<Link text="{objectView>/oPlan/FileName}" press="onLnkPlan"/>
 										<Button press="onDeletePlan" icon="sap-icon://delete" type="Transparent"/>

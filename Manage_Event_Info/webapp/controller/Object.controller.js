@@ -1,17 +1,22 @@
+jQuery.sap.require("com.coil.podium.Manage_Event_Info.libs.mapsjs-core");
+jQuery.sap.require("com.coil.podium.Manage_Event_Info.libs.mapsjs-service");
+jQuery.sap.require("com.coil.podium.Manage_Event_Info.libs.mapsjs-ui");
+jQuery.sap.require("com.coil.podium.Manage_Event_Info.libs.mapsjs-mapevents");
+
 sap.ui.define([
 	"./BaseController",
 	"sap/ui/model/json/JSONModel",
 	"../model/formatter",
 	"sap/ui/core/Fragment",
 	"sap/ui/model/Filter",
-	"sap/ui/model/FilterOperator",
-	
+	"sap/ui/model/FilterOperator"
+
 	//---- HERE Maps API , add AMD libraries above------	
-	"../libs/mapsjs-core",
-	"../libs/mapsjs-service",
-	"../libs/mapsjs-ui",
-	"../libs/mapsjs-mapevents"
-], function (BaseController, JSONModel, formatter, Fragment,Filter,FilterOperator) {
+	// "../libs/mapsjs-core",
+	// "../libs/mapsjs-service",
+	// "../libs/mapsjs-ui",
+	// "../libs/mapsjs-mapevents"
+], function (BaseController, JSONModel, formatter, Fragment, Filter, FilterOperator) {
 	"use strict";
 
 	return BaseController.extend("com.coil.podium.Manage_Event_Info.controller.Object", {
@@ -51,6 +56,19 @@ sap.ui.define([
 			var myModel = this.getOwnerComponent().getModel();
 			myModel.setSizeLimit(999);
 
+		},
+
+		onAfterRendering: function () {
+			//Init Validation framework
+			this._initMessage();
+		},
+
+		_initMessage: function () {
+			//MessageProcessor could be of two type, Model binding based and Control based
+			//we are using Model-binding based here
+			var oMessageProcessor = this.getModel("objectView");
+			this._oMessageManager = sap.ui.getCore().getMessageManager();
+			this._oMessageManager.registerMessageProcessor(oMessageProcessor);
 		},
 
 		/* =========================================================== */
@@ -122,8 +140,11 @@ sap.ui.define([
 		 * @param data: will only be there for edit Event scenerios
 		 * @returns to terminate further execution
 		 */
-		 
+
 		_setView: function (data) {
+			//Remove older UI control messages
+			this._oMessageManager.removeAllMessages();
+
 			var oViewModel = this.getModel("objectView");
 			oViewModel.setProperty("/busy", false);
 			if (data) {
@@ -142,21 +163,19 @@ sap.ui.define([
 				};
 
 				explicitFireChange.call(this);*/
-			/*	
-				this.getView().byId("CountryDropdownId").fireChange({
-					//	selectedItem: this.getView().byId("CountryDropdownId").getSelectedItem()
-					value : data.CountryId ,         
-					itemPressed : false
-					
-				});*/
-		
-				//TimeZoneFlow
-			
-				this.setInitTimeZones(data.CountryId);
-				
-				
+				/*	
+					this.getView().byId("CountryDropdownId").fireChange({
+						//	selectedItem: this.getView().byId("CountryDropdownId").getSelectedItem()
+						value : data.CountryId ,         
+						itemPressed : false
+						
+					});*/
 
-//				oViewModel.setProperty("/oDetails", data);
+				//TimeZoneFlow
+
+				this.setInitTimeZones(data.CountryId);
+
+				//				oViewModel.setProperty("/oDetails", data);
 				return;
 			}
 			// oViewModel.setProperty("/oHighlights", []);
@@ -179,7 +198,7 @@ sap.ui.define([
 			});
 
 		},
-		
+
 		_fnbusyItems: function (oEvent) {
 			var oViewModel = this.getModel("objectView");
 			if (oEvent.getId() === "dataRequested") {
@@ -189,37 +208,39 @@ sap.ui.define([
 			}
 
 		},
-		
-		bindTimeZoneCtrl : function(sIsoCode){
-		
-		var oCtrl = this.getView().byId("TimezoneDropdownId");
-		
-		oCtrl.bindItems({
+
+		bindTimeZoneCtrl: function (sIsoCode) {
+
+			var oCtrl = this.getView().byId("TimezoneDropdownId");
+
+			oCtrl.bindItems({
 				template: new sap.ui.core.Item({
-					key : "{Id}",
-					text : "{ZoneName}"
+					key: "{Id}",
+					text: "{ZoneName}"
 				}),
 				path: "/MasterTimezoneSet",
 				events: {
 					dataRequested: this._fnbusyItems.bind(this),
 					dataReceived: this._fnbusyItems.bind(this)
 				},
-				filters: [ new Filter("IsArchived", FilterOperator.EQ, false), new Filter("CountryCode", FilterOperator.EQ, sIsoCode)	],
+				filters: [new Filter("IsArchived", FilterOperator.EQ, false), new Filter("CountryCode", FilterOperator.EQ, sIsoCode)],
 				templateShareable: true
 			});
-			
+
 		},
-		
-		setInitTimeZones : function(sCountryId){
+
+		setInitTimeZones: function (sCountryId) {
 			this._fnbusyItems({
-					getId : function(){return "dataRequested" ;}
-				});
+				getId: function () {
+					return "dataRequested";
+				}
+			});
 			var sKey = this.getModel().createKey("/MasterCountrySet", {
-				Id :  sCountryId
+				Id: sCountryId
 			});
 			var that = this;
 			this.getModel().read(sKey, {
-				success : function(data){
+				success: function (data) {
 					that.bindTimeZoneCtrl(data.IsoCode);
 				}
 			})
@@ -328,6 +349,9 @@ sap.ui.define([
 		 * Save edit or create Event Info details 
 		 */
 		onSave: function () {
+			
+			this._oMessageManager.removeAllMessages();
+			
 			var oViewModel = this.getModel("objectView");
 			var oPayload = oViewModel.getProperty("/oDetails");
 			var oValid = this._fnValidation(oPayload);
@@ -341,27 +365,27 @@ sap.ui.define([
 		},
 
 		onCountryChange: function (oEvent) {
-			
-	/*		var oSelectedItem = oEvent.getSource().getSelectedItem();
-			var oObject = oSelectedItem.getBindingContext().getObject();
-			this.getModel("objectView").setProperty("/oDetails/CountryId", oObject.Id);
-			var aTimezones = [];
-			var selectedTimezoneId = this.getModel("objectView").getProperty("/oDetails/TimezoneId");
-			var isFound = false;
 
-			for (var i = 0; i < oObject.Timezones.__list.length; i++) {
-				var sPath = oObject.Timezones.__list[i];
-				aTimezones.push(this.getModel().getData("/" + sPath));
-				if (selectedTimezoneId == aTimezones[i].Id) {
-					isFound = true;
-				}
-			}
-			if (isFound == false && aTimezones.length > 0) {
-				// this.getModel("objectView").setProperty("/oDetails/TimezoneId", null);
-			// 	this.getModel("objectView").refresh();
-				this.getModel("objectView").setProperty("/oDetails/TimezoneId", aTimezones[0].Id);
-			}
-			this.getModel("objectView").setProperty("/aTimezones", aTimezones);*/
+			/*		var oSelectedItem = oEvent.getSource().getSelectedItem();
+					var oObject = oSelectedItem.getBindingContext().getObject();
+					this.getModel("objectView").setProperty("/oDetails/CountryId", oObject.Id);
+					var aTimezones = [];
+					var selectedTimezoneId = this.getModel("objectView").getProperty("/oDetails/TimezoneId");
+					var isFound = false;
+
+					for (var i = 0; i < oObject.Timezones.__list.length; i++) {
+						var sPath = oObject.Timezones.__list[i];
+						aTimezones.push(this.getModel().getData("/" + sPath));
+						if (selectedTimezoneId == aTimezones[i].Id) {
+							isFound = true;
+						}
+					}
+					if (isFound == false && aTimezones.length > 0) {
+						// this.getModel("objectView").setProperty("/oDetails/TimezoneId", null);
+					// 	this.getModel("objectView").refresh();
+						this.getModel("objectView").setProperty("/oDetails/TimezoneId", aTimezones[0].Id);
+					}
+					this.getModel("objectView").setProperty("/aTimezones", aTimezones);*/
 			var oSelectedItem = oEvent.getSource().getSelectedItem();
 			var oObject = oSelectedItem.getBindingContext().getObject();
 			this.bindTimeZoneCtrl(oObject.IsoCode);
@@ -415,63 +439,195 @@ sap.ui.define([
 		 */
 		_fnValidation: function (data) {
 			var oReturn = {
-				IsNotValid: false,
-				sMsg: [],
-			};
+					IsNotValid: false,
+					sMsg: [],
+				},
+				aCtrlMessage = [],
 
-			var url = data.Url,
+				url = data.Url,
 				regex =
 				/((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/;
 
-			if (data.Name === "") {
+			if (!data.Name) {
 				oReturn.IsNotValid = true;
-				oReturn.sMsg.push("Please enter Name");
-			} else if (data.StartDate === "") {
+				oReturn.sMsg.push("MSG_VALDTN_ERR_NAME");
+				aCtrlMessage.push({
+					message: "MSG_VALDTN_ERR_NAME",
+					target: "/oDetails/Name"
+				});
+			} else
+			if (!data.StartDate) {
 				oReturn.IsNotValid = true;
-				oReturn.sMsg.push("Please enter Start Date");
-			} else if (data.EndDate === "") {
+				oReturn.sMsg.push("MSG_VALDTN_ERR_SDATE");
+				aCtrlMessage.push({
+					message: "MSG_VALDTN_ERR_SDATE",
+					target: "/oDetails/StartDate"
+				});
+			} else
+			if (!data.EndDate) {
 				oReturn.IsNotValid = true;
-				oReturn.sMsg.push("Please enter End Date");
-			} else if (data.EndDate !== "" && data.EndDate < data.StartDate) {
+				oReturn.sMsg.push("MSG_VALDTN_ERR_EDATE");
+				aCtrlMessage.push({
+					message: "MSG_VALDTN_ERR_EDATE",
+					target: "/oDetails/EndDate"
+				});
+			} else
+			if (data.EndDate !== "" && data.EndDate < data.StartDate) {
 				oReturn.IsNotValid = true;
-				oReturn.sMsg.push("End date should be greater than or equal to Start date");
-			} else if (data.StartTime === "") {
+				oReturn.sMsg.push("MSG_EDATE_GRT_ERR");
+				aCtrlMessage.push({
+					message: "MSG_EDATE_GRT_ERR",
+					target: "/oDetails/EndDate"
+				});
+			} else
+			if (!data.StartTime) {
 				oReturn.IsNotValid = true;
-				oReturn.sMsg.push("Please enter Start Time");
-			} else if (data.EndTime === "") {
+				oReturn.sMsg.push("MSG_VALDTN_ERR_STIME");
+				aCtrlMessage.push({
+					message: "MSG_VALDTN_ERR_STIME",
+					target: "/oDetails/StartTime"
+				});
+			} else
+			if (!data.EndTime) {
 				oReturn.IsNotValid = true;
-				oReturn.sMsg.push("Please enter End Time");
-			} else if (data.EndTime !== "" && data.EndDate === data.StartDate) {
+				oReturn.sMsg.push("MSG_VALDTN_ERR_ETIME");
+				aCtrlMessage.push({
+					message: "MSG_VALDTN_ERR_ETIME",
+					target: "/oDetails/EndTime"
+				});
+			} else
+			if (data.EndTime <= data.StartTime && data.EndDate === data.StartDate) {
 				oReturn.IsNotValid = true;
-				oReturn.sMsg.push("End time should be greater than Start time");
-			} else if (data.Url !== "" && !url.match(regex)) {
+				oReturn.sMsg.push("MSG_ETIME_GRT_ERR");
+				aCtrlMessage.push({
+					message: "MSG_ETIME_GRT_ERR",
+					target: "/oDetails/EndTime"
+				});
+			} else
+			if (data.Url !== "" && !url.match(regex)) {
 				oReturn.IsNotValid = true;
-				oReturn.sMsg.push("Please enter valid URL");
+				oReturn.sMsg.push("MSG_VALDTN_ERR_URL");
+				aCtrlMessage.push({
+					message: "MSG_VALDTN_ERR_URL",
+					target: "/oDetails/Url"
+				});
+			} else
+			if (+data.Longitude == 0 || +data.Latitude == 0) {
+				oReturn.IsNotValid = true;
+				oReturn.sMsg.push("MSG_LAT_LNG");
+				aCtrlMessage.push({
+					message: "MSG_LAT_LNG",
+					target: "/oDetails/Latitude"
+				});
+				aCtrlMessage.push({
+					message: "MSG_LAT_LNG",
+					target: "/oDetails/Longitude"
+				});
 			} else if (+data.Latitude < -90 || +data.Latitude > 90) {
 				oReturn.IsNotValid = true;
-				oReturn.sMsg.push("Latitude must be between -90 and 90 degrees inclusive.");
+				oReturn.sMsg.push("MSG_ERR_LAT");
+				aCtrlMessage.push({
+					message: "MSG_ERR_LAT",
+					target: "/oDetails/Latitude"
+				});
+
 			} else if (+data.Longitude < -180 || +data.Longitude > 180) {
 				oReturn.IsNotValid = true;
-				oReturn.sMsg.push("Longitude must be between -180 and 180 degrees inclusive.");
-			} else if (data.Longitude === "" || data.Latitude === "") {
+				oReturn.sMsg.push("MSG_ERR_LNG");
+				aCtrlMessage.push({
+					message: "MSG_ERR_LNG",
+					target: "/oDetails/Longitude"
+				});
+			} else
+			if (!data.CountryId) {
 				oReturn.IsNotValid = true;
-				oReturn.sMsg.push("Enter a valid Latitude or Longitude!");
-			} else if (data.CountryId === "") {
-				oReturn.IsNotValid = true;
-				oReturn.sMsg.push("Please enter Country");
+				oReturn.sMsg.push("MSG_VALDTN_ERR_COUNTRY");
+				aCtrlMessage.push({
+					message: "MSG_VALDTN_ERR_COUNTRY",
+					target: "/oDetails/CountryId"
+				});
 			}
 			if (data.Highlights !== null && data.Highlights.length > 0) {
 				var error = false;
 				for (var i = 0; i < data.Highlights.length; i++) {
 					var oHighlight = data.Highlights[i];
 					if (oHighlight.Highlight === "" && error === false) {
-						oReturn.IsNotValid = true;
 						error = true;
-						oReturn.sMsg.push("Dont save with empty Highlight");
+						oReturn.IsNotValid = true;
+						oReturn.sMsg.push("MSG_VALDTN_ERR_HIGHLIGHT");
+						aCtrlMessage.push({
+							message: "MSG_VALDTN_ERR_HIGHLIGHT",
+							target: "/oDetails/Highlights"
+						});
 					}
 				}
 			}
+			if (aCtrlMessage.length) this._genCtrlMessages(aCtrlMessage);
 			return oReturn;
+		},
+
+		// if (data.Name === "") {
+		// 	oReturn.IsNotValid = true;
+		// 	oReturn.sMsg.push("Please enter Name");
+		// } else if (data.StartDate === "") {
+		// 	oReturn.IsNotValid = true;
+		// 	oReturn.sMsg.push("Please enter Start date");
+		// } else if (data.EndDate === "") {
+		// 	oReturn.IsNotValid = true;
+		// 	oReturn.sMsg.push("Please enter End date");
+		// } else if (data.EndDate !== "" && data.EndDate < data.StartDate) {
+		// 	oReturn.IsNotValid = true;
+		// 	oReturn.sMsg.push("End date should be greater than or equal to Start date");
+		// } else if (data.StartTime === "") {
+		// 	oReturn.IsNotValid = true;
+		// 	oReturn.sMsg.push("Please enter Start time");
+		// } else if (data.EndTime === "") {
+		// 	oReturn.IsNotValid = true;
+		// 	oReturn.sMsg.push("Please enter End time");
+		// } else if (data.EndTime < data.StartTime && data.EndDate === data.StartDate) {
+		// 	oReturn.IsNotValid = true;
+		// 	oReturn.sMsg.push("End time should be greater than Start time");
+		// } else if (data.Url !== "" && !url.match(regex)) {
+		// 	oReturn.IsNotValid = true;
+		// 	oReturn.sMsg.push("Please enter valid URL");
+		// } else if (+data.Latitude < -90 || +data.Latitude > 90) {
+		// 	oReturn.IsNotValid = true;
+		// 	oReturn.sMsg.push("Latitude must be between -90 and 90 degrees inclusive");
+		// } else if (+data.Longitude < -180 || +data.Longitude > 180) {
+		// 	oReturn.IsNotValid = true;
+		// 	oReturn.sMsg.push("Longitude must be between -180 and 180 degrees inclusive");
+		// } else if (data.Longitude === "" || data.Latitude === "") {
+		// 	oReturn.IsNotValid = true;
+		// 	oReturn.sMsg.push("Enter a valid Latitude or Longitude!");
+		// } else if (data.CountryId === "") {
+		// 	oReturn.IsNotValid = true;
+		// 	oReturn.sMsg.push("Please select Country");
+		// }
+		// if (data.Highlights !== null && data.Highlights.length > 0) {
+		// 	var error = false;
+		// 	for (var i = 0; i < data.Highlights.length; i++) {
+		// 		var oHighlight = data.Highlights[i];
+		// 		if (oHighlight.Highlight === "" && error === false) {
+		// 			oReturn.IsNotValid = true;
+		// 			error = true;
+		// 			oReturn.sMsg.push("Please remove empty Highlights");
+		// 		}
+		// 	}
+		// }
+
+		_genCtrlMessages: function (aCtrlMsgs) {
+			var that = this,
+				oViewModel = that.getModel("objectView");
+			aCtrlMsgs.forEach(function (ele) {
+				that._oMessageManager.addMessages(
+					new sap.ui.core.message.Message({
+						message: that.getResourceBundle().getText(ele.message),
+						type: sap.ui.core.MessageType.Error,
+						target: ele.target,
+						processor: oViewModel,
+						persistent: true
+					}));
+			});
 		},
 
 		_fnMsgConcatinator: function (aMsgs) {

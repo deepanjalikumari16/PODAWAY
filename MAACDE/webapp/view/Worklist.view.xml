@@ -9,11 +9,11 @@
 					<HBox>
 					<VBox class="sapUiSmallMarginBegin" visible="{worklistView>/bEditQuestion}" >
 						<Text text="{i18n>LblHeading}"   />
-						<TextArea id="ipHeading"  value="{= ${Heading} }" visible="{worklistView>/bEditQuestion}" rows="6" cols="40"/>
+						<TextArea id="ipHeading"  value="{worklistView>/sHeading}" visible="{worklistView>/bEditQuestion}" rows="6" cols="40"/>
 					</VBox>
-					<VBox visible="{worklistView>/bEditQuestion}" >
+					<VBox class="sapUiSmallMarginBegin" visible="{worklistView>/bEditQuestion}" >
 						<Text text="{i18n>LblQuestion}"  />
-						<TextArea id="ipTitle" value="{= ${Question} }" visible="{worklistView>/bEditQuestion}" rows="6" cols="40"/>
+						<TextArea id="ipTitle"  value="{worklistView>/sQuestion}" visible="{worklistView>/bEditQuestion}" rows="6" cols="40"/>
 					</VBox>
 					</HBox>
 				
@@ -36,7 +36,7 @@
 					<VBox class="card sapFCard">
 						<Image class="iconImg" src="{ path: '__metadata' , formatter : '.formatter.giveImage' }" alt="Image" height="100px"/>
 						<Text text="{Title}" wrapping="true" maxLines="1" wrappingType="Normal" class="sapUiTinyMarginTopBottom" textAlign="Center" width="100%"/>
-						<HBox class="container">
+						<HBox 	alignItems="Center"	justifyContent="End" class="container">
 							<Button press="onDevice" class="sapUiTinyMargin" text="{i18n>btnEdit}" type="Emphasized"/>
 							<Button enabled="{= !${IsDefault} }" press="onDevice" class="sapUiTinyMargin" text="{i18n>btnRemove}" type="Reject"/>
 						</HBox>

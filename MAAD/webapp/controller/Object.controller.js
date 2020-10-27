@@ -50,6 +50,19 @@ sap.ui.define([
 
 		},
 
+		onAfterRendering: function () {
+			//Init Validation framework
+			this._initMessage();
+		},
+
+		_initMessage: function () {
+			//MessageProcessor could be of two type, Model binding based and Control based
+			//we are using Model-binding based here
+			var oMessageProcessor = this.getModel("objectView");
+			this._oMessageManager = sap.ui.getCore().getMessageManager();
+			this._oMessageManager.registerMessageProcessor(oMessageProcessor);
+		},
+
 		/* =========================================================== */
 		/* event handlers                                              */
 		/* =========================================================== */
@@ -73,14 +86,25 @@ sap.ui.define([
 		 * Save edit or create Event details 
 		 */
 		onSave: function () {
+			
+			this._oMessageManager.removeAllMessages();
+			
 			var oViewModel = this.getModel("objectView");
-			var oPayload = oViewModel.getProperty("/oDetails"),
-				oValid = this._fnValidation(oPayload);
+			var oPayload = oViewModel.getProperty("/oDetails");
+			// var oPayload = $.extend(true, {}, oViewModel.getProperty("/oDetails"));
+			var oValid = this._fnValidation(oPayload);
 
 			if (oValid.IsNotValid) {
 				this.showError(this._fnMsgConcatinator(oValid.sMsg));
 				return;
 			}
+
+			oPayload.Specialities = oPayload.Specialities.map(function (ele) {
+				return {
+					Id: ele
+				};
+			});
+
 			oViewModel.setProperty("/busy", true);
 			this.CUOperation(oPayload);
 		},
@@ -136,6 +160,9 @@ sap.ui.define([
 					Id: sObjectId
 				});
 				this.getModel().read(sObjectPath, {
+					urlParameters: {
+						"$expand": "Specialities"
+					},
 					success: this._setView.bind(this)
 				});
 			}.bind(this));
@@ -158,14 +185,26 @@ sap.ui.define([
 		 * @returns to terminate further execution
 		 */
 		_setView: function (data) {
+
+			this._oMessageManager.removeAllMessages();
 			var oViewModel = this.getModel("objectView");
 			oViewModel.setProperty("/busy", false);
 			if (data) {
+				if (data.Specialities) {
+					data.Specialities = data.Specialities.results.map(function (ele) {
+						return ele.Id;
+					});
+				}
 				oViewModel.setProperty("/oDetails", data);
 				return;
 			}
+			var selectedRole = this.getModel("appView").getProperty("/selectedRoleId");
+			if (selectedRole === null || selectedRole === 0) {
+				selectedRole = 1;
+			}
+			selectedRole = parseInt(selectedRole);
 			oViewModel.setProperty("/oDetails", {
-				RoleId: null,
+				RoleId: selectedRole,
 				FirstName: "",
 				LastName: "",
 				Email: "",
@@ -178,6 +217,7 @@ sap.ui.define([
 				Mobile: "",
 				EmergencyDialCode: "",
 				EmergencyMobile: "",
+				Specialities: [],
 				IsArchived: false
 			});
 		},
@@ -256,43 +296,117 @@ sap.ui.define([
 		 */
 		_fnValidation: function (data) {
 			var oReturn = {
-				IsNotValid: false,
-				sMsg: []
-			};
+					IsNotValid: false,
+					sMsg: []
+				},
+				aCtrlMessage = [];
 
-			if (data.RoleId === null) {
+			// if (data.RoleId === null) {
+			// 	oReturn.IsNotValid = true;
+			// 	oReturn.sMsg.push("Please select Role");
+			// } else
+			// if (data.FirstName === "") {
+			// 	oReturn.IsNotValid = true;
+			// 	oReturn.sMsg.push("Please enter First Name");
+			// } else
+			// if (data.LastName === "") {
+			// 	oReturn.IsNotValid = true;
+			// 	oReturn.sMsg.push("Please enter Last Name");
+			// } else
+			// if (data.Email === "") {
+			// 	oReturn.IsNotValid = true;
+			// 	oReturn.sMsg.push("Please enter Email");
+			// } else
+			// if (data.EMail !== "") {
+			// 	var email = this.getView().byId("emailInput").getValue();
+			// 	var mailregex = /^\w+[\w-+\.]*\@\w+([-\.]\w+)*\.[a-zA-Z]{2,}$/;
+			// 	if (!mailregex.test(email)) {
+			// 		oReturn.IsNotValid = true;
+			// 		oReturn.sMsg.push("Please enter a valid email address");
+			// 	}
+			// }
+			// if (data.Mobile !== "") {
+			// 	var mobile = this.getView().byId("mobileInput").getValue();
+			// 	var mobileregex = /^[0-9]{5,15}$/;
+			// 	if (!mobileregex.test(mobile)) {
+			// 		oReturn.IsNotValid = true;
+			// 		oReturn.sMsg.push("MSG_INVALID_MOBILE");
+			// 	}
+			// }
+			if (!data.RoleId) {
 				oReturn.IsNotValid = true;
-				oReturn.sMsg.push("Please select Role");
+				oReturn.sMsg.push("MSG_VALDTN_ERR_ROLE");
+				aCtrlMessage.push({
+					message: "MSG_VALDTN_ERR_ROLE",
+					target: "/oDetails/RoleId"
+				});
 			} else
-			if (data.FirstName === "") {
+			if (!data.FirstName) {
 				oReturn.IsNotValid = true;
-				oReturn.sMsg.push("Please enter First Name");
+				oReturn.sMsg.push("MSG_VALDTN_ERR_FNAME");
+				aCtrlMessage.push({
+					message: "MSG_VALDTN_ERR_FNAME",
+					target: "/oDetails/FirstName"
+				});
 			} else
-			if (data.LastName === "") {
+			if (!data.LastName) {
 				oReturn.IsNotValid = true;
-				oReturn.sMsg.push("Please enter Last Name");
+				oReturn.sMsg.push("MSG_VALDTN_ERR_LNAME");
+				aCtrlMessage.push({
+					message: "MSG_VALDTN_ERR_LNAME",
+					target: "/oDetails/LastName"
+				});
 			} else
-			if (data.Email === "") {
+			if (!data.Email) {
 				oReturn.IsNotValid = true;
-				oReturn.sMsg.push("Please enter Email");
+				oReturn.sMsg.push("MSG_VALDTN_ERR_EMAIL");
+				aCtrlMessage.push({
+					message: "MSG_VALDTN_ERR_EMAIL",
+					target: "/oDetails/Email"
+				});
 			} else
-			if (data.EMail !== "") {
+			if (data.Email) {
 				var email = this.getView().byId("emailInput").getValue();
 				var mailregex = /^\w+[\w-+\.]*\@\w+([-\.]\w+)*\.[a-zA-Z]{2,}$/;
 				if (!mailregex.test(email)) {
 					oReturn.IsNotValid = true;
-					oReturn.sMsg.push("Please enter a valid email address");
+					oReturn.sMsg.push("MSG_INVALID_EMAIL");
+					aCtrlMessage.push({
+						message: "MSG_INVALID_EMAIL",
+						target: "/oDetails/Email"
+					});
 				}
-			}
-			if (data.Mobile !== "") {
+			} else
+			if (data.Mobile) {
 				var mobile = this.getView().byId("mobileInput").getValue();
 				var mobileregex = /^[0-9]{5,15}$/;
 				if (!mobileregex.test(mobile)) {
 					oReturn.IsNotValid = true;
 					oReturn.sMsg.push("MSG_INVALID_MOBILE");
+					aCtrlMessage.push({
+						message: "MSG_INVALID_MOBILE",
+						target: "/oDetails/Mobile"
+					});
 				}
 			}
+
+			if (aCtrlMessage.length) this._genCtrlMessages(aCtrlMessage);
 			return oReturn;
+		},
+
+		_genCtrlMessages: function (aCtrlMsgs) {
+			var that = this,
+				oViewModel = that.getModel("objectView");
+			aCtrlMsgs.forEach(function (ele) {
+				that._oMessageManager.addMessages(
+					new sap.ui.core.message.Message({
+						message: that.getResourceBundle().getText(ele.message),
+						type: sap.ui.core.MessageType.Error,
+						target: ele.target,
+						processor: oViewModel,
+						persistent: true
+					}));
+			});
 		},
 
 		_fnMsgConcatinator: function (aMsgs) {
@@ -307,6 +421,11 @@ sap.ui.define([
 			delete oPayload.Role;
 			delete oPayload.EmergencyRelationship;
 			delete oPayload.UserPreference;
+			delete oPayload.VolunteerAssignment;
+			delete oPayload.UserDevice;
+			if (oPayload.RoleId !== 4) {
+				delete oPayload.Specialities;
+			}
 			var oClonePayload = $.extend(true, {}, oPayload),
 				that = this;
 

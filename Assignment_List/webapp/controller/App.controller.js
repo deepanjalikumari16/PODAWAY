@@ -9,6 +9,7 @@ sap.ui.define([
 		onInit : function () {
 			var oViewModel,
 				fnSetAppNotBusy,
+				that = this,
 				iOriginalBusyDelay = this.getView().getBusyIndicatorDelay();
 
 			oViewModel = new JSONModel({
@@ -20,6 +21,14 @@ sap.ui.define([
 			fnSetAppNotBusy = function() {
 				oViewModel.setProperty("/busy", false);
 				oViewModel.setProperty("/delay", iOriginalBusyDelay);
+				//load Event info data
+				that.getModel().read("/EventInfoSet('bfed13c1-6cfd-4c77-9a62-cdbf500d0800')", {
+				success: function (response) {
+					oViewModel.setProperty("/EXPO_Latitude", response.Latitude);
+					oViewModel.setProperty("/EXPO_Longitude", response.Longitude);
+				}
+			});
+				
 			};
 
 			// disable busy indication when the metadata is loaded and in case of errors

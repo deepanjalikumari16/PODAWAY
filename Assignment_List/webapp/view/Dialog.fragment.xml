@@ -1,7 +1,7 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:f="sap.ui.layout.form">
-	<Dialog id="openDialog" title="Assign">
+	<Dialog id="openDialog" title="{i18n>Assign}">
 		<VBox class="sapUiSmallMargin">
-			<f:SimpleForm id="SimpleFormDisplay354" editable="true" layout="ResponsiveGridLayout" title="Change Assignee" labelSpanXL="3" labelSpanL="3"
+			<f:SimpleForm id="SimpleFormDisplay354" editable="true" layout="ResponsiveGridLayout" labelSpanXL="3" labelSpanL="3"
 				labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="4" emptySpanL="4" emptySpanM="4" emptySpanS="0" columnsXL="1"
 				columnsL="1" columnsM="1" singleContainerFullSize="false">
 				<f:content>
@@ -14,8 +14,8 @@
 			</f:SimpleForm>
 		</VBox>
 		<buttons>
-			<Button text="Assign Now" press=".assignNow"/>
-			<Button text="Cancel" press=".closeDialog"/>
+			<Button text="{i18n>AssignNow}" press=".assignNow"/>
+			<Button text="{i18n>cancel}" press=".closeDialog"/>
 		</buttons>
 	</Dialog>
 </core:FragmentDefinition>

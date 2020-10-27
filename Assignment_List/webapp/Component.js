@@ -32,6 +32,13 @@ sap.ui.define([
 
 			// create the views based on the url/hash
 			this.getRouter().initialize();
+			
+			// When user comes from dashboard Emergency Incident
+			if( location.hash.search("isEmergency") >= 0)
+			{
+				 this.isEmergency = true;
+			}
+			
 		},
 
 		/**

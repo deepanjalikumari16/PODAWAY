@@ -50,7 +50,7 @@
 								</OverflowToolbar>
 							</headerToolbar>
 							<columns>
-								<Column width="18%">
+								<Column width="17%">
 									<Text text="{i18n>colAssignment}"/>
 								</Column>
 								<Column width="13%">
@@ -65,13 +65,13 @@
 								<Column width="14%">
 									<Text text="{i18n>colAssignTeamManager}"/>
 								</Column>
-								<Column width="11%">
+								<Column width="12%">
 									<Text text="{i18n>colStatus}"/>
 								</Column>
-								<Column width="8%">
+								<Column width="7%">
 									<Text text="{i18n>colNavigate}"/>
 								</Column>
-								<Column width="8%">
+								<Column width="9%">
 									<Text text="{i18n>colMessage}"/>
 								</Column>
 								<Column width="8%">
@@ -87,10 +87,12 @@
 										<ObjectStatus text="{ServiceType/IncidentType/IncidentType}"
 											state="{= ${ServiceType/IncidentType/IncidentType} === 'Emergency' ? 'Error' : 'Success' }"/>
 										<Text text="{Assignee/FirstName} {Assignee/LastName}"/>
-										<!--If loggedIn user is a Team Manager button text will be Start Assignment otherwise Assign Now-->
+										<!--If loggedIn user is a Team Manager, button text will be Start Assignment otherwise Assign Now-->
 										<!--Very Important: Never change Pushbutton Text, as It is being used in "onAssignNow" event-->
 										<Button text="{= ${worklistView>/loggedUserId} === ${AssigneeId} ? 'Start Assignment' : 'Assign Now' }" press="onAssignNow"/>
-										<Button icon="sap-icon://locate-me" press="onNavigate" type="Transparent"/>
+										<!--<Button text="{= ${worklistView>/loggedUserId} === ${AssigneeId} ? {i18n>btnStartAssignment} : i18n>btnAssignNow }" press="onAssignNow"/>-->
+										<!--<Button text="{i18n>btnStartAssignment}" press="onAssignNow"/>-->
+										<Button icon="sap-icon://locate-me" enabled="{= ${PODVisitor} !== null &amp;&amp; parseInt(${PODVisitor/Latitude}) > 0 &amp;&amp; parseInt(${PODVisitor/Longitude}) > 0 }" press="onNavigate" type="Transparent"/>
 										<Button icon="sap-icon://message-popup" press="onMessage" type="Transparent"/>
 										<Button icon="sap-icon://comment" press="onComment" type="Transparent"/>
 									</cells>
@@ -110,7 +112,7 @@
 								</OverflowToolbar>
 							</headerToolbar>
 							<columns>
-								<Column width="18%">
+								<Column width="17%">
 									<Text text="{i18n>colAssignment}"/>
 								</Column>
 								<Column width="15%">
@@ -128,7 +130,7 @@
 								<Column width="8%">
 									<Text text="{i18n>colNavigate}"/>
 								</Column>
-								<Column width="8%">
+								<Column width="9%">
 									<Text text="{i18n>colMessage}"/>
 								</Column>
 								<Column width="9%">
@@ -144,11 +146,10 @@
 										<ObjectStatus text="{ServiceType/IncidentType/IncidentType}"
 											state="{= ${ServiceType/IncidentType/IncidentType} === 'Emergency' ? 'Error' : 'Success' }"/>
 										<HBox>
-											<Button text="Reassign" press="onAssignNow" visible="{= ${worklistView>/loggedUserRoleId} === 1 }" class="sapUiSmallMarginEnd"/>
-											<Button text="Mark as Complete" press="onMarkasComplete"/>
+											<Button text="{i18n>btnReassign}" press="onAssignNow" visible="{= ${worklistView>/loggedUserRoleId} === 1 }" class="sapUiSmallMarginEnd"/>
+											<Button text="{i18n>btnMarkAsComplete}" press="onMarkasComplete"/>
 										</HBox>
-										
-										<Button icon="sap-icon://locate-me" press="onNavigate" type="Transparent"/>
+										<Button icon="sap-icon://locate-me" enabled="{= ${PODVisitor} !== null &amp;&amp; parseInt(${PODVisitor/Latitude}) > 0 &amp;&amp; parseInt(${PODVisitor/Longitude}) > 0 }" press="onNavigate" type="Transparent"/>
 										<Button icon="sap-icon://message-popup" press="onMessage" type="Transparent"/>
 										<Button icon="sap-icon://comment" press="onComment" type="Transparent"/>
 									</cells>
@@ -202,7 +203,7 @@
 										<ObjectStatus text="{ServiceType/IncidentType/IncidentType}"
 											state="{= ${ServiceType/IncidentType/IncidentType} === 'Emergency' ? 'Error' : 'Success' }"/>
 										<ObjectStatus text="{i18n>colCompleted}" state="Success"/>
-										<Button icon="sap-icon://locate-me" press="onNavigate" type="Transparent"/>
+										<Button icon="sap-icon://locate-me" enabled="{= ${PODVisitor} !== null &amp;&amp; parseInt(${PODVisitor/Latitude}) > 0 &amp;&amp; parseInt(${PODVisitor/Longitude}) > 0 }" press="onNavigate" type="Transparent"/>
 										<Button icon="sap-icon://message-popup" press="onMessage" type="Transparent"/>
 										<Button icon="sap-icon://comment" press="onComment" type="Transparent"/>
 									</cells>
@@ -257,7 +258,7 @@
 										<ObjectStatus text="{ServiceType/IncidentType/IncidentType}"
 											state="{= ${ServiceType/IncidentType/IncidentType} === 'Emergency' ? 'Error' : 'Success' }"/>
 										<ObjectStatus text="{i18n>colCancelled}" state="Error"/>
-										<Button icon="sap-icon://locate-me" press="onNavigate" type="Transparent"/>
+										<Button icon="sap-icon://locate-me" enabled="{= ${PODVisitor} !== null &amp;&amp; parseInt(${PODVisitor/Latitude}) > 0 &amp;&amp; parseInt(${PODVisitor/Longitude}) > 0 }" press="onNavigate" type="Transparent"/>
 										<Button icon="sap-icon://message-popup" press="onMessage" type="Transparent"/>
 										<Button icon="sap-icon://comment" press="onComment" type="Transparent"/>
 									</cells>

@@ -27,7 +27,10 @@ sap.ui.define([
 		onInit: function () {
 			var oViewModel,
 				iOriginalBusyDelay,
-				oTable = this.byId("table");
+				oTable = this.byId("table"),
+				oTable1 = this.byId("table1"),
+				oTable2 = this.byId("table2"),
+				oTable3 = this.byId("table3");
 
 			// Put down worklist table's original value for busy indicator delay,
 			// so it can be restored later on. Busy handling on the table is
@@ -44,7 +47,8 @@ sap.ui.define([
 				shareSendEmailSubject: this.getResourceBundle().getText("shareSendEmailWorklistSubject"),
 				shareSendEmailMessage: this.getResourceBundle().getText("shareSendEmailWorklistMessage", [location.href]),
 				tableNoDataText: this.getResourceBundle().getText("tableNoDataText"),
-				tableBusyDelay: 0
+				tableBusyDelay: 0,
+				bShowVolunteer: false
 			});
 			this.setModel(oViewModel, "worklistView");
 			var dat = this;
@@ -64,6 +68,20 @@ sap.ui.define([
 					}
 				});
 			});
+
+			oTable1.attachEventOnce("updateFinished1", function () {
+				// Restore original busy indicator delay for worklist's table
+				oViewModel.setProperty("/tableBusyDelay", iOriginalBusyDelay);
+			});
+			oTable2.attachEventOnce("updateFinished2", function () {
+				// Restore original busy indicator delay for worklist's table
+				oViewModel.setProperty("/tableBusyDelay", iOriginalBusyDelay);
+			});
+			oTable3.attachEventOnce("updateFinished3", function () {
+				// Restore original busy indicator delay for worklist's table
+				oViewModel.setProperty("/tableBusyDelay", iOriginalBusyDelay);
+			});
+
 			// Add the worklist page to the flp routing history
 			this.addHistoryEntry({
 				title: this.getResourceBundle().getText("worklistViewTitle"),
@@ -105,6 +123,10 @@ sap.ui.define([
 				if (this.getModel("worklistView").getProperty("/selectId") === "3") {
 					sTitle = this.getResourceBundle().getText("worklistPodTabTitleCount", [iTotalItems]);
 				}
+				if (this.getModel("worklistView").getProperty("/selectId") === "4") {
+					sTitle = null;
+					// 	sTitle = this.getResourceBundle().getText("worklistVolManTabTitleCount", [iTotalItems]);
+				}
 			} else {
 				if (this.getModel("worklistView").getProperty("/selectId") === "1") {
 					noDetailsFound = this.getResourceBundle().getText("tableNoDataText");
@@ -118,9 +140,59 @@ sap.ui.define([
 					noDetailsFound = this.getResourceBundle().getText("tableNoPodText");
 					sTitle = this.getResourceBundle().getText("worklistTableTitlePod");
 				}
+				if (this.getModel("worklistView").getProperty("/selectId") === "4") {
+					// noDetailsFound = null;
+						noDetailsFound = this.getResourceBundle().getText("tableNoVolText");
+					// 	sTitle = this.getResourceBundle().getText("worklistTableTitleVolMan");
+				}
 			}
 			this.getModel("worklistView").setProperty("/worklistTableTitle", sTitle);
 			this.getModel("worklistView").setProperty("/tableNoDataText", noDetailsFound);
+		},
+
+		onUpdateFinished1: function (oEvent) {
+			// update the worklist's object counter after the table update
+			var sAllTitle,
+				oTable1 = oEvent.getSource(),
+				iTotalItems1 = oEvent.getParameter("total");
+			// only update the counter if the length is final and
+			// the table is not empty
+			if (iTotalItems1 && oTable1.getBinding("items").isLengthFinal()) {
+				sAllTitle = this.getResourceBundle().getText("allCount", [iTotalItems1]);
+			} else {
+				sAllTitle = this.getResourceBundle().getText("all");
+			}
+			this.getModel("worklistView").setProperty("/all", sAllTitle);
+		},
+
+		onUpdateFinished2: function (oEvent) {
+			// update the worklist's object counter after the table update
+			var sAvailableTitle,
+				oTable2 = oEvent.getSource(),
+				iTotalItems2 = oEvent.getParameter("total");
+			// only update the counter if the length is final and
+			// the table is not empty
+			if (iTotalItems2 && oTable2.getBinding("items").isLengthFinal()) {
+				sAvailableTitle = this.getResourceBundle().getText("availableCount", [iTotalItems2]);
+			} else {
+				sAvailableTitle = this.getResourceBundle().getText("available");
+			}
+			this.getModel("worklistView").setProperty("/available", sAvailableTitle);
+		},
+
+		onUpdateFinished3: function (oEvent) {
+			// update the worklist's object counter after the table update
+			var sunavailableTitle,
+				oTable3 = oEvent.getSource(),
+				iTotalItems3 = oEvent.getParameter("total");
+			// only update the counter if the length is final and
+			// the table is not empty
+			if (iTotalItems3 && oTable3.getBinding("items").isLengthFinal()) {
+				sunavailableTitle = this.getResourceBundle().getText("unavailableCount", [iTotalItems3]);
+			} else {
+				sunavailableTitle = this.getResourceBundle().getText("unavailable");
+			}
+			this.getModel("worklistView").setProperty("/unavailable", sunavailableTitle);
 		},
 
 		onEdit: function (oEvent) {
@@ -128,15 +200,39 @@ sap.ui.define([
 		},
 
 		onChange: function (oEvent) {
-			var selectId = this.getView().byId("Id").getSelectedKey();
+			/*var selectId = this.getView().byId("Id").getSelectedKey();
 			this.getModel("worklistView").setProperty("/selectId", selectId);
-
 			var oTable = this.getView().byId("table");
 			var itemBinding = oTable.getBinding("items");
 			var afilter = [new Filter("RoleId", FilterOperator.EQ, selectId),
 				new Filter("IsArchived", FilterOperator.EQ, false)
 			];
-			itemBinding.filter(afilter, "Application");
+			itemBinding.filter(afilter, "Application");*/
+
+			var sSelectedKey = oEvent.getSource().getSelectedKey();
+
+			this.getModel("appView").setProperty("/selectedRoleId", sSelectedKey);
+			this.getModel("worklistView").setProperty("/selectId", sSelectedKey);
+
+			if (+sSelectedKey !== 4) { //
+				this.getModel("worklistView").setProperty("/bShowVolunteer", false);
+				
+				var oTable = this.getView().byId("table");
+				var itemBinding = oTable.getBinding("items");
+				var afilter = [new Filter("RoleId", FilterOperator.EQ, sSelectedKey),
+					new Filter("IsArchived", FilterOperator.EQ, false)
+				];
+				if (itemBinding) itemBinding.filter(afilter, "Application");
+			} else {
+				this.getModel("worklistView").setProperty("/bShowVolunteer", true);
+				// 	this.getModel("worklistView").setProperty("/selectId", sSelectedKey);
+				// 	var oTable1 = this.getView().byId("table");
+				// 	var itemBinding1 = oTable1.getBinding("items");
+				// 	var afilter1 = [new Filter("RoleId", FilterOperator.EQ, sSelectedKey),
+				// 		new Filter("IsArchived", FilterOperator.EQ, false)
+				// 	];
+				// if(itemBinding1)	itemBinding1.filter(afilter1, "Application");
+			}
 		},
 
 		onComment: function (oEvent) {
@@ -172,10 +268,10 @@ sap.ui.define([
 		},
 		comment: function () {
 			var enteredComment = this.getModel("worklistView").getProperty("/comments");
-			var enteredCommentLength = enteredComment.length;
 			if (enteredComment === null || enteredComment === "") {
 				this.showToast.call(this, "MSG_ENTER_COMMENT");
 			} else {
+				var enteredCommentLength = enteredComment.length;
 				if (enteredCommentLength > 500) {
 					this.showToast.call(this, "MSG_EXCEEDED_COMMENT_LENGTH");
 				} else {
@@ -194,6 +290,48 @@ sap.ui.define([
 						}
 					});
 				}
+			}
+		},
+
+		onPodCategory: function (oEvent) {
+			var sPath = oEvent.getSource().getBindingContext().getPath(),
+				oButton = oEvent.getSource();
+			// create popover
+			if (!this._oPopover) {
+				Fragment.load({
+					name: "com.coil.podium.MAAD.view.PODCategoryDialog",
+					controller: this
+				}).then(function (pPopover) {
+					this._oPopover = pPopover;
+					this.getView().addDependent(this._oPopover);
+					this._oPopover.bindElement(sPath);
+					this._oPopover.openBy(oButton);
+
+				}.bind(this));
+			} else {
+				this._oPopover.openBy(oButton);
+				this._oPopover.bindElement(sPath);
+			}
+		},
+
+		onSpeciality: function (oEvent) {
+			var sPath = oEvent.getSource().getBindingContext().getPath(),
+				oButton = oEvent.getSource();
+			// create popover
+			if (!this._oPopover) {
+				Fragment.load({
+					name: "com.coil.podium.MAAD.view.SpecialityDialog",
+					controller: this
+				}).then(function (pPopover) {
+					this._oPopover = pPopover;
+					this.getView().addDependent(this._oPopover);
+					this._oPopover.bindElement(sPath);
+					this._oPopover.openBy(oButton);
+
+				}.bind(this));
+			} else {
+				this._oPopover.openBy(oButton);
+				this._oPopover.bindElement(sPath);
 			}
 		},
 
@@ -242,13 +380,21 @@ sap.ui.define([
 				var sQuery = oEvent.getParameter("query").toLowerCase();
 				sQuery = "'" + sQuery + "'";
 				if (sQuery && sQuery.length > 0) {
+
 					aTableSearchState = [new Filter('tolower(FirstName)', FilterOperator.Contains, sQuery),
+					// aTableSearchState = [new Filter( {
+					// 		path: 'FirstName',
+					// 		caseSensitive: false,
+					// 		operator: FilterOperator.Contains,
+					// 		value1: sQuery
+					// 	} ),
 						new Filter("IsArchived", FilterOperator.EQ, false),
-						new Filter("RoleId", FilterOperator.EQ, this.getModel("worklistView").getProperty("/selectId"))
+						new Filter("RoleId", FilterOperator.EQ, this.getModel("appView").getProperty("/selectedRoleId"))
+						// selectId
 					];
 				} else {
 					aTableSearchState = [new Filter("IsArchived", FilterOperator.EQ, false),
-						new Filter("RoleId", FilterOperator.EQ, this.getModel("worklistView").getProperty("/selectId"))
+						new Filter("RoleId", FilterOperator.EQ, this.getModel("appView").getProperty("/selectedRoleId"))
 					];
 				}
 				this._applySearch(aTableSearchState);
@@ -262,7 +408,17 @@ sap.ui.define([
 		 * @public
 		 */
 		onRefresh: function () {
+			debugger;
 			var oTable = this.byId("table");
+			var oTable1 = this.byId("table1");
+			var oTable2 = this.byId("table2");
+			var oTable3 = this.byId("table3");
+			var selectedRole = this.getModel("appView").getProperty("/selectedRoleId");
+			if (selectedRole === "4") {
+				oTable1.getBinding("items").refresh();
+				oTable2.getBinding("items").refresh();
+				oTable3.getBinding("items").refresh();
+			}
 			oTable.getBinding("items").refresh();
 		},
 
@@ -325,8 +481,17 @@ sap.ui.define([
 		 */
 		_applySearch: function (aTableSearchState) {
 			var oTable = this.byId("table"),
+				oTable1 = this.byId("table1"),
+				oTable2 = this.byId("table2"),
+				oTable3 = this.byId("table3"),
 				oViewModel = this.getModel("worklistView");
 			oTable.getBinding("items").filter(aTableSearchState, "Application");
+			var selectedRole = this.getModel("appView").getProperty("/selectedRoleId");
+			if (selectedRole === "4") {
+				oTable1.getBinding("items").filter(aTableSearchState);
+				oTable2.getBinding("items").filter(aTableSearchState);
+				oTable3.getBinding("items").filter(aTableSearchState);
+			}
 			// changes the noDataText of the list in case there are no filter results
 			if (aTableSearchState.length !== 0) {
 				oViewModel.setProperty("/tableNoDataText", this.getResourceBundle().getText("worklistNoDataWithSearchText"));

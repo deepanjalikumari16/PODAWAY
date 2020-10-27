@@ -93,16 +93,22 @@ sap.ui.define([
 		_getAccName : function(iAccType){
 			var	sAccType;
 			switch(iAccType){
-				case 1 : sAccType = "Device"; break;
-				case 2 : sAccType = "Condition"; break;
-				case 3 : sAccType = "Place";
+				case 1 : sAccType = this.getResourceBundle().getText("Device"); break;
+				case 2 : sAccType = this.getResourceBundle().getText("Condition"); break;
+				case 3 : sAccType = this.getResourceBundle().getText("Place");
 			}
 			return sAccType;
 		},
 		
 		_fnSuccessToast: function(sText){
-						MessageToast.show(this.getResourceBundle().getText(sText));
+						MessageToast.show(this.getResourceBundle().getText(sText,[this._getAccName(this.getOwnerComponent().sAccType)] ) );
 					},
+		
+		_ErrorBox : function(sMsg){
+			var bCompact = !!this.getView().$().closest(".sapUiSizeCompact").length;
+			MessageBox.error(sMsg,	{	styleClass: bCompact ? "sapUiSizeCompact" : ""	});
+		},
+					
 		_fnWarningMessageBox : function(sMsg, _fnSuccess, _fnError ){
 			var bCompact = !!this.getView().$().closest(".sapUiSizeCompact").length;
 			MessageBox.warning(

@@ -143,20 +143,63 @@ sap.ui.define([
 		/* event handlers                                              */
 		/* =========================================================== */
 
-		onEditQuestion: function () {
+		onEditQuestion: function (oEvent) {
+			this._oMessageManager.removeAllMessages();
+			if(oEvent)
+			{
+			var sQuestion = this.getModel().getProperty( "Question" ,oEvent.getSource().getBindingContext()),
+				sHeading = this.getModel().getProperty( "Heading" ,oEvent.getSource().getBindingContext());
+				
+			this.getModel("worklistView").setProperty("/sQuestion", sQuestion);
+			this.getModel("worklistView").setProperty("/sHeading", sHeading);
+			}
+			
 			var bValue = this.getModel("worklistView").getProperty("/bEditQuestion");
 			this.getModel("worklistView").setProperty("/bEditQuestion", !bValue);
 		},
+		
+		isValid : function(sQuestion,sHeading){
+			this._oMessageManager.removeAllMessages();
+			var aCtrlMessage = [], 
+				bReturn = {  status : true, aMsg : [] };
+			
+			if (sQuestion.length === 0) {
+				aCtrlMessage.push({   message : "ERR_QUESTION" , target :  "/sQuestion" });
+				bReturn.status= false;
+				bReturn.aMsg.push("ERR_QUESTION");
+			}
+				
+			if (sHeading.length === 0) {
+				aCtrlMessage.push({   message : "ERR_HEADING" , target :  "/sHeading" });
+				bReturn.status= false;
+				bReturn.aMsg.push("ERR_HEADING");
+			}
+			
+			if(aCtrlMessage.length)	this._GenCtrlMessages(aCtrlMessage);
+			
+		
+			 return bReturn;
+			
+		},
 
 		onSaveQuestion: function () {
-			var sValue = this.getView().byId("ipTitle").getValue(),
-				sHeading = this.getView().byId("ipHeading").getValue(),
+			var sQuestion = this.getModel("worklistView").getProperty("/sQuestion"),
+				sHeading = 	this.getModel("worklistView").getProperty("/sHeading"),
 				that = this;
-
+				
+			var oValid = this.isValid(sQuestion,sHeading);
+			
+			if(!(oValid.status)){
+				
+				that._ErrorBox(that._fnMsgConcatinator(oValid.aMsg));
+			
+				return;
+			}
+		
 			var sPath = this.getView().byId("ipTitle").getBindingContext().getPath();
-
+			
 			this.getModel().update(sPath, {
-				Question: sValue,
+				Question: sQuestion,
 				Heading: sHeading
 			}, {
 				success: function () {
@@ -178,7 +221,8 @@ sap.ui.define([
 				TextAllowed: false,
 				IsEnabled: false
 			});
-
+			
+			
 			that.getModel("worklistView").setProperty("/sDialogMode", "C");
 
 			that._DeviceAccessibilityDialog();
@@ -326,6 +370,7 @@ sap.ui.define([
 		/* internal methods                                            */
 		/* =========================================================== */
 		_DeviceAccessibilityDialog: function () {
+			this._oMessageManager.removeAllMessages();
 			var oView = this.getView(),
 				that = this;
 			// create dialog lazily
@@ -362,7 +407,7 @@ sap.ui.define([
 				 breturn = true;
 			}
 
-			this._GenCtrlMessages(aCtrlMessage);
+			if(aCtrlMessage.length)	this._GenCtrlMessages(aCtrlMessage);
 			if (this._oMessageManager.getMessageModel().getData().length > 0) {
 				 breturn = true;
 			}
@@ -372,8 +417,6 @@ sap.ui.define([
 
 		_GenCtrlMessages : function(aCtrlMsgs){
 			var that = this;
-			if(aCtrlMsgs.length === 0) return;
-			
 			aCtrlMsgs.forEach(function(ele){
 					that._oMessageManager.addMessages(
 					new sap.ui.core.message.Message({
@@ -384,8 +427,6 @@ sap.ui.define([
 						persistent: true
 					}));
 			});
-		
-			
 		},
 
 		//Get image editor control from Button
@@ -482,6 +523,14 @@ sap.ui.define([
 		_fnCreateOptionSuccess: function (sMsg) {
 			this.onCancelAddOption();
 			this._fnSuccessToast(sMsg);
+		},
+		_fnMsgConcatinator: function (aMsgs) {
+			//	var sFnMsg = "";
+			var that = this;
+			return aMsgs.map(function (x) {
+				return that.getResourceBundle().getText(x);
+			}).join("\n");
+
 		}
 
 	});

@@ -39,6 +39,11 @@ sap.ui.define([
 			});
 		},
 
+		onAfterRendering: function () {
+			//Init Validation framework
+			this._initMessage();
+		},
+
 		/* =========================================================== */
 		/* event handlers                                              */
 		/* =========================================================== */
@@ -103,6 +108,9 @@ sap.ui.define([
 		 * @returns to terminate further execution
 		 */
 		_setView: function (data) {
+
+			this._oMessageManager.removeAllMessages();
+
 			var oViewModel = this.getModel("objectView");
 			oViewModel.setProperty("/busy", false);
 			this._pendingDelOps = [];
@@ -118,6 +126,14 @@ sap.ui.define([
 			});
 		},
 
+		_initMessage: function () {
+			//MessageProcessor could be of two type, Model binding based and Control based
+			//we are using Model-binding based here
+			var oMessageProcessor = this.getModel("objectView");
+			this._oMessageManager = sap.ui.getCore().getMessageManager();
+			this._oMessageManager.registerMessageProcessor(oMessageProcessor);
+		},
+
 		/*
 		 * @function
 		 * Cancel current object action
@@ -131,13 +147,16 @@ sap.ui.define([
 		 * Save edit or create FAQ details 
 		 */
 		onSave: function () {
+			
+			this._oMessageManager.removeAllMessages();
+			
 			var oViewModel = this.getModel("objectView");
 			var oPayload = oViewModel.getProperty("/oDetails"),
 				oValid = this._fnValidation(oPayload);
 
 			if (oPayload.NavigationId === "") {
 				oPayload.NavigationId = null;
-			} 
+			}
 			if (oPayload.NavigationId !== null) {
 				oPayload.NavigationId = parseInt(oPayload.NavigationId);
 			}
@@ -166,23 +185,66 @@ sap.ui.define([
 		 */
 		_fnValidation: function (data) {
 			var oReturn = {
-				IsNotValid: false,
-				sMsg: []
-			};
+					IsNotValid: false,
+					sMsg: []
+				},
+				aCtrlMessage = [];
 
-			if (data.FaqCategoryId === "") {
+			if (!data.FaqCategoryId) {
 				oReturn.IsNotValid = true;
-				oReturn.sMsg.push("Please enter FAQ Category");
+				oReturn.sMsg.push("MSG_VALDTN_ERR_FAQID");
+				aCtrlMessage.push({
+					message: "MSG_VALDTN_ERR_FAQID",
+					target: "/oDetails/FaqCategoryId"
+				});
 			} else
-			if (data.Question === "") {
+			if (!data.Question) {
 				oReturn.IsNotValid = true;
-				oReturn.sMsg.push("Please enter Question");
+				oReturn.sMsg.push("MSG_VALDTN_ERR_QUESTION");
+				aCtrlMessage.push({
+					message: "MSG_VALDTN_ERR_QUESTION",
+					target: "/oDetails/Question"
+				});
 			} else
-			if (data.Answer === "") {
+			if (!data.Answer) {
 				oReturn.IsNotValid = true;
-				oReturn.sMsg.push("Please enter Answer");
+				oReturn.sMsg.push("MSG_VALDTN_ERR_ANSWER");
+				aCtrlMessage.push({
+					message: "MSG_VALDTN_ERR_ANSWER",
+					target: "/oDetails/Answer"
+				});
 			}
+
+			if (aCtrlMessage.length) this._genCtrlMessages(aCtrlMessage);
 			return oReturn;
+		},
+
+		// if (data.FaqCategoryId === "") {
+		// 	oReturn.IsNotValid = true;
+		// 	oReturn.sMsg.push("Please select FAQ Category");
+		// } else
+		// if (data.Question === "") {
+		// 	oReturn.IsNotValid = true;
+		// 	oReturn.sMsg.push("Please enter Question");
+		// } else
+		// if (data.Answer === "") {
+		// 	oReturn.IsNotValid = true;
+		// 	oReturn.sMsg.push("Please enter Answer");
+		// }
+
+		_genCtrlMessages: function (aCtrlMsgs) {
+			var that = this,
+				oViewModel = that.getModel("objectView");
+			aCtrlMsgs.forEach(function (ele) {
+				that._oMessageManager.addMessages(
+					new sap.ui.core.message.Message({
+						message: that.getResourceBundle().getText(ele.message),
+						type: sap.ui.core.MessageType.Error,
+						target: ele.target,
+						processor: oViewModel,
+						persistent: true
+					}));
+			});
 		},
 
 		_fnMsgConcatinator: function (aMsgs) {

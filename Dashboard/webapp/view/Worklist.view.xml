@@ -29,7 +29,7 @@
 				</l:BlockLayoutCell>
 				<l:BlockLayoutCell class="podium-dashboard_item" titleLevel="H5" width="20%">
 					<l:titleLink>
-						<Link press="toAssignments" text="{i18n>TtlEmergencyIncidents}"/>
+						<Link press=".toAssignments(true)" text="{i18n>TtlEmergencyIncidents}"/>
 					</l:titleLink>
 					<FlexBox alignItems="Center" height="90%" justifyContent="Start">
 						<items>
@@ -42,7 +42,7 @@
 				</l:BlockLayoutCell>
 				<l:BlockLayoutCell class="podium-dashboard_item" titleLevel="H6" width="20%">
 					<l:titleLink>
-						<Link press="toAssignments" text="{i18n>TtlTotalIncidents}"/>
+						<Link press=".toAssignments(false)" text="{i18n>TtlTotalIncidents}"/>
 					</l:titleLink>
 					<FlexBox alignItems="Center" height="90%" justifyContent="Start">
 						<items>

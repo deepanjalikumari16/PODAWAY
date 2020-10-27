@@ -74,6 +74,9 @@ sap.ui.define([
 			oViewModel.refresh();
 
 		},
+		onDelTheme: function(){
+			this.getModel("objectView").setProperty("/oDetails/ThemeId", null);
+		},
 		/** 
 		 * Open Map and choose latitude/longitude for a given facility
 		 */
@@ -211,15 +214,25 @@ sap.ui.define([
 			if (!(oViewModel.getProperty("/oDetails/Highlights"))) oViewModel.setProperty("/oDetails/Highlights", []);
 			oViewModel.getProperty("/oDetails/Highlights").push({
 				Highlight: "",
-				EventAttractionId: oViewModel.getProperty("/oDetails/Id")
+				EventAttractionId: oViewModel.getProperty("/oDetails/Id"),
+				IsArchived : false
 			});
 			oViewModel.refresh();
 		},
+		
+		onComboBoxChange  : function(oEvent){
+		if(oEvent.getParameter("itemPressed") === false)
+		{
+			oEvent.getSource().setValue("");
+		}
+		},
+		
 		onDelHighlight: function (oEvent) {
-			var oViewModel = this.getModel("objectView"),
-				iIndex = +(oEvent.getParameter("listItem").getBindingContext("objectView").sPath.match(/\d+/)[0]);
-			oViewModel.getProperty("/oDetails/Highlights").splice(iIndex, 1);
-			oViewModel.refresh();
+			var oViewModel = this.getModel("objectView");
+			
+			oViewModel.setProperty("IsArchived", true, oEvent.getParameter("listItem").getBindingContext("objectView") );
+			
+			oViewModel.refresh(true);
 		},
 
 		/* =========================================================== */
@@ -484,8 +497,8 @@ sap.ui.define([
 				}))
 				.then(function () {
 						oViewModel.setProperty("/busy", false);
-						that.onCancel.apply(that);
 						that._fnSuccessToast.call(that, "MSG_SUCCESS_EVENTDETAILS");
+						that.onCancel.apply(that);
 					},
 					function () {
 						oViewModel.setProperty("/busy", false);

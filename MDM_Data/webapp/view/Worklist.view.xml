@@ -198,7 +198,7 @@
 										<CheckBox selected="{IsBuilding}" editable="false"/>
 										<CheckBox selected="{IsCategory}" editable="false"/>
 										<CheckBox selected="{IsTheme}" editable="false"/>
-										<Button text="{i18n>LnkViewImage}" press=".onViewImage($event, 'I')"/>
+										<Button text="{i18n>LnkViewImage}" enabled="{= ${Image} !== null }" press=".onViewImage($event, 'I')"/>
 										<Button icon="sap-icon://edit" press="onEdit" type="Transparent"/>
 									</cells>
 								</ColumnListItem>

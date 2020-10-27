@@ -1,5 +1,5 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:f="sap.ui.layout.form">
-	<Dialog id="commentDialog" title="Add Comment">
+	<Dialog id="commentDialog" title="{i18n>comment}">
 		<VBox class="sapUiSmallMargin">
 			<f:SimpleForm id="SimpleFormDisplay355" editable="true" layout="ResponsiveGridLayout" labelSpanXL="3" labelSpanL="3" labelSpanM="3"
 				labelSpanS="12" adjustLabelSpan="false" emptySpanXL="4" emptySpanL="4" emptySpanM="4" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1"
@@ -10,8 +10,8 @@
 			</f:SimpleForm>
 		</VBox>
 		<buttons>
-			<Button text="Comment" press=".comment"/>
-			<Button text="Cancel" press=".closeCommentDialog"/>
+			<Button text="{i18n>comment}" press=".comment"/>
+			<Button text="{i18n>cancel}" press=".closeCommentDialog"/>
 		</buttons>
 	</Dialog>
 </core:FragmentDefinition>

@@ -1,15 +1,15 @@
+jQuery.sap.require("Assignment_List.Assignment_List.libs.mapsjs-core");
+jQuery.sap.require("Assignment_List.Assignment_List.libs.mapsjs-service");
+jQuery.sap.require("Assignment_List.Assignment_List.libs.mapsjs-ui");
+jQuery.sap.require("Assignment_List.Assignment_List.libs.mapsjs-mapevents");
+
 sap.ui.define([
 	"./BaseController",
 	"sap/ui/model/json/JSONModel",
 	"../model/formatter",
 	"sap/ui/model/Filter",
 	"sap/ui/model/FilterOperator",
-	"sap/ui/core/Fragment",
-	//---- HERE Maps API , add AMD libraries above------	
-	"../libs/mapsjs-core",
-	"../libs/mapsjs-service",
-	"../libs/mapsjs-ui",
-	"../libs/mapsjs-mapevents"
+	"sap/ui/core/Fragment"
 ], function (BaseController, JSONModel, formatter, Filter, FilterOperator, Fragment) {
 	"use strict";
 
@@ -50,6 +50,7 @@ sap.ui.define([
 				tableNoDataText: this.getResourceBundle().getText("tableNoDataText"),
 				tableBusyDelay: 0,
 				assigneeId: 0,
+				volunteerId: 0,
 				comments: "",
 				Latitude: 0,
 				Longitude: 0,
@@ -66,6 +67,12 @@ sap.ui.define([
 			oTable.attachEventOnce("updateFinished", function () {
 				// Restore original busy indicator delay for worklist's table
 				oViewModel.setProperty("/tableBusyDelay", iOriginalBusyDelay);
+
+				if (dat.getOwnerComponent().isEmergency) {
+					dat.getView().byId("filterbar").getAllFilterItems()[0].getControl().setSelectedKey(2);
+					dat.onSearch();
+				}
+
 				//Fetch loggedIn User ID to disable delete button for loggedIn user
 				var oModel = dat.getModel();
 				oModel.callFunction("/GetLoggedInUser", {
@@ -94,19 +101,6 @@ sap.ui.define([
 				icon: "sap-icon://table-view",
 				intent: "#AssignmentList-display"
 			}, true);
-
-			/*var sPendingTitle = this.getResourceBundle().getText("pending");
-			this.getModel("worklistView").setProperty("/pending", sPendingTitle);
-
-			var sinprogressTitle = this.getResourceBundle().getText("inprogress");
-			this.getModel("worklistView").setProperty("/inprogress", sinprogressTitle);
-
-			var sCompletedTitle = this.getResourceBundle().getText("completed");
-			this.getModel("worklistView").setProperty("/completed", sCompletedTitle);
-
-			var sCancelledTitle = this.getResourceBundle().getText("cancelled");
-			this.getModel("worklistView").setProperty("/cancelled", sCancelledTitle);*/
-
 		},
 
 		/* =========================================================== */
@@ -125,7 +119,6 @@ sap.ui.define([
 		onUpdateFinished: function (oEvent) {
 			// update the worklist's object counter after the table update
 			var sPendingTitle,
-				// sTitle, 
 				oTable = oEvent.getSource(),
 				iTotalItems = oEvent.getParameter("total");
 
@@ -215,6 +208,7 @@ sap.ui.define([
 		onAssignNow: function (oEvent) {
 			var bText = oEvent.getSource().getText();
 			if (bText === "Assign Now" || bText === "Reassign") {
+				// if (bText === "{i18n>btnAssignNow}" || bText === "{i18n>btnReassign}") {
 				var oView = this.getView();
 				var oObject = oEvent.getSource().getBindingContext().getObject();
 				this.getModel("worklistView").setProperty("/assigneeId", oObject.AssigneeId);
@@ -242,26 +236,43 @@ sap.ui.define([
 					this.byId("openDialog").open();
 				}
 			} else {
-				var startPath = oEvent.getSource().getBindingContext().getPath();
-				var sData = this.getModel().getData(startPath);
-				this.getModel("worklistView").setProperty("/assignmentId", sData.Id);
-				var dat = this;
-				var oModel = dat.getModel();
-				oModel.callFunction("/StartAssignment", {
-					method: "GET",
-					urlParameters: {
-						AssignmentId: this.getModel("worklistView").getProperty("/assignmentId")
-					},
-					success: function (edata) {
-						dat.showToast.call(dat, "MSG_SUCCESS_START_ASSIGNMENT");
-						oModel.refresh(true);
-					}
-				});
+				var oView = this.getView();
+				var oObject = oEvent.getSource().getBindingContext().getObject();
+				this.getModel("worklistView").setProperty("/volunteerId", oObject.VolunteerId);
+
+				var sPath = oEvent.getSource().getBindingContext().getPath();
+				var data = this.getModel().getData(sPath);
+				this.getModel("worklistView").setProperty("/assignmentId", data.Id);
+				// this.getModel("worklistView").setProperty("/volunteerId", data.volunteerId);
+				// create dialog lazily
+				if (!this.byId("openStartDialog")) {
+					// load asynchronous XML fragment
+					Fragment.load({
+						id: oView.getId(),
+						name: "Assignment_List.Assignment_List.view.StartAssignment",
+						controller: this
+					}).then(function (oDialog) {
+						// connect dialog to the root view 
+						//of this component (models, lifecycle)
+						oView.addDependent(oDialog);
+						oDialog.bindElement({
+							path: sPath,
+							model: "worklistView"
+						});
+						oDialog.open();
+					});
+				} else {
+					this.byId("openStartDialog").open();
+				}
 			}
 		},
 
 		closeDialog: function () {
 			this.byId("openDialog").close();
+		},
+
+		closeStartDialog: function () {
+			this.byId("openStartDialog").close();
 		},
 
 		assignNow: function () {
@@ -279,6 +290,26 @@ sap.ui.define([
 					success: function (data) {
 						dat.showToast.call(dat, "MSG_SUCCESS_ASSIGNEE");
 						dat.byId("openDialog").close();
+						oModel.refresh(true);
+					}
+				});
+			}
+		},
+
+		startAssignNow: function (oEvent) {
+			if (this.getModel("worklistView").getProperty("/volunteerId") === null) {
+				this.showToast.call(this, "MSG_ENTER_VOLUNTEER_ASSIGNEE");
+			} else {
+				var dat = this;
+				var oModel = dat.getModel();
+				oModel.callFunction("/StartAssignment", {
+					method: "GET",
+					urlParameters: {
+						AssignmentId: this.getModel("worklistView").getProperty("/assignmentId"),
+						VolunteerId: this.getModel("worklistView").getProperty("/volunteerId")
+					},
+					success: function (edata) {
+						dat.showToast.call(dat, "MSG_SUCCESS_START_ASSIGNMENT");
 						oModel.refresh(true);
 					}
 				});
@@ -333,11 +364,12 @@ sap.ui.define([
 			this.byId("commentDialog").close();
 		},
 		comment: function () {
+			debugger;
 			var enteredComment = this.getModel("worklistView").getProperty("/comments");
-			var enteredCommentLength = enteredComment.length;
 			if (enteredComment === null || enteredComment === "") {
 				this.showToast.call(this, "MSG_ENTER_COMMENT");
 			} else {
+				var enteredCommentLength = enteredComment.length;
 				if (enteredCommentLength > 500) {
 					this.showToast.call(this, "MSG_EXCEEDED_COMMENT_LENGTH");
 				} else {
@@ -379,14 +411,8 @@ sap.ui.define([
 			this.getModel("worklistView").setProperty("/POD_Longitude", pData.Longitude);
 
 			// To get EXPO Latitude and Longitude
+			//GOt lat long in App controller
 			var that = this;
-			this.getView().getModel().read("/EventInfoSet", {
-				filters: [new Filter("Id", FilterOperator.EQ, 'bfed13c1-6cfd-4c77-9a62-cdbf500d0800')],
-				success: function (response) {
-					that.getModel("worklistView").setProperty("/EXPO_Latitude", response.results[0].Latitude);
-					that.getModel("worklistView").setProperty("/EXPO_Longitude", response.results[0].Longitude);
-				}
-			});
 
 			var oData = oEvent.getSource().getBindingContext().getObject();
 			Fragment.load({
@@ -407,25 +433,9 @@ sap.ui.define([
 						zoom: 15,
 						center: {
 							// lng: 55.147110,
-							lng: that.getModel("worklistView").getProperty("/EXPO_Longitude"),
-							lat: that.getModel("worklistView").getProperty("/EXPO_Latitude")
+							lng: that.getModel("appView").getProperty("/EXPO_Longitude"),
+							lat: that.getModel("appView").getProperty("/EXPO_Latitude")
 								// lat: 24.962762
-						}
-					});
-
-				// Obtain the default map types from the platform object
-				var maptypes = platform.createDefaultLayers();
-				//24.962762, 55.147110
-				// Instantiate (and display) a map object:
-				var map = new H.Map(
-					document.getElementById("map"),
-					maptypes.vector.normal.map, {
-						zoom: 15,
-						center: {
-							// lng: 55.147110,
-							lng: that.getModel("worklistView").getProperty("/EXPO_Longitude"),
-							// lat: 24.962762
-							lat: that.getModel("worklistView").getProperty("/EXPO_Latitude")
 						}
 					});
 
@@ -482,7 +492,7 @@ sap.ui.define([
 			var that = this;
 			var POD_LatLong = that.getModel("worklistView").getProperty("/POD_Latitude") + "," + that.getModel("worklistView").getProperty(
 				"/POD_Longitude");
-			var EXPO_LatLong = that.getModel("worklistView").getProperty("/EXPO_Latitude") + "," + that.getModel("worklistView").getProperty(
+			var EXPO_LatLong = that.getModel("appView").getProperty("/EXPO_Latitude") + "," + that.getModel("appView").getProperty(
 				"/EXPO_Longitude");
 			// TODO: Get from location from ODATA entity call, using test location for now lng: 55.147110, lat: 24.962762
 			//	debugger;
@@ -498,18 +508,20 @@ sap.ui.define([
 
 			function onSuccess(result) {
 				// ensure that at least one route was found
-				var route = result.response.route[0];
-				/*
-				 * The styling of the route response on the map is entirely under the developer's control.
-				 * A representitive styling can be found the full JS + HTML code of this example
-				 * in the functions below:
-				 */
-				that.addRouteShapeToMap(route, map);
-				that.addManueversToMap(route, map);
+				try {
+					var route = result.response.route[0];
+					/*
+					 * The styling of the route response on the map is entirely under the developer's control.
+					 * A representitive styling can be found the full JS + HTML code of this example
+					 * in the functions below:
+					 */
+					that.addRouteShapeToMap(route, map);
+					that.addManueversToMap(route, map);
+				} catch (err) {
+					that.showToast("ERR_NO_ROUTE");
+					console.log(err);
+				}
 
-				//	that.addWaypointsToPanel(route.waypoint,map);
-				//	that.addManueversToPanel(route,map);
-				//	that.addSummaryToPanel(route.summary,map);
 			};
 
 			router.calculateRoute(routeRequestParams, onSuccess.bind(that), onSuccess);
@@ -618,28 +630,26 @@ sap.ui.define([
 		},
 
 		onPodCategory: function (oEvent) {
-			var	sPath = oEvent.getSource().getBindingContext().getPath(),
-				 oButton = oEvent.getSource();
+			var sPath = oEvent.getSource().getBindingContext().getPath(),
+				oButton = oEvent.getSource();
 			// create popover
 			if (!this._oPopover) {
 				Fragment.load({
 					name: "Assignment_List.Assignment_List.view.PODCategoryDialog",
 					controller: this
-				}).then(function(pPopover) {
+				}).then(function (pPopover) {
 					this._oPopover = pPopover;
 					this.getView().addDependent(this._oPopover);
 					this._oPopover.bindElement(sPath);
 					this._oPopover.openBy(oButton);
-			
+
 				}.bind(this));
 			} else {
 				this._oPopover.openBy(oButton);
 				this._oPopover.bindElement(sPath);
 			}
-			
-		
-
 		},
+
 		onSearch: function () {
 			var aFilters = this.getFiltersfromFB(),
 				oTable = this.getView().byId("table"),

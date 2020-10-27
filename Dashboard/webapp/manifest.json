@@ -35,6 +35,12 @@
 					"action": "Display",
 					"title": "Dashboard"
 				}
+			},
+			"outbounds": {
+					"Manage-Visitor": {
+					"semanticObject": "Manage",
+					"action": "Visitor"
+				}
 			}
 		}
 	},
