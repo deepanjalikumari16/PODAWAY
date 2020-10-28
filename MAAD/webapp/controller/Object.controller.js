@@ -86,9 +86,9 @@ sap.ui.define([
 		 * Save edit or create Event details 
 		 */
 		onSave: function () {
-			
+
 			this._oMessageManager.removeAllMessages();
-			
+
 			var oViewModel = this.getModel("objectView");
 			var oPayload = oViewModel.getProperty("/oDetails");
 			// var oPayload = $.extend(true, {}, oViewModel.getProperty("/oDetails"));
@@ -122,6 +122,36 @@ sap.ui.define([
 			var oSelectedItem = oEvent.getSource().getSelectedItem();
 			var oObject = oSelectedItem.getBindingContext().getObject();
 			this.getModel("objectView").setProperty("/oDetails/DialCode", oObject.DialCode);
+
+			if (oEvent.getParameter("itemPressed") === false) {
+				oEvent.getSource().setValue("");
+			}
+
+		},
+
+		onChangeManagerId: function (oEvent) {
+			if (oEvent.getParameter("itemPressed") === false) {
+				oEvent.getSource().setValue("");
+			}
+		},
+
+		onChangeSpeciality: function (oEvent) {
+			if (oEvent.getParameter("itemPressed") === false) {
+				oEvent.getSource().setValue("");
+			}
+		},
+
+		onRoleChange: function (oEvent) {
+			var oSelectedItem = oEvent.getSource().getSelectedItem();
+			var oObject = oSelectedItem.getBindingContext().getObject();
+			if (oObject.Id === 4) {
+				var setflag = true;
+				this.getModel("objectView").setProperty("/oDetails/splflg", setflag);
+			}
+			if (oObject.Id !== 4) {
+				setflag = false;
+				this.getModel("objectView").setProperty("/oDetails/splflg", setflag);
+			}
 		},
 
 		// Below function triggers when user enter any value in Email input field
@@ -199,11 +229,13 @@ sap.ui.define([
 				return;
 			}
 			var selectedRole = this.getModel("appView").getProperty("/selectedRoleId");
+			selectedRole = parseInt(selectedRole);
 			if (selectedRole === null || selectedRole === 0) {
 				selectedRole = 1;
 			}
-			selectedRole = parseInt(selectedRole);
+
 			oViewModel.setProperty("/oDetails", {
+				// RoleId: selectedRole.toString(),
 				RoleId: selectedRole,
 				FirstName: "",
 				LastName: "",
@@ -301,38 +333,6 @@ sap.ui.define([
 				},
 				aCtrlMessage = [];
 
-			// if (data.RoleId === null) {
-			// 	oReturn.IsNotValid = true;
-			// 	oReturn.sMsg.push("Please select Role");
-			// } else
-			// if (data.FirstName === "") {
-			// 	oReturn.IsNotValid = true;
-			// 	oReturn.sMsg.push("Please enter First Name");
-			// } else
-			// if (data.LastName === "") {
-			// 	oReturn.IsNotValid = true;
-			// 	oReturn.sMsg.push("Please enter Last Name");
-			// } else
-			// if (data.Email === "") {
-			// 	oReturn.IsNotValid = true;
-			// 	oReturn.sMsg.push("Please enter Email");
-			// } else
-			// if (data.EMail !== "") {
-			// 	var email = this.getView().byId("emailInput").getValue();
-			// 	var mailregex = /^\w+[\w-+\.]*\@\w+([-\.]\w+)*\.[a-zA-Z]{2,}$/;
-			// 	if (!mailregex.test(email)) {
-			// 		oReturn.IsNotValid = true;
-			// 		oReturn.sMsg.push("Please enter a valid email address");
-			// 	}
-			// }
-			// if (data.Mobile !== "") {
-			// 	var mobile = this.getView().byId("mobileInput").getValue();
-			// 	var mobileregex = /^[0-9]{5,15}$/;
-			// 	if (!mobileregex.test(mobile)) {
-			// 		oReturn.IsNotValid = true;
-			// 		oReturn.sMsg.push("MSG_INVALID_MOBILE");
-			// 	}
-			// }
 			if (!data.RoleId) {
 				oReturn.IsNotValid = true;
 				oReturn.sMsg.push("MSG_VALDTN_ERR_ROLE");

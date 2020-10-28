@@ -58,13 +58,13 @@ sap.ui.define([
 			oTable.attachEventOnce("updateFinished", function () {
 				// Restore original busy indicator delay for worklist's table
 				oViewModel.setProperty("/tableBusyDelay", iOriginalBusyDelay);
-
 				//Fetch loggedIn User ID to disable delete button for loggedIn user
 				var oModel = dat.getModel();
 				oModel.callFunction("/GetLoggedInUser", {
 					method: "GET",
 					success: function (data) {
 						oViewModel.setProperty("/loggedUserId", data.results[0].Id);
+						oViewModel.setProperty("/loggedRoleId", data.results[0].RoleId);
 					}
 				});
 			});
@@ -88,6 +88,9 @@ sap.ui.define([
 				icon: "sap-icon://table-view",
 				intent: "#ManageAdmin-display"
 			}, true);
+
+			// this.getModel("worklistView").setProperty("/selectId", "1");
+
 		},
 
 		/* =========================================================== */
@@ -142,7 +145,7 @@ sap.ui.define([
 				}
 				if (this.getModel("worklistView").getProperty("/selectId") === "4") {
 					// noDetailsFound = null;
-						noDetailsFound = this.getResourceBundle().getText("tableNoVolText");
+					noDetailsFound = this.getResourceBundle().getText("tableNoVolText");
 					// 	sTitle = this.getResourceBundle().getText("worklistTableTitleVolMan");
 				}
 			}
@@ -200,15 +203,6 @@ sap.ui.define([
 		},
 
 		onChange: function (oEvent) {
-			/*var selectId = this.getView().byId("Id").getSelectedKey();
-			this.getModel("worklistView").setProperty("/selectId", selectId);
-			var oTable = this.getView().byId("table");
-			var itemBinding = oTable.getBinding("items");
-			var afilter = [new Filter("RoleId", FilterOperator.EQ, selectId),
-				new Filter("IsArchived", FilterOperator.EQ, false)
-			];
-			itemBinding.filter(afilter, "Application");*/
-
 			var sSelectedKey = oEvent.getSource().getSelectedKey();
 
 			this.getModel("appView").setProperty("/selectedRoleId", sSelectedKey);
@@ -216,7 +210,7 @@ sap.ui.define([
 
 			if (+sSelectedKey !== 4) { //
 				this.getModel("worklistView").setProperty("/bShowVolunteer", false);
-				
+
 				var oTable = this.getView().byId("table");
 				var itemBinding = oTable.getBinding("items");
 				var afilter = [new Filter("RoleId", FilterOperator.EQ, sSelectedKey),
@@ -225,13 +219,39 @@ sap.ui.define([
 				if (itemBinding) itemBinding.filter(afilter, "Application");
 			} else {
 				this.getModel("worklistView").setProperty("/bShowVolunteer", true);
-				// 	this.getModel("worklistView").setProperty("/selectId", sSelectedKey);
-				// 	var oTable1 = this.getView().byId("table");
-				// 	var itemBinding1 = oTable1.getBinding("items");
-				// 	var afilter1 = [new Filter("RoleId", FilterOperator.EQ, sSelectedKey),
-				// 		new Filter("IsArchived", FilterOperator.EQ, false)
-				// 	];
-				// if(itemBinding1)	itemBinding1.filter(afilter1, "Application");
+
+				var oViewModel = this.getModel("worklistView");
+				var loggedUserId = oViewModel.getProperty("/loggedUserId");
+				var loggedRoleId = oViewModel.getProperty("/loggedRoleId");
+				if (loggedRoleId == 2) {
+					var managerFilter = new Filter("ManagerId", FilterOperator.EQ, loggedUserId);
+					var oTable1 = this.getView().byId("table1");
+					var itemBinding1 = oTable1.getBinding("items");
+					var afilter1 = [new Filter("RoleId", FilterOperator.EQ, 4),
+						new Filter("IsArchived", FilterOperator.EQ, false),
+						managerFilter
+					];
+					if (itemBinding1) itemBinding1.filter(afilter1, "Application");
+					
+					var oTable2 = this.getView().byId("table2");
+					var itemBinding2 = oTable2.getBinding("items");
+					var afilter2 = [new Filter("RoleId", FilterOperator.EQ, 4),
+						new Filter("IsArchived", FilterOperator.EQ, false),
+						new Filter("IsAvailable", FilterOperator.EQ, true),
+						managerFilter
+					];
+					if (itemBinding2) itemBinding2.filter(afilter2, "Application");
+					
+					var oTable3 = this.getView().byId("table3");
+					var itemBinding3 = oTable3.getBinding("items");
+					var afilter3 = [new Filter("RoleId", FilterOperator.EQ, 4),
+						new Filter("IsArchived", FilterOperator.EQ, false),
+						new Filter("IsAvailable", FilterOperator.EQ, false),
+						managerFilter
+					];
+					if (itemBinding3) itemBinding3.filter(afilter3, "Application");
+					
+				}
 			}
 		},
 
@@ -382,12 +402,12 @@ sap.ui.define([
 				if (sQuery && sQuery.length > 0) {
 
 					aTableSearchState = [new Filter('tolower(FirstName)', FilterOperator.Contains, sQuery),
-					// aTableSearchState = [new Filter( {
-					// 		path: 'FirstName',
-					// 		caseSensitive: false,
-					// 		operator: FilterOperator.Contains,
-					// 		value1: sQuery
-					// 	} ),
+						// aTableSearchState = [new Filter( {
+						// 		path: 'FirstName',
+						// 		caseSensitive: false,
+						// 		operator: FilterOperator.Contains,
+						// 		value1: sQuery
+						// 	} ),
 						new Filter("IsArchived", FilterOperator.EQ, false),
 						new Filter("RoleId", FilterOperator.EQ, this.getModel("appView").getProperty("/selectedRoleId"))
 						// selectId
@@ -408,13 +428,11 @@ sap.ui.define([
 		 * @public
 		 */
 		onRefresh: function () {
-			debugger;
 			var oTable = this.byId("table");
 			var oTable1 = this.byId("table1");
 			var oTable2 = this.byId("table2");
 			var oTable3 = this.byId("table3");
-			var selectedRole = this.getModel("appView").getProperty("/selectedRoleId");
-			if (selectedRole === "4") {
+			if (this.getModel("appView").getProperty("/selectedRoleId") === "4") {
 				oTable1.getBinding("items").refresh();
 				oTable2.getBinding("items").refresh();
 				oTable3.getBinding("items").refresh();
@@ -486,8 +504,7 @@ sap.ui.define([
 				oTable3 = this.byId("table3"),
 				oViewModel = this.getModel("worklistView");
 			oTable.getBinding("items").filter(aTableSearchState, "Application");
-			var selectedRole = this.getModel("appView").getProperty("/selectedRoleId");
-			if (selectedRole === "4") {
+			if (this.getModel("appView").getProperty("/selectedRoleId") === "4") {
 				oTable1.getBinding("items").filter(aTableSearchState);
 				oTable2.getBinding("items").filter(aTableSearchState);
 				oTable3.getBinding("items").filter(aTableSearchState);

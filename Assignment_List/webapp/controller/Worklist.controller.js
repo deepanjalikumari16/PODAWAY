@@ -103,6 +103,22 @@ sap.ui.define([
 			}, true);
 		},
 
+		// calculate: function () {
+		// 	var oViewModel = this.getModel("worklistView");
+		// 	var loggedUserId = oViewModel.getProperty("/loggedUserId");
+
+		// 	var managerFilter = new Filter("ManagerId", FilterOperator.EQ, loggedUserId);
+		// 	var oTable1 = this.getView().byId("table1");
+		// 	var itemBinding1 = oTable1.getBinding("items");
+		// 	var afilter1 = [new Filter("RoleId", FilterOperator.EQ, 4),
+		// 		new Filter("IsArchived", FilterOperator.EQ, false),
+		// 		new Filter("IsAvailable", FilterOperator.EQ, true),
+		// 		managerFilter
+		// 	];
+		// 	if (itemBinding1) itemBinding1.filter(afilter1, "Application");
+
+		// },
+
 		/* =========================================================== */
 		/* event handlers                                              */
 		/* =========================================================== */
@@ -206,65 +222,90 @@ sap.ui.define([
 		},
 
 		onAssignNow: function (oEvent) {
-			var bText = oEvent.getSource().getText();
-			if (bText === "Assign Now" || bText === "Reassign") {
-				// if (bText === "{i18n>btnAssignNow}" || bText === "{i18n>btnReassign}") {
-				var oView = this.getView();
-				var oObject = oEvent.getSource().getBindingContext().getObject();
-				this.getModel("worklistView").setProperty("/assigneeId", oObject.AssigneeId);
-				var sPath = oEvent.getSource().getBindingContext().getPath();
-				var data = this.getModel().getData(sPath);
-				this.getModel("worklistView").setProperty("/assignmentId", data.Id);
-				// create dialog lazily
-				if (!this.byId("openDialog")) {
-					// load asynchronous XML fragment
-					Fragment.load({
-						id: oView.getId(),
-						name: "Assignment_List.Assignment_List.view.Dialog",
-						controller: this
-					}).then(function (oDialog) {
-						// connect dialog to the root view 
-						//of this component (models, lifecycle)
-						oView.addDependent(oDialog);
-						oDialog.bindElement({
-							path: sPath,
-							model: "worklistView"
-						});
-						oDialog.open();
+			var oView = this.getView();
+			var oObject = oEvent.getSource().getBindingContext().getObject();
+			this.getModel("worklistView").setProperty("/assigneeId", oObject.AssigneeId);
+			var sPath = oEvent.getSource().getBindingContext().getPath();
+			var data = this.getModel().getData(sPath);
+			this.getModel("worklistView").setProperty("/assignmentId", data.Id);
+			// create dialog lazily
+			if (!this.byId("openDialog")) {
+				// load asynchronous XML fragment
+				Fragment.load({
+					id: oView.getId(),
+					name: "Assignment_List.Assignment_List.view.Dialog",
+					controller: this
+				}).then(function (oDialog) {
+					// connect dialog to the root view 
+					//of this component (models, lifecycle)
+					oView.addDependent(oDialog);
+					oDialog.bindElement({
+						path: sPath,
+						model: "worklistView"
 					});
-				} else {
-					this.byId("openDialog").open();
-				}
+					oDialog.open();
+				});
 			} else {
-				var oView = this.getView();
-				var oObject = oEvent.getSource().getBindingContext().getObject();
-				this.getModel("worklistView").setProperty("/volunteerId", oObject.VolunteerId);
-
-				var sPath = oEvent.getSource().getBindingContext().getPath();
-				var data = this.getModel().getData(sPath);
-				this.getModel("worklistView").setProperty("/assignmentId", data.Id);
-				// this.getModel("worklistView").setProperty("/volunteerId", data.volunteerId);
-				// create dialog lazily
-				if (!this.byId("openStartDialog")) {
-					// load asynchronous XML fragment
-					Fragment.load({
-						id: oView.getId(),
-						name: "Assignment_List.Assignment_List.view.StartAssignment",
-						controller: this
-					}).then(function (oDialog) {
-						// connect dialog to the root view 
-						//of this component (models, lifecycle)
-						oView.addDependent(oDialog);
-						oDialog.bindElement({
-							path: sPath,
-							model: "worklistView"
-						});
-						oDialog.open();
-					});
-				} else {
-					this.byId("openStartDialog").open();
-				}
+				this.byId("openDialog").open();
 			}
+		},
+
+		onStartAssignment: function (oEvent) {
+			var that = this;
+			var oView = this.getView();
+			var oObject = oEvent.getSource().getBindingContext().getObject();
+			this.getModel("worklistView").setProperty("/volunteerId", oObject.VolunteerId);
+
+			var sPath = oEvent.getSource().getBindingContext().getPath();
+			var data = this.getModel().getData(sPath);
+			this.getModel("worklistView").setProperty("/assignmentId", data.Id);
+			// this.getModel("worklistView").setProperty("/volunteerId", data.volunteerId);
+			// create dialog lazily
+			if (!this.byId("openStartDialog")) {
+				// load asynchronous XML fragment
+				Fragment.load({
+					id: oView.getId(),
+					name: "Assignment_List.Assignment_List.view.StartAssignment",
+					controller: this
+				}).then(function (oDialog) {
+					// connect dialog to the root view 
+					//of this component (models, lifecycle)
+					oView.addDependent(oDialog);
+					oDialog.bindElement({
+						path: sPath,
+						model: "worklistView"
+					});
+
+					oDialog.open();
+					that.loadVolunteer();
+
+				});
+			} else {
+				this.byId("openStartDialog").open();
+				that.loadVolunteer();
+			}
+		},
+
+		loadVolunteer: function () {
+			var oViewModel = this.getModel("worklistView");
+			var loggedUserId = oViewModel.getProperty("/loggedUserId");
+			var managerFilter = new Filter("ManagerId", FilterOperator.EQ, loggedUserId);
+			var oCombo = this.getView().byId("dropdown");
+			var afilter1 = [new Filter("RoleId", FilterOperator.EQ, 4),
+				new Filter("IsArchived", FilterOperator.EQ, false),
+				new Filter("IsAvailable", FilterOperator.EQ, true),
+				managerFilter
+			];
+			var oItemTemplate = new sap.ui.core.ListItem({
+				text: "{FirstName} {LastName}",
+				key: "{Id}"
+			});
+			oCombo.bindAggregation("items", {
+				path: "/UserSet",
+				filters: afilter1,
+				template: oItemTemplate,
+				templateShareable: false
+			});
 		},
 
 		closeDialog: function () {
@@ -311,6 +352,7 @@ sap.ui.define([
 					success: function (edata) {
 						dat.showToast.call(dat, "MSG_SUCCESS_START_ASSIGNMENT");
 						oModel.refresh(true);
+						dat.closeDialog();
 					}
 				});
 			}

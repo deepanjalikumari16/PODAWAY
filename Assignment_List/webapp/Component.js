@@ -39,6 +39,15 @@ sap.ui.define([
 				 this.isEmergency = true;
 			}
 			
+			// When user comes from dashboard Emergency Incident
+			//Get Startup parameters
+          /* // this.oStartUpParams = this.getComponentData().startupParameters;
+            
+            if(Object.entries(this.oStartUpParams).length > 0 && this.oStartUpParams.hasOwnProperty("isEmergency") && !!this.oStartUpParams.isEmergency[0] )
+            {
+            this.oStartUpParams.isEmergency = true;
+            }*/
+			
 		},
 
 		/**
