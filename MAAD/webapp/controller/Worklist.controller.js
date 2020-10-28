@@ -232,7 +232,7 @@ sap.ui.define([
 						managerFilter
 					];
 					if (itemBinding1) itemBinding1.filter(afilter1, "Application");
-					
+
 					var oTable2 = this.getView().byId("table2");
 					var itemBinding2 = oTable2.getBinding("items");
 					var afilter2 = [new Filter("RoleId", FilterOperator.EQ, 4),
@@ -241,7 +241,7 @@ sap.ui.define([
 						managerFilter
 					];
 					if (itemBinding2) itemBinding2.filter(afilter2, "Application");
-					
+
 					var oTable3 = this.getView().byId("table3");
 					var itemBinding3 = oTable3.getBinding("items");
 					var afilter3 = [new Filter("RoleId", FilterOperator.EQ, 4),
@@ -250,9 +250,68 @@ sap.ui.define([
 						managerFilter
 					];
 					if (itemBinding3) itemBinding3.filter(afilter3, "Application");
-					
+
 				}
 			}
+		},
+
+		onMessage: function (oEvent) {
+			debugger;
+			var oView = this.getView();
+			var sPath = oEvent.getSource().getBindingContext().getPath();
+			var data = this.getModel().getData(sPath);
+			this.getModel("worklistView").setProperty("/userId", data.Id);
+			// var oObject = oEvent.getSource().getBindingContext().getObject();
+			this.getModel("worklistView").setProperty("/message", null);
+			if (!this.byId("messageDialog")) {
+				// load asynchronous XML fragment
+				Fragment.load({
+					id: oView.getId(),
+					name: "com.coil.podium.MAAD.view.MessageDialog",
+					controller: this
+				}).then(function (oDialog) {
+					// connect dialog to the root view 
+					//of this component (models, lifecycle)
+					oView.addDependent(oDialog);
+					oDialog.bindElement({
+						path: sPath,
+						model: "worklistView"
+					});
+					oDialog.open();
+				});
+			} else {
+				this.byId("messageDialog").open();
+			}
+		},
+
+		send: function () {
+			debugger;
+			var enteredMessage = this.getModel("worklistView").getProperty("/message");
+			if (enteredMessage === null || enteredMessage === "") {
+				this.showToast.call(this, "MSG_ENTER_MESSAGE");
+			} else {
+				var enteredMessageLength = enteredMessage.length;
+				if (enteredMessageLength > 500) {
+					this.showToast.call(this, "MSG_EXCEEDED_LENGTH");
+				} else {
+					var dat = this;
+					var oModel = dat.getModel();
+					oModel.create("/UserMessageSet", {
+						ReceiverId: this.getModel("worklistView").getProperty("/userId"),
+						Message: this.getModel("worklistView").getProperty("/message")
+					}, {
+						success: function (data) {
+							dat.showToast.call(dat, "MSG_SUCCESS_MESSAGE");
+							dat.byId("messageDialog").close();
+							oModel.refresh(true);
+						}
+					});
+				}
+			}
+		},
+
+		closeMessageDialog: function () {
+			this.byId("messageDialog").close();
 		},
 
 		onComment: function (oEvent) {
@@ -293,7 +352,7 @@ sap.ui.define([
 			} else {
 				var enteredCommentLength = enteredComment.length;
 				if (enteredCommentLength > 500) {
-					this.showToast.call(this, "MSG_EXCEEDED_COMMENT_LENGTH");
+					this.showToast.call(this, "MSG_EXCEEDED_LENGTH");
 				} else {
 					var dat = this;
 					var oModel = dat.getModel();

@@ -12,6 +12,14 @@
 			</SearchField>
 		</l:VerticalLayout>
 		<content>
+			<!--<OverflowToolbar>-->
+			<!--	<ToolbarSpacer/>-->
+			<!--	<Button text="{i18n>btnAdd}" visible="{= ${worklistView>/loggedRoleId} === 1 }" icon="sap-icon://add" press="onAdd">-->
+			<!--		<layoutData>-->
+			<!--			<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>-->
+			<!--		</layoutData>-->
+			<!--	</Button>-->
+			<!--</OverflowToolbar>-->
 			<Table id="table" width="auto" visible="{= !${worklistView>/bShowVolunteer} }"
 				items="{ path: '/UserSet', filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path : 'RoleId' , operator : 'EQ' , value1 : 1 } ], sorter: { path: 'Id', descending: false } }"
 				noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
@@ -20,8 +28,7 @@
 					<OverflowToolbar>
 						<Title id="tableHeader" text="{worklistView>/worklistTableTitle}" level="H3"/>
 						<ToolbarSpacer/>
-						<Button text="{i18n>btnAdd}" visible="{= ${worklistView>/loggedRoleId} === 1 }" icon="sap-icon://add"
-							press="onAdd">
+						<Button text="{i18n>btnAdd}" visible="{= ${worklistView>/loggedRoleId} === 1 }" icon="sap-icon://add" press="onAdd">
 							<layoutData>
 								<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
 							</layoutData>
@@ -61,7 +68,8 @@
 							<Text text="{LastName}"/>
 							<Text text="{Mobile}"/>
 							<Text text="{Email}"/>
-							<Button icon="sap-icon://message-popup" press="onMessage" type="Transparent"/>
+							<Button icon="sap-icon://BusinessSuiteInAppSymbols/icon-ab-testing" press="onMessage" visible="{= ${worklistView>/loggedUserId} !== ${Id} }"
+								type="Transparent" tooltip="message"/>
 							<Button icon="sap-icon://comment" press="onComment" type="Transparent"/>
 							<Button icon="sap-icon://edit" enabled="{= ${worklistView>/selectId} !== '3' }" press="onEdit" type="Transparent"/>
 							<Button icon="sap-icon://delete" visible="{= ${worklistView>/loggedUserId} !== ${Id} }" press="onDelete" type="Transparent" tooltip="remove"/>
@@ -89,34 +97,37 @@
 								</OverflowToolbar>
 							</headerToolbar>
 							<columns>
-								<Column>
+								<Column width="13%">
 									<Text text="{i18n>colFirstName}"/>
 								</Column>
-								<Column>
+								<Column width="10%">
 									<Text text="{i18n>colLastName}"/>
 								</Column>
-								<Column>
+								<Column width="9%">
 									<Text text="{i18n>colStatus}"/>
 								</Column>
-								<Column>
+								<Column width="15%">
 									<Text text="{i18n>colPodAssigned}"/>
 								</Column>
-								<Column>
+								<Column width="10%">
 									<Text text="{i18n>colPodCategory}"/>
 								</Column>
-								<Column>
+								<Column width="8%">
 									<Text text="{i18n>colSpeciality}"/>
 								</Column>
-								<Column>
+								<Column width="9%">
 									<Text text="{i18n>colIncidentType}"/>
 								</Column>
-								<Column>
+								<Column width="7%">
 									<Text text="{i18n>colMessage}"/>
 								</Column>
-								<Column>
+								<Column width="8%">
+									<Text text="{i18n>colComment}"/>
+								</Column>
+								<Column width="5%">
 									<Text text="{i18n>colEdit}"/>
 								</Column>
-								<Column>
+								<Column width="7%">
 									<Text text="{i18n>colRemove}"/>
 								</Column>
 							</columns>
@@ -127,12 +138,14 @@
 										<Text text="{LastName}"/>
 										<ObjectStatus text="{= ${IsAvailable} === false ? 'Unavailable' : 'Available' }" state="{= ${IsAvailable} === false ? 'Error' : 'Success' }"/>
 										<Text text="{VolunteerAssignment/PODVisitor/FirstName} {VolunteerAssignment/PODVisitor/LastName}"/>
-										<Button text="{= ${VolunteerAssignment/PODConditions}.length }" visible="{= ${VolunteerAssignment} !== null &amp;&amp; ${VolunteerAssignment/PODConditions}.length !== 0}" press="onPodCategory"/>
+										<Button text="{= ${VolunteerAssignment/PODConditions}.length }"
+											visible="{= ${VolunteerAssignment} !== null &amp;&amp; ${VolunteerAssignment/PODConditions}.length !== 0}" press="onPodCategory"/>
 										<Button text="{= ${Specialities}.length }" visible="{= ${Specialities}.length !== 0}" press="onSpeciality"/>
 										<ObjectStatus text="{VolunteerAssignment/ServiceType/IncidentType/IncidentType}"
 											state="{= ${VolunteerAssignment/ServiceType/IncidentType/IncidentType} === 'Emergency' ? 'Error' : 'Success' }"/>
-										<Button icon="sap-icon://message-popup" press="onMessage" type="Transparent"/>
-										<!--<Button icon="sap-icon://comment" press="onComment" type="Transparent"/>-->
+										<Button icon="sap-icon://BusinessSuiteInAppSymbols/icon-ab-testing" visible="{= ${worklistView>/loggedUserId} !== ${Id} }" press="onMessage"
+											type="Transparent" tooltip="message"/>
+										<Button icon="sap-icon://comment" press="onComment" type="Transparent"/>
 										<Button icon="sap-icon://edit" press="onEdit" type="Transparent"/>
 										<Button icon="sap-icon://delete" visible="{= ${worklistView>/loggedUserId} !== ${Id} }" press="onDelete" type="Transparent" tooltip="remove"/>
 									</cells>
@@ -157,31 +170,31 @@
 								</OverflowToolbar>
 							</headerToolbar>
 							<columns>
-								<Column>
+								<Column width="15%">
 									<Text text="{i18n>colFirstName}"/>
 								</Column>
-								<Column>
+								<Column width="15%">
 									<Text text="{i18n>colLastName}"/>
 								</Column>
-								<Column>
+								<Column width="20%">
 									<Text text="{i18n>colPodAssigned}"/>
 								</Column>
-								<Column>
+								<Column width="10%">
 									<Text text="{i18n>colSpeciality}"/>
 								</Column>
-								<Column>
+								<Column width="10%">
 									<Text text="{i18n>colIncidentType}"/>
 								</Column>
-								<Column>
+								<Column width="10%">
 									<Text text="{i18n>colMessage}"/>
 								</Column>
-								<!--<Column>-->
-								<!--	<Text text="{i18n>colComment}"/>-->
-								<!--</Column>-->
-								<Column>
+								<Column width="10%">
+									<Text text="{i18n>colComment}"/>
+								</Column>
+								<Column width="5%">
 									<Text text="{i18n>colEdit}"/>
 								</Column>
-								<Column>
+								<Column width="10%">
 									<Text text="{i18n>colRemove}"/>
 								</Column>
 							</columns>
@@ -194,8 +207,9 @@
 										<Button text="{= ${Specialities}.length }" visible="{= ${Specialities}.length !== 0}" press="onSpeciality"/>
 										<ObjectStatus text="{VolunteerAssignment/ServiceType/IncidentType/IncidentType}"
 											state="{= ${VolunteerAssignment/ServiceType/IncidentType/IncidentType} === 'Emergency' ? 'Error' : 'Success' }"/>
-										<Button icon="sap-icon://message-popup" press="onMessage" type="Transparent"/>
-										<!--<Button icon="sap-icon://comment" press="onComment" type="Transparent"/>-->
+										<Button icon="sap-icon://BusinessSuiteInAppSymbols/icon-ab-testing" visible="{= ${worklistView>/loggedUserId} !== ${Id} }" press="onMessage"
+											type="Transparent" tooltip="message"/>
+										<Button icon="sap-icon://comment" press="onComment" type="Transparent"/>
 										<Button icon="sap-icon://edit" press="onEdit" type="Transparent"/>
 										<Button icon="sap-icon://delete" visible="{= ${worklistView>/loggedUserId} !== ${Id} }" press="onDelete" type="Transparent" tooltip="remove"/>
 									</cells>
@@ -220,34 +234,34 @@
 								</OverflowToolbar>
 							</headerToolbar>
 							<columns>
-								<Column>
+								<Column width="15%">
 									<Text text="{i18n>colFirstName}"/>
 								</Column>
-								<Column>
+								<Column width="11%">
 									<Text text="{i18n>colLastName}"/>
 								</Column>
-								<Column>
+								<Column width="15%">
 									<Text text="{i18n>colPodAssigned}"/>
 								</Column>
-								<Column>
+								<Column width="10%">
 									<Text text="{i18n>colPodCategory}"/>
 								</Column>
-								<Column>
+								<Column width="10%">
 									<Text text="{i18n>colSpeciality}"/>
 								</Column>
-								<Column>
+								<Column width="10%">
 									<Text text="{i18n>colIncidentType}"/>
 								</Column>
-								<Column>
+								<Column width="8%">
 									<Text text="{i18n>colMessage}"/>
 								</Column>
-								<!--<Column>-->
-								<!--	<Text text="{i18n>colComment}"/>-->
-								<!--</Column>-->
-								<Column>
+								<Column width="8%">
+									<Text text="{i18n>colComment}"/>
+								</Column>
+								<Column width="5%">
 									<Text text="{i18n>colEdit}"/>
 								</Column>
-								<Column>
+								<Column width="8%">
 									<Text text="{i18n>colRemove}"/>
 								</Column>
 							</columns>
@@ -257,12 +271,14 @@
 										<Text text="{FirstName}"/>
 										<Text text="{LastName}"/>
 										<Text text="{VolunteerAssignment/PODVisitor/FirstName} {VolunteerAssignment/PODVisitor/LastName}"/>
-										<Button text="{= ${VolunteerAssignment/PODConditions}.length }" visible="{= ${VolunteerAssignment} !== null &amp;&amp; ${VolunteerAssignment/PODConditions}.length !== 0}" press="onPodCategory"/>
+										<Button text="{= ${VolunteerAssignment/PODConditions}.length }"
+											visible="{= ${VolunteerAssignment} !== null &amp;&amp; ${VolunteerAssignment/PODConditions}.length !== 0}" press="onPodCategory"/>
 										<Button text="{= ${Specialities}.length }" visible="{= ${Specialities}.length !== 0}" press="onSpeciality"/>
 										<ObjectStatus text="{VolunteerAssignment/ServiceType/IncidentType/IncidentType}"
 											state="{= ${VolunteerAssignment/ServiceType/IncidentType/IncidentType} === 'Emergency' ? 'Error' : 'Success' }"/>
-										<Button icon="sap-icon://message-popup" press="onMessage" type="Transparent"/>
-										<!--<Button icon="sap-icon://comment" press="onComment" type="Transparent"/>-->
+										<Button icon="sap-icon://BusinessSuiteInAppSymbols/icon-ab-testing" visible="{= ${worklistView>/loggedUserId} !== ${Id} }" press="onMessage"
+											type="Transparent" tooltip="message"/>
+										<Button icon="sap-icon://comment" press="onComment" type="Transparent"/>
 										<Button icon="sap-icon://edit" press="onEdit" type="Transparent"/>
 										<Button icon="sap-icon://delete" visible="{= ${worklistView>/loggedUserId} !== ${Id} }" press="onDelete" type="Transparent" tooltip="remove"/>
 									</cells>

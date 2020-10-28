@@ -77,7 +77,7 @@
 									<cells>
 										<Text text="{ServiceType/ServiceType}"/>
 										<Text text="{PODVisitor/FirstName} {PODVisitor/LastName}"/>
-										<Button text="{= ${PODConditions}.length }" press="onPodCategory"/>
+										<Button text="{= ${PODConditions}.length }" visible="{= ${PODConditions}.length !== 0}" press="onPodCategory"/>
 										<ObjectStatus text="{ServiceType/IncidentType/IncidentType}"
 											state="{= ${ServiceType/IncidentType/IncidentType} === 'Emergency' ? 'Error' : 'Success' }"/>
 										<Text text="{Assignee/FirstName} {Assignee/LastName}"/>
@@ -92,7 +92,7 @@
 										<Button icon="sap-icon://locate-me"
 											enabled="{= ${PODVisitor} !== null &amp;&amp; parseInt(${PODVisitor/Latitude}) > 0 &amp;&amp; parseInt(${PODVisitor/Longitude}) > 0 }"
 											press="onNavigate" type="Transparent"/>
-										<Button icon="sap-icon://message-popup" press="onMessage" type="Transparent"/>
+										<Button icon="sap-icon://BusinessSuiteInAppSymbols/icon-ab-testing" press="onMessage" type="Transparent" tooltip="message"/>
 										<Button icon="sap-icon://comment" press="onComment" type="Transparent"/>
 									</cells>
 								</ColumnListItem>
@@ -135,7 +135,7 @@
 									<cells>
 										<Text text="{ServiceType/ServiceType}"/>
 										<Text text="{PODVisitor/FirstName} {PODVisitor/LastName}"/>
-										<Button text="{= ${PODConditions}.length }" press="onPodCategory"/>
+										<Button text="{= ${PODConditions}.length }" visible="{= ${PODConditions}.length !== 0}" press="onPodCategory"/>
 										<ObjectStatus text="{ServiceType/IncidentType/IncidentType}"
 											state="{= ${ServiceType/IncidentType/IncidentType} === 'Emergency' ? 'Error' : 'Success' }"/>
 										<HBox>
@@ -145,7 +145,7 @@
 										<Button icon="sap-icon://locate-me"
 											enabled="{= ${PODVisitor} !== null &amp;&amp; parseInt(${PODVisitor/Latitude}) > 0 &amp;&amp; parseInt(${PODVisitor/Longitude}) > 0 }"
 											press="onNavigate" type="Transparent"/>
-										<Button icon="sap-icon://message-popup" press="onMessage" type="Transparent"/>
+										<Button icon="sap-icon://BusinessSuiteInAppSymbols/icon-ab-testing" press="onMessage" type="Transparent" tooltip="message"/>
 										<Button icon="sap-icon://comment" press="onComment" type="Transparent"/>
 									</cells>
 								</ColumnListItem>
@@ -188,14 +188,14 @@
 									<cells>
 										<Text text="{ServiceType/ServiceType}"/>
 										<Text text="{PODVisitor/FirstName} {PODVisitor/LastName}"/>
-										<Button text="{= ${PODConditions}.length }" press="onPodCategory"/>
+										<Button text="{= ${PODConditions}.length }" visible="{= ${PODConditions}.length !== 0}" press="onPodCategory"/>
 										<ObjectStatus text="{ServiceType/IncidentType/IncidentType}"
 											state="{= ${ServiceType/IncidentType/IncidentType} === 'Emergency' ? 'Error' : 'Success' }"/>
 										<ObjectStatus text="{i18n>colCompleted}" state="Success"/>
 										<Button icon="sap-icon://locate-me"
 											enabled="{= ${PODVisitor} !== null &amp;&amp; parseInt(${PODVisitor/Latitude}) > 0 &amp;&amp; parseInt(${PODVisitor/Longitude}) > 0 }"
 											press="onNavigate" type="Transparent"/>
-										<Button icon="sap-icon://message-popup" press="onMessage" type="Transparent"/>
+										<Button icon="sap-icon://BusinessSuiteInAppSymbols/icon-ab-testing" press="onMessage" type="Transparent" tooltip="message"/>
 										<Button icon="sap-icon://comment" press="onComment" type="Transparent"/>
 									</cells>
 								</ColumnListItem>
@@ -238,15 +238,15 @@
 									<cells>
 										<Text text="{ServiceType/ServiceType}"/>
 										<Text text="{PODVisitor/FirstName} {PODVisitor/LastName}"/>
-										<!--<Button text="{PODConditions/$count}"/>-->
-										<Button text="{= ${PODConditions}.length }" press="onPodCategory"/>
+										<Button text="{= ${PODConditions}.length }" visible="{= ${PODConditions}.length !== 0}" press="onPodCategory"/>
 										<ObjectStatus text="{ServiceType/IncidentType/IncidentType}"
 											state="{= ${ServiceType/IncidentType/IncidentType} === 'Emergency' ? 'Error' : 'Success' }"/>
 										<ObjectStatus text="{i18n>colCancelled}" state="Error"/>
 										<Button icon="sap-icon://locate-me"
 											enabled="{= ${PODVisitor} !== null &amp;&amp; parseInt(${PODVisitor/Latitude}) > 0 &amp;&amp; parseInt(${PODVisitor/Longitude}) > 0 }"
 											press="onNavigate" type="Transparent"/>
-										<Button icon="sap-icon://message-popup" press="onMessage" type="Transparent"/>
+										<!--<Button icon="sap-icon://message-popup" press="onMessage" type="Transparent"/>-->
+										<Button icon="sap-icon://BusinessSuiteInAppSymbols/icon-ab-testing" press="onMessage" type="Transparent" tooltip="message"/>
 										<Button icon="sap-icon://comment" press="onComment" type="Transparent"/>
 									</cells>
 								</ColumnListItem>
