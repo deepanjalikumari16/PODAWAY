@@ -12,14 +12,6 @@
 			</SearchField>
 		</l:VerticalLayout>
 		<content>
-			<!--<OverflowToolbar>-->
-			<!--	<ToolbarSpacer/>-->
-			<!--	<Button text="{i18n>btnAdd}" visible="{= ${worklistView>/loggedRoleId} === 1 }" icon="sap-icon://add" press="onAdd">-->
-			<!--		<layoutData>-->
-			<!--			<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>-->
-			<!--		</layoutData>-->
-			<!--	</Button>-->
-			<!--</OverflowToolbar>-->
 			<Table id="table" width="auto" visible="{= !${worklistView>/bShowVolunteer} }"
 				items="{ path: '/UserSet', filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path : 'RoleId' , operator : 'EQ' , value1 : 1 } ], sorter: { path: 'Id', descending: false } }"
 				noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
@@ -28,6 +20,11 @@
 					<OverflowToolbar>
 						<Title id="tableHeader" text="{worklistView>/worklistTableTitle}" level="H3"/>
 						<ToolbarSpacer/>
+						<Button text="{i18n>btnRefresh}" icon="sap-icon://refresh" press="onRefreshView">
+							<layoutData>
+								<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
+							</layoutData>
+						</Button>
 						<Button text="{i18n>btnAdd}" visible="{= ${worklistView>/loggedRoleId} === 1 }" icon="sap-icon://add" press="onAdd">
 							<layoutData>
 								<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
@@ -68,8 +65,8 @@
 							<Text text="{LastName}"/>
 							<Text text="{Mobile}"/>
 							<Text text="{Email}"/>
-							<Button icon="sap-icon://BusinessSuiteInAppSymbols/icon-ab-testing" press="onMessage" visible="{= ${worklistView>/loggedUserId} !== ${Id} }"
-								type="Transparent" tooltip="message"/>
+							<Button icon="sap-icon://email" press="onMessage" visible="{= ${worklistView>/loggedUserId} !== ${Id} }" type="Transparent"
+								tooltip="message"/>
 							<Button icon="sap-icon://comment" press="onComment" type="Transparent"/>
 							<Button icon="sap-icon://edit" enabled="{= ${worklistView>/selectId} !== '3' }" press="onEdit" type="Transparent"/>
 							<Button icon="sap-icon://delete" visible="{= ${worklistView>/loggedUserId} !== ${Id} }" press="onDelete" type="Transparent" tooltip="remove"/>
@@ -88,6 +85,11 @@
 							<headerToolbar>
 								<OverflowToolbar>
 									<ToolbarSpacer/>
+									<Button text="{i18n>btnRefresh}" icon="sap-icon://refresh" press="onRefreshView">
+										<layoutData>
+											<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
+										</layoutData>
+									</Button>
 									<Button text="{i18n>btnAdd}" visible="{= ${worklistView>/loggedRoleId} === 1 || ${worklistView>/loggedRoleId} === 2}" icon="sap-icon://add"
 										press="onAdd">
 										<layoutData>
@@ -143,11 +145,11 @@
 										<Button text="{= ${Specialities}.length }" visible="{= ${Specialities}.length !== 0}" press="onSpeciality"/>
 										<ObjectStatus text="{VolunteerAssignment/ServiceType/IncidentType/IncidentType}"
 											state="{= ${VolunteerAssignment/ServiceType/IncidentType/IncidentType} === 'Emergency' ? 'Error' : 'Success' }"/>
-										<Button icon="sap-icon://BusinessSuiteInAppSymbols/icon-ab-testing" visible="{= ${worklistView>/loggedUserId} !== ${Id} }" press="onMessage"
-											type="Transparent" tooltip="message"/>
+										<Button icon="sap-icon://email" visible="{= ${worklistView>/loggedUserId} !== ${Id} }" press="onMessage" type="Transparent"
+											tooltip="message"/>
 										<Button icon="sap-icon://comment" press="onComment" type="Transparent"/>
 										<Button icon="sap-icon://edit" press="onEdit" type="Transparent"/>
-										<Button icon="sap-icon://delete" visible="{= ${worklistView>/loggedUserId} !== ${Id} }" press="onDelete" type="Transparent" tooltip="remove"/>
+										<Button icon="sap-icon://delete" enabled="{= ${IsAvailable} === true}" press="onDelete" type="Transparent" tooltip="remove"/>
 									</cells>
 								</ColumnListItem>
 							</items>
@@ -161,6 +163,11 @@
 							<headerToolbar>
 								<OverflowToolbar>
 									<ToolbarSpacer/>
+									<Button text="{i18n>btnRefresh}" icon="sap-icon://refresh" press="onRefreshView">
+										<layoutData>
+											<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
+										</layoutData>
+									</Button>
 									<Button text="{i18n>btnAdd}" visible="{= ${worklistView>/loggedRoleId} === 1 || ${worklistView>/loggedRoleId} === 2}" icon="sap-icon://add"
 										press="onAdd">
 										<layoutData>
@@ -207,8 +214,8 @@
 										<Button text="{= ${Specialities}.length }" visible="{= ${Specialities}.length !== 0}" press="onSpeciality"/>
 										<ObjectStatus text="{VolunteerAssignment/ServiceType/IncidentType/IncidentType}"
 											state="{= ${VolunteerAssignment/ServiceType/IncidentType/IncidentType} === 'Emergency' ? 'Error' : 'Success' }"/>
-										<Button icon="sap-icon://BusinessSuiteInAppSymbols/icon-ab-testing" visible="{= ${worklistView>/loggedUserId} !== ${Id} }" press="onMessage"
-											type="Transparent" tooltip="message"/>
+										<Button icon="sap-icon://email" visible="{= ${worklistView>/loggedUserId} !== ${Id} }" press="onMessage" type="Transparent"
+											tooltip="message"/>
 										<Button icon="sap-icon://comment" press="onComment" type="Transparent"/>
 										<Button icon="sap-icon://edit" press="onEdit" type="Transparent"/>
 										<Button icon="sap-icon://delete" visible="{= ${worklistView>/loggedUserId} !== ${Id} }" press="onDelete" type="Transparent" tooltip="remove"/>
@@ -225,6 +232,11 @@
 							<headerToolbar>
 								<OverflowToolbar>
 									<ToolbarSpacer/>
+									<Button text="{i18n>btnRefresh}" icon="sap-icon://refresh" press="onRefreshView">
+										<layoutData>
+											<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
+										</layoutData>
+									</Button>
 									<Button text="{i18n>btnAdd}" visible="{= ${worklistView>/loggedRoleId} === 1 || ${worklistView>/loggedRoleId} === 2}" icon="sap-icon://add"
 										press="onAdd">
 										<layoutData>
@@ -234,13 +246,13 @@
 								</OverflowToolbar>
 							</headerToolbar>
 							<columns>
-								<Column width="15%">
+								<Column width="19%">
 									<Text text="{i18n>colFirstName}"/>
 								</Column>
 								<Column width="11%">
 									<Text text="{i18n>colLastName}"/>
 								</Column>
-								<Column width="15%">
+								<Column width="19%">
 									<Text text="{i18n>colPodAssigned}"/>
 								</Column>
 								<Column width="10%">
@@ -261,9 +273,6 @@
 								<Column width="5%">
 									<Text text="{i18n>colEdit}"/>
 								</Column>
-								<Column width="8%">
-									<Text text="{i18n>colRemove}"/>
-								</Column>
 							</columns>
 							<items>
 								<ColumnListItem>
@@ -276,11 +285,10 @@
 										<Button text="{= ${Specialities}.length }" visible="{= ${Specialities}.length !== 0}" press="onSpeciality"/>
 										<ObjectStatus text="{VolunteerAssignment/ServiceType/IncidentType/IncidentType}"
 											state="{= ${VolunteerAssignment/ServiceType/IncidentType/IncidentType} === 'Emergency' ? 'Error' : 'Success' }"/>
-										<Button icon="sap-icon://BusinessSuiteInAppSymbols/icon-ab-testing" visible="{= ${worklistView>/loggedUserId} !== ${Id} }" press="onMessage"
-											type="Transparent" tooltip="message"/>
+										<Button icon="sap-icon://email" visible="{= ${worklistView>/loggedUserId} !== ${Id} }" press="onMessage" type="Transparent"
+											tooltip="message"/>
 										<Button icon="sap-icon://comment" press="onComment" type="Transparent"/>
 										<Button icon="sap-icon://edit" press="onEdit" type="Transparent"/>
-										<Button icon="sap-icon://delete" visible="{= ${worklistView>/loggedUserId} !== ${Id} }" press="onDelete" type="Transparent" tooltip="remove"/>
 									</cells>
 								</ColumnListItem>
 							</items>

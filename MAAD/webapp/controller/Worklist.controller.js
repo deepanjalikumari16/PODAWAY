@@ -65,6 +65,8 @@ sap.ui.define([
 					success: function (data) {
 						oViewModel.setProperty("/loggedUserId", data.results[0].Id);
 						oViewModel.setProperty("/loggedRoleId", data.results[0].RoleId);
+						
+						dat.getModel("appView").setProperty("/loggedRoleId", data.results[0].RoleId);
 					}
 				});
 			});
@@ -256,7 +258,6 @@ sap.ui.define([
 		},
 
 		onMessage: function (oEvent) {
-			debugger;
 			var oView = this.getView();
 			var sPath = oEvent.getSource().getBindingContext().getPath();
 			var data = this.getModel().getData(sPath);
@@ -285,7 +286,6 @@ sap.ui.define([
 		},
 
 		send: function () {
-			debugger;
 			var enteredMessage = this.getModel("worklistView").getProperty("/message");
 			if (enteredMessage === null || enteredMessage === "") {
 				this.showToast.call(this, "MSG_ENTER_MESSAGE");
@@ -444,6 +444,11 @@ sap.ui.define([
 
 		onAdd: function (oEvent) {
 			this.getRouter().navTo("createObject");
+		},
+		
+		onRefreshView: function () {
+			var oModel = this.getModel();
+			oModel.refresh(true);
 		},
 
 		onSearch: function (oEvent) {

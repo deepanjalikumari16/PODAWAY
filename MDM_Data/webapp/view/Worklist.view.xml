@@ -9,17 +9,21 @@
 			</f:DynamicPageTitle>
 		</f:title>
 		<f:content>
-			<IconTabBar id="idIconTabBar3" expanded="{device>/isNoPhone}" class="sapUiResponsiveContentPadding">
+			<IconTabBar id="idIconTabBar3" expanded="{device>/isNoPhone}" class="sapUiResponsiveContentPadding mdm-data-tab">
 				<items>
 					<IconTabFilter text="{worklistView>/masterService}" key="Service">
 						<Table id="table" width="auto"
-							items="{ path: '/MasterServiceTypeSet', parameters : { expand : 'Navigation,IncidentType' }, filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false } ] }"
+							items="{ path: '/MasterServiceTypeSet', parameters : { expand : 'Navigation,IncidentType' }, filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path : 'IsChild' , operator : 'EQ' , value1 : false } ] }"
 							noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
 							updateFinished=".onUpdateFinished">
 							<headerToolbar>
 								<OverflowToolbar>
-									<Title id="tableHeader" text="{worklistView>/worklistTableTitle}" level="H3"/>
 									<ToolbarSpacer/>
+									<Button text="{i18n>btnRefresh}" icon="sap-icon://refresh" press="onRefreshView">
+										<layoutData>
+											<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
+										</layoutData>
+									</Button>
 								</OverflowToolbar>
 							</headerToolbar>
 							<columns>
@@ -47,7 +51,6 @@
 								<Column width="5%">
 									<Text text="{i18n>colEdit}"/>
 								</Column>
-							
 							</columns>
 							<items>
 								<ColumnListItem>
@@ -72,8 +75,12 @@
 							updateFinished=".onUpdateFinished1">
 							<headerToolbar>
 								<OverflowToolbar>
-									<Title id="tableHeader1" text="{worklistView>/worklistTableTitle}" level="H3"/>
 									<ToolbarSpacer/>
+									<Button text="{i18n>btnRefresh}" icon="sap-icon://refresh" press="onRefreshView">
+										<layoutData>
+											<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
+										</layoutData>
+									</Button>
 								</OverflowToolbar>
 							</headerToolbar>
 							<columns>
@@ -101,8 +108,12 @@
 							updateFinished=".onUpdateFinished2">
 							<headerToolbar>
 								<OverflowToolbar>
-									<Title id="tableHeader2" text="{worklistView>/worklistTableTitle}" level="H3"/>
 									<ToolbarSpacer/>
+									<Button text="{i18n>btnRefresh}" icon="sap-icon://refresh" press="onRefreshView">
+										<layoutData>
+											<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
+										</layoutData>
+									</Button>
 								</OverflowToolbar>
 							</headerToolbar>
 							<columns>
@@ -130,8 +141,12 @@
 							updateFinished=".onUpdateFinished3">
 							<headerToolbar>
 								<OverflowToolbar>
-									<Title id="tableHeader3" text="{worklistView>/worklistTableTitle}" level="H3"/>
 									<ToolbarSpacer/>
+									<Button text="{i18n>btnRefresh}" icon="sap-icon://refresh" press="onRefreshView">
+										<layoutData>
+											<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
+										</layoutData>
+									</Button>
 								</OverflowToolbar>
 							</headerToolbar>
 							<columns>
@@ -163,8 +178,12 @@
 							updateFinished=".onUpdateFinished4">
 							<headerToolbar>
 								<OverflowToolbar>
-									<Title id="tableHeader4" text="{worklistView>/worklistTableTitle}" level="H3"/>
 									<ToolbarSpacer/>
+									<Button text="{i18n>btnRefresh}" icon="sap-icon://refresh" press="onRefreshView">
+										<layoutData>
+											<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
+										</layoutData>
+									</Button>
 								</OverflowToolbar>
 							</headerToolbar>
 							<columns>
@@ -212,8 +231,12 @@
 							updateFinished=".onUpdateFinished5">
 							<headerToolbar>
 								<OverflowToolbar>
-									<Title id="tableHeader5" text="{worklistView>/worklistTableTitle}" level="H3"/>
 									<ToolbarSpacer/>
+									<Button text="{i18n>btnRefresh}" icon="sap-icon://refresh" press="onRefreshView">
+										<layoutData>
+											<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
+										</layoutData>
+									</Button>
 								</OverflowToolbar>
 							</headerToolbar>
 							<columns>
@@ -252,8 +275,12 @@
 							updateFinished=".onUpdateFinished6">
 							<headerToolbar>
 								<OverflowToolbar>
-									<Title id="tableHeader6" text="{worklistView>/worklistTableTitle}" level="H3"/>
 									<ToolbarSpacer/>
+									<Button text="{i18n>btnRefresh}" icon="sap-icon://refresh" press="onRefreshView">
+										<layoutData>
+											<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
+										</layoutData>
+									</Button>
 								</OverflowToolbar>
 							</headerToolbar>
 							<columns>
@@ -288,8 +315,12 @@
 							updateFinished=".onUpdateFinished7">
 							<headerToolbar>
 								<OverflowToolbar>
-									<Title id="tableHeader7" text="{worklistView>/worklistTableTitle}" level="H3"/>
 									<ToolbarSpacer/>
+									<Button text="{i18n>btnRefresh}" icon="sap-icon://refresh" press="onRefreshView">
+										<layoutData>
+											<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
+										</layoutData>
+									</Button>
 								</OverflowToolbar>
 							</headerToolbar>
 							<columns>
@@ -316,8 +347,12 @@
 							updateFinished=".onUpdateFinished8">
 							<headerToolbar>
 								<OverflowToolbar>
-									<Title id="tableHeader8" text="{worklistView>/worklistTableTitle}" level="H3"/>
 									<ToolbarSpacer/>
+									<Button text="{i18n>btnRefresh}" icon="sap-icon://refresh" press="onRefreshView">
+										<layoutData>
+											<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
+										</layoutData>
+									</Button>
 								</OverflowToolbar>
 							</headerToolbar>
 							<columns>
@@ -332,6 +367,39 @@
 								<ColumnListItem>
 									<cells>
 										<Text text="{Category}"/>
+										<Button icon="sap-icon://edit" press="onEdit" type="Transparent"/>
+									</cells>
+								</ColumnListItem>
+							</items>
+						</Table>
+					</IconTabFilter>
+					<IconTabFilter text="{worklistView>/speciality}" key="Speciality">
+						<Table id="table9" width="auto"
+							items="{ path: '/MasterSpecialitySet', filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false } ] }"
+							noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
+							updateFinished=".onUpdateFinished9">
+							<headerToolbar>
+								<OverflowToolbar>
+									<ToolbarSpacer/>
+									<Button text="{i18n>btnRefresh}" icon="sap-icon://refresh" press="onRefreshView">
+										<layoutData>
+											<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
+										</layoutData>
+									</Button>
+								</OverflowToolbar>
+							</headerToolbar>
+							<columns>
+								<Column width="95%">
+									<Text text="{i18n>colSpeciality}"/>
+								</Column>
+								<Column width="5%">
+									<Text text="{i18n>colEdit}"/>
+								</Column>
+							</columns>
+							<items>
+								<ColumnListItem>
+									<cells>
+										<Text text="{Speciality}"/>
 										<Button icon="sap-icon://edit" press="onEdit" type="Transparent"/>
 									</cells>
 								</ColumnListItem>

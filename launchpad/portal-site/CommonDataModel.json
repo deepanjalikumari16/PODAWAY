@@ -14,7 +14,10 @@
 				"i18n": "i18n/defaultCatalogId.properties"
 			},
 			"payload": {
-				"viz": []
+				"viz": [{
+					"id": "com.coil.podium.Plugin",
+					"vizId": "Shell-plugin"
+				}]
 			}
 		}],
 		"groups": [{
@@ -26,7 +29,7 @@
 				"i18n": "i18n/defaultGroupId.properties"
 			},
 			"payload": {
-			"viz": [{
+				"viz": [{
 					"id": "com.coil.podium.MAACDE-0-1597672368722",
 					"appId": "com.coil.podium.MAACDE",
 					"vizId": "Manage-Device"
@@ -61,8 +64,9 @@
 								"componentData": {
 									"config": {
 										"applications": {
-											"Shell-home": {}
-										}
+											"Shell-home": {},
+											"Shell-plugin":{}	
+											}
 									}
 								}
 							}

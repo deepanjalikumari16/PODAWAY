@@ -1,6 +1,7 @@
 {
   "welcomeFile": "/cp.portal",
   "authenticationMethod": "route",
+  "sessionTimeout": 20,
   "logout": {
     "logoutEndpoint": "/do/logout"
   },

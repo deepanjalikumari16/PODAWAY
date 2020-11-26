@@ -114,7 +114,7 @@ sap.ui.define([
 				});
 				that.getModel().read(sObjectPath, {
 					urlParameters: {
-						"$expand": "Highlights"
+						"$expand": "Images,Highlights"
 					},
 					// success: this._setView.bind(this)
 					success: function (data) {
@@ -144,11 +144,13 @@ sap.ui.define([
 		_setView: function (data) {
 			//Remove older UI control messages
 			this._oMessageManager.removeAllMessages();
-
+			//Reset del array 
+			this._pendingDelOps = [];
+			
 			var oViewModel = this.getModel("objectView");
 			oViewModel.setProperty("/busy", false);
 			if (data) {
-
+				oViewModel.setProperty("/oImages", data.Images.results);
 				oViewModel.setProperty("/oDetails", data);
 				oViewModel.setProperty("/oDetails/Highlights", data.Highlights.results);
 
@@ -245,6 +247,47 @@ sap.ui.define([
 				}
 			})
 		},
+		/* 
+		 * Called on delete of file from list
+		 * @param oEvent: to retrieve listitem info
+		 */
+		onDelete: function (oEvent) {
+			var oViewModel = this.getModel("objectView"),
+				oItemBindingContext = oEvent.getParameter("listItem").getBindingContext("objectView"),
+				iIndex = +(oItemBindingContext.getPath().match(/(\d+)/)[0]);
+			if (oViewModel.getProperty("/sMode") === "E" && oItemBindingContext.getProperty("Id") !== undefined) {
+				this._pendingDelOps.push(oItemBindingContext.getProperty("Id"));
+			}
+
+			oViewModel.getProperty("/oImages").splice(iIndex, 1);
+			oViewModel.refresh();
+
+		},
+		/** 
+		 * 
+		 * @param oEvent: having source and file info 
+		 */
+		onUpload: function (oEvent) {
+			var oFile = oEvent.getSource().FUEl.files[0],
+				oCtrl = oEvent.getSource();
+			this.getImageBinary(oFile).then(this._fnAddFile.bind(this, oCtrl));
+		},
+		
+		_fnAddFile: function (oCtrl, oItem) {
+			var iIndex = oItem.Image.search(",") + 1;
+			var oImageData = {
+					Image: oItem.Image.slice(iIndex),
+					FileName: oItem.name,
+					FileType: "image/png",
+					IsArchived: false
+				};
+				this.getModel("objectView").getProperty("/oImages").push(oImageData);
+		
+
+			oCtrl.clear();
+			this.getModel("objectView").refresh();
+		},
+		
 		/** 
 		 * Open Map and choose latitude/longitude for a given facility
 		 */
@@ -349,9 +392,9 @@ sap.ui.define([
 		 * Save edit or create Event Info details 
 		 */
 		onSave: function () {
-			
+
 			this._oMessageManager.removeAllMessages();
-			
+
 			var oViewModel = this.getModel("objectView");
 			var oPayload = oViewModel.getProperty("/oDetails");
 			var oValid = this._fnValidation(oPayload);
@@ -360,36 +403,26 @@ sap.ui.define([
 				this.showError(this._fnMsgConcatinator(oValid.sMsg));
 				return;
 			}
+			
+			function _fnError() {
+				oViewModel.setProperty("/busy", false);
+			}
+			
 			oViewModel.setProperty("/busy", true);
-			this.CUOperation(oPayload);
+			this.CUOperation(oPayload).then(this._fnUploadFiles.bind(this), _fnError);
 		},
 
 		onCountryChange: function (oEvent) {
-
-			/*		var oSelectedItem = oEvent.getSource().getSelectedItem();
-					var oObject = oSelectedItem.getBindingContext().getObject();
-					this.getModel("objectView").setProperty("/oDetails/CountryId", oObject.Id);
-					var aTimezones = [];
-					var selectedTimezoneId = this.getModel("objectView").getProperty("/oDetails/TimezoneId");
-					var isFound = false;
-
-					for (var i = 0; i < oObject.Timezones.__list.length; i++) {
-						var sPath = oObject.Timezones.__list[i];
-						aTimezones.push(this.getModel().getData("/" + sPath));
-						if (selectedTimezoneId == aTimezones[i].Id) {
-							isFound = true;
-						}
-					}
-					if (isFound == false && aTimezones.length > 0) {
-						// this.getModel("objectView").setProperty("/oDetails/TimezoneId", null);
-					// 	this.getModel("objectView").refresh();
-						this.getModel("objectView").setProperty("/oDetails/TimezoneId", aTimezones[0].Id);
-					}
-					this.getModel("objectView").setProperty("/aTimezones", aTimezones);*/
 			var oSelectedItem = oEvent.getSource().getSelectedItem();
 			var oObject = oSelectedItem.getBindingContext().getObject();
 			this.bindTimeZoneCtrl(oObject.IsoCode);
 			this.getModel("objectView").setProperty("/oDetails/TimezoneId", null);
+		},
+
+		onChangeTimezone: function (oEvent) {
+			if (oEvent.getParameter("itemPressed") === false) {
+				oEvent.getSource().setValue("");
+			}
 		},
 
 		onUrlValidate: function () {
@@ -546,7 +579,15 @@ sap.ui.define([
 					message: "MSG_VALDTN_ERR_COUNTRY",
 					target: "/oDetails/CountryId"
 				});
-			}
+			} else 
+			if (!data.Title) {
+				oReturn.IsNotValid = true;
+				oReturn.sMsg.push("MSG_VALDTN_ERR_TITLE");
+				aCtrlMessage.push({
+					message: "MSG_VALDTN_ERR_TITLE",
+					target: "/oDetails/Title"
+				});
+			} 
 			if (data.Highlights !== null && data.Highlights.length > 0) {
 				var error = false;
 				for (var i = 0; i < data.Highlights.length; i++) {
@@ -565,55 +606,6 @@ sap.ui.define([
 			if (aCtrlMessage.length) this._genCtrlMessages(aCtrlMessage);
 			return oReturn;
 		},
-
-		// if (data.Name === "") {
-		// 	oReturn.IsNotValid = true;
-		// 	oReturn.sMsg.push("Please enter Name");
-		// } else if (data.StartDate === "") {
-		// 	oReturn.IsNotValid = true;
-		// 	oReturn.sMsg.push("Please enter Start date");
-		// } else if (data.EndDate === "") {
-		// 	oReturn.IsNotValid = true;
-		// 	oReturn.sMsg.push("Please enter End date");
-		// } else if (data.EndDate !== "" && data.EndDate < data.StartDate) {
-		// 	oReturn.IsNotValid = true;
-		// 	oReturn.sMsg.push("End date should be greater than or equal to Start date");
-		// } else if (data.StartTime === "") {
-		// 	oReturn.IsNotValid = true;
-		// 	oReturn.sMsg.push("Please enter Start time");
-		// } else if (data.EndTime === "") {
-		// 	oReturn.IsNotValid = true;
-		// 	oReturn.sMsg.push("Please enter End time");
-		// } else if (data.EndTime < data.StartTime && data.EndDate === data.StartDate) {
-		// 	oReturn.IsNotValid = true;
-		// 	oReturn.sMsg.push("End time should be greater than Start time");
-		// } else if (data.Url !== "" && !url.match(regex)) {
-		// 	oReturn.IsNotValid = true;
-		// 	oReturn.sMsg.push("Please enter valid URL");
-		// } else if (+data.Latitude < -90 || +data.Latitude > 90) {
-		// 	oReturn.IsNotValid = true;
-		// 	oReturn.sMsg.push("Latitude must be between -90 and 90 degrees inclusive");
-		// } else if (+data.Longitude < -180 || +data.Longitude > 180) {
-		// 	oReturn.IsNotValid = true;
-		// 	oReturn.sMsg.push("Longitude must be between -180 and 180 degrees inclusive");
-		// } else if (data.Longitude === "" || data.Latitude === "") {
-		// 	oReturn.IsNotValid = true;
-		// 	oReturn.sMsg.push("Enter a valid Latitude or Longitude!");
-		// } else if (data.CountryId === "") {
-		// 	oReturn.IsNotValid = true;
-		// 	oReturn.sMsg.push("Please select Country");
-		// }
-		// if (data.Highlights !== null && data.Highlights.length > 0) {
-		// 	var error = false;
-		// 	for (var i = 0; i < data.Highlights.length; i++) {
-		// 		var oHighlight = data.Highlights[i];
-		// 		if (oHighlight.Highlight === "" && error === false) {
-		// 			oReturn.IsNotValid = true;
-		// 			error = true;
-		// 			oReturn.sMsg.push("Please remove empty Highlights");
-		// 		}
-		// 	}
-		// }
 
 		_genCtrlMessages: function (aCtrlMsgs) {
 			var that = this,
@@ -689,7 +681,97 @@ sap.ui.define([
 
 			});
 		},
+		
+		_fnUploadFiles: function (data) {
+			var aProms = [],
+				that = this,
+				oDataModel = this.getModel(),
+				oViewModel = this.getModel("objectView");
 
+			//Deletion Operation : if Any
+			if (this._pendingDelOps.length) {
+				this._pendingDelOps.forEach(function (ele) {
+					aProms.push(that._fnDelOp(oDataModel, "/EventImageSet", ele));
+				});
+			}
+
+			//Upload Files check if Id is present
+			oViewModel.getProperty("/oImages").forEach(function (ele) {
+			
+				if (ele.Id === undefined) {
+					ele.EventId = oViewModel.getProperty("/oDetails/Id");
+					aProms.push(that._fnCrOp.call(that, "/EventImageSet", ele));
+				}
+			});
+
+
+			//Collect all request and show success/failure
+			Promise.all(aProms)
+	   			   .then(function () {
+						oViewModel.setProperty("/busy", false);
+						that.showToast.call(that, "MSG_SUCCESS_CREATE");
+						that.onCancel.apply(that);
+					},
+					function () {
+						oViewModel.setProperty("/busy", false);
+					}
+				);
+
+		},
+/** 
+		 * 
+		 * @constructor 
+		 * @param oDataModel ODATAMODEL instance
+		 * @param sEntitySet Entityset path
+		 * @param sId Id to be removed/archived
+		 * @returns Promise to be resolved/rejected
+		 */
+		_fnDelOp: function (oDataModel, sEntitySet, sId) {
+			var ssEntitySet = sEntitySet,
+				ssId = sId,
+				oODataModel = oDataModel;
+
+			return new Promise(function (res, rej) {
+				var sKey = oODataModel.createKey(ssEntitySet, {
+					Id: ssId
+				});
+				oODataModel.update(sKey, {
+					"IsArchived": true
+				}, {
+					success: function () {
+						res();
+					},
+					error: function () {
+						rej();
+					}
+				});
+			});
+
+		},
+		/** 
+		 * 
+		 * @constructor 
+		 * @param sEntitySet Entityset path
+		 * @param data to be created against path
+		 * @returns Promise to be resolved/rejected
+		 */
+		_fnCrOp: function (sEntitySet, data) {
+			var that = this,
+				ssEntitySet = sEntitySet,
+				oData = data;
+			return new Promise(function (res, rej) {
+				that.getModel().create(ssEntitySet, oData, {
+					success: function (data1) {
+			
+						res();
+					},
+					error: function () {
+						rej();
+					}
+				});
+			});
+
+		},
 		/**
 		 * Binds the view to the object path.
 		 * @function
@@ -750,6 +832,27 @@ sap.ui.define([
 				oResourceBundle.getText("shareSendEmailObjectSubject", [sObjectId]));
 			oViewModel.setProperty("/shareSendEmailMessage",
 				oResourceBundle.getText("shareSendEmailObjectMessage", [sObjectName, sObjectId, location.href]));
+		},
+		/** 
+		 * 
+		 * @param oFile
+		 * @returns  Image Binary from file 
+		 */
+		getImageBinary: function (oFile) {
+		var	oFileReader = new FileReader() , 
+			sFileName = oFile.name;
+			return new Promise(function (res, rej) {
+
+				if (!(oFile instanceof File)) {
+					res(oFile);
+					return;
+				}
+
+				oFileReader.onload = function () {
+					res( { Image : oFileReader.result, name:  sFileName} );
+				};
+				oFileReader.readAsDataURL(oFile);
+			});
 		}
 
 	});

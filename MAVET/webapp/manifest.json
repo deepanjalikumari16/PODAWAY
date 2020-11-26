@@ -65,7 +65,6 @@
 		}
 	},
 	"sap.ui5": {
-	 
 		"rootView": {
 			"viewName": "com.coil.podium.MAEVAT.view.App",
 			"type": "XML",
@@ -117,24 +116,36 @@
 				"controlId": "app",
 				"controlAggregation": "pages",
 				"bypassed": {
-					"target": ["notFound"]
+					"target": [
+						"notFound"
+					]
 				},
 				"async": true
 			},
-			"routes": [{
-				"pattern": "",
-				"name": "worklist",
-				"target": ["worklist"]
-			}, {
-				"pattern": "Event/{objectId}",
-				"name": "object",
-				"target": ["object"]
-			}, {
-				"name": "createObject",
-				"pattern": "Event",
-				"greedy": false,
-				"target": ["object"]
-			}],
+			"routes": [
+				{
+					"pattern": "",
+					"name": "worklist",
+					"target": [
+						"worklist"
+					]
+				},
+				{
+					"pattern": "Event/{objectId}",
+					"name": "object",
+					"target": [
+						"object"
+					]
+				},
+				{
+					"name": "createObject",
+					"pattern": "Event",
+					"greedy": false,
+					"target": [
+						"object"
+					]
+				}
+			],
 			"targets": {
 				"worklist": {
 					"viewName": "Worklist",
@@ -158,12 +169,15 @@
 		},
 		"flexEnabled": true,
 		"resources": {
-			"css": [{
-				"uri": "css/style.css"
-			}, {
-				"uri": "css/mapsjs-ui.css",
-				"id": ""
-			}]
+			"css": [
+				{
+					"uri": "css/style.css"
+				},
+				{
+					"uri": "css/mapsjs-ui.css",
+					"id": ""
+				}
+			]
 		}
 	},
 	"sap.platform.hcp": {

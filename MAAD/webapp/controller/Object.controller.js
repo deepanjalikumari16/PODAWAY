@@ -333,6 +333,12 @@ sap.ui.define([
 				},
 				aCtrlMessage = [];
 
+			var email = this.getView().byId("emailInput").getValue();
+			var mailregex = /^\w+[\w-+\.]*\@\w+([-\.]\w+)*\.[a-zA-Z]{2,}$/;
+
+			var mobile = this.getView().byId("mobileInput").getValue();
+			var mobileregex = /^[0-9]{5,15}$/;
+
 			if (!data.RoleId) {
 				oReturn.IsNotValid = true;
 				oReturn.sMsg.push("MSG_VALDTN_ERR_ROLE");
@@ -340,54 +346,48 @@ sap.ui.define([
 					message: "MSG_VALDTN_ERR_ROLE",
 					target: "/oDetails/RoleId"
 				});
-			} else
-			if (!data.FirstName) {
+			} else if (!data.FirstName) {
 				oReturn.IsNotValid = true;
 				oReturn.sMsg.push("MSG_VALDTN_ERR_FNAME");
 				aCtrlMessage.push({
 					message: "MSG_VALDTN_ERR_FNAME",
 					target: "/oDetails/FirstName"
 				});
-			} else
-			if (!data.LastName) {
+			} else if (!data.LastName) {
 				oReturn.IsNotValid = true;
 				oReturn.sMsg.push("MSG_VALDTN_ERR_LNAME");
 				aCtrlMessage.push({
 					message: "MSG_VALDTN_ERR_LNAME",
 					target: "/oDetails/LastName"
 				});
-			} else
-			if (!data.Email) {
+			} else if (!data.Email) {
 				oReturn.IsNotValid = true;
 				oReturn.sMsg.push("MSG_VALDTN_ERR_EMAIL");
 				aCtrlMessage.push({
 					message: "MSG_VALDTN_ERR_EMAIL",
 					target: "/oDetails/Email"
 				});
-			} else
-			if (data.Email) {
-				var email = this.getView().byId("emailInput").getValue();
-				var mailregex = /^\w+[\w-+\.]*\@\w+([-\.]\w+)*\.[a-zA-Z]{2,}$/;
-				if (!mailregex.test(email)) {
-					oReturn.IsNotValid = true;
-					oReturn.sMsg.push("MSG_INVALID_EMAIL");
-					aCtrlMessage.push({
-						message: "MSG_INVALID_EMAIL",
-						target: "/oDetails/Email"
-					});
-				}
-			} else
-			if (data.Mobile) {
-				var mobile = this.getView().byId("mobileInput").getValue();
-				var mobileregex = /^[0-9]{5,15}$/;
-				if (!mobileregex.test(mobile)) {
-					oReturn.IsNotValid = true;
-					oReturn.sMsg.push("MSG_INVALID_MOBILE");
-					aCtrlMessage.push({
-						message: "MSG_INVALID_MOBILE",
-						target: "/oDetails/Mobile"
-					});
-				}
+			} else if (data.Email && !mailregex.test(email)) {
+				oReturn.IsNotValid = true;
+				oReturn.sMsg.push("MSG_INVALID_EMAIL");
+				aCtrlMessage.push({
+					message: "MSG_INVALID_EMAIL",
+					target: "/oDetails/Email"
+				});
+			} else if (data.Mobile && !mobileregex.test(mobile)) {
+				oReturn.IsNotValid = true;
+				oReturn.sMsg.push("MSG_INVALID_MOBILE");
+				aCtrlMessage.push({
+					message: "MSG_INVALID_MOBILE",
+					target: "/oDetails/Mobile"
+				});
+			} else if (!data.ManagerId && data.RoleId === 4) {
+				oReturn.IsNotValid = true;
+				oReturn.sMsg.push("MSG_INVALID_TEAM_MANAGER");
+				aCtrlMessage.push({
+					message: "MSG_INVALID_TEAM_MANAGER",
+					target: "/oDetails/ManagerId"
+				});
 			}
 
 			if (aCtrlMessage.length) this._genCtrlMessages(aCtrlMessage);

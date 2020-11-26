@@ -36,13 +36,23 @@
 			</f:DynamicPageHeader>
 		</f:header>
 		<f:content>
-			<IconTabBar id="idIconTabBar3" expanded="{device>/isNoPhone}" class="sapUiResponsiveContentPadding">
+			<IconTabBar id="idIconTabBar3" expanded="{device>/isNoPhone}" class="sapUiResponsiveContentPadding assignment-tab">
 				<items>
 					<IconTabFilter text="{worklistView>/pending}">
 						<Table id="table" width="auto"
-							items="{ path: '/AssignmentSet', parameters : { expand : 'PODVisitor,Assignee,AssignmentStatus,ServiceType/IncidentType,PODConditions' }, filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path : 'AssignmentStatusId' , operator : 'EQ' , value1 : 1 }] }"
+							items="{ path: '/AssignmentSet', parameters : { expand : 'PODVisitor,Assignee,AssignmentStatus,ServiceType/IncidentType,PODConditions' }, filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path : 'AssignmentStatusId' , operator : 'EQ' , value1 : 1 }], sorter: { path: 'UpdatedAt', descending: true } }"
 							noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
 							updateFinished=".onUpdateFinished">
+							<headerToolbar>
+								<OverflowToolbar>
+									<ToolbarSpacer/>
+									<Button text="{i18n>btnRefresh}" icon="sap-icon://refresh" press="onRefreshView">
+										<layoutData>
+											<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
+										</layoutData>
+									</Button>
+								</OverflowToolbar>
+							</headerToolbar>
 							<columns>
 								<Column width="13%">
 									<Text text="{i18n>colAssignment}"/>
@@ -85,14 +95,17 @@
 										<HBox>
 											<!--<Button text="{i18n>btnReassign}" press="onAssignNow" visible="{= ${worklistView>/loggedUserRoleId} === 1 && ${AssigneeId} !== null}"-->
 											<!--	class="sapUiSmallMarginEnd"/>-->
-											<Button text="{i18n>btnAssignNow}" visible="{= ${worklistView>/loggedUserRoleId} === 1 &amp;&amp; ${AssigneeId} === null}" press="onAssignNow"/>
-											<Button text="{i18n>btnReassign}" visible="{= (${worklistView>/loggedUserRoleId} === 1 || ${worklistView>/loggedUserRoleId} === 2) &amp;&amp; ${AssigneeId} !== null}" press="onAssignNow" class="sapUiSmallMarginEnd"/>
+											<Button text="{i18n>btnAssignNow}" visible="{= ${worklistView>/loggedUserRoleId} === 1 &amp;&amp; ${AssigneeId} === null}"
+												press="onAssignNow"/>
+											<Button text="{i18n>btnReassign}"
+												visible="{= (${worklistView>/loggedUserRoleId} === 1 || ${worklistView>/loggedUserRoleId} === 2) &amp;&amp; ${AssigneeId} !== null}"
+												press="onAssignNow" class="sapUiSmallMarginEnd"/>
 											<Button text="{i18n>btnStartAssignment}" visible="{= ${worklistView>/loggedUserRoleId} === 2}" press="onStartAssignment"/>
 										</HBox>
 										<Button icon="sap-icon://locate-me"
 											enabled="{= ${PODVisitor} !== null &amp;&amp; parseInt(${PODVisitor/Latitude}) > 0 &amp;&amp; parseInt(${PODVisitor/Longitude}) > 0 }"
 											press="onNavigate" type="Transparent"/>
-										<Button icon="sap-icon://BusinessSuiteInAppSymbols/icon-ab-testing" press="onMessage" type="Transparent" tooltip="message"/>
+										<Button icon="sap-icon://email" press="onMessage" type="Transparent" tooltip="message"/>
 										<Button icon="sap-icon://comment" press="onComment" type="Transparent"/>
 									</cells>
 								</ColumnListItem>
@@ -104,6 +117,16 @@
 							items="{ path: '/AssignmentSet', parameters : { expand : 'PODVisitor,Assignee,AssignmentStatus,ServiceType/IncidentType,PODConditions' }, filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path : 'AssignmentStatusId' , operator : 'EQ' , value1 : 2 } ] }"
 							noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
 							updateFinished=".onUpdateFinished1">
+							<headerToolbar>
+								<OverflowToolbar>
+									<ToolbarSpacer/>
+									<Button text="{i18n>btnRefresh}" icon="sap-icon://refresh" press="onRefreshView">
+										<layoutData>
+											<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
+										</layoutData>
+									</Button>
+								</OverflowToolbar>
+							</headerToolbar>
 							<columns>
 								<Column width="20%">
 									<Text text="{i18n>colAssignment}"/>
@@ -145,7 +168,7 @@
 										<Button icon="sap-icon://locate-me"
 											enabled="{= ${PODVisitor} !== null &amp;&amp; parseInt(${PODVisitor/Latitude}) > 0 &amp;&amp; parseInt(${PODVisitor/Longitude}) > 0 }"
 											press="onNavigate" type="Transparent"/>
-										<Button icon="sap-icon://BusinessSuiteInAppSymbols/icon-ab-testing" press="onMessage" type="Transparent" tooltip="message"/>
+										<Button icon="sap-icon://email" press="onMessage" type="Transparent" tooltip="message"/>
 										<Button icon="sap-icon://comment" press="onComment" type="Transparent"/>
 									</cells>
 								</ColumnListItem>
@@ -157,6 +180,16 @@
 							items="{ path: '/AssignmentSet', parameters : { expand : 'PODVisitor,Assignee,AssignmentStatus,ServiceType/IncidentType,PODConditions' }, filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path : 'AssignmentStatusId' , operator : 'EQ' , value1 : 3 } ] }"
 							noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
 							updateFinished=".onUpdateFinished2">
+							<headerToolbar>
+								<OverflowToolbar>
+									<ToolbarSpacer/>
+									<Button text="{i18n>btnRefresh}" icon="sap-icon://refresh" press="onRefreshView">
+										<layoutData>
+											<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
+										</layoutData>
+									</Button>
+								</OverflowToolbar>
+							</headerToolbar>
 							<columns>
 								<Column width="20%">
 									<Text text="{i18n>colAssignment}"/>
@@ -195,7 +228,7 @@
 										<Button icon="sap-icon://locate-me"
 											enabled="{= ${PODVisitor} !== null &amp;&amp; parseInt(${PODVisitor/Latitude}) > 0 &amp;&amp; parseInt(${PODVisitor/Longitude}) > 0 }"
 											press="onNavigate" type="Transparent"/>
-										<Button icon="sap-icon://BusinessSuiteInAppSymbols/icon-ab-testing" press="onMessage" type="Transparent" tooltip="message"/>
+										<Button icon="sap-icon://email" press="onMessage" type="Transparent" tooltip="message"/>
 										<Button icon="sap-icon://comment" press="onComment" type="Transparent"/>
 									</cells>
 								</ColumnListItem>
@@ -207,6 +240,16 @@
 							items="{ path: '/AssignmentSet', parameters : { expand : 'PODVisitor,Assignee,AssignmentStatus,ServiceType/IncidentType,PODConditions' }, filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path : 'AssignmentStatusId' , operator : 'EQ' , value1 : 4 } ] }"
 							noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
 							updateFinished=".onUpdateFinished3">
+							<headerToolbar>
+								<OverflowToolbar>
+									<ToolbarSpacer/>
+									<Button text="{i18n>btnRefresh}" icon="sap-icon://refresh" press="onRefreshView">
+										<layoutData>
+											<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
+										</layoutData>
+									</Button>
+								</OverflowToolbar>
+							</headerToolbar>
 							<columns>
 								<Column width="20%">
 									<Text text="{i18n>colAssignment}"/>
@@ -246,7 +289,7 @@
 											enabled="{= ${PODVisitor} !== null &amp;&amp; parseInt(${PODVisitor/Latitude}) > 0 &amp;&amp; parseInt(${PODVisitor/Longitude}) > 0 }"
 											press="onNavigate" type="Transparent"/>
 										<!--<Button icon="sap-icon://message-popup" press="onMessage" type="Transparent"/>-->
-										<Button icon="sap-icon://BusinessSuiteInAppSymbols/icon-ab-testing" press="onMessage" type="Transparent" tooltip="message"/>
+										<Button icon="sap-icon://email" press="onMessage" type="Transparent" tooltip="message"/>
 										<Button icon="sap-icon://comment" press="onComment" type="Transparent"/>
 									</cells>
 								</ColumnListItem>

@@ -7,7 +7,7 @@
 				<f:content>
 					<Label text="{i18n>colVolunteer}"/>
 					<ComboBox id="dropdown" selectedKey="{worklistView>/volunteerId}"
-						items="{ path: '/UserSet', filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path : 'RoleId', operator : 'EQ', value1 : 4 }, { path : 'IsAvailable' , operator : 'EQ' , value1 : true } } ] }">
+						items="{ path: '/UserSet', filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path : 'RoleId', operator : 'EQ', value1 : 4 }, { path : 'IsAvailable' , operator : 'EQ' , value1 : true } ] }">
 						<core:Item key="{Id}" text="{FirstName} {LastName}"/>
 						<!--{ path : 'ManagerId' , operator : 'EQ' , value1 : ${worklistView>/loggedUserId} }-->
 					</ComboBox>

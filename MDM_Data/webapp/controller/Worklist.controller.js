@@ -106,6 +106,7 @@ sap.ui.define([
 				icon: "sap-icon://table-view",
 				intent: "#MasterDataManagement-display"
 			}, true);
+			
 		},
 
 		/* =========================================================== */
@@ -256,6 +257,21 @@ sap.ui.define([
 			this.getModel("worklistView").setProperty("/category", scategoryTitle);
 		},
 
+		onUpdateFinished9: function (oEvent) {
+			// update the worklist's object counter after the table update
+			var sspecialityTitle,
+				oTable9 = oEvent.getSource(),
+				iTotalItems9 = oEvent.getParameter("total");
+			// only update the counter if the length is final and
+			// the table is not empty
+			if (iTotalItems9 && oTable9.getBinding("items").isLengthFinal()) {
+				sspecialityTitle = this.getResourceBundle().getText("specialityCount", [iTotalItems9]);
+			} else {
+				sspecialityTitle = this.getResourceBundle().getText("speciality");
+			}
+			this.getModel("worklistView").setProperty("/speciality", sspecialityTitle);
+		},
+
 		/**
 		 * Event handler when a table item gets pressed
 		 * @param {sap.ui.base.Event} oEvent the table selectionChange event
@@ -368,7 +384,6 @@ sap.ui.define([
 				//24.962762, 55.147110
 				// Instantiate (and display) a map object:
 				this.getView().byId("map");
-				debugger;
 				var map = new H.Map(
 					document.getElementById("map"),
 					maptypes.vector.normal.map, {
@@ -461,34 +476,44 @@ sap.ui.define([
 				Navigation: false,
 				Building: false,
 				Theme: false,
-				Category: false
+				Category: false,
+				Speciality: false
 			};
-			bEditOptions[sSelectedKey] = true;
-			oViewModel.setProperty("/bEditOptions", bEditOptions);
-			//Set Data to dialog
-			var data = oEvent.getSource().getBindingContext().getObject();
-
-			oViewModel.setProperty("/oEditData", data);
-			oViewModel.setProperty("/sEditPath", oEvent.getSource().getBindingContext().getPath());
-
-			oViewModel.setProperty("/sDialogTitle", sSelectedKey);
-
-			var oView = this.getView();
-
-			if (!this.byId("detailsDialog")) {
-				// load asynchronous XML fragment
-				Fragment.load({
-					id: oView.getId(),
-					name: "com.coil.podium.MDM_Data.dialog.details",
-					controller: this
-				}).then(function (oDialog) {
-					// connect dialog to the root view of this component (models, lifecycle)
-					oView.addDependent(oDialog);
-					oDialog.open();
-				});
+			if (sSelectedKey === "Service") {
+				this._showObject(oEvent.getSource());
 			} else {
-				this.byId("detailsDialog").open();
+				bEditOptions[sSelectedKey] = true;
+				oViewModel.setProperty("/bEditOptions", bEditOptions);
+				//Set Data to dialog
+				var data = oEvent.getSource().getBindingContext().getObject();
+
+				oViewModel.setProperty("/oEditData", data);
+				oViewModel.setProperty("/sEditPath", oEvent.getSource().getBindingContext().getPath());
+
+				oViewModel.setProperty("/sDialogTitle", sSelectedKey);
+
+				var oView = this.getView();
+
+				if (!this.byId("detailsDialog")) {
+					// load asynchronous XML fragment
+					Fragment.load({
+						id: oView.getId(),
+						name: "com.coil.podium.MDM_Data.dialog.details",
+						controller: this
+					}).then(function (oDialog) {
+						// connect dialog to the root view of this component (models, lifecycle)
+						oView.addDependent(oDialog);
+						oDialog.open();
+					});
+				} else {
+					this.byId("detailsDialog").open();
+				}
 			}
+		},
+
+		onRefreshView: function () {
+			var oModel = this.getModel();
+			oModel.refresh(true);
 		},
 		/**
 		 * Event handler when the share in JAM button has been clicked
@@ -509,10 +534,32 @@ sap.ui.define([
 			this.getImageBinary(oFile).then(this._fnAddFile.bind(this));
 		},
 
+		onAfterRendering: function () {
+			//Init Validation framework
+			this._initMessage();
+		},
+
+		_initMessage: function () {
+			//MessageProcessor could be of two type, Model binding based and Control based
+			//we are using Model-binding based here
+			var oMessageProcessor = this.getModel("worklistView");
+			this._oMessageManager = sap.ui.getCore().getMessageManager();
+			this._oMessageManager.registerMessageProcessor(oMessageProcessor);
+		},
+
 		onSave: function (oEvent) {
+
+			this._oMessageManager.removeAllMessages();
+
 			var oViewModel = this.getModel("worklistView"),
 				data = oViewModel.getProperty("/oEditData"),
 				sPath = oViewModel.getProperty("/sEditPath");
+
+			var oValid = this._fnValidation(data);
+			if (oValid.IsNotValid) {
+				this.showError(this._fnMsgConcatinator(oValid.sMsg));
+				return;
+			}
 
 			delete data.CreatedBy;
 			delete data.UpdatedAt;
@@ -543,6 +590,185 @@ sap.ui.define([
 					error: this._Error.bind(this)
 				});
 			}
+		},
+
+		_fnValidation: function (data) {
+			var oReturn = {
+					IsNotValid: false,
+					sMsg: []
+				},
+				aCtrlMessage = [];
+			var oViewModel = this.getModel("worklistView");
+			if (oViewModel.getProperty("/bEditOptions").Service === true) {
+				if (!data.ServiceType) {
+					oReturn.IsNotValid = true;
+					oReturn.sMsg.push("MSG_VALDTN_SERVTYPE");
+					aCtrlMessage.push({
+						message: "MSG_VALDTN_SERVTYPE",
+						target: "/oEditData/ServiceType"
+					});
+				}
+				if (!data.ServiceMessage) {
+					oReturn.IsNotValid = true;
+					oReturn.sMsg.push("MSG_VALDTN_SERVMSG");
+					aCtrlMessage.push({
+						message: "MSG_VALDTN_SERVMSG",
+						target: "/oEditData/ServiceMessage"
+					});
+				}
+				if (data.Mobile) {
+					var mobileregex = /^[0-9]{5,15}$/;
+					if (!mobileregex.test(data.Mobile)) {
+						oReturn.IsNotValid = true;
+						oReturn.sMsg.push("MSG_INVALID_MOBILE");
+						aCtrlMessage.push({
+							message: "MSG_INVALID_MOBILE",
+							target: "/oEditData/Mobile"
+						});
+					}
+				}
+			}
+			if (oViewModel.getProperty("/bEditOptions").Facility === true) {
+				if (!data.FacilityType) {
+					oReturn.IsNotValid = true;
+					oReturn.sMsg.push("MSG_VALDTN_FTYPE");
+					aCtrlMessage.push({
+						message: "MSG_VALDTN_FTYPE",
+						target: "/oEditData/FacilityType"
+					});
+				}
+			}
+			if (oViewModel.getProperty("/bEditOptions").Relationship === true) {
+				if (!data.Relationship) {
+					oReturn.IsNotValid = true;
+					oReturn.sMsg.push("MSG_VALDTN_RELATION");
+					aCtrlMessage.push({
+						message: "MSG_VALDTN_RELATION",
+						target: "/oEditData/Relationship"
+					});
+				}
+			}
+			if (oViewModel.getProperty("/bEditOptions").FAQ === true) {
+				if (!data.FaqCategory) {
+					oReturn.IsNotValid = true;
+					oReturn.sMsg.push("MSG_VALDTN_FAQCAT");
+					aCtrlMessage.push({
+						message: "MSG_VALDTN_FAQCAT",
+						target: "/oEditData/FaqCategory"
+					});
+				}
+			}
+			if (oViewModel.getProperty("/bEditOptions").Event === true) {
+				if (!data.EventAttractionType) {
+					oReturn.IsNotValid = true;
+					oReturn.sMsg.push("MSG_VALDTN_EAT");
+					aCtrlMessage.push({
+						message: "MSG_VALDTN_EAT",
+						target: "/oEditData/EventAttractionType"
+					});
+				}
+			}
+			if (oViewModel.getProperty("/bEditOptions").Navigation === true) {
+				if (!data.NavigationTypeName) {
+					oReturn.IsNotValid = true;
+					oReturn.sMsg.push("MSG_VALDTN_NTN");
+					aCtrlMessage.push({
+						message: "MSG_VALDTN_NTN",
+						target: "/oEditData/NavigationTypeName"
+					});
+				}
+			}
+			if (oViewModel.getProperty("/bEditOptions").Building === true) {
+				if (!data.BuildingName) {
+					oReturn.IsNotValid = true;
+					oReturn.sMsg.push("MSG_VALDTN_BUILDING");
+					aCtrlMessage.push({
+						message: "MSG_VALDTN_BUILDING",
+						target: "/oEditData/BuildingName"
+					});
+				}
+				if (+data.Longitude == 0 || +data.Latitude == 0) {
+					oReturn.IsNotValid = true;
+					oReturn.sMsg.push("MSG_LAT_LNG");
+					aCtrlMessage.push({
+						message: "MSG_LAT_LNG",
+						target: "/oEditData/Latitude"
+					});
+					aCtrlMessage.push({
+						message: "MSG_LAT_LNG",
+						target: "/oEditData/Longitude"
+					});
+				} else if (+data.Latitude < -90 || +data.Latitude > 90) {
+					oReturn.IsNotValid = true;
+					oReturn.sMsg.push("MSG_ERR_LAT");
+					aCtrlMessage.push({
+						message: "MSG_ERR_LAT",
+						target: "/oEditData/Latitude"
+					});
+				} else if (+data.Longitude < -180 || +data.Longitude > 180) {
+					oReturn.IsNotValid = true;
+					oReturn.sMsg.push("MSG_ERR_LNG");
+					aCtrlMessage.push({
+						message: "MSG_ERR_LNG",
+						target: "/oEditData/Longitude"
+					});
+				}
+			}
+			if (oViewModel.getProperty("/bEditOptions").Theme === true) {
+				if (!data.Theme) {
+					oReturn.IsNotValid = true;
+					oReturn.sMsg.push("MSG_VALDTN_THEME");
+					aCtrlMessage.push({
+						message: "MSG_VALDTN_THEME",
+						target: "/oEditData/Theme"
+					});
+				}
+			}
+			if (oViewModel.getProperty("/bEditOptions").Category === true) {
+				if (!data.Category) {
+					oReturn.IsNotValid = true;
+					oReturn.sMsg.push("MSG_VALDTN_CATEGORY");
+					aCtrlMessage.push({
+						message: "MSG_VALDTN_CATEGORY",
+						target: "/oEditData/Category"
+					});
+				}
+			}
+			if (oViewModel.getProperty("/bEditOptions").Speciality === true) {
+				if (!data.Speciality) {
+					oReturn.IsNotValid = true;
+					oReturn.sMsg.push("MSG_VALDTN_SPECIALITY");
+					aCtrlMessage.push({
+						message: "MSG_VALDTN_SPECIALITY",
+						target: "/oEditData/Speciality"
+					});
+				}
+			}
+
+			if (aCtrlMessage.length) this._genCtrlMessages(aCtrlMessage);
+			return oReturn;
+		},
+
+		_genCtrlMessages: function (aCtrlMsgs) {
+			var that = this,
+				oViewModel = that.getModel("worklistView");
+			aCtrlMsgs.forEach(function (ele) {
+				that._oMessageManager.addMessages(
+					new sap.ui.core.message.Message({
+						message: that.getResourceBundle().getText(ele.message),
+						type: sap.ui.core.MessageType.Error,
+						target: ele.target,
+						processor: oViewModel,
+						persistent: true
+					}));
+			});
+		},
+
+		_fnMsgConcatinator: function (aMsgs) {
+			var that = this;
+			return aMsgs.map(function (x) {
+				return that.getResourceBundle().getText(x);
+			}).join("");
 		},
 
 		_UploadImage: function (sPath, oImage) {

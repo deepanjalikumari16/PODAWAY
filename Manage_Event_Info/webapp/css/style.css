@@ -2,3 +2,18 @@
 width: 640px; 
 height: 480px	
 }
+.mng-event-info .sapFDynamicPageTitleMainInner {
+	display: flex;
+    flex-flow: column-reverse;
+}
+.mng-event-info .sapFDynamicPageTitleMainHeading,
+.mng-event-info .sapFDynamicPageTitleMainHeadingInner {
+	width: 100%;
+}
+.mng-event-info .sapUiRespGrid {
+	padding: 0 0 1rem !important;
+	border-bottom: 0;
+}
+.mng-event-info .sapUiAFLayoutEnd {
+    margin-right: 0 !important;
+}

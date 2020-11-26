@@ -74,43 +74,41 @@ sap.ui.define([
 			oViewModel.refresh();
 
 		},
-		onDelTheme: function(){
+		onDelTheme: function () {
 			this.getModel("objectView").setProperty("/oDetails/ThemeId", null);
 		},
 		/** 
 		 * Open Map and choose latitude/longitude for a given facility
 		 */
 		onMap: function () {
-			
-			if(!(this.getModel("appView").getProperty("/bHEREMapsLibLoaded"))) this.loadHERELibs() ;
-			
+
+			if (!(this.getModel("appView").getProperty("/bHEREMapsLibLoaded"))) this.loadHERELibs();
+
 			var that = this,
 				oViewModel = this.getModel("objectView");
-		
+
 			//Open dialog, if already open once open before
-			if(that._oDlgAddOption)	
-			{	
+			if (that._oDlgAddOption) {
 				//remove all the previous Markers
-				if(that.marker)	that.map.removeObject(that.marker);
-				that.map.setCenter( that._getLocation(), true);
+				if (that.marker) that.map.removeObject(that.marker);
+				that.map.setCenter(that._getLocation(), true);
 				that.addDraggableMarker(that.map, that.behavior, that._getLocation());
 				that._oDlgAddOption.open();
 				return;
 			}
-			
-			
+
 			Fragment.load({
 				id: that.getView().getId(),
 				type: "HTML",
 				name: "com.coil.podium.MAEVAT.dialog.HEREMaps",
 				controller: that
 			}).then(function (oDialog) {
-				
+
 				that._oDlgAddOption = oDialog;
-				var	oCurrentLocation = this._getLocation(),
-				platform = new H.service.Platform({
-					'apikey': 'BbN_bDCaLx6-5GZou8CHRvPWpf9CoDtVbMK4w-OTAxM'
-				});
+				var oCurrentLocation = this._getLocation(),
+					platform = new H.service.Platform({
+						'apikey': 'BbN_bDCaLx6-5GZou8CHRvPWpf9CoDtVbMK4w-OTAxM'
+					});
 
 				// Obtain the default map types from the platform object
 				var maptypes = platform.createDefaultLayers();
@@ -121,20 +119,20 @@ sap.ui.define([
 						zoom: 15,
 						center: {
 							lng: oCurrentLocation.lng,
-							lat: oCurrentLocation.lat}
+							lat: oCurrentLocation.lat
+						}
 					});
 				that.behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
 
 				var ui = H.ui.UI.createDefault(map, maptypes);
-			
+
 				that.map = map;
 				// connect dialog to the root view of this component (models, lifecycle)
 				that.getView().addDependent(oDialog);
-				that.addDraggableMarker(map, that.behavior,oCurrentLocation );
+				that.addDraggableMarker(map, that.behavior, oCurrentLocation);
 				oDialog.open();
 			}.bind(this));
-			
-			
+
 		},
 
 		onCloseMaps: function () {
@@ -165,13 +163,19 @@ sap.ui.define([
 			var oValidate = this._fnValidate(oData);
 
 			if (oValidate.IsNotValid) {
-				this.showErrorMessageBox( this._fnMsgConcatinator(oValidate.sMsg));
+				this.showErrorMessageBox(this._fnMsgConcatinator(oValidate.sMsg));
 				return;
 			}
 
 			function _fnError() {
 				oViewModel.setProperty("/busy", false);
 			}
+
+			oData.AvoidablePlaces = oData.AvoidablePlaces.map(function (ele) {
+				return {
+					Id: ele
+				};
+			});
 
 			oData.AccessibilityDevices = oData.AccessibilityDevices.map(function (ele) {
 				return {
@@ -215,23 +219,22 @@ sap.ui.define([
 			oViewModel.getProperty("/oDetails/Highlights").push({
 				Highlight: "",
 				EventAttractionId: oViewModel.getProperty("/oDetails/Id"),
-				IsArchived : false
+				IsArchived: false
 			});
 			oViewModel.refresh();
 		},
-		
-		onComboBoxChange  : function(oEvent){
-		if(oEvent.getParameter("itemPressed") === false)
-		{
-			oEvent.getSource().setValue("");
-		}
+
+		onComboBoxChange: function (oEvent) {
+			if (oEvent.getParameter("itemPressed") === false) {
+				oEvent.getSource().setValue("");
+			}
 		},
-		
+
 		onDelHighlight: function (oEvent) {
 			var oViewModel = this.getModel("objectView");
-			
-			oViewModel.setProperty("IsArchived", true, oEvent.getParameter("listItem").getBindingContext("objectView") );
-			
+
+			oViewModel.setProperty("IsArchived", true, oEvent.getParameter("listItem").getBindingContext("objectView"));
+
 			oViewModel.refresh(true);
 		},
 
@@ -255,7 +258,7 @@ sap.ui.define([
 				});
 				this.getModel().read(sObjectPath, {
 					urlParameters: {
-						"$expand": "Images,Categories,Plans,AccessibilityDevices,Highlights"
+						"$expand": "Images,Categories,AvoidablePlaces,Plans,AccessibilityDevices,Highlights"
 					},
 					success: this._setView.bind(this)
 				});
@@ -336,9 +339,21 @@ sap.ui.define([
 			if (data) {
 				oViewModel.setProperty("/oImages", data.Images.results);
 				oViewModel.setProperty("/oPlan", data.Plans.results[0] === undefined ? null : data.Plans.results[0]);
-				data.AccessibilityDevices = data.AccessibilityDevices.results.map(function (ele) {
-					return ele.Id;
-				});
+
+				if (data.AccessibilityDevices.hasOwnProperty("results"))
+					data.AccessibilityDevices = data.AccessibilityDevices.results.map(function (ele) {
+						return ele.Id;
+					});
+				else
+					data.AccessibilityDevices = [];
+
+				if (data.AvoidablePlaces.hasOwnProperty("results"))
+					data.AvoidablePlaces = data.AvoidablePlaces.results.map(function (ele) {
+						return ele.Id;
+					});
+				else
+					data.AvoidablePlaces = [];
+
 				//Categories
 				data.Categories = data.Categories.results.map(function (ele) {
 					return ele.Id;
@@ -359,8 +374,11 @@ sap.ui.define([
 				IsArchived: false,
 				Description: "",
 				AccessibilityDevices: [],
+				AssistiveDevices: [],
+				AvoidablePlaces: [],
 				Categories: [],
 				Title: "",
+				Name: "",
 				ThemeId: null,
 				//Issue #18, Manage Event Attraction: Add and edit there is no option to add highlights
 				Highlights: []
@@ -447,6 +465,7 @@ sap.ui.define([
 				oDataModel = this.getModel(),
 				oViewModel = this.getModel("objectView"),
 				sCoverImageId = null;
+			//	bHasCoverImage = false;
 
 			//Deletion Operation : if Any
 			if (this._pendingDelOps.length) {
@@ -462,11 +481,11 @@ sap.ui.define([
 			//Upload Files check if Id is present
 			oViewModel.getProperty("/oImages").forEach(function (ele) {
 				ele.EventAttractionId = data.Id;
-
+				//	if (bHasCoverImage === false) bHasCoverImage = ele.IsCoverImage;
 				if (ele.Id === undefined) {
 					aProms.push(that._fnCrOp.call(that, "/EventAttractionImageSet", ele));
 				} else {
-					sCoverImageId = ele.IsCoverImage ? ele.Id : sCoverImageId;
+					sCoverImageId = ele.IsCoverImage && !ele.IsArchived  ? ele.Id : sCoverImageId;
 				}
 			});
 
@@ -478,23 +497,41 @@ sap.ui.define([
 
 			//Collect all request and show success/failure
 			Promise.all(aProms)
-				.then(new Promise(function (res, rej) {
-					if (sCoverImageId) {
-						oDataModel.callFunction("/UpdateEventAttractionCoverImage", {
-							urlParameters: {
-								ImageId: sCoverImageId,
-								EventAttactionId: data.Id
-							},
-							success: function () {
+				//.then(that._fetchCoverImages.bind(that, data.Id))
+				.then(function (data1) {
+
+						return new Promise(function (res, rej) {
+
+							/*if(sCoverImageId === undefined)
+							{
+							var oCoverImage = data1.Images.results.find(function (ele) {
+								return  ele.IsArchived === false && ele.IsCoverImage;
+							});
+
+							if (data1.Images.results.length > 0)
+								oCoverImage = oCoverImage ? oCoverImage.Id : data1.Images.results[0].Id;
+							}*/
+
+							if (sCoverImageId) {
+								oDataModel.callFunction("/UpdateEventAttractionCoverImage", {
+									urlParameters: {
+										ImageId: +sCoverImageId,
+										EventAttactionId: +data.Id
+									},
+									success: function () {
+										res();
+									},
+									error: function () {
+										rej();
+									}
+								});
+							} else {
 								res();
-							},
-							error: function () {
-								rej();
 							}
 						});
-
 					}
-				}))
+
+				)
 				.then(function () {
 						oViewModel.setProperty("/busy", false);
 						that._fnSuccessToast.call(that, "MSG_SUCCESS_EVENTDETAILS");
@@ -506,6 +543,29 @@ sap.ui.define([
 				);
 
 		},
+		_fetchCoverImages: function (iEventAttractionId) {
+
+			var that = this;
+			return new Promise(function (res, rej) {
+				var sKey = that.getModel().createKey("/EventAttractionSet", {
+					"Id": iEventAttractionId
+				});
+
+				that.getModel().read(sKey, {
+					urlParameters: {
+						"$expand": "Images",
+						"$select": "Images"
+					},
+					success: function (data) {
+						res(data);
+					}
+
+				});
+
+			});
+
+		},
+
 		/** 
 		 * 
 		 * @constructor 
@@ -586,7 +646,7 @@ sap.ui.define([
 			this._oMessageManager = sap.ui.getCore().getMessageManager();
 			this._oMessageManager.registerMessageProcessor(oMessageProcessor);
 		},
-		
+
 		_genCtrlMessages: function (aCtrlMsgs) {
 			var that = this,
 				oViewModel = that.getModel("objectView");
@@ -601,7 +661,7 @@ sap.ui.define([
 					}));
 			});
 		},
-		
+
 		_fnValidate: function (data) {
 			this._oMessageManager.removeAllMessages();
 			var oReturn = {
@@ -609,7 +669,7 @@ sap.ui.define([
 					sMsg: []
 				},
 				aCtrlMessage = [];
-				
+
 			if (!(data.Title.length)) {
 				oReturn.IsNotValid = true;
 				oReturn.sMsg.push("MSG_ERR_TITLE");
@@ -617,7 +677,17 @@ sap.ui.define([
 					message: "MSG_ERR_TITLE",
 					target: "/oDetails/Title"
 				});
-				
+
+			}
+
+			if (!(data.Name.length)) {
+				oReturn.IsNotValid = true;
+				oReturn.sMsg.push("MSG_ERR_NAME");
+				aCtrlMessage.push({
+					message: "MSG_ERR_NAME",
+					target: "/oDetails/Name"
+				});
+
 			}
 
 			if (!(data.Description.length)) {
@@ -640,10 +710,10 @@ sap.ui.define([
 					message: "MSG_LAT_LNG",
 					target: "/oDetails/Latitude"
 				});
-			} else	if (+data.Latitude < -90 || +data.Latitude > 90) {
+			} else if (+data.Latitude < -90 || +data.Latitude > 90) {
 				oReturn.IsNotValid = true;
 				oReturn.sMsg.push("MSG_ERR_LAT");
-				
+
 				aCtrlMessage.push({
 					message: "MSG_ERR_LAT",
 					target: "/oDetails/Latitude"
@@ -664,7 +734,7 @@ sap.ui.define([
 			return oReturn;
 
 		},
-		
+
 		_fnMsgConcatinator: function (aMsgs) {
 			//	var sFnMsg = "";
 			var that = this;
@@ -675,14 +745,14 @@ sap.ui.define([
 		},
 		//load HERE Maps Libs in sync
 		loadHERELibs: function () {
-			
-			this.getModel("appView").setProperty("/bHEREMapsLibLoaded" ,  true);
-			
+
+			this.getModel("appView").setProperty("/bHEREMapsLibLoaded", true);
+
 			jQuery.sap.require("com.coil.podium.MAEVAT.libs.mapsjs-core");
 			jQuery.sap.require("com.coil.podium.MAEVAT.libs.mapsjs-service");
 			jQuery.sap.require("com.coil.podium.MAEVAT.libs.mapsjs-ui");
 			jQuery.sap.require("com.coil.podium.MAEVAT.libs.mapsjs-mapevents");
-		
+
 		}
 
 	});

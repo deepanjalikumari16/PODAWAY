@@ -220,6 +220,11 @@ sap.ui.define([
 				});
 			oShareDialog.open();
 		},
+		
+		onRefreshView: function () {
+			var oModel = this.getModel();
+			oModel.refresh(true);
+		},
 
 		onAssignNow: function (oEvent) {
 			var oView = this.getView();

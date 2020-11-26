@@ -1,0 +1,54 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+	<TableSelectDialog noDataText="{i18n>NoUsersFound}" title="{i18n>SelectUsers}" search=".handleSearch" confirm=".handleConfirm" cancel=".handleClose"
+		items="{ path : '/UserSet', parameters : { expand : 'Role', select : 'Id,FirstName,LastName,Email,RoleId,Role/Role' }, filters : { path : 'IsArchived' , operator : 'EQ' , value1 : false }, sorter : [ { path : 'RoleId', descending : false }, { path : 'FirstName', descending : false } ] }">
+		<ColumnListItem>
+			<cells>
+				<Text text="{FirstName}"/>
+				<Text text="{LastName}"/>
+				<Text text="{Email}"/>
+				<Text text="{Role/Role}"/>
+			</cells>
+		</ColumnListItem>
+		<columns>
+			<Column>
+				<Text text="{i18n>colFirstName}"/>
+			</Column>
+			<Column>
+				<Text text="{i18n>colLastName}"/>
+			</Column>
+			<Column>
+				<Text text="{i18n>colEmail}"/>
+			</Column>
+			<Column>
+				<Text text="{i18n>colRole}"/>
+			</Column>
+		</columns>
+	</TableSelectDialog>
+</core:FragmentDefinition>
+<!--<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">-->
+<!--	<TableSelectDialog noDataText="No Users found" title="Select User" search=".onSearchUsers" confirm=".handleDone" cancel=".handleClose"-->
+<!--		items="{ path : '/UserSet', parameters : { expand : 'Role' }, parameters : { 'select' : 'Id,FirstName,LastName,Email,Role/Role' }, filters : { path : 'IsArchived' , operator : 'EQ' , value1 : false }, sorter : { path : 'Name', descending : false } }">-->
+<!--		<ColumnListItem>-->
+<!--			<cells>-->
+<!--				<Text text="{FirstName}"/>-->
+<!--				<Text text="{LastName}"/>-->
+<!--				<Text text="{Email}"/>-->
+<!--				<Text text="{Role/Role}"/>-->
+<!--			</cells>-->
+<!--		</ColumnListItem>-->
+<!--		<columns>-->
+<!--			<Column>-->
+<!--				<Text text="{i18n>colFirstName}"/>-->
+<!--			</Column>-->
+<!--			<Column>-->
+<!--				<Text text="{i18n>colLastName}"/>-->
+<!--			</Column>-->
+<!--			<Column>-->
+<!--				<Text text="{i18n>colEmail}"/>-->
+<!--			</Column>-->
+<!--			<Column>-->
+<!--				<Text text="{i18n>colRole}"/>-->
+<!--			</Column>-->
+<!--		</columns>-->
+<!--	</TableSelectDialog>-->
+<!--</core:FragmentDefinition>-->

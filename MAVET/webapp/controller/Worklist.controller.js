@@ -5,7 +5,7 @@ sap.ui.define([
 	"sap/ui/model/Filter",
 	"sap/ui/model/FilterOperator",
 	"sap/ui/core/Fragment"
-], function (BaseController, JSONModel, formatter, Filter, FilterOperator,Fragment) {
+], function (BaseController, JSONModel, formatter, Filter, FilterOperator, Fragment) {
 	"use strict";
 
 	return BaseController.extend("com.coil.podium.MAEVAT.controller.Worklist", {
@@ -20,7 +20,7 @@ sap.ui.define([
 		 * Called when the worklist controller is instantiated.
 		 * @public
 		 */
-		onInit : function () {
+		onInit: function () {
 			var oViewModel,
 				iOriginalBusyDelay,
 				oTable = this.byId("table");
@@ -34,22 +34,22 @@ sap.ui.define([
 
 			// Model used to manipulate control states
 			oViewModel = new JSONModel({
-				worklistTableTitle : this.getResourceBundle().getText("worklistTableTitle"),
+				worklistTableTitle: this.getResourceBundle().getText("worklistTableTitle"),
 				saveAsTileTitle: this.getResourceBundle().getText("saveAsTileTitle", this.getResourceBundle().getText("worklistViewTitle")),
 				shareOnJamTitle: this.getResourceBundle().getText("worklistTitle"),
 				shareSendEmailSubject: this.getResourceBundle().getText("shareSendEmailWorklistSubject"),
 				shareSendEmailMessage: this.getResourceBundle().getText("shareSendEmailWorklistMessage", [location.href]),
-				tableNoDataText : this.getResourceBundle().getText("tableNoDataText"),
-				tableBusyDelay : 0,
-				iEvtType : 1
-		
+				tableNoDataText: this.getResourceBundle().getText("tableNoDataText"),
+				tableBusyDelay: 0,
+				iEvtType: 1
+
 			});
 			this.setModel(oViewModel, "worklistView");
 
 			// Make sure, busy indication is showing immediately so there is no
 			// break after the busy indication for loading the view's meta data is
 			// ended (see promise 'oWhenMetadataIsLoaded' in AppController)
-			oTable.attachEventOnce("updateFinished", function(){
+			oTable.attachEventOnce("updateFinished", function () {
 				// Restore original busy indicator delay for worklist's table
 				oViewModel.setProperty("/tableBusyDelay", iOriginalBusyDelay);
 			});
@@ -70,16 +70,18 @@ sap.ui.define([
 		 * @param {sap.ui.base.Event} oEvent the update finished event
 		 * @public
 		 */
-		onUpdateFinished : function (oEvent) {
+		onUpdateFinished: function (oEvent) {
 			// update the worklist's object counter after the table update
 			var sTitle,
 				oTable = oEvent.getSource(),
 				iTotalItems = oEvent.getParameter("total");
 			// only update the counter if the length is final and
 			// the table is not empty
-		
+
 			if (iTotalItems && oTable.getBinding("items").isLengthFinal()) {
-				sTitle = this.getResourceBundle().getText("worklistTableTitleCount" + this.getModel("worklistView").getProperty("/iEvtType")   , [iTotalItems]);
+				sTitle = this.getResourceBundle().getText("worklistTableTitleCount" + this.getModel("worklistView").getProperty("/iEvtType"), [
+					iTotalItems
+				]);
 			} else {
 				sTitle = this.getResourceBundle().getText("worklistTableTitle" + this.getModel("worklistView").getProperty("/iEvtType"));
 			}
@@ -89,12 +91,12 @@ sap.ui.define([
 		 * Event handler when the share in JAM button has been clicked
 		 * @public
 		 */
-		onShareInJamPress : function () {
+		onShareInJamPress: function () {
 			var oViewModel = this.getModel("worklistView"),
 				oShareDialog = sap.ui.getCore().createComponent({
 					name: "sap.collaboration.components.fiori.sharing.dialog",
 					settings: {
-						object:{
+						object: {
 							id: location.href,
 							share: oViewModel.getProperty("/shareOnJamTitle")
 						}
@@ -102,7 +104,7 @@ sap.ui.define([
 				});
 			oShareDialog.open();
 		},
-		
+
 		//START: Image and Plan Life cycle
 		onViewImage: function (oEvent, sDialogType) {
 
@@ -127,15 +129,17 @@ sap.ui.define([
 			}
 			//Experimental merger of Images and Plans
 			this.getModel("worklistView").setProperty("/sDialog", sDialogType);
-			
+
 		},
 		bindDialog: function () {
-			var that = this ,	oViewModel = this.getModel("worklistView"), sType = oViewModel.getProperty("/sDialog");
+			var that = this,
+				oViewModel = this.getModel("worklistView"),
+				sType = oViewModel.getProperty("/sDialog");
 			this._oDlgAddOption.getContent()[0].bindAggregation("pages", {
-				path:  sType === "I" ?  "/EventAttractionImageSet" : "/EventAttractionPlanSet",
+				path: sType === "I" ? "/EventAttractionImageSet" : "/EventAttractionPlanSet",
 				filters: [
 					new Filter("IsArchived", FilterOperator.EQ, false),
-					new Filter( "EventAttractionId" , FilterOperator.EQ, that.oImageBindingContext.getProperty("Id"))
+					new Filter("EventAttractionId", FilterOperator.EQ, that.oImageBindingContext.getProperty("Id"))
 				],
 				template: new sap.m.Image({
 					src: {
@@ -143,20 +147,19 @@ sap.ui.define([
 						formatter: that.formatter.giveImage
 					}
 				}),
-				events : {
-					dataRequested : function(){
-						oViewModel.setProperty("/bLoadingImages", true); 
+				events: {
+					dataRequested: function () {
+						oViewModel.setProperty("/bLoadingImages", true);
 					},
-					dataReceived : function(oEvt){
-						oViewModel.setProperty("/bLoadingImages", false); 
-						if(oEvt.getParameter("data").results.length){
-							oViewModel.setProperty("/bImages", true); 
-						}else
-						{
-							oViewModel.setProperty("/bImages", false); 
+					dataReceived: function (oEvt) {
+						oViewModel.setProperty("/bLoadingImages", false);
+						if (oEvt.getParameter("data").results.length) {
+							oViewModel.setProperty("/bImages", true);
+						} else {
+							oViewModel.setProperty("/bImages", false);
 						}
 					}
-					
+
 				}
 			});
 		},
@@ -176,9 +179,7 @@ sap.ui.define([
 
 		},
 
-		
-
-		onBasicSearch : function (oEvent) {
+		onBasicSearch: function (oEvent) {
 			if (oEvent.getParameters().refreshButtonPressed) {
 				// Search field's 'refresh' button has been pressed.
 				// This is visible if you select any master list item.
@@ -202,15 +203,15 @@ sap.ui.define([
 		 * and group settings and refreshes the list binding.
 		 * @public
 		 */
-		onRefresh : function () {
+		onRefresh: function () {
 			var oTable = this.byId("table");
 			oTable.getBinding("items").refresh();
 		},
-		
-		onAdd: function(){
-			this.getRouter().navTo("createObject");	
+
+		onAdd: function () {
+			this.getRouter().navTo("createObject");
 		},
-		
+
 		/**
 		 * Event handler when a table edit item gets pressed
 		 * @param {sap.ui.base.Event} oEvent the table list item event
@@ -246,30 +247,33 @@ sap.ui.define([
 		 * @constructor 
 		 */
 		_fnInitialBindings: function () {
-			var oTable = this.byId("table"), oTemplate = oTable.getItems()[0].clone();
-		
-		this.getModel("worklistView").setProperty("/iEvtType",this.getOwnerComponent().iEvtType);
-		
-		oTable.bindItems({
-			template: oTemplate,
-			path: "/EventAttractionSet",
-			parameters : {
-					expand : "Theme,EventAttractionType,Building,AccessibilityDevices"
+			var oTable = this.byId("table"),
+				oTemplate = oTable.getItems()[0].clone();
+
+			this.getModel("worklistView").setProperty("/iEvtType", this.getOwnerComponent().iEvtType);
+
+			oTable.bindItems({
+				template: oTemplate,
+				path: "/EventAttractionSet",
+				parameters: {
+					expand: "Theme,EventAttractionType,Building,AccessibilityDevices"
 				},
-			sorter: [ new sap.ui.model.Sorter("Index"),
-					   new sap.ui.model.Sorter("CreatedAt") ],
-			events: {
+				// sorter: [ new sap.ui.model.Sorter("Index"),
+				// 		   new sap.ui.model.Sorter("CreatedAt") ],
+						   
+				sorter: [ new sap.ui.model.Sorter("Name") ],						   
+				events: {
 					dataRequested: this._fnbusyItems.bind(this),
 					dataReceived: this._fnbusyItems.bind(this)
 				},
-			filters: [new Filter("EventAttractionTypeId", FilterOperator.EQ, this.getOwnerComponent().iEvtType),
+				filters: [new Filter("EventAttractionTypeId", FilterOperator.EQ, this.getOwnerComponent().iEvtType),
 					new Filter("IsArchived", FilterOperator.EQ, false)
 				],
-			templateShareable: true
-		});	
+				templateShareable: true
+			});
 
 		},
-		
+
 		getFiltersfromFB: function () {
 			var oFBCtrl = this.getView().byId("filterbar"),
 				aFilters = [];
@@ -289,7 +293,7 @@ sap.ui.define([
 		 * @param {sap.m.ObjectListItem} oItem selected Item
 		 * @private
 		 */
-		_showObject : function (oItem) {
+		_showObject: function (oItem) {
 			this.getRouter().navTo("object", {
 				objectId: oItem.getBindingContext().getProperty("Id")
 			});
@@ -300,7 +304,7 @@ sap.ui.define([
 		 * @param {sap.ui.model.Filter[]} aTableSearchState An array of filters for the search
 		 * @private
 		 */
-		_applySearch: function(aTableSearchState) {
+		_applySearch: function (aTableSearchState) {
 			var oTable = this.byId("table"),
 				oViewModel = this.getModel("worklistView");
 			oTable.getBinding("items").filter(aTableSearchState, "Application");

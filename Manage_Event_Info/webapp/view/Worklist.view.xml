@@ -1,7 +1,7 @@
 <mvc:View controllerName="com.coil.podium.Manage_Event_Info.controller.Worklist" xmlns="sap.m" xmlns:c="sap.ui.core"
 	xmlns:mvc="sap.ui.core.mvc" xmlns:semantic="sap.f.semantic" xmlns:l="sap.ui.layout" xmlns:footerbar="sap.ushell.ui.footerbar"
 	xmlns:fb="sap.ui.comp.filterbar">
-	<semantic:SemanticPage id="page" headerPinnable="false" toggleHeaderOnTitleClick="false">
+	<semantic:SemanticPage id="page" headerPinnable="false" toggleHeaderOnTitleClick="false" class="mng-event-info">
 		<semantic:titleHeading>
 		<!--<l:VerticalLayout>-->
 		<!--	<SearchField id="searchField" tooltip="{i18n>worklistSearchTooltip}" search=".onSearch">-->
@@ -49,11 +49,16 @@
 					<OverflowToolbar>
 						<Title id="tableHeader" text="{worklistView>/worklistTableTitle}" level="H3"/>
 						<ToolbarSpacer/>
-						<Button text="{i18n>btnAdd}" icon="sap-icon://add" press="onAdd">
+						<Button text="{i18n>btnRefresh}" icon="sap-icon://refresh" press="onRefreshView">
 							<layoutData>
 								<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
 							</layoutData>
 						</Button>
+						<!--<Button text="{i18n>btnAdd}" icon="sap-icon://add" press="onAdd">-->
+						<!--	<layoutData>-->
+						<!--		<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>-->
+						<!--	</layoutData>-->
+						<!--</Button>-->
 					</OverflowToolbar>
 				</headerToolbar>
 				<columns>

@@ -12,7 +12,7 @@
 		"resources": "resources.json",
 		"dataSources": {
 			"mainService": {
-				"uri": "/EXPO_PODIUM_API/api/v2/odata.svc",
+				"uri": "/EXPO_PODIUM_API/api/v2/odata.svc/",
 				"type": "OData",
 				"settings": {
 					"odataVersion": "2.0",
@@ -115,8 +115,17 @@
 					]
 				},
 				{
-					"pattern": "MasterFaqCategorySet/{objectId}",
+					"pattern": "MasterServiceTypeSet/{objectId}",
 					"name": "object",
+					"target": [
+						"object"
+					]
+				},
+				{
+					"name": "createObject",
+					"pattern": "MasterServiceTypeSet",
+					"titleTarget": "",
+					"greedy": false,
 					"target": [
 						"object"
 					]

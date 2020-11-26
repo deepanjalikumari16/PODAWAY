@@ -1,0 +1,80 @@
+{
+	"_version": "1.5.0",
+	"sap.app": {
+		"applicationVersion": {
+			"version": "1.0.0"
+		},
+		"_version": "1.3.0",
+		"id": "com.coil.podium.Plugin",
+		"type": "component",
+		"i18n": "i18n/i18n.properties",
+		"title": "{{appTitle}}",
+		"crossNavigation": {
+   			"inbounds": {
+				"Shell-plugin": {
+					"signature": {
+						"parameters": {},
+						"additionalParameters": "allowed"
+					},
+					"hideLauncher": true,
+					"semanticObject": "Shell",
+					"action": "plugin"
+				}
+			   }
+		     },
+		 "dataSources": {
+			"mainService": {
+				"uri": "/EXPO_PODIUM_API/api/v2/odata.svc/",
+				"type": "OData",
+				"settings": {
+					"odataVersion": "2.0"
+				}
+			}
+		},
+		"description": "{{appDescription}}"
+	},
+	"sap.ui": {
+		"_version": "1.3.0",
+		"technology": "UI5",
+		"deviceTypes": {
+			"desktop": true,
+			"tablet": true,
+			"phone": true
+		},
+		"supportedThemes": []
+	},
+	"sap.ui5": {
+		"_version": "1.2.0",
+		"contentDensities": {
+			"compact": true,
+			"cozy": false
+		},
+		"models": {
+			"": {
+				"dataSource": "mainService",
+				"settings": {
+					"useBatch": false,
+					"defaultOperationMode": "Auto",
+					"defaultBindingMode": "TwoWay",
+					"defaultCountMode": "None"
+				}
+			}
+		},
+		"dependencies": {
+			"minUI5Version": "1.38.1",
+			"libs": {
+				"sap.ui.core": {
+					"minVersion": "1.38.1"
+				},
+				"sap.m": {
+					"minVersion": "1.38.1"
+				}
+			}
+		}
+	},
+	"sap.flp": {
+		"_version" : "1.1.0",
+		"type": "plugin",
+		"config": {}
+	}
+}

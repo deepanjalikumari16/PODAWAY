@@ -1,0 +1,70 @@
+<mvc:View controllerName="com.coil.podium.Groups.controller.Object" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
+	xmlns:u="sap.ui.unified" xmlns:uxap="sap.uxap" xmlns:l="sap.ui.layout">
+	<uxap:ObjectPageLayout id="ObjectPageLayout" showAnchorBar="true" showFooter="true" subSectionLayout="TitleOnLeft"
+		binding="{objectView>/oDetails}" busy="{objectView>/busy}" busyIndicatorDelay="0" class="sapUiResponsiveContentPadding">
+		<uxap:headerTitle>
+			<uxap:ObjectPageHeader objectTitle="{= ${objectView>/sMode} === 'C' ? ${i18n>TtlAddGroup} : ${i18n>TtlEditGroup} }"/>
+		</uxap:headerTitle>
+		<uxap:sections>
+			<uxap:ObjectPageSection title="{i18n>groupName}">
+				<uxap:subSections>
+					<uxap:ObjectPageSubSection>
+						<l:Grid width="100%" defaultSpan="XL6 L6 M6 S12">
+							<VBox>
+								<Label required="true" text="{i18n>colName}"/>
+								<Input value="{objectView>GroupName}" maxLength="50"/>
+							</VBox>
+						</l:Grid>
+					</uxap:ObjectPageSubSection>
+				</uxap:subSections>
+			</uxap:ObjectPageSection>
+			<uxap:ObjectPageSection title="{i18n>members}">
+				<uxap:subSections>
+					<uxap:ObjectPageSubSection>
+						<Table id="List" mode="Delete" delete="onDeleteMember" width="auto"
+							items="{path: 'objectView>/oDetails/Members'}"
+							headerText="{i18n>colGroupMembers}" growing="true">
+							<headerToolbar>
+								<Toolbar>
+									<ToolbarSpacer/>
+									<Button press="addMember" text="{i18n>btnAdd}"/>
+								</Toolbar>
+							</headerToolbar>
+							<columns>
+								<Column>
+									<Text text="{i18n>colFirstName}"/>
+								</Column>
+								<Column>
+									<Text text="{i18n>colLastName}"/>
+								</Column>
+								<Column>
+									<Text text="{i18n>colEmail}"/>
+								</Column>
+								<Column>
+									<Text text="{i18n>colRole}"/>
+								</Column>
+							</columns>
+							<items>
+								<ColumnListItem>
+									<cells>
+										<Text text="{objectView>FirstName}" visible="{= ${objectView>IsArchived} !== true }"/>
+										<Text text="{objectView>LastName}" visible="{= ${objectView>IsArchived} !== true }"/>
+										<Text text="{objectView>Email}" visible="{= ${objectView>IsArchived} !== true }"/>
+										<Text text="{objectView>Role/Role}" visible="{= ${objectView>IsArchived} !== true }"/>
+									</cells>
+								</ColumnListItem>
+							</items>
+						</Table>
+					</uxap:ObjectPageSubSection>
+				</uxap:subSections>
+			</uxap:ObjectPageSection>
+		</uxap:sections>
+		<uxap:footer>
+			<Toolbar>
+				<ToolbarSpacer/>
+				<Button text="{i18n>btnCancel}" press="onCancel"/>
+				<Button text="{i18n>btnSave}" type="Emphasized" press="onSave"/>
+			</Toolbar>
+		</uxap:footer>
+	</uxap:ObjectPageLayout>
+</mvc:View>

@@ -17,6 +17,10 @@
 								</ComboBox>	
 							</VBox>
 							<VBox>
+								<Label required="true" text="{i18n>LblName}"/>
+								<Input value="{objectView>Name}"/>
+							</VBox>
+							<VBox>
 								<Label required="true" text="{i18n>LblTitle}"/>
 								<Input value="{objectView>Title}"/>
 							</VBox>
@@ -43,13 +47,20 @@
 							<VBox visible="{= ${objectView>EventAttractionTypeId} === 1 }" >
 								<Label text="{i18n>LblAccessibilityEquipmentRequired}"/>
 								<MultiComboBox selectedKeys="{objectView>AccessibilityDevices}"
-									items="{ path: '/AccessibilityItemSet', filters : [ { path : 'AccessibilityId' , operator : 'EQ' , value1 : '1' }, { path : 'IsArchived' , operator : 'EQ' , value1 : 'false' } ], parameters : { 'select' : 'Id,Title' } }">
+									items="{ path: '/AccessibilityItemSet', filters : [ { path : 'AccessibilityId' , operator : 'EQ' , value1 : 1 }, { path : 'IsArchived' , operator : 'EQ' , value1 : 'false' } ], parameters : { 'select' : 'Id,Title' } }">
+									<core:Item key="{Id}" text="{Title}"/>
+								</MultiComboBox>
+							</VBox>
+							<VBox visible="{= ${objectView>EventAttractionTypeId} === 1 }" >
+								<Label text="{i18n>LblPlacestoAvoid}"/>
+								<MultiComboBox selectedKeys="{objectView>AvoidablePlaces}"
+									items="{ path: '/AccessibilityItemSet', filters : [ { path : 'AccessibilityId' , operator : 'EQ' , value1 : 3 }, { path : 'IsArchived' , operator : 'EQ' , value1 : 'false' } ], parameters : { 'select' : 'Id,Title' } }">
 									<core:Item key="{Id}" text="{Title}"/>
 								</MultiComboBox>
 							</VBox>
 							<VBox>
 								<Label text="{i18n>LblHighlights}"/>
-								<List items="{path: 'objectView>Highlights', filters : [  {  path : 'IsArchived', operator: 'EQ' , value1: false }  ]}" mode="Delete" delete="onDelHighlight" >
+								<List items="{path: 'objectView>Highlights', filters : [  {  path : 'IsArchived', operator: 'EQ' , value1: false }  ], sorter: { path: 'Id', descending: false } }" mode="Delete" delete="onDelHighlight" >
 									<headerToolbar>
 										<Toolbar>
 											<ToolbarSpacer />

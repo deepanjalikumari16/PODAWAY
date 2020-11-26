@@ -1,0 +1,12 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+	<ResponsivePopover title="Notifications" class="sapUiPopupWithPadding" placement="Bottom">
+		<content>
+			<List items="{path: 'Notifications>/aNotifications' }" id="notificationList">
+				
+				<NotificationListItem description="{Notifications>Notification/body}" 	close="onItemClose"	
+				title="{Notifications>Notification/Subject}" />
+			<!--	<NotificationListItem  	close="onItemClose"	title="Notification2" />-->
+			</List>	
+	</content>
+</ResponsivePopover>
+</core:FragmentDefinition>

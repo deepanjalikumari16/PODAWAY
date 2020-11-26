@@ -57,8 +57,11 @@
 					</OverflowToolbar>
 				</headerToolbar>
 				<columns>
+					<!--<Column>-->
+					<!--	<Text text="{i18n>TitleLabel}"/>-->
+					<!--</Column>-->
 					<Column>
-						<Text text="{i18n>TitleLabel}"/>
+						<Text text="{i18n>NameLabel}"/>
 					</Column>
 					<Column>
 						<Text text="{i18n>colType}"/>
@@ -88,7 +91,8 @@
 				<items>
 					<ColumnListItem>
 						<cells>
-							<Text text="{Title}" />
+							<!--<Text text="{Title}" />-->
+							<Text text="{Name}" />
 							<Text text="{EventAttractionType/EventAttractionType}"/>
 							<Text text="{Theme/Theme}"  />
 							<Text text="{Building/BuildingName}"/>
