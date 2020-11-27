@@ -34,7 +34,7 @@ sap.ui.define([
 			this.getRouter().initialize();
 			
 			//Determine event type s
-			this.iEvtType = 1;
+			this.iEvtType = 2;
 		
 			if (window.location.hash.search("Initiative") >= 0) {
 					this.iEvtType = 1;

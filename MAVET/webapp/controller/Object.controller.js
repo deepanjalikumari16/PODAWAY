@@ -379,6 +379,7 @@ sap.ui.define([
 				Categories: [],
 				Title: "",
 				Name: "",
+				ReferenceLink: "",
 				ThemeId: null,
 				//Issue #18, Manage Event Attraction: Add and edit there is no option to add highlights
 				Highlights: []
@@ -485,7 +486,7 @@ sap.ui.define([
 				if (ele.Id === undefined) {
 					aProms.push(that._fnCrOp.call(that, "/EventAttractionImageSet", ele));
 				} else {
-					sCoverImageId = ele.IsCoverImage && !ele.IsArchived  ? ele.Id : sCoverImageId;
+					sCoverImageId = ele.IsCoverImage && !ele.IsArchived ? ele.Id : sCoverImageId;
 				}
 			});
 
@@ -699,18 +700,40 @@ sap.ui.define([
 				});
 			}
 
-			if (+data.Longitude == 0 || +data.Latitude == 0) {
-				oReturn.IsNotValid = true;
-				oReturn.sMsg.push("MSG_LAT_LNG");
-				aCtrlMessage.push({
-					message: "MSG_LAT_LNG",
-					target: "/oDetails/Longitude"
-				});
-				aCtrlMessage.push({
-					message: "MSG_LAT_LNG",
-					target: "/oDetails/Latitude"
-				});
-			} else if (+data.Latitude < -90 || +data.Latitude > 90) {
+			//Lat Lng optional for offers
+			if (data.EventAttractionTypeId !== 2) {
+				if (+data.Longitude == 0 || +data.Latitude == 0) {
+					oReturn.IsNotValid = true;
+					oReturn.sMsg.push("MSG_LAT_LNG");
+					aCtrlMessage.push({
+						message: "MSG_LAT_LNG",
+						target: "/oDetails/Longitude"
+					});
+					aCtrlMessage.push({
+						message: "MSG_LAT_LNG",
+						target: "/oDetails/Latitude"
+					});
+				} else if (+data.Latitude < -90 || +data.Latitude > 90) {
+					oReturn.IsNotValid = true;
+					oReturn.sMsg.push("MSG_ERR_LAT");
+
+					aCtrlMessage.push({
+						message: "MSG_ERR_LAT",
+						target: "/oDetails/Latitude"
+					});
+
+				} else if (+data.Longitude < -180 || +data.Longitude > 180) {
+					oReturn.IsNotValid = true;
+					oReturn.sMsg.push("MSG_ERR_LNG");
+					aCtrlMessage.push({
+						message: "MSG_ERR_LNG",
+						target: "/oDetails/Longitude"
+					});
+
+				}
+			}
+
+			if (data.EventAttractionTypeId === 2 && (+data.Latitude < -90 || +data.Latitude > 90)) {
 				oReturn.IsNotValid = true;
 				oReturn.sMsg.push("MSG_ERR_LAT");
 
@@ -718,15 +741,25 @@ sap.ui.define([
 					message: "MSG_ERR_LAT",
 					target: "/oDetails/Latitude"
 				});
-
-			} else if (+data.Longitude < -180 || +data.Longitude > 180) {
+			} else if (data.EventAttractionTypeId === 2 && (+data.Longitude < -180 || +data.Longitude > 180)) {
 				oReturn.IsNotValid = true;
 				oReturn.sMsg.push("MSG_ERR_LNG");
 				aCtrlMessage.push({
 					message: "MSG_ERR_LNG",
 					target: "/oDetails/Longitude"
 				});
+			}
 
+			//Redirection link for Offers
+			var regex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
+			var url = data.ReferenceLink;
+			if (data.EventAttractionTypeId === 2 && (data.ReferenceLink.length > 0 && !(url.match(regex)))) {
+				oReturn.IsNotValid = true;
+				oReturn.sMsg.push("ERR_Invalid_link");
+				aCtrlMessage.push({
+					message: "ERR_Invalid_link",
+					target: "/oDetails/ReferenceLink"
+				});
 			}
 
 			if (aCtrlMessage.length) this._genCtrlMessages(aCtrlMessage);

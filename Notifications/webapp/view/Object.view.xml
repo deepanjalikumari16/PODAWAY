@@ -16,7 +16,7 @@
 							</VBox>
 							<VBox>
 								<Label required="true" text="{i18n>colBody}"/>
-								<TextArea width="100%" value="{objectView>Body}" rows="4" maxLength="600"/>
+								<TextArea width="100%" value="{objectView>Body}" rows="4" maxLength="250" placeholder="{i18n>MessagePlaceHolder}" showExceededText="true"/>
 							</VBox>
 							<VBox>
 								<Label required="true" text="{i18n>colRedirectionType}"/>
@@ -29,7 +29,7 @@
 							</VBox>
 							<VBox>
 								<Label visible="{= ${objectView>RedirectionType} === 'LINK'}" required="true" text="{i18n>colRedirectionTo}"/>
-								<Input visible="{= ${objectView>RedirectionType} === 'LINK'}" width="100%" value="{objectView>RedirectionTo}"/>
+								<Input visible="{= ${objectView>RedirectionType} === 'LINK'}" width="100%" value="{objectView>RedirectionTo}" placeholder="{i18n>linkPlaceHolder}"/>
 								<Label visible="{= ${objectView>RedirectionType} === 'SCREEN'}" required="true" text="{i18n>colRedirectionTo}"/>
 								<ComboBox visible="{= ${objectView>RedirectionType} === 'SCREEN'}" width="100%" selectedKey="{objectView>RedirectionTo}"
 									items="{ path: '/MasterRedirectionSet' }">
@@ -82,7 +82,8 @@
 				<ToolbarSpacer/>
 				<Button text="{i18n>btnCancel}" press="onCancel"/>
 				<Button text="{i18n>btnDraft}" type="Accept" press="onDraft"/>
-				<Button text="{i18n>btnPublish}" type="Emphasized" press="onPublish"/>
+				<Button text="{i18n>btnSchedule}" type="Emphasized" visible="{= ${objectView>IsLater} === true}" press="onPublish"/>
+				<Button text="{i18n>btnSend}" type="Emphasized" visible="{= ${objectView>IsLater} === false}" press="onPublish"/>
 			</Toolbar>
 		</uxap:footer>
 	</uxap:ObjectPageLayout>

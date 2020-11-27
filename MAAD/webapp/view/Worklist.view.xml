@@ -79,7 +79,7 @@
 				<items>
 					<IconTabFilter text="{worklistView>/all}">
 						<Table id="table1" width="auto"
-							items="{ path: '/UserSet', parameters : { expand : 'VolunteerAssignment/PODVisitor, VolunteerAssignment/PODConditions, VolunteerAssignment/ServiceType/IncidentType, Specialities' }, filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path : 'RoleId' , operator : 'EQ' , value1 : 4 } ], sorter: { path: 'Id', descending: false } }"
+							items="{ path: '/UserSet', parameters : { expand : 'VolunteerAssignment/PODVisitor, Manager, VolunteerAssignment/PODConditions, VolunteerAssignment/ServiceType/IncidentType, Specialities' }, filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path : 'RoleId' , operator : 'EQ' , value1 : 4 } ], sorter: { path: 'Id', descending: false } }"
 							noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
 							updateFinished=".onUpdateFinished1">
 							<headerToolbar>
@@ -99,31 +99,34 @@
 								</OverflowToolbar>
 							</headerToolbar>
 							<columns>
-								<Column width="13%">
+								<Column width="15%">
 									<Text text="{i18n>colFirstName}"/>
 								</Column>
 								<Column width="10%">
 									<Text text="{i18n>colLastName}"/>
 								</Column>
-								<Column width="9%">
+								<Column width="13%">
 									<Text text="{i18n>colStatus}"/>
 								</Column>
-								<Column width="15%">
-									<Text text="{i18n>colPodAssigned}"/>
+								<!--<Column width="15%">-->
+								<!--	<Text text="{i18n>colPodAssigned}"/>-->
+								<!--</Column>-->
+								<!--<Column width="10%">-->
+								<!--	<Text text="{i18n>colPodCategory}"/>-->
+								<!--</Column>-->
+								<Column width="20%">
+									<Text text="{i18n>colTeamManager}"/>
 								</Column>
 								<Column width="10%">
-									<Text text="{i18n>colPodCategory}"/>
-								</Column>
-								<Column width="8%">
 									<Text text="{i18n>colSpeciality}"/>
 								</Column>
-								<Column width="9%">
-									<Text text="{i18n>colIncidentType}"/>
-								</Column>
-								<Column width="7%">
+								<!--<Column width="9%">-->
+								<!--	<Text text="{i18n>colIncidentType}"/>-->
+								<!--</Column>-->
+								<Column width="10%">
 									<Text text="{i18n>colMessage}"/>
 								</Column>
-								<Column width="8%">
+								<Column width="10%">
 									<Text text="{i18n>colComment}"/>
 								</Column>
 								<Column width="5%">
@@ -139,12 +142,13 @@
 										<Text text="{FirstName}"/>
 										<Text text="{LastName}"/>
 										<ObjectStatus text="{= ${IsAvailable} === false ? 'Unavailable' : 'Available' }" state="{= ${IsAvailable} === false ? 'Error' : 'Success' }"/>
-										<Text text="{VolunteerAssignment/PODVisitor/FirstName} {VolunteerAssignment/PODVisitor/LastName}"/>
-										<Button text="{= ${VolunteerAssignment/PODConditions}.length }"
-											visible="{= ${VolunteerAssignment} !== null &amp;&amp; ${VolunteerAssignment/PODConditions}.length !== 0}" press="onPodCategory"/>
+										<Text text="{Manager/FirstName} {Manager/LastName}"/>
+										<!--<Text text="{VolunteerAssignment/PODVisitor/FirstName} {VolunteerAssignment/PODVisitor/LastName}"/>-->
+										<!--<Button text="{= ${VolunteerAssignment/PODConditions}.length }"-->
+										<!--	visible="{= ${VolunteerAssignment} !== null &amp;&amp; ${VolunteerAssignment/PODConditions}.length !== 0}" press="onPodCategory"/>-->
 										<Button text="{= ${Specialities}.length }" visible="{= ${Specialities}.length !== 0}" press="onSpeciality"/>
-										<ObjectStatus text="{VolunteerAssignment/ServiceType/IncidentType/IncidentType}"
-											state="{= ${VolunteerAssignment/ServiceType/IncidentType/IncidentType} === 'Emergency' ? 'Error' : 'Success' }"/>
+										<!--<ObjectStatus text="{VolunteerAssignment/ServiceType/IncidentType/IncidentType}"-->
+										<!--	state="{= ${VolunteerAssignment/ServiceType/IncidentType/IncidentType} === 'Emergency' ? 'Error' : 'Success' }"/>-->
 										<Button icon="sap-icon://email" visible="{= ${worklistView>/loggedUserId} !== ${Id} }" press="onMessage" type="Transparent"
 											tooltip="message"/>
 										<Button icon="sap-icon://comment" press="onComment" type="Transparent"/>
@@ -157,7 +161,7 @@
 					</IconTabFilter>
 					<IconTabFilter text="{worklistView>/available}">
 						<Table id="table2" width="auto"
-							items="{ path: '/UserSet', parameters : { expand : 'VolunteerAssignment/PODVisitor, VolunteerAssignment/ServiceType/IncidentType, Specialities' }, filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path : 'RoleId' , operator : 'EQ' , value1 : 4 }, { path : 'IsAvailable' , operator : 'EQ' , value1 : true } ], sorter: { path: 'Id', descending: false } }"
+							items="{ path: '/UserSet', parameters : { expand : 'VolunteerAssignment/PODVisitor, Manager, VolunteerAssignment/ServiceType/IncidentType, Specialities' }, filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path : 'RoleId' , operator : 'EQ' , value1 : 4 }, { path : 'IsAvailable' , operator : 'EQ' , value1 : true } ], sorter: { path: 'Id', descending: false } }"
 							noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
 							updateFinished=".onUpdateFinished2">
 							<headerToolbar>
@@ -177,20 +181,23 @@
 								</OverflowToolbar>
 							</headerToolbar>
 							<columns>
-								<Column width="15%">
+								<Column width="17%">
 									<Text text="{i18n>colFirstName}"/>
 								</Column>
 								<Column width="15%">
 									<Text text="{i18n>colLastName}"/>
 								</Column>
-								<Column width="20%">
-									<Text text="{i18n>colPodAssigned}"/>
+								<!--<Column width="20%">-->
+								<!--	<Text text="{i18n>colPodAssigned}"/>-->
+								<!--</Column>-->
+								<!--<Column width="10%">-->
+								<!--	<Text text="{i18n>colIncidentType}"/>-->
+								<!--</Column>-->
+								<Column width="23%">
+									<Text text="{i18n>colTeamManager}"/>
 								</Column>
 								<Column width="10%">
 									<Text text="{i18n>colSpeciality}"/>
-								</Column>
-								<Column width="10%">
-									<Text text="{i18n>colIncidentType}"/>
 								</Column>
 								<Column width="10%">
 									<Text text="{i18n>colMessage}"/>
@@ -210,10 +217,11 @@
 									<cells>
 										<Text text="{FirstName}"/>
 										<Text text="{LastName}"/>
-										<Text text="{VolunteerAssignment/PODVisitor/FirstName} {VolunteerAssignment/PODVisitor/LastName}"/>
+										<!--<Text text="{VolunteerAssignment/PODVisitor/FirstName} {VolunteerAssignment/PODVisitor/LastName}"/>-->
+										<!--<ObjectStatus text="{VolunteerAssignment/ServiceType/IncidentType/IncidentType}"-->
+										<!--	state="{= ${VolunteerAssignment/ServiceType/IncidentType/IncidentType} === 'Emergency' ? 'Error' : 'Success' }"/>-->
+										<Text text="{Manager/FirstName} {Manager/LastName}"/>
 										<Button text="{= ${Specialities}.length }" visible="{= ${Specialities}.length !== 0}" press="onSpeciality"/>
-										<ObjectStatus text="{VolunteerAssignment/ServiceType/IncidentType/IncidentType}"
-											state="{= ${VolunteerAssignment/ServiceType/IncidentType/IncidentType} === 'Emergency' ? 'Error' : 'Success' }"/>
 										<Button icon="sap-icon://email" visible="{= ${worklistView>/loggedUserId} !== ${Id} }" press="onMessage" type="Transparent"
 											tooltip="message"/>
 										<Button icon="sap-icon://comment" press="onComment" type="Transparent"/>
@@ -226,7 +234,7 @@
 					</IconTabFilter>
 					<IconTabFilter text="{worklistView>/unavailable}">
 						<Table id="table3" width="auto"
-							items="{ path: '/UserSet', parameters : { expand : 'VolunteerAssignment/PODVisitor, VolunteerAssignment/PODConditions, VolunteerAssignment/ServiceType/IncidentType, Specialities' }, filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path : 'RoleId' , operator : 'EQ' , value1 : 4 }, { path : 'IsAvailable' , operator : 'EQ' , value1 : false } ], sorter: { path: 'Id', descending: false } }"
+							items="{ path: '/UserSet', parameters : { expand : 'VolunteerAssignment/PODVisitor, Manager, VolunteerAssignment/PODConditions, VolunteerAssignment/ServiceType/IncidentType, Specialities' }, filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path : 'RoleId' , operator : 'EQ' , value1 : 4 }, { path : 'IsAvailable' , operator : 'EQ' , value1 : false } ], sorter: { path: 'Id', descending: false } }"
 							noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
 							updateFinished=".onUpdateFinished3">
 							<headerToolbar>
@@ -246,23 +254,26 @@
 								</OverflowToolbar>
 							</headerToolbar>
 							<columns>
-								<Column width="19%">
+								<Column width="11%">
 									<Text text="{i18n>colFirstName}"/>
 								</Column>
 								<Column width="11%">
 									<Text text="{i18n>colLastName}"/>
 								</Column>
-								<Column width="19%">
+								<Column width="15%">
 									<Text text="{i18n>colPodAssigned}"/>
 								</Column>
 								<Column width="10%">
 									<Text text="{i18n>colPodCategory}"/>
 								</Column>
 								<Column width="10%">
-									<Text text="{i18n>colSpeciality}"/>
-								</Column>
-								<Column width="10%">
 									<Text text="{i18n>colIncidentType}"/>
+								</Column>
+								<Column width="14%">
+									<Text text="{i18n>colTeamManager}"/>
+								</Column>
+								<Column width="8%">
+									<Text text="{i18n>colSpeciality}"/>
 								</Column>
 								<Column width="8%">
 									<Text text="{i18n>colMessage}"/>
@@ -282,9 +293,10 @@
 										<Text text="{VolunteerAssignment/PODVisitor/FirstName} {VolunteerAssignment/PODVisitor/LastName}"/>
 										<Button text="{= ${VolunteerAssignment/PODConditions}.length }"
 											visible="{= ${VolunteerAssignment} !== null &amp;&amp; ${VolunteerAssignment/PODConditions}.length !== 0}" press="onPodCategory"/>
-										<Button text="{= ${Specialities}.length }" visible="{= ${Specialities}.length !== 0}" press="onSpeciality"/>
 										<ObjectStatus text="{VolunteerAssignment/ServiceType/IncidentType/IncidentType}"
 											state="{= ${VolunteerAssignment/ServiceType/IncidentType/IncidentType} === 'Emergency' ? 'Error' : 'Success' }"/>
+										<Text text="{Manager/FirstName} {Manager/LastName}"/>
+										<Button text="{= ${Specialities}.length }" visible="{= ${Specialities}.length !== 0}" press="onSpeciality"/>
 										<Button icon="sap-icon://email" visible="{= ${worklistView>/loggedUserId} !== ${Id} }" press="onMessage" type="Transparent"
 											tooltip="message"/>
 										<Button icon="sap-icon://comment" press="onComment" type="Transparent"/>

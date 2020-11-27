@@ -10,7 +10,7 @@
 		</l:VerticalLayout>
 		<content>
 			<Table id="table" width="auto"
-				items="{ path: '/NotificationSet', parameters : { expand : 'Group, Receivers/Role, Redirection' }, filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path : 'IsSystemGenerated' , operator : 'EQ' , value1 : false } ] }"
+				items="{ path: '/NotificationSet', parameters : { expand : 'Group, Receivers/Role, Redirection' }, filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path : 'IsSystemGenerated' , operator : 'EQ' , value1 : false } ], sorter: { path: 'UpdatedAt', descending: true } }"
 				noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
 				updateFinished=".onUpdateFinished">
 				<headerToolbar>
@@ -36,19 +36,22 @@
 					<Column width="25%">
 						<Text text="{i18n>colBody}"/>
 					</Column>
-					<Column width="8%">
+					<Column width="10%">
 						<Text text="{i18n>colNotificationType}"/>
 					</Column>
 					<Column width="10%">
 						<Text text="{i18n>colNotificationStatus}"/>
 					</Column>
-					<Column width="11%">
-						<Text text="{i18n>colRedirectionType}"/>
+					<Column width="15%">
+						<Text text="{i18n>colScheduledDtTm}"/>
 					</Column>
-					<Column width="10%">
-						<Text text="{i18n>colRedirectionTo}"/>
-					</Column>
-					<Column width="10%">
+					<!--<Column width="11%">-->
+					<!--	<Text text="{i18n>colRedirectionType}"/>-->
+					<!--</Column>-->
+					<!--<Column width="10%">-->
+					<!--	<Text text="{i18n>colRedirectionTo}"/>-->
+					<!--</Column>-->
+					<Column width="14%">
 						<Text text="{i18n>colCreatorName}"/>
 					</Column>
 					<Column width="5%">
@@ -65,12 +68,17 @@
 							<Text text="{Body}"/>
 							<Text text="{NotificationType}"/>
 							<Text text="{NotificationStatus}"/>
-							<Text text="{RedirectionType}"/>
 							<VBox>
-								<Text text="{Redirection/RedirectionValue}" visible="{= ${RedirectionType} === 'SCREEN' }"/>
-								<Link text="{RedirectionTo}" href="{RedirectionTo}" target="_blank" visible="{= ${RedirectionType} === 'LINK' }"/>
+								<Text text="{parts: [ {path: 'ScheduledDate'}, {path: 'ScheduledTime'} ], formatter : '.formatter.formatDate' }"
+									visible="{= !!${ScheduledDate}}"/>
+								<Text text="{path: 'UpdatedAt', type: 'sap.ui.model.odata.type.DateTime', formatOptions: { pattern: 'dd MMM yyyy, hh:mm a' } }"
+									visible="{= !${ScheduledDate}}"/>
 							</VBox>
-							<!--<Text text="{= ${RedirectionType} === 'SCREEN' ? ${Redirection/RedirectionValue} : ${RedirectionTo} }"/>-->
+							<!--<Text text="{RedirectionType}"/>-->
+							<!--<VBox>-->
+							<!--	<Text text="{Redirection/RedirectionValue}" visible="{= ${RedirectionType} === 'SCREEN' }"/>-->
+							<!--	<Link text="{RedirectionTo}" href="{RedirectionTo}" target="_blank" visible="{= ${RedirectionType} === 'LINK' }"/>-->
+							<!--</VBox>-->
 							<Text text="{CreatorName}"/>
 							<Button icon="sap-icon://edit" visible="{= ${NotificationStatus} === 'DRAFT' || ${NotificationStatus} === 'SCHEDULED' }" press="onEdit"
 								type="Transparent"/>

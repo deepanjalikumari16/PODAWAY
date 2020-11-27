@@ -186,12 +186,13 @@ sap.ui.define([
 				var data = this.getModel().getData(sPath);
 				this.getModel().update(sPath, {
 					GroupName: data.GroupName,
+					Members: data.Members.results,
 					IsArchived: true
 				}, {
 					success: this.showToast.bind(this, "MSG_SUCCESS_ADM_REMOVE")
 				});
 			}
-			this.showWarning("MSG_CONFIRM_DELETE", onYes);
+			this.showWarning("MSG_CONFIRM_DELETE", onYes.bind(this));
 		},
 
 		/**

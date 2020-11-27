@@ -101,7 +101,7 @@ sap.ui.define([
 				actions: [sap.m.MessageBox.Action.NO, sap.m.MessageBox.Action.YES],
 				onClose: function (sAction) {
 					if (sAction === "YES") {
-						// _fnYes && _fnYes.apply(that);
+						_fnYes && _fnYes.apply(that);
 					}
 				}
 			});

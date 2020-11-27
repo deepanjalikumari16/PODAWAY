@@ -56,6 +56,9 @@ sap.ui.define([
 				icon: "sap-icon://table-view",
 				intent: "#Notifications-display"
 			}, true);
+			
+			
+			
 		},
 
 		/* =========================================================== */
