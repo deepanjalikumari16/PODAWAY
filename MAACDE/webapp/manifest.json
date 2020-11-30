@@ -51,7 +51,7 @@
 					},
 					"semanticObject": "Manage",
 					"action": "Device",
-					"title": "Accessibility Devices"
+					"title": "Assistive Devices"
 				}
 			}
 		}
@@ -73,7 +73,7 @@
 		}
 	},
 	"sap.ui5": {
-		"handleValidation" : true,  
+		"handleValidation": true,
 		"rootView": {
 			"viewName": "com.coil.podium.MAACDE.view.App",
 			"type": "XML",

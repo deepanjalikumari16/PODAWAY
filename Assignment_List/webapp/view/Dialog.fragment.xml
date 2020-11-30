@@ -14,7 +14,7 @@
 			</f:SimpleForm>
 		</VBox>
 		<buttons>
-			<Button text="{i18n>AssignNow}" press=".assignNow"/>
+			<Button text="{i18n>AssignNow}" enabled="{= ${worklistView>/assigneeId} !== ${worklistView>/preAssigneeId}}" press=".assignNow"/>
 			<Button text="{i18n>cancel}" press=".closeDialog"/>
 		</buttons>
 	</Dialog>

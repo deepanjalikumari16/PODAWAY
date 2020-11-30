@@ -220,7 +220,7 @@ sap.ui.define([
 				});
 			oShareDialog.open();
 		},
-		
+
 		onRefreshView: function () {
 			var oModel = this.getModel();
 			oModel.refresh(true);
@@ -230,6 +230,7 @@ sap.ui.define([
 			var oView = this.getView();
 			var oObject = oEvent.getSource().getBindingContext().getObject();
 			this.getModel("worklistView").setProperty("/assigneeId", oObject.AssigneeId);
+			this.getModel("worklistView").setProperty("/preAssigneeId", oObject.AssigneeId);
 			var sPath = oEvent.getSource().getBindingContext().getPath();
 			var data = this.getModel().getData(sPath);
 			this.getModel("worklistView").setProperty("/assignmentId", data.Id);
@@ -364,24 +365,53 @@ sap.ui.define([
 		},
 
 		onMarkasComplete: function (oEvent) {
+
 			var sPath = oEvent.getSource().getBindingContext().getPath();
 			var data = this.getModel().getData(sPath);
 			var dat = this;
 			var oModel = dat.getModel();
-			oModel.callFunction("/CompleteAssignment", {
-				method: "GET",
-				urlParameters: {
-					AssignmentId: data.Id
+			var chkRequest = false;
+			debugger;
+			var sAssignmentPath = "/AssignmentSet";
+
+			var afilter = [new Filter("AssignmentStatusId", FilterOperator.EQ, 2),
+				new Filter("IsArchived", FilterOperator.EQ, false)
+			];
+
+			dat.getModel().read(sAssignmentPath, {
+				filters: afilter,
+				success: function (pendingdata) {
+					if (pendingdata && pendingdata.results.length) {
+						for (var i = 0; i < pendingdata.results.length; i++) {
+							if (pendingdata.results[i].Id === data.Id) {
+								chkRequest = true;
+								oModel.callFunction("/CompleteAssignment", {
+									method: "GET",
+									urlParameters: {
+										AssignmentId: data.Id
+									},
+									success: function (adata) {
+										dat.showToast.call(dat, "MSG_SUCCESS_MARKED_COMPLETED");
+										oModel.refresh(true);
+										return;
+									}
+								});
+							}
+						}
+					}
+					if (chkRequest === false) {
+						dat.showToast.call(dat, "MSG_ERROR_REQUEST_ALREADY_CANCELLED");
+						oModel.refresh(true);
+					}
 				},
-				success: function (adata) {
-					dat.showToast.call(dat, "MSG_SUCCESS_MARKED_COMPLETED");
+				error: function () {
+					dat.showToast.call(dat, "MSG_ERROR_REQUEST_ALREADY_CANCELLED");
 					oModel.refresh(true);
 				}
 			});
 		},
-		
+
 		onMessage: function (oEvent) {
-			debugger;
 			var oView = this.getView();
 			var sPath = oEvent.getSource().getBindingContext().getPath();
 			var data = this.getModel().getData(sPath);

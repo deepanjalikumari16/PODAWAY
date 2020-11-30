@@ -13,15 +13,6 @@
 				<f:content>
 					<fb:FilterBar id="filterbar" reset="onReset" search="onSearch" useToolbar="false" basicSearch="sfld" showGoOnFB="true">
 						<fb:filterGroupItems>
-							<!--<fb:FilterGroupItem visibleInFilterBar="true" groupName="A" name="PODVisitor/PODVisitorId" groupTitle="Filters" label="{i18n>colPodCategory}">-->
-							<!--	<fb:control>-->
-							<!--		<ComboBox items="{ path: '/AccessibilityItemSet', -->
-							<!--		          filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false },-->
-							<!--		                      { path : 'AccessibilityId' , operator : 'EQ' , value1 : 2 } ] }">-->
-							<!--			<core:Item key="{Id}" text="{Title}"/>-->
-							<!--		</ComboBox>-->
-							<!--	</fb:control>-->
-							<!--</fb:FilterGroupItem>-->
 							<fb:FilterGroupItem visibleInFilterBar="true" groupName="A" name="ServiceType/IncidentTypeId" groupTitle="Filters"
 								label="{i18n>colIncidentType}">
 								<fb:control>
@@ -91,10 +82,7 @@
 										<ObjectStatus text="{ServiceType/IncidentType/IncidentType}"
 											state="{= ${ServiceType/IncidentType/IncidentType} === 'Emergency' ? 'Error' : 'Success' }"/>
 										<Text text="{Assignee/FirstName} {Assignee/LastName}"/>
-										<!--If loggedIn user is a Team Manager, button text will be Start Assignment otherwise Assign Now-->
 										<HBox>
-											<!--<Button text="{i18n>btnReassign}" press="onAssignNow" visible="{= ${worklistView>/loggedUserRoleId} === 1 && ${AssigneeId} !== null}"-->
-											<!--	class="sapUiSmallMarginEnd"/>-->
 											<Button text="{i18n>btnAssignNow}" visible="{= ${worklistView>/loggedUserRoleId} === 1 &amp;&amp; ${AssigneeId} === null}"
 												press="onAssignNow"/>
 											<Button text="{i18n>btnReassign}"
@@ -114,7 +102,7 @@
 					</IconTabFilter>
 					<IconTabFilter text="{worklistView>/inprogress}">
 						<Table id="table1" width="auto"
-							items="{ path: '/AssignmentSet', parameters : { expand : 'PODVisitor,Assignee,AssignmentStatus,ServiceType/IncidentType,PODConditions' }, filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path : 'AssignmentStatusId' , operator : 'EQ' , value1 : 2 } ] }"
+							items="{ path: '/AssignmentSet', parameters : { expand : 'PODVisitor,Assignee,AssignmentStatus,ServiceType/IncidentType,PODConditions' }, filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path : 'AssignmentStatusId' , operator : 'EQ' , value1 : 2 } ], sorter: { path: 'UpdatedAt', descending: true } }"
 							noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
 							updateFinished=".onUpdateFinished1">
 							<headerToolbar>
@@ -177,7 +165,7 @@
 					</IconTabFilter>
 					<IconTabFilter text="{worklistView>/completed}">
 						<Table id="table2" width="auto"
-							items="{ path: '/AssignmentSet', parameters : { expand : 'PODVisitor,Assignee,AssignmentStatus,ServiceType/IncidentType,PODConditions' }, filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path : 'AssignmentStatusId' , operator : 'EQ' , value1 : 3 } ] }"
+							items="{ path: '/AssignmentSet', parameters : { expand : 'PODVisitor,Assignee,AssignmentStatus,ServiceType/IncidentType,PODConditions' }, filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path : 'AssignmentStatusId' , operator : 'EQ' , value1 : 3 } ], sorter: { path: 'UpdatedAt', descending: true } }"
 							noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
 							updateFinished=".onUpdateFinished2">
 							<headerToolbar>
@@ -237,7 +225,7 @@
 					</IconTabFilter>
 					<IconTabFilter text="{worklistView>/cancelled}">
 						<Table id="table3" width="auto"
-							items="{ path: '/AssignmentSet', parameters : { expand : 'PODVisitor,Assignee,AssignmentStatus,ServiceType/IncidentType,PODConditions' }, filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path : 'AssignmentStatusId' , operator : 'EQ' , value1 : 4 } ] }"
+							items="{ path: '/AssignmentSet', parameters : { expand : 'PODVisitor,Assignee,AssignmentStatus,ServiceType/IncidentType,PODConditions' }, filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path : 'AssignmentStatusId' , operator : 'EQ' , value1 : 4 } ], sorter: { path: 'UpdatedAt', descending: true } }"
 							noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
 							updateFinished=".onUpdateFinished3">
 							<headerToolbar>

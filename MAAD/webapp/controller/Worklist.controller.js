@@ -65,8 +65,8 @@ sap.ui.define([
 					success: function (data) {
 						oViewModel.setProperty("/loggedUserId", data.results[0].Id);
 						oViewModel.setProperty("/loggedRoleId", data.results[0].RoleId);
-						
 						dat.getModel("appView").setProperty("/loggedRoleId", data.results[0].RoleId);
+						dat.loadVolunteer();
 					}
 				});
 			});
@@ -221,39 +221,49 @@ sap.ui.define([
 				if (itemBinding) itemBinding.filter(afilter, "Application");
 			} else {
 				this.getModel("worklistView").setProperty("/bShowVolunteer", true);
+				this.loadVolunteer();
+			}
+		},
 
-				var oViewModel = this.getModel("worklistView");
-				var loggedUserId = oViewModel.getProperty("/loggedUserId");
-				var loggedRoleId = oViewModel.getProperty("/loggedRoleId");
-				if (loggedRoleId == 2) {
-					var managerFilter = new Filter("ManagerId", FilterOperator.EQ, loggedUserId);
-					var oTable1 = this.getView().byId("table1");
-					var itemBinding1 = oTable1.getBinding("items");
-					var afilter1 = [new Filter("RoleId", FilterOperator.EQ, 4),
-						new Filter("IsArchived", FilterOperator.EQ, false),
-						managerFilter
-					];
-					if (itemBinding1) itemBinding1.filter(afilter1, "Application");
+		loadVolunteer: function () {
+			var oViewModel = this.getModel("worklistView");
 
-					var oTable2 = this.getView().byId("table2");
-					var itemBinding2 = oTable2.getBinding("items");
-					var afilter2 = [new Filter("RoleId", FilterOperator.EQ, 4),
-						new Filter("IsArchived", FilterOperator.EQ, false),
-						new Filter("IsAvailable", FilterOperator.EQ, true),
-						managerFilter
-					];
-					if (itemBinding2) itemBinding2.filter(afilter2, "Application");
+			var loggedUserId = oViewModel.getProperty("/loggedUserId");
+			var loggedRoleId = oViewModel.getProperty("/loggedRoleId");
 
-					var oTable3 = this.getView().byId("table3");
-					var itemBinding3 = oTable3.getBinding("items");
-					var afilter3 = [new Filter("RoleId", FilterOperator.EQ, 4),
-						new Filter("IsArchived", FilterOperator.EQ, false),
-						new Filter("IsAvailable", FilterOperator.EQ, false),
-						managerFilter
-					];
-					if (itemBinding3) itemBinding3.filter(afilter3, "Application");
+			if (loggedRoleId === 2) {
+				this.getModel("worklistView").setProperty("/bShowVolunteer", true);
 
-				}
+				this.getModel("appView").setProperty("/selectedRoleId", 4);
+				this.getModel("worklistView").setProperty("/selectId", 4);
+
+				var managerFilter = new Filter("ManagerId", FilterOperator.EQ, loggedUserId);
+				var oTable1 = this.getView().byId("table1");
+				var itemBinding1 = oTable1.getBinding("items");
+				var afilter1 = [new Filter("RoleId", FilterOperator.EQ, 4),
+					new Filter("IsArchived", FilterOperator.EQ, false),
+					managerFilter
+				];
+				if (itemBinding1) itemBinding1.filter(afilter1, "Application");
+
+				var oTable2 = this.getView().byId("table2");
+				var itemBinding2 = oTable2.getBinding("items");
+				var afilter2 = [new Filter("RoleId", FilterOperator.EQ, 4),
+					new Filter("IsArchived", FilterOperator.EQ, false),
+					new Filter("IsAvailable", FilterOperator.EQ, true),
+					managerFilter
+				];
+				if (itemBinding2) itemBinding2.filter(afilter2, "Application");
+
+				var oTable3 = this.getView().byId("table3");
+				var itemBinding3 = oTable3.getBinding("items");
+				var afilter3 = [new Filter("RoleId", FilterOperator.EQ, 4),
+					new Filter("IsArchived", FilterOperator.EQ, false),
+					new Filter("IsAvailable", FilterOperator.EQ, false),
+					managerFilter
+				];
+				if (itemBinding3) itemBinding3.filter(afilter3, "Application");
+
 			}
 		},
 
@@ -445,7 +455,7 @@ sap.ui.define([
 		onAdd: function (oEvent) {
 			this.getRouter().navTo("createObject");
 		},
-		
+
 		onRefreshView: function () {
 			var oModel = this.getModel();
 			oModel.refresh(true);

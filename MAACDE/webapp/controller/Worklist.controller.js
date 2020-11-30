@@ -219,7 +219,8 @@ sap.ui.define([
 				AccessibilityId: this.getOwnerComponent().sAccType,
 				Icon: null,
 				TextAllowed: false,
-				IsEnabled: false
+				IsEnabled: false,
+				Information : ""
 			});
 			
 			

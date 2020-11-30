@@ -8,6 +8,8 @@
 			<Label required="true" text="{i18n>LblAccessibilityDeviceTitle}"/>
 			<!-- , type: 'sap.ui.model.odata.type.String' , constraints : { nullable : false  } -->
 			<Input  value="{ path:  'worklistView>Title' }"/>
+			<Label required="true" text="{i18n>LblInformation}"/>
+			<Input  value="{ path:  'worklistView>Information' }"/>
 			<Label visible="{=  ${worklistView>AccessibilityId} === 2  }" text="{i18n>LblIsTextAllowed}" />
 			<CheckBox visible="{=  ${worklistView>AccessibilityId} === 2 }" selected="{worklistView>TextAllowed}"   />
 			<Label text="{i18n>LblEnabled}" />	

@@ -2,7 +2,9 @@
 	xmlns:f="sap.f" xmlns:l="sap.ui.layout" xmlns:fb="sap.ui.comp.filterbar">
 	<Page id="page" class="sapUiResponsiveContentPadding">
 		<l:VerticalLayout>
-			<Select id="Id" items="{path : '/MasterRoleSet', filters : [{path:'Id', operator : 'NE' , value1 : 3 }]}" change="onChange">
+			<Title id="title" text="{i18n>titleVol}" visible="{= ${worklistView>/loggedRoleId} === 1 }"/>
+			<Select id="Id" items="{path : '/MasterRoleSet', filters : [{path:'Id', operator : 'NE' , value1 : 3 }]}" change="onChange"
+				visible="{= ${worklistView>/loggedRoleId} === 1 }">
 				<c:Item key="{Id}" text="{Role}"/>
 			</Select>
 			<SearchField id="searchField" tooltip="{i18n>worklistSearchTooltip}" search=".onSearch">
@@ -12,7 +14,7 @@
 			</SearchField>
 		</l:VerticalLayout>
 		<content>
-			<Table id="table" width="auto" visible="{= !${worklistView>/bShowVolunteer} }"
+			<Table id="table" width="auto" visible="{= !${worklistView>/bShowVolunteer} &amp;&amp; ${worklistView>/loggedRoleId} === 1 }"
 				items="{ path: '/UserSet', filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path : 'RoleId' , operator : 'EQ' , value1 : 1 } ], sorter: { path: 'Id', descending: false } }"
 				noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
 				updateFinished=".onUpdateFinished">
@@ -108,21 +110,12 @@
 								<Column width="13%">
 									<Text text="{i18n>colStatus}"/>
 								</Column>
-								<!--<Column width="15%">-->
-								<!--	<Text text="{i18n>colPodAssigned}"/>-->
-								<!--</Column>-->
-								<!--<Column width="10%">-->
-								<!--	<Text text="{i18n>colPodCategory}"/>-->
-								<!--</Column>-->
 								<Column width="20%">
 									<Text text="{i18n>colTeamManager}"/>
 								</Column>
 								<Column width="10%">
 									<Text text="{i18n>colSpeciality}"/>
 								</Column>
-								<!--<Column width="9%">-->
-								<!--	<Text text="{i18n>colIncidentType}"/>-->
-								<!--</Column>-->
 								<Column width="10%">
 									<Text text="{i18n>colMessage}"/>
 								</Column>
