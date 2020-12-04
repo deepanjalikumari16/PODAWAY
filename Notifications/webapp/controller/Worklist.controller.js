@@ -19,10 +19,12 @@ sap.ui.define([
 		 * Called when the worklist controller is instantiated.
 		 * @public
 		 */
-		onInit : function () {
+		onInit: function () {
 			var oViewModel,
 				iOriginalBusyDelay,
-				oTable = this.byId("table");
+				oTable = this.byId("table"),
+				oTable1 = this.byId("table1"),
+				oTable2 = this.byId("table2");
 
 			// Put down worklist table's original value for busy indicator delay,
 			// so it can be restored later on. Busy handling on the table is
@@ -33,20 +35,28 @@ sap.ui.define([
 
 			// Model used to manipulate control states
 			oViewModel = new JSONModel({
-				worklistTableTitle : this.getResourceBundle().getText("worklistTableTitle"),
+				worklistTableTitle: this.getResourceBundle().getText("worklistTableTitle"),
 				saveAsTileTitle: this.getResourceBundle().getText("saveAsTileTitle", this.getResourceBundle().getText("worklistViewTitle")),
 				shareOnJamTitle: this.getResourceBundle().getText("worklistTitle"),
 				shareSendEmailSubject: this.getResourceBundle().getText("shareSendEmailWorklistSubject"),
 				shareSendEmailMessage: this.getResourceBundle().getText("shareSendEmailWorklistMessage", [location.href]),
-				tableNoDataText : this.getResourceBundle().getText("tableNoDataText"),
-				tableBusyDelay : 0
+				tableNoDataText: this.getResourceBundle().getText("tableNoDataText"),
+				tableBusyDelay: 0
 			});
 			this.setModel(oViewModel, "worklistView");
 
 			// Make sure, busy indication is showing immediately so there is no
 			// break after the busy indication for loading the view's meta data is
 			// ended (see promise 'oWhenMetadataIsLoaded' in AppController)
-			oTable.attachEventOnce("updateFinished", function(){
+			oTable.attachEventOnce("updateFinished", function () {
+				// Restore original busy indicator delay for worklist's table
+				oViewModel.setProperty("/tableBusyDelay", iOriginalBusyDelay);
+			});
+			oTable1.attachEventOnce("updateFinished1", function () {
+				// Restore original busy indicator delay for worklist's table
+				oViewModel.setProperty("/tableBusyDelay", iOriginalBusyDelay);
+			});
+			oTable2.attachEventOnce("updateFinished2", function () {
 				// Restore original busy indicator delay for worklist's table
 				oViewModel.setProperty("/tableBusyDelay", iOriginalBusyDelay);
 			});
@@ -56,9 +66,7 @@ sap.ui.define([
 				icon: "sap-icon://table-view",
 				intent: "#Notifications-display"
 			}, true);
-			
-			
-			
+
 		},
 
 		/* =========================================================== */
@@ -74,19 +82,49 @@ sap.ui.define([
 		 * @param {sap.ui.base.Event} oEvent the update finished event
 		 * @public
 		 */
-		onUpdateFinished : function (oEvent) {
+		onUpdateFinished: function (oEvent) {
 			// update the worklist's object counter after the table update
-			var sTitle,
+			var sDraft,
 				oTable = oEvent.getSource(),
 				iTotalItems = oEvent.getParameter("total");
 			// only update the counter if the length is final and
 			// the table is not empty
 			if (iTotalItems && oTable.getBinding("items").isLengthFinal()) {
-				sTitle = this.getResourceBundle().getText("worklistTableTitleCount", [iTotalItems]);
+				sDraft = this.getResourceBundle().getText("draftCount", [iTotalItems]);
 			} else {
-				sTitle = this.getResourceBundle().getText("worklistTableTitle");
+				sDraft = this.getResourceBundle().getText("draft");
 			}
-			this.getModel("worklistView").setProperty("/worklistTableTitle", sTitle);
+			this.getModel("worklistView").setProperty("/draft", sDraft);
+		},
+
+		onUpdateFinished1: function (oEvent) {
+			// update the worklist's object counter after the table update
+			var sScheduled,
+				oTable1 = oEvent.getSource(),
+				iTotalItems1 = oEvent.getParameter("total");
+			// only update the counter if the length is final and
+			// the table is not empty
+			if (iTotalItems1 && oTable1.getBinding("items").isLengthFinal()) {
+				sScheduled = this.getResourceBundle().getText("scheduledCount", [iTotalItems1]);
+			} else {
+				sScheduled = this.getResourceBundle().getText("scheduled");
+			}
+			this.getModel("worklistView").setProperty("/scheduled", sScheduled);
+		},
+
+		onUpdateFinished2: function (oEvent) {
+			// update the worklist's object counter after the table update
+			var sTriggered,
+				oTable2 = oEvent.getSource(),
+				iTotalItems2 = oEvent.getParameter("total");
+			// only update the counter if the length is final and
+			// the table is not empty
+			if (iTotalItems2 && oTable2.getBinding("items").isLengthFinal()) {
+				sTriggered = this.getResourceBundle().getText("triggeredCount", [iTotalItems2]);
+			} else {
+				sTriggered = this.getResourceBundle().getText("triggered");
+			}
+			this.getModel("worklistView").setProperty("/triggered", sTriggered);
 		},
 
 		/**
@@ -94,22 +132,21 @@ sap.ui.define([
 		 * @param {sap.ui.base.Event} oEvent the table selectionChange event
 		 * @public
 		 */
-		onPress : function (oEvent) {
+		onPress: function (oEvent) {
 			// The source is the list item that got pressed
 			this._showObject(oEvent.getSource());
 		},
-
 
 		/**
 		 * Event handler when the share in JAM button has been clicked
 		 * @public
 		 */
-		onShareInJamPress : function () {
+		onShareInJamPress: function () {
 			var oViewModel = this.getModel("worklistView"),
 				oShareDialog = sap.ui.getCore().createComponent({
 					name: "sap.collaboration.components.fiori.sharing.dialog",
 					settings: {
-						object:{
+						object: {
 							id: location.href,
 							share: oViewModel.getProperty("/shareOnJamTitle")
 						}
@@ -118,7 +155,7 @@ sap.ui.define([
 			oShareDialog.open();
 		},
 
-		onSearch : function (oEvent) {
+		onSearch: function (oEvent) {
 			if (oEvent.getParameters().refreshButtonPressed) {
 				// Search field's 'refresh' button has been pressed.
 				// This is visible if you select any master list item.
@@ -127,29 +164,29 @@ sap.ui.define([
 				this.onRefresh();
 			} else {
 				var aTableSearchState = [];
-				var sQuery = oEvent.getParameter("query");
-
+				// var sQuery = oEvent.getParameter("query");
+				var sQuery = oEvent.getParameter("query").toLowerCase();
 				sQuery = "'" + sQuery + "'";
 				if (sQuery && sQuery.length > 0) {
 
 					aTableSearchState = [new Filter('tolower(Subject)', FilterOperator.Contains, sQuery),
 						new Filter("IsArchived", FilterOperator.EQ, false),
-						new Filter('IsSystemGenerated' , FilterOperator.EQ, false)
+						new Filter('IsSystemGenerated', FilterOperator.EQ, false)
 					];
 				} else {
 					aTableSearchState = [new Filter("IsArchived", FilterOperator.EQ, false),
-										 new Filter('IsSystemGenerated' , FilterOperator.EQ, false)
+						new Filter('IsSystemGenerated', FilterOperator.EQ, false)
 					];
 				}
 				this._applySearch(aTableSearchState);
 			}
 
 		},
-		
+
 		onAdd: function (oEvent) {
 			this.getRouter().navTo("createObject");
 		},
-		
+
 		onRefreshView: function () {
 			var oModel = this.getModel();
 			oModel.refresh(true);
@@ -160,19 +197,23 @@ sap.ui.define([
 		 * and group settings and refreshes the list binding.
 		 * @public
 		 */
-		onRefresh : function () {
+		onRefresh: function () {
 			var oTable = this.byId("table");
+			var oTable1 = this.byId("table1");
+			var oTable2 = this.byId("table2");
 			oTable.getBinding("items").refresh();
+			oTable1.getBinding("items").refresh();
+			oTable2.getBinding("items").refresh();
 		},
-		
+
 		// onLink: function (oEvent) {
 		// 	window.open(url, '_blank');
 		// },
-		
+
 		onEdit: function (oEvent) {
 			this._showObject(oEvent.getSource());
 		},
-		
+
 		onDelete: function (oEvent) {
 			var sPath = oEvent.getSource().getBindingContext().getPath();
 
@@ -205,7 +246,7 @@ sap.ui.define([
 		 * @param {sap.m.ObjectListItem} oItem selected Item
 		 * @private
 		 */
-		_showObject : function (oItem) {
+		_showObject: function (oItem) {
 			this.getRouter().navTo("object", {
 				objectId: oItem.getBindingContext().getProperty("UUID")
 			});
@@ -216,10 +257,15 @@ sap.ui.define([
 		 * @param {sap.ui.model.Filter[]} aTableSearchState An array of filters for the search
 		 * @private
 		 */
-		_applySearch: function(aTableSearchState) {
+		_applySearch: function (aTableSearchState) {
 			var oTable = this.byId("table"),
+				oTable1 = this.byId("table1"),
+				oTable2 = this.byId("table2"),
 				oViewModel = this.getModel("worklistView");
-			oTable.getBinding("items").filter(aTableSearchState, "Application");
+				// "Application"
+			oTable.getBinding("items").filter(aTableSearchState);    
+			oTable1.getBinding("items").filter(aTableSearchState);
+			oTable2.getBinding("items").filter(aTableSearchState);
 			// changes the noDataText of the list in case there are no filter results
 			if (aTableSearchState.length !== 0) {
 				oViewModel.setProperty("/tableNoDataText", this.getResourceBundle().getText("worklistNoDataWithSearchText"));

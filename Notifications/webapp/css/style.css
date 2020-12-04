@@ -1,0 +1,10 @@
+.MapContainer {
+	width: 640px; 
+	height: 480px	
+}
+.notification-tab .sapMITH {
+    padding: 0 1rem !important;
+}
+.notification-tab .sapMITBContent {
+	padding: 1rem 0 !important;
+}

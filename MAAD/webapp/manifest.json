@@ -106,31 +106,27 @@
 				},
 				"async": true
 			},
-			"routes": [
-				{
-					"pattern": "",
-					"name": "worklist",
-					"target": [
-						"worklist"
-					]
-				},
-				{
-					"pattern": "UserSet/{objectId}",
-					"name": "object",
-					"target": [
-						"object"
-					]
-				},
-				{
-					"name": "createObject",
-					"pattern": "UserSet",
-					"titleTarget": "",
-					"greedy": false,
-					"target": [
-						"object"
-					]
-				}
-			],
+			"routes": [{
+				"pattern": "",
+				"name": "worklist",
+				"target": [
+					"worklist"
+				]
+			}, {
+				"pattern": "UserSet/{objectId}",
+				"name": "object",
+				"target": [
+					"object"
+				]
+			}, {
+				"name": "createObject",
+				"pattern": "UserSet",
+				"titleTarget": "",
+				"greedy": false,
+				"target": [
+					"object"
+				]
+			}],
 			"targets": {
 				"worklist": {
 					"viewName": "Worklist",
@@ -153,6 +149,11 @@
 					"viewId": "notFound"
 				}
 			}
+		},
+		"resources": {
+			"css": [{
+				"uri": "css/style.css"
+			}]
 		}
 	},
 	"sap.platform.hcp": {

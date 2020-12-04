@@ -209,6 +209,7 @@ sap.ui.define([
 		},
 
 		onAdd: function () {
+			this._setPrefilledAttarctionType();
 			this.getRouter().navTo("createObject");
 		},
 
@@ -325,6 +326,11 @@ sap.ui.define([
 				oViewModel.setProperty("/bTableBusy", false);
 			}
 
+		},
+		
+		_setPrefilledAttarctionType: function(){
+			var oFBCtrl = this.getView().byId("filterbar");
+		    this.getModel("appView").setProperty("/prefilledType", oFBCtrl.getAllFilterItems()[0].getControl().getSelectedKey());
 		}
 
 	});

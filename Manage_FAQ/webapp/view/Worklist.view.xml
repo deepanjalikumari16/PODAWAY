@@ -41,6 +41,11 @@
 					<OverflowToolbar>
 						<Title id="tableHeader" text="{worklistView>/worklistTableTitle}" level="H3"/>
 						<ToolbarSpacer/>
+						<Button text="{i18n>btnRefresh}" icon="sap-icon://refresh" press="onRefreshView">
+							<layoutData>
+								<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
+							</layoutData>
+						</Button>
 						<Button text="{i18n>btnAdd}" icon="sap-icon://add" press="onAdd">
 							<layoutData>
 								<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>

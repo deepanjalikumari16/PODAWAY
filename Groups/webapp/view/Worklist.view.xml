@@ -1,14 +1,27 @@
-<mvc:View controllerName="com.coil.podium.Groups.controller.Worklist" xmlns="sap.m" xmlns:c="sap.ui.core" xmlns:mvc="sap.ui.core.mvc"
+<mvc:View controllerName="com.coil.podium.Groups.controller.Worklist" xmlns:core="sap.ui.core" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc"
 	xmlns:f="sap.f" xmlns:l="sap.ui.layout" xmlns:fb="sap.ui.comp.filterbar">
-	<Page id="page" class="sapUiResponsiveContentPadding">
-		<l:VerticalLayout>
-			<SearchField id="searchField" tooltip="{i18n>worklistSearchTooltip}" search=".onSearch">
-				<layoutData>
-					<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
-				</layoutData>
-			</SearchField>
-		</l:VerticalLayout>
-		<content>
+	<f:DynamicPage id="page">
+		<f:title>
+			<f:DynamicPageTitle>
+				<f:heading>
+					<Title text="{i18n>worklistTitle}"/>
+				</f:heading>
+			</f:DynamicPageTitle>
+		</f:title>
+		<f:header>
+			<f:DynamicPageHeader pinnable="true">
+				<f:content>
+					<l:VerticalLayout>
+						<SearchField id="searchField" tooltip="{i18n>worklistSearchTooltip}" search=".onSearch">
+							<layoutData>
+								<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
+							</layoutData>
+						</SearchField>
+					</l:VerticalLayout>
+				</f:content>
+			</f:DynamicPageHeader>
+		</f:header>
+		<f:content>
 			<Table id="table" width="auto"
 				items="{ path: '/NotificationGroupSet', filters : { path : 'IsArchived' , operator : 'EQ' , value1 : false }, sorter: { path: 'Id', descending: false } }"
 				noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
@@ -58,69 +71,6 @@
 					</ColumnListItem>
 				</items>
 			</Table>
-		</content>
-	</Page>
+		</f:content>
+	</f:DynamicPage>
 </mvc:View>
-<!--<mvc:View controllerName="com.coil.podium.Groups.controller.Worklist" xmlns:core="sap.ui.core" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc"-->
-<!--	xmlns:f="sap.f" xmlns:fb="sap.ui.comp.filterbar">-->
-<!--	<f:DynamicPage id="page">-->
-<!--		<f:title>-->
-<!--			<f:DynamicPageTitle>-->
-<!--				<f:heading>-->
-<!--					<Title text="{i18n>worklistTitle}"/>-->
-<!--				</f:heading>-->
-<!--			</f:DynamicPageTitle>-->
-<!--		</f:title>-->
-<!--		<f:content>-->
-<!--			<Table id="table" width="auto"-->
-<!--				items="{ path: '/NotificationGroupSet', filters : { path : 'IsArchived' , operator : 'EQ' , value1 : false }, sorter: { path: 'Id', descending: false } }"-->
-<!--				noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"-->
-<!--				updateFinished=".onUpdateFinished">-->
-<!--				<headerToolbar>-->
-<!--					<OverflowToolbar>-->
-<!--						<Title id="tableHeader" text="{worklistView>/worklistTableTitle}" level="H3"/>-->
-<!--						<ToolbarSpacer/>-->
-<!--						<Button text="{i18n>btnRefresh}" icon="sap-icon://refresh" press="onRefreshView">-->
-<!--							<layoutData>-->
-<!--								<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>-->
-<!--							</layoutData>-->
-<!--						</Button>-->
-<!--						<Button text="{i18n>btnAdd}" icon="sap-icon://add" press="onAdd">-->
-<!--							<layoutData>-->
-<!--								<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>-->
-<!--							</layoutData>-->
-<!--						</Button>-->
-<!--					</OverflowToolbar>-->
-<!--				</headerToolbar>-->
-<!--				<columns>-->
-<!--					<Column>-->
-<!--						<Text text="{i18n>colGroupName}"/>-->
-<!--					</Column>-->
-<!--					<Column>-->
-<!--						<Text text="{i18n>colTotalMembers}"/>-->
-<!--					</Column>-->
-<!--					<Column>-->
-<!--						<Text text="{i18n>colCreator}"/>-->
-<!--					</Column>-->
-<!--					<Column>-->
-<!--						<Text text="{i18n>colEdit}"/>-->
-<!--					</Column>-->
-<!--					<Column>-->
-<!--						<Text text="{i18n>colRemove}"/>-->
-<!--					</Column>-->
-<!--				</columns>-->
-<!--				<items>-->
-<!--					<ColumnListItem>-->
-<!--						<cells>-->
-<!--							<Text text="{GroupName}"/>-->
-<!--							<Text text="{TotalMembers}"/>-->
-<!--							<Text text="{= ${CreatorName}=== null ? 'SYSTEM' : ${CreatorName} }"/>-->
-<!--							<Button icon="sap-icon://edit" visible="{= ${IsDefault} !== true }" press="onEdit" type="Transparent"/>-->
-<!--							<Button icon="sap-icon://delete" visible="{= ${IsDefault} !== true }" press="onDelete" type="Transparent" tooltip="remove"/>-->
-<!--						</cells>-->
-<!--					</ColumnListItem>-->
-<!--				</items>-->
-<!--			</Table>-->
-<!--		</f:content>-->
-<!--	</f:DynamicPage>-->
-<!--</mvc:View>-->

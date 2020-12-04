@@ -12,13 +12,13 @@
 				<f:content>
 					<fb:FilterBar id="filterbar" reset="onReset" search="onSearch" useToolbar="false" basicSearch="sfld" showGoOnFB="true">
 						<fb:filterGroupItems>
-							<!--<fb:FilterGroupItem visibleInFilterBar="true" groupName="A" name="EventAttractionTypeId" groupTitle="Filters" label="{i18n>colFacilityType}">
+							<fb:FilterGroupItem visible="{= ${worklistView>/iEvtType} !== 1 }" visibleInFilterBar="true" groupName="A" name="EventAttractionTypeId" groupTitle="Filters" label="{i18n>colFacilityType}">
 								<fb:control>
-									<ComboBox items="{/MasterEventAttractionTypeSet}">
+									<ComboBox items="{path: '/MasterEventAttractionTypeSet', filters : [ {  path:'Id', operator: 'NE', value1: 1 }  ]}">
 										<core:Item key="{Id}" text="{EventAttractionType}"/>
 									</ComboBox>
 								</fb:control>
-							</fb:FilterGroupItem>-->
+							</fb:FilterGroupItem>
 							<fb:FilterGroupItem visibleInFilterBar="true" groupName="A" name="BuildingId" groupTitle="Filters" label="{i18n>colLocation}">
 								<fb:control>
 									<ComboBox items="{/BuildingSet}">

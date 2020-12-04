@@ -1,93 +1,216 @@
-<mvc:View controllerName="com.coil.podium.Notifications.controller.Worklist" xmlns="sap.m" xmlns:c="sap.ui.core" xmlns:mvc="sap.ui.core.mvc"
-	xmlns:f="sap.f" xmlns:l="sap.ui.layout" xmlns:fb="sap.ui.comp.filterbar">
-	<Page id="page" class="sapUiResponsiveContentPadding">
-		<l:VerticalLayout>
-			<SearchField id="searchField" tooltip="{i18n>worklistSearchTooltip}" search=".onSearch">
-				<layoutData>
-					<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
-				</layoutData>
-			</SearchField>
-		</l:VerticalLayout>
-		<content>
-			<Table id="table" width="auto"
-				items="{ path: '/NotificationSet', parameters : { expand : 'Group, Receivers/Role, Redirection' }, filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path : 'IsSystemGenerated' , operator : 'EQ' , value1 : false } ], sorter: { path: 'UpdatedAt', descending: true } }"
-				noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
-				updateFinished=".onUpdateFinished">
-				<headerToolbar>
-					<OverflowToolbar>
-						<Title id="tableHeader" text="{worklistView>/worklistTableTitle}" level="H3"/>
-						<ToolbarSpacer/>
-						<Button text="{i18n>btnRefresh}" icon="sap-icon://refresh" press="onRefreshView">
+<mvc:View controllerName="com.coil.podium.Notifications.controller.Worklist" xmlns:core="sap.ui.core" xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc" xmlns:f="sap.f" xmlns:l="sap.ui.layout" xmlns:fb="sap.ui.comp.filterbar">
+	<f:DynamicPage id="page">
+		<f:title>
+			<f:DynamicPageTitle>
+				<f:heading>
+					<Title text="{i18n>worklistTitle}"/>
+				</f:heading>
+			</f:DynamicPageTitle>
+		</f:title>
+		<f:header>
+			<f:DynamicPageHeader pinnable="true">
+				<f:content>
+					<l:VerticalLayout>
+						<SearchField id="searchField" tooltip="{i18n>worklistSearchTooltip}" search=".onSearch">
 							<layoutData>
 								<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
 							</layoutData>
-						</Button>
-						<Button text="{i18n>btnAdd}" icon="sap-icon://add" press="onAdd">
-							<layoutData>
-								<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
-							</layoutData>
-						</Button>
-					</OverflowToolbar>
-				</headerToolbar>
-				<columns>
-					<Column width="15%">
-						<Text text="{i18n>colSubject}"/>
-					</Column>
-					<Column width="25%">
-						<Text text="{i18n>colBody}"/>
-					</Column>
-					<Column width="10%">
-						<Text text="{i18n>colNotificationType}"/>
-					</Column>
-					<Column width="10%">
-						<Text text="{i18n>colNotificationStatus}"/>
-					</Column>
-					<Column width="15%">
-						<Text text="{i18n>colScheduledDtTm}"/>
-					</Column>
-					<!--<Column width="11%">-->
-					<!--	<Text text="{i18n>colRedirectionType}"/>-->
-					<!--</Column>-->
-					<!--<Column width="10%">-->
-					<!--	<Text text="{i18n>colRedirectionTo}"/>-->
-					<!--</Column>-->
-					<Column width="14%">
-						<Text text="{i18n>colCreatorName}"/>
-					</Column>
-					<Column width="5%">
-						<Text text="{i18n>colEdit}"/>
-					</Column>
-					<Column width="6%">
-						<Text text="{i18n>colRemove}"/>
-					</Column>
-				</columns>
+						</SearchField>
+					</l:VerticalLayout>
+				</f:content>
+			</f:DynamicPageHeader>
+		</f:header>
+		<f:content>
+			<IconTabBar id="idIconTabBar3" expanded="{device>/isNoPhone}" class="sapUiResponsiveContentPadding notification-tab">
 				<items>
-					<ColumnListItem>
-						<cells>
-							<Text text="{Subject}"/>
-							<Text text="{Body}"/>
-							<Text text="{NotificationType}"/>
-							<Text text="{NotificationStatus}"/>
-							<VBox>
-								<Text text="{parts: [ {path: 'ScheduledDate'}, {path: 'ScheduledTime'} ], formatter : '.formatter.formatDate' }"
-									visible="{= !!${ScheduledDate}}"/>
-								<Text text="{path: 'UpdatedAt', type: 'sap.ui.model.odata.type.DateTime', formatOptions: { pattern: 'dd MMM yyyy, hh:mm a' } }"
-									visible="{= !${ScheduledDate}}"/>
-							</VBox>
-							<!--<Text text="{RedirectionType}"/>-->
-							<!--<VBox>-->
-							<!--	<Text text="{Redirection/RedirectionValue}" visible="{= ${RedirectionType} === 'SCREEN' }"/>-->
-							<!--	<Link text="{RedirectionTo}" href="{RedirectionTo}" target="_blank" visible="{= ${RedirectionType} === 'LINK' }"/>-->
-							<!--</VBox>-->
-							<Text text="{CreatorName}"/>
-							<Button icon="sap-icon://edit" visible="{= ${NotificationStatus} === 'DRAFT' || ${NotificationStatus} === 'SCHEDULED' }" press="onEdit"
-								type="Transparent"/>
-							<Button icon="sap-icon://delete" visible="{= ${NotificationStatus} === 'DRAFT' || ${NotificationStatus} === 'SCHEDULED' }" press="onDelete"
-								type="Transparent" tooltip="remove"/>
-						</cells>
-					</ColumnListItem>
+					<IconTabFilter text="{worklistView>/draft}">
+						<Table id="table" width="auto"
+							items="{ path: '/NotificationSet', parameters : { expand : 'Group, Receivers/Role, Redirection' }, filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path : 'IsSystemGenerated' , operator : 'EQ' , value1 : false }, { path : 'NotificationStatus' , operator : 'EQ' , value1 : 'DRAFT' } ], sorter: { path: 'UpdatedAt', descending: true } }"
+							noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
+							updateFinished=".onUpdateFinished">
+							<headerToolbar>
+								<OverflowToolbar>
+									<!--<Title id="tableHeader" text="{worklistView>/worklistTableTitle}" level="H3"/>-->
+									<ToolbarSpacer/>
+									<Button text="{i18n>btnRefresh}" icon="sap-icon://refresh" press="onRefreshView">
+										<layoutData>
+											<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
+										</layoutData>
+									</Button>
+									<Button text="{i18n>btnAdd}" icon="sap-icon://add" press="onAdd">
+										<layoutData>
+											<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
+										</layoutData>
+									</Button>
+								</OverflowToolbar>
+							</headerToolbar>
+							<columns>
+								<Column width="15%">
+									<Text text="{i18n>colSubject}"/>
+								</Column>
+								<Column width="30%">
+									<Text text="{i18n>colBody}"/>
+								</Column>
+								<Column width="10%">
+									<Text text="{i18n>colNotificationType}"/>
+								</Column>
+								<Column width="19%">
+									<Text text="{i18n>colScheduledDtTm}"/>
+								</Column>
+								<Column width="15%">
+									<Text text="{i18n>colCreatorName}"/>
+								</Column>
+								<Column width="5%">
+									<Text text="{i18n>colEdit}"/>
+								</Column>
+								<Column width="6%">
+									<Text text="{i18n>colRemove}"/>
+								</Column>
+							</columns>
+							<items>
+								<ColumnListItem>
+									<cells>
+										<Text text="{Subject}"/>
+										<Text text="{Body}"/>
+										<Text text="{NotificationType}"/>
+										<!--<Text text="{NotificationStatus}"/>-->
+										<VBox>
+											<Text text="{parts: [ {path: 'ScheduledDate'}, {path: 'ScheduledTime'} ], formatter : '.formatter.formatDate' }"
+												visible="{= !!${ScheduledDate}}"/>
+											<Text text="{path: 'UpdatedAt', type: 'sap.ui.model.odata.type.DateTime', formatOptions: { pattern: 'dd MMM yyyy, hh:mm a' } }"
+												visible="{= !${ScheduledDate}}"/>
+										</VBox>
+										<Text text="{CreatorName}"/>
+										<Button icon="sap-icon://edit" press="onEdit" type="Transparent"/>
+										<Button icon="sap-icon://delete" press="onDelete" type="Transparent" tooltip="remove"/>
+									</cells>
+								</ColumnListItem>
+							</items>
+						</Table>
+					</IconTabFilter>
+					<IconTabFilter text="{worklistView>/scheduled}">
+						<Table id="table1" width="auto"
+							items="{ path: '/NotificationSet', parameters : { expand : 'Group, Receivers/Role, Redirection' }, filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path : 'IsSystemGenerated' , operator : 'EQ' , value1 : false }, { path : 'NotificationStatus' , operator : 'EQ' , value1 : 'SCHEDULED' } ], sorter: { path: 'UpdatedAt', descending: true } }"
+							noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
+							updateFinished=".onUpdateFinished1">
+							<headerToolbar>
+								<OverflowToolbar>
+									<!--<Title id="tableHeader" text="{worklistView>/worklistTableTitle}" level="H3"/>-->
+									<ToolbarSpacer/>
+									<Button text="{i18n>btnRefresh}" icon="sap-icon://refresh" press="onRefreshView">
+										<layoutData>
+											<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
+										</layoutData>
+									</Button>
+									<Button text="{i18n>btnAdd}" icon="sap-icon://add" press="onAdd">
+										<layoutData>
+											<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
+										</layoutData>
+									</Button>
+								</OverflowToolbar>
+							</headerToolbar>
+							<columns>
+								<Column width="15%">
+									<Text text="{i18n>colSubject}"/>
+								</Column>
+								<Column width="30%">
+									<Text text="{i18n>colBody}"/>
+								</Column>
+								<Column width="10%">
+									<Text text="{i18n>colNotificationType}"/>
+								</Column>
+								<Column width="19%">
+									<Text text="{i18n>colScheduledDtTm}"/>
+								</Column>
+								<Column width="15%">
+									<Text text="{i18n>colCreatorName}"/>
+								</Column>
+								<Column width="5%">
+									<Text text="{i18n>colEdit}"/>
+								</Column>
+								<Column width="6%">
+									<Text text="{i18n>colRemove}"/>
+								</Column>
+							</columns>
+							<items>
+								<ColumnListItem>
+									<cells>
+										<Text text="{Subject}"/>
+										<Text text="{Body}"/>
+										<Text text="{NotificationType}"/>
+										<VBox>
+											<Text text="{parts: [ {path: 'ScheduledDate'}, {path: 'ScheduledTime'} ], formatter : '.formatter.formatDate' }"
+												visible="{= !!${ScheduledDate}}"/>
+											<Text text="{path: 'UpdatedAt', type: 'sap.ui.model.odata.type.DateTime', formatOptions: { pattern: 'dd MMM yyyy, hh:mm a' } }"
+												visible="{= !${ScheduledDate}}"/>
+										</VBox>
+										<Text text="{CreatorName}"/>
+										<Button icon="sap-icon://edit" press="onEdit" type="Transparent"/>
+										<Button icon="sap-icon://delete" press="onDelete" type="Transparent" tooltip="remove"/>
+									</cells>
+								</ColumnListItem>
+							</items>
+						</Table>
+					</IconTabFilter>
+					<IconTabFilter text="{worklistView>/triggered}">
+						<Table id="table2" width="auto"
+							items="{ path: '/NotificationSet', parameters : { expand : 'Group, Receivers/Role, Redirection' }, filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path : 'IsSystemGenerated' , operator : 'EQ' , value1 : false }, { path : 'NotificationStatus' , operator : 'EQ' , value1 : 'TRIGGERED' } ], sorter: { path: 'UpdatedAt', descending: true } }"
+							noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
+							updateFinished=".onUpdateFinished2">
+							<headerToolbar>
+								<OverflowToolbar>
+									<!--<Title id="tableHeader" text="{worklistView>/worklistTableTitle}" level="H3"/>-->
+									<ToolbarSpacer/>
+									<Button text="{i18n>btnRefresh}" icon="sap-icon://refresh" press="onRefreshView">
+										<layoutData>
+											<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
+										</layoutData>
+									</Button>
+									<Button text="{i18n>btnAdd}" icon="sap-icon://add" press="onAdd">
+										<layoutData>
+											<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
+										</layoutData>
+									</Button>
+								</OverflowToolbar>
+							</headerToolbar>
+							<columns>
+								<Column width="20%">
+									<Text text="{i18n>colSubject}"/>
+								</Column>
+								<Column width="35%">
+									<Text text="{i18n>colBody}"/>
+								</Column>
+								<Column width="10%">
+									<Text text="{i18n>colNotificationType}"/>
+								</Column>
+								<Column width="20%">
+									<Text text="{i18n>colScheduledDtTm}"/>
+								</Column>
+								<Column width="15%">
+									<Text text="{i18n>colCreatorName}"/>
+								</Column>
+							</columns>
+							<items>
+								<ColumnListItem>
+									<cells>
+										<Text text="{Subject}"/>
+										<Text text="{Body}"/>
+										<Text text="{NotificationType}"/>
+										<VBox>
+											<Text text="{parts: [ {path: 'ScheduledDate'}, {path: 'ScheduledTime'} ], formatter : '.formatter.formatDate' }"
+												visible="{= !!${ScheduledDate}}"/>
+											<Text text="{path: 'UpdatedAt', type: 'sap.ui.model.odata.type.DateTime', formatOptions: { pattern: 'dd MMM yyyy, hh:mm a' } }"
+												visible="{= !${ScheduledDate}}"/>
+										</VBox>
+										<Text text="{CreatorName}"/>
+									</cells>
+								</ColumnListItem>
+							</items>
+						</Table>
+					</IconTabFilter>
 				</items>
-			</Table>
-		</content>
-	</Page>
+			</IconTabBar>
+		</f:content>
+	</f:DynamicPage>
 </mvc:View>

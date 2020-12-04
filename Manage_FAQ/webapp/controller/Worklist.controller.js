@@ -121,6 +121,11 @@ sap.ui.define([
 			this.getRouter().navTo("createObject");
 		},
 
+		onRefreshView: function () {
+			var oModel = this.getModel();
+			oModel.refresh(true);
+		},
+
 		onDelete: function (oEvent) {
 			var sPath = oEvent.getSource().getBindingContext().getPath();
 

@@ -12,8 +12,10 @@
 						<l:Grid width="100%" defaultSpan="XL6 L6 M6 S12">
 							<VBox>
 								<Label text="{i18n>LblType}" />
-								<ComboBox enabled="false" selectedKey="{objectView>EventAttractionTypeId}" items="{ path: '/MasterEventAttractionTypeSet' }">
-									<core:Item key="{Id}" text="{EventAttractionType}"/>
+								<ComboBox id="dpAttarctiontype"  selectedKey="{objectView>EventAttractionTypeId}">
+								<!--
+								 items="{ path: '/MasterEventAttractionTypeSet' }"
+								<core:Item key="{Id}" text="{EventAttractionType}"/>-->
 								</ComboBox>	
 							</VBox>
 							<VBox>

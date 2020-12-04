@@ -2,7 +2,7 @@
 	xmlns:f="sap.f" xmlns:l="sap.ui.layout" xmlns:fb="sap.ui.comp.filterbar">
 	<Page id="page" class="sapUiResponsiveContentPadding">
 		<l:VerticalLayout>
-			<Title id="title" text="{i18n>titleVol}" visible="{= ${worklistView>/loggedRoleId} === 1 }"/>
+			<Title id="title" text="{i18n>titleVol}" visible="{= ${worklistView>/loggedRoleId} === 2 }"/>
 			<Select id="Id" items="{path : '/MasterRoleSet', filters : [{path:'Id', operator : 'NE' , value1 : 3 }]}" change="onChange"
 				visible="{= ${worklistView>/loggedRoleId} === 1 }">
 				<c:Item key="{Id}" text="{Role}"/>
@@ -76,8 +76,8 @@
 					</ColumnListItem>
 				</items>
 			</Table>
-			<!--Begin of Volunteer table-->
-			<IconTabBar id="idIconTabBar3" expanded="{device>/isNoPhone}" class="sapUiResponsiveContentPadding" visible="{worklistView>/bShowVolunteer}">
+			<IconTabBar id="idIconTabBar3" expanded="{device>/isNoPhone}" class="sapUiResponsiveContentPadding maad-tab"
+				visible="{worklistView>/bShowVolunteer}">
 				<items>
 					<IconTabFilter text="{worklistView>/all}">
 						<Table id="table1" width="auto"
@@ -136,12 +136,7 @@
 										<Text text="{LastName}"/>
 										<ObjectStatus text="{= ${IsAvailable} === false ? 'Unavailable' : 'Available' }" state="{= ${IsAvailable} === false ? 'Error' : 'Success' }"/>
 										<Text text="{Manager/FirstName} {Manager/LastName}"/>
-										<!--<Text text="{VolunteerAssignment/PODVisitor/FirstName} {VolunteerAssignment/PODVisitor/LastName}"/>-->
-										<!--<Button text="{= ${VolunteerAssignment/PODConditions}.length }"-->
-										<!--	visible="{= ${VolunteerAssignment} !== null &amp;&amp; ${VolunteerAssignment/PODConditions}.length !== 0}" press="onPodCategory"/>-->
 										<Button text="{= ${Specialities}.length }" visible="{= ${Specialities}.length !== 0}" press="onSpeciality"/>
-										<!--<ObjectStatus text="{VolunteerAssignment/ServiceType/IncidentType/IncidentType}"-->
-										<!--	state="{= ${VolunteerAssignment/ServiceType/IncidentType/IncidentType} === 'Emergency' ? 'Error' : 'Success' }"/>-->
 										<Button icon="sap-icon://email" visible="{= ${worklistView>/loggedUserId} !== ${Id} }" press="onMessage" type="Transparent"
 											tooltip="message"/>
 										<Button icon="sap-icon://comment" press="onComment" type="Transparent"/>
@@ -180,12 +175,6 @@
 								<Column width="15%">
 									<Text text="{i18n>colLastName}"/>
 								</Column>
-								<!--<Column width="20%">-->
-								<!--	<Text text="{i18n>colPodAssigned}"/>-->
-								<!--</Column>-->
-								<!--<Column width="10%">-->
-								<!--	<Text text="{i18n>colIncidentType}"/>-->
-								<!--</Column>-->
 								<Column width="23%">
 									<Text text="{i18n>colTeamManager}"/>
 								</Column>
@@ -210,9 +199,6 @@
 									<cells>
 										<Text text="{FirstName}"/>
 										<Text text="{LastName}"/>
-										<!--<Text text="{VolunteerAssignment/PODVisitor/FirstName} {VolunteerAssignment/PODVisitor/LastName}"/>-->
-										<!--<ObjectStatus text="{VolunteerAssignment/ServiceType/IncidentType/IncidentType}"-->
-										<!--	state="{= ${VolunteerAssignment/ServiceType/IncidentType/IncidentType} === 'Emergency' ? 'Error' : 'Success' }"/>-->
 										<Text text="{Manager/FirstName} {Manager/LastName}"/>
 										<Button text="{= ${Specialities}.length }" visible="{= ${Specialities}.length !== 0}" press="onSpeciality"/>
 										<Button icon="sap-icon://email" visible="{= ${worklistView>/loggedUserId} !== ${Id} }" press="onMessage" type="Transparent"
@@ -302,6 +288,5 @@
 				</items>
 			</IconTabBar>
 		</content>
-		<!--End of Volunteer table-->
 	</Page>
 </mvc:View>

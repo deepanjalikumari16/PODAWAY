@@ -153,6 +153,11 @@
 					"viewId": "notFound"
 				}
 			}
+		},
+		"resources": {
+			"css": [{
+				"uri": "css/style.css"
+			}]
 		}
 	},
 	"sap.platform.hcp": {

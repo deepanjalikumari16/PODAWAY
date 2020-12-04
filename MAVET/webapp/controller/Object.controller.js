@@ -2,8 +2,10 @@ sap.ui.define([
 	"./BaseController",
 	"sap/ui/model/json/JSONModel",
 	"../model/formatter",
-	"sap/ui/core/Fragment"
-], function (BaseController, JSONModel, formatter, Fragment) {
+	"sap/ui/core/Fragment",
+	"sap/ui/model/Filter",
+	"sap/ui/model/FilterOperator"
+], function (BaseController, JSONModel, formatter, Fragment, Filter, FilterOperator) {
 	"use strict";
 
 	return BaseController.extend("com.coil.podium.MAEVAT.controller.Object", {
@@ -36,6 +38,7 @@ sap.ui.define([
 			iOriginalBusyDelay = this.getView().getBusyIndicatorDelay();
 			this.setModel(oViewModel, "objectView");
 			this.getOwnerComponent().getModel().metadataLoaded().then(function () {
+
 				// Restore original busy indicator delay for the object view
 				oViewModel.setProperty("/delay", iOriginalBusyDelay);
 			});
@@ -44,6 +47,12 @@ sap.ui.define([
 		onAfterRendering: function () {
 			//Init Validation framework
 			this._initMessage();
+			var that = this;
+			debugger;
+			this.getOwnerComponent().getModel().metadataLoaded().then(function () {
+				//03-DEC-2020 added additional field for attractions
+				that._setAttarctionTypeCtrl.call(that);
+			});
 		},
 
 		/* =========================================================== */
@@ -253,6 +262,7 @@ sap.ui.define([
 			this.getModel("objectView").setProperty("/busy", true);
 			var sObjectId = oEvent.getParameter("arguments").objectId;
 			this.getModel().metadataLoaded().then(function () {
+
 				var sObjectPath = this.getModel().createKey("/EventAttractionSet", {
 					Id: sObjectId
 				});
@@ -265,6 +275,7 @@ sap.ui.define([
 
 			}.bind(this));
 		},
+
 		/** 
 		 * 
 		 * @param map , Here API map Object	
@@ -368,7 +379,7 @@ sap.ui.define([
 			oViewModel.setProperty("/oPlan", null);
 			oViewModel.setProperty("/oDetails", {
 				BuildingId: null,
-				EventAttractionTypeId: this.getOwnerComponent().iEvtType,
+				EventAttractionTypeId:  this.getModel("appView").getProperty("/prefilledType"),
 				Latitude: "",
 				Longitude: "",
 				IsArchived: false,
@@ -671,6 +682,16 @@ sap.ui.define([
 				},
 				aCtrlMessage = [];
 
+			if (!(data.EventAttractionTypeId)) {
+				oReturn.IsNotValid = true;
+				oReturn.sMsg.push("ERR_TYPE_ERROR");
+				aCtrlMessage.push({
+					message: "ERR_TYPE_ERROR",
+					target: "/oDetails/EventAttractionTypeId"
+				});
+			}
+			
+
 			if (!(data.Title.length)) {
 				oReturn.IsNotValid = true;
 				oReturn.sMsg.push("MSG_ERR_TITLE");
@@ -774,6 +795,17 @@ sap.ui.define([
 			return aMsgs.map(function (x) {
 				return that.getResourceBundle().getText(x);
 			}).join("\n");
+
+		},
+		_setAttarctionTypeCtrl: function () {
+			//this.getOwnerComponent().iEvtType
+			var oTypeCtrl = this.getView().byId("dpAttarctiontype");
+
+			oTypeCtrl.bindItems({
+				path: "/MasterEventAttractionTypeSet",
+				filters: [new Filter("Id", this.getOwnerComponent().iEvtType === 1 ? FilterOperator.EQ : FilterOperator.NE , 1)],
+				template: new sap.ui.core.Item({	key: "{Id}",		text: "{EventAttractionType}"		})
+			});
 
 		},
 		//load HERE Maps Libs in sync

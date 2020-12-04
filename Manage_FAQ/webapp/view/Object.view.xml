@@ -6,7 +6,7 @@
 			<uxap:ObjectPageHeader objectTitle="{= ${objectView>/sMode} === 'C' ? ${i18n>TtlAddFaq} : ${i18n>TtlEditFaq} }"/>
 		</uxap:headerTitle>
 		<uxap:sections>
-			<uxap:ObjectPageSection title="">
+			<uxap:ObjectPageSection title="{i18n>objectViewTitle}">
 				<uxap:subSections>
 					<uxap:ObjectPageSubSection>
 						<l:Grid width="100%" defaultSpan="XL6 L6 M6 S12">

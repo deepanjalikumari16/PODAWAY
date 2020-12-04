@@ -48,7 +48,7 @@
 								<Column width="13%">
 									<Text text="{i18n>colAssignment}"/>
 								</Column>
-								<Column width="11%">
+								<Column width="10%">
 									<Text text="{i18n>colPodName}"/>
 								</Column>
 								<Column width="10%">
@@ -63,14 +63,11 @@
 								<Column width="19%">
 									<Text text="{i18n>colStatus}"/>
 								</Column>
-								<Column width="7%">
-									<Text text="{i18n>colNavigate}"/>
+								<Column width="14%">
+									<Text text="{i18n>colCreatedAt}"/>
 								</Column>
-								<Column width="10%">
-									<Text text="{i18n>colMessage}"/>
-								</Column>
-								<Column width="7%">
-									<Text text="{i18n>colComment}"/>
+								<Column width="11%">
+									<Text text="{i18n>colActions}"/>
 								</Column>
 							</columns>
 							<items>
@@ -90,11 +87,14 @@
 												press="onAssignNow" class="sapUiSmallMarginEnd"/>
 											<Button text="{i18n>btnStartAssignment}" visible="{= ${worklistView>/loggedUserRoleId} === 2}" press="onStartAssignment"/>
 										</HBox>
-										<Button icon="sap-icon://locate-me"
-											enabled="{= ${PODVisitor} !== null &amp;&amp; parseInt(${PODVisitor/Latitude}) > 0 &amp;&amp; parseInt(${PODVisitor/Longitude}) > 0 }"
-											press="onNavigate" type="Transparent"/>
-										<Button icon="sap-icon://email" press="onMessage" type="Transparent" tooltip="message"/>
-										<Button icon="sap-icon://comment" press="onComment" type="Transparent"/>
+										<Text text="{path: 'CreatedAt', type: 'sap.ui.model.odata.type.DateTime', formatOptions: { pattern: 'dd MMM yyyy, hh:mm a' } }"/>
+										<HBox>
+											<Button icon="sap-icon://locate-me"
+												enabled="{= ${PODVisitor} !== null &amp;&amp; parseInt(${PODVisitor/Latitude}) > 0 &amp;&amp; parseInt(${PODVisitor/Longitude}) > 0 }"
+												press="onNavigate" type="Transparent" tooltip="Navigate" class="sapUiSmallMarginEnd"/>
+											<Button icon="sap-icon://email" press="onMessage" type="Transparent" tooltip="Email POD" class="sapUiSmallMarginEnd"/>
+											<Button icon="sap-icon://comment" press="onComment" type="Transparent" tooltip="Comment"/>
+										</HBox>
 									</cells>
 								</ColumnListItem>
 							</items>
@@ -116,10 +116,10 @@
 								</OverflowToolbar>
 							</headerToolbar>
 							<columns>
-								<Column width="20%">
+								<Column width="23%">
 									<Text text="{i18n>colAssignment}"/>
 								</Column>
-								<Column width="17%">
+								<Column width="15%">
 									<Text text="{i18n>colPodName}"/>
 								</Column>
 								<Column width="10%">
@@ -131,14 +131,11 @@
 								<Column width="15%">
 									<Text text="{i18n>colStatus}"/>
 								</Column>
-								<Column width="8%">
-									<Text text="{i18n>colNavigate}"/>
+								<Column width="15%">
+									<Text text="{i18n>colCreatedAt}"/>
 								</Column>
 								<Column width="12%">
-									<Text text="{i18n>colMessage}"/>
-								</Column>
-								<Column width="8%">
-									<Text text="{i18n>colComment}"/>
+									<Text text="{i18n>colActions}"/>
 								</Column>
 							</columns>
 							<items>
@@ -150,14 +147,16 @@
 										<ObjectStatus text="{ServiceType/IncidentType/IncidentType}"
 											state="{= ${ServiceType/IncidentType/IncidentType} === 'Emergency' ? 'Error' : 'Success' }"/>
 										<HBox>
-											<!--<Button text="{i18n>btnReassign}" press="onAssignNow" visible="{= ${worklistView>/loggedUserRoleId} === 1 }" class="sapUiSmallMarginEnd"/>-->
 											<Button text="{i18n>btnMarkAsComplete}" press="onMarkasComplete"/>
 										</HBox>
-										<Button icon="sap-icon://locate-me"
-											enabled="{= ${PODVisitor} !== null &amp;&amp; parseInt(${PODVisitor/Latitude}) > 0 &amp;&amp; parseInt(${PODVisitor/Longitude}) > 0 }"
-											press="onNavigate" type="Transparent"/>
-										<Button icon="sap-icon://email" press="onMessage" type="Transparent" tooltip="message"/>
-										<Button icon="sap-icon://comment" press="onComment" type="Transparent"/>
+										<Text text="{path: 'CreatedAt', type: 'sap.ui.model.odata.type.DateTime', formatOptions: { pattern: 'dd MMM yyyy, hh:mm a' } }"/>
+										<HBox>
+											<Button icon="sap-icon://locate-me"
+												enabled="{= ${PODVisitor} !== null &amp;&amp; parseInt(${PODVisitor/Latitude}) > 0 &amp;&amp; parseInt(${PODVisitor/Longitude}) > 0 }"
+												press="onNavigate" type="Transparent" tooltip="Navigate" class="sapUiSmallMarginEnd"/>
+											<Button icon="sap-icon://email" press="onMessage" type="Transparent" tooltip="Email POD" class="sapUiSmallMarginEnd"/>
+											<Button icon="sap-icon://comment" press="onComment" type="Transparent" tooltip="Comment"/>
+										</HBox>
 									</cells>
 								</ColumnListItem>
 							</items>
@@ -179,29 +178,26 @@
 								</OverflowToolbar>
 							</headerToolbar>
 							<columns>
-								<Column width="20%">
+								<Column width="23%">
 									<Text text="{i18n>colAssignment}"/>
 								</Column>
 								<Column width="15%">
 									<Text text="{i18n>colPodName}"/>
 								</Column>
-								<Column width="12%">
+								<Column width="10%">
 									<Text text="{i18n>colPodCategory}"/>
 								</Column>
-								<Column width="12%">
+								<Column width="10%">
 									<Text text="{i18n>colIncidentType}"/>
 								</Column>
-								<Column width="11%">
+								<Column width="10%">
 									<Text text="{i18n>colStatus}"/>
 								</Column>
-								<Column width="10%">
-									<Text text="{i18n>colNavigate}"/>
+								<Column width="20%">
+									<Text text="{i18n>colCreatedAt}"/>
 								</Column>
-								<Column width="10%">
-									<Text text="{i18n>colMessage}"/>
-								</Column>
-								<Column width="10%">
-									<Text text="{i18n>colComment}"/>
+								<Column width="12%">
+									<Text text="{i18n>colActions}"/>
 								</Column>
 							</columns>
 							<items>
@@ -213,11 +209,14 @@
 										<ObjectStatus text="{ServiceType/IncidentType/IncidentType}"
 											state="{= ${ServiceType/IncidentType/IncidentType} === 'Emergency' ? 'Error' : 'Success' }"/>
 										<ObjectStatus text="{i18n>colCompleted}" state="Success"/>
-										<Button icon="sap-icon://locate-me"
-											enabled="{= ${PODVisitor} !== null &amp;&amp; parseInt(${PODVisitor/Latitude}) > 0 &amp;&amp; parseInt(${PODVisitor/Longitude}) > 0 }"
-											press="onNavigate" type="Transparent"/>
-										<Button icon="sap-icon://email" press="onMessage" type="Transparent" tooltip="message"/>
-										<Button icon="sap-icon://comment" press="onComment" type="Transparent"/>
+										<Text text="{path: 'CreatedAt', type: 'sap.ui.model.odata.type.DateTime', formatOptions: { pattern: 'dd MMM yyyy, hh:mm a' } }"/>
+										<HBox>
+											<Button icon="sap-icon://locate-me"
+												enabled="{= ${PODVisitor} !== null &amp;&amp; parseInt(${PODVisitor/Latitude}) > 0 &amp;&amp; parseInt(${PODVisitor/Longitude}) > 0 }"
+												press="onNavigate" type="Transparent" tooltip="Navigate" class="sapUiSmallMarginEnd"/>
+											<Button icon="sap-icon://email" press="onMessage" type="Transparent" tooltip="Email POD" class="sapUiSmallMarginEnd"/>
+											<Button icon="sap-icon://comment" press="onComment" type="Transparent" tooltip="Comment"/>
+										</HBox>
 									</cells>
 								</ColumnListItem>
 							</items>
@@ -239,29 +238,26 @@
 								</OverflowToolbar>
 							</headerToolbar>
 							<columns>
-								<Column width="20%">
+								<Column width="23%">
 									<Text text="{i18n>colAssignment}"/>
 								</Column>
 								<Column width="15%">
 									<Text text="{i18n>colPodName}"/>
 								</Column>
-								<Column width="12%">
+								<Column width="10%">
 									<Text text="{i18n>colPodCategory}"/>
 								</Column>
-								<Column width="12%">
+								<Column width="10%">
 									<Text text="{i18n>colIncidentType}"/>
 								</Column>
-								<Column width="11%">
+								<Column width="10%">
 									<Text text="{i18n>colStatus}"/>
 								</Column>
-								<Column width="10%">
-									<Text text="{i18n>colNavigate}"/>
+								<Column width="20%">
+									<Text text="{i18n>colCreatedAt}"/>
 								</Column>
-								<Column width="10%">
-									<Text text="{i18n>colMessage}"/>
-								</Column>
-								<Column width="10%">
-									<Text text="{i18n>colComment}"/>
+								<Column width="12%">
+									<Text text="{i18n>colActions}"/>
 								</Column>
 							</columns>
 							<items>
@@ -273,12 +269,14 @@
 										<ObjectStatus text="{ServiceType/IncidentType/IncidentType}"
 											state="{= ${ServiceType/IncidentType/IncidentType} === 'Emergency' ? 'Error' : 'Success' }"/>
 										<ObjectStatus text="{i18n>colCancelled}" state="Error"/>
-										<Button icon="sap-icon://locate-me"
-											enabled="{= ${PODVisitor} !== null &amp;&amp; parseInt(${PODVisitor/Latitude}) > 0 &amp;&amp; parseInt(${PODVisitor/Longitude}) > 0 }"
-											press="onNavigate" type="Transparent"/>
-										<!--<Button icon="sap-icon://message-popup" press="onMessage" type="Transparent"/>-->
-										<Button icon="sap-icon://email" press="onMessage" type="Transparent" tooltip="message"/>
-										<Button icon="sap-icon://comment" press="onComment" type="Transparent"/>
+										<Text text="{path: 'CreatedAt', type: 'sap.ui.model.odata.type.DateTime', formatOptions: { pattern: 'dd MMM yyyy, hh:mm a' } }"/>
+										<HBox>
+											<Button icon="sap-icon://locate-me"
+												enabled="{= ${PODVisitor} !== null &amp;&amp; parseInt(${PODVisitor/Latitude}) > 0 &amp;&amp; parseInt(${PODVisitor/Longitude}) > 0 }"
+												press="onNavigate" type="Transparent" tooltip="Navigate" class="sapUiSmallMarginEnd"/>
+											<Button icon="sap-icon://email" press="onMessage" type="Transparent" tooltip="Email POD" class="sapUiSmallMarginEnd"/>
+											<Button icon="sap-icon://comment" press="onComment" type="Transparent" tooltip="Comment"/>
+										</HBox>
 									</cells>
 								</ColumnListItem>
 							</items>
