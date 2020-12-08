@@ -40,7 +40,7 @@ sap.ui.define([
 								"tileType": "sap.ushell.ui.tile.StaticTile",
 								"properties": {
 									"title": "PODium Visitor Management",
-									"targetURL": "#PODiumVisitorManagement-display"
+									"targetURL": "#Manage-Visitor"
 								}
 							}]
 						}]
@@ -51,11 +51,11 @@ sap.ui.define([
 				"adapter": {
 					"config": {
 						"inbounds": {
-							"PODiumVisitorManagement-display": {
-								"semanticObject": "PODiumVisitorManagement",
-								"action": "display",
+							"Manage-Visitor": {
+								"semanticObject": "Manage",
+								"action": "Visitor",
 								"description": "PODium Visitor Management for admins",
-								"title": "PODium Visitor Management",
+								"title": "PODium Visitors",
 								"signature": {
 									"parameters": {}
 								},

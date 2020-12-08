@@ -26,15 +26,17 @@
 		},
 		"crossNavigation": {
 			"inbounds": {
-				"intent1": {
+				"Manage-Visitor": {
 					"signature": {
 						"parameters": {},
 						"additionalParameters": "allowed"
 					},
 					"semanticObject": "Manage",
-					"action": "Visitor"
+					"action": "Visitor",
+					"title": "PODium Visitors"
 				}
 			}
+		
 		}
 	},
 	"sap.ui": {

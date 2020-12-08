@@ -27,7 +27,7 @@
 				</columns>
 				<items>
 					<ColumnListItem>
-						<Text text="{worklistView>Title}"/>
+						<Text text="{worklistView>Name}"/>
 						<Text text="{worklistView>Building/BuildingName}"/>
 						<Button text="{i18n>LnkViewImage}" press=".onViewImage($event, 'I')"/>
 						<Button text="{i18n>LnkViewPlan}" press=".onViewImage($event, 'P')"/>
@@ -50,7 +50,7 @@
 						<Button press="onMoveJourney"  enabled="{worklistView>/bBottomDisabled}"  icon="sap-icon://arrow-bottom" />
 					</OverflowToolbar>	
 				</infoToolbar>
-				<ObjectListItem title="{worklistView>Title}"  >
+				<ObjectListItem title="{worklistView>Name}"  >
 					<ObjectAttribute  text="{worklistView>Building/BuildingName}" />
 				</ObjectListItem>
 			</List>	

@@ -68,10 +68,10 @@
 							<Text text="{Mobile}"/>
 							<Text text="{Email}"/>
 							<Button icon="sap-icon://email" press="onMessage" visible="{= ${worklistView>/loggedUserId} !== ${Id} }" type="Transparent"
-								tooltip="message"/>
-							<Button icon="sap-icon://comment" press="onComment" type="Transparent"/>
-							<Button icon="sap-icon://edit" enabled="{= ${worklistView>/selectId} !== '3' }" press="onEdit" type="Transparent"/>
-							<Button icon="sap-icon://delete" visible="{= ${worklistView>/loggedUserId} !== ${Id} }" press="onDelete" type="Transparent" tooltip="remove"/>
+								tooltip="Email"/>
+							<Button icon="sap-icon://comment" press="onComment" type="Transparent" tooltip="Note"/>
+							<Button icon="sap-icon://edit" enabled="{= ${worklistView>/selectId} !== '3' }" press="onEdit" type="Transparent" tooltip="Edit"/>
+							<Button icon="sap-icon://delete" visible="{= ${worklistView>/loggedUserId} !== ${Id} }" press="onDelete" type="Transparent" tooltip="Remove"/>
 						</cells>
 					</ColumnListItem>
 				</items>
@@ -138,10 +138,10 @@
 										<Text text="{Manager/FirstName} {Manager/LastName}"/>
 										<Button text="{= ${Specialities}.length }" visible="{= ${Specialities}.length !== 0}" press="onSpeciality"/>
 										<Button icon="sap-icon://email" visible="{= ${worklistView>/loggedUserId} !== ${Id} }" press="onMessage" type="Transparent"
-											tooltip="message"/>
-										<Button icon="sap-icon://comment" press="onComment" type="Transparent"/>
-										<Button icon="sap-icon://edit" press="onEdit" type="Transparent"/>
-										<Button icon="sap-icon://delete" enabled="{= ${IsAvailable} === true}" press="onDelete" type="Transparent" tooltip="remove"/>
+											tooltip="Email"/>
+										<Button icon="sap-icon://comment" press="onComment" type="Transparent" tooltip="Note"/>
+										<Button icon="sap-icon://edit" press="onEdit" type="Transparent" tooltip="Edit"/>
+										<Button icon="sap-icon://delete" enabled="{= ${IsAvailable} === true}" press="onDelete" type="Transparent" tooltip="Remove"/>
 									</cells>
 								</ColumnListItem>
 							</items>
@@ -202,10 +202,10 @@
 										<Text text="{Manager/FirstName} {Manager/LastName}"/>
 										<Button text="{= ${Specialities}.length }" visible="{= ${Specialities}.length !== 0}" press="onSpeciality"/>
 										<Button icon="sap-icon://email" visible="{= ${worklistView>/loggedUserId} !== ${Id} }" press="onMessage" type="Transparent"
-											tooltip="message"/>
-										<Button icon="sap-icon://comment" press="onComment" type="Transparent"/>
-										<Button icon="sap-icon://edit" press="onEdit" type="Transparent"/>
-										<Button icon="sap-icon://delete" visible="{= ${worklistView>/loggedUserId} !== ${Id} }" press="onDelete" type="Transparent" tooltip="remove"/>
+											tooltip="Email"/>
+										<Button icon="sap-icon://comment" press="onComment" type="Transparent" tooltip="Note"/>
+										<Button icon="sap-icon://edit" press="onEdit" type="Transparent" tooltip="Edit"/>
+										<Button icon="sap-icon://delete" visible="{= ${worklistView>/loggedUserId} !== ${Id} }" press="onDelete" type="Transparent" tooltip="Remove"/>
 									</cells>
 								</ColumnListItem>
 							</items>
@@ -277,9 +277,9 @@
 										<Text text="{Manager/FirstName} {Manager/LastName}"/>
 										<Button text="{= ${Specialities}.length }" visible="{= ${Specialities}.length !== 0}" press="onSpeciality"/>
 										<Button icon="sap-icon://email" visible="{= ${worklistView>/loggedUserId} !== ${Id} }" press="onMessage" type="Transparent"
-											tooltip="message"/>
-										<Button icon="sap-icon://comment" press="onComment" type="Transparent"/>
-										<Button icon="sap-icon://edit" press="onEdit" type="Transparent"/>
+											tooltip="Email"/>
+										<Button icon="sap-icon://comment" press="onComment" type="Transparent" tooltip="Note"/>
+										<Button icon="sap-icon://edit" press="onEdit" type="Transparent" tooltip="Edit"/>
 									</cells>
 								</ColumnListItem>
 							</items>

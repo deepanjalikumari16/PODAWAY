@@ -355,10 +355,20 @@ sap.ui.define([
 
 			var sValue = oEvent.getParameter("value").toLowerCase();
 			sValue = "'" + sValue + "'";
-			var oFilter = new Filter('tolower(FirstName)', sap.ui.model.FilterOperator.Contains, sValue);
-			// new Filter('tolower(LastName)', sap.ui.model.FilterOperator.Contains, sValue),
-			// new Filter('tolower(Email)', sap.ui.model.FilterOperator.Contains, sValue)
-			// ];
+
+			var InputFilter = new sap.ui.model.Filter({
+				filters: [
+					new sap.ui.model.Filter('tolower(FirstName)', sap.ui.model.FilterOperator.Contains, sValue),
+					new sap.ui.model.Filter('tolower(LastName)', sap.ui.model.FilterOperator.Contains, sValue),
+					new sap.ui.model.Filter('tolower(Email)', sap.ui.model.FilterOperator.Contains, sValue)
+				],
+				and: false
+			});
+
+			var oFilter = [InputFilter,
+				new Filter("IsArchived", FilterOperator.EQ, false)
+			];
+
 			var oBinding = oEvent.getSource().getBinding("items");
 			oBinding.filter([oFilter]);
 		}

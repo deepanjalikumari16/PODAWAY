@@ -11,169 +11,9 @@
 		<f:content>
 			<IconTabBar id="idIconTabBar3" expanded="{device>/isNoPhone}" class="sapUiResponsiveContentPadding mdm-data-tab">
 				<items>
-					<IconTabFilter text="{worklistView>/masterService}" key="Service">
-						<Table id="table" width="auto"
-							items="{ path: '/MasterServiceTypeSet', parameters : { expand : 'Navigation,IncidentType' }, filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path : 'IsChild' , operator : 'EQ' , value1 : false } ] }"
-							noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
-							updateFinished=".onUpdateFinished">
-							<headerToolbar>
-								<OverflowToolbar>
-									<ToolbarSpacer/>
-									<Button text="{i18n>btnRefresh}" icon="sap-icon://refresh" press="onRefreshView">
-										<layoutData>
-											<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
-										</layoutData>
-									</Button>
-								</OverflowToolbar>
-							</headerToolbar>
-							<columns>
-								<Column width="5%">
-									<Text text=""/>
-								</Column>
-								<Column width="18%">
-									<Text text="{i18n>colServiceType}"/>
-								</Column>
-								<Column width="31%">
-									<Text text="{i18n>colServiceMessage}"/>
-								</Column>
-								<Column width="12%">
-									<Text text="{i18n>colContactNumber}"/>
-								</Column>
-								<Column width="9%">
-									<Text text="{i18n>colIsCancelable}"/>
-								</Column>
-								<Column width="9%">
-									<Text text="{i18n>colIncidentTypeId}"/>
-								</Column>
-								<Column width="9%">
-									<Text text="{i18n>colNavigationId}"/>
-								</Column>
-								<Column width="5%">
-									<Text text="{i18n>colEdit}"/>
-								</Column>
-							</columns>
-							<items>
-								<ColumnListItem>
-									<cells>
-										<Image width="2rem" class="sapUiTinyMargin" height="2rem" src="{ path : '__metadata' , formatter : '.formatter.giveImage' }"/>
-										<Text text="{ServiceType}"/>
-										<Text text="{ServiceMessage}"/>
-										<Text text="{ContactNumber}"/>
-										<CheckBox selected="{IsCancelable}" editable="false"/>
-										<ObjectStatus text="{IncidentType/IncidentType}" state="{= ${IncidentType/IncidentType} === 'Emergency' ? 'Error' : 'Success' }"/>
-										<Text text="{Navigation/NavigationTypeName}"/>
-										<Button icon="sap-icon://edit" press="onEdit" type="Transparent"/>
-									</cells>
-								</ColumnListItem>
-							</items>
-						</Table>
-					</IconTabFilter>
-					<IconTabFilter text="{worklistView>/masterFacility}" key="Facility">
-						<Table id="table1" width="auto"
-							items="{ path: '/MasterFacilityTypeSet', filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false } ] }"
-							noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
-							updateFinished=".onUpdateFinished1">
-							<headerToolbar>
-								<OverflowToolbar>
-									<ToolbarSpacer/>
-									<Button text="{i18n>btnRefresh}" icon="sap-icon://refresh" press="onRefreshView">
-										<layoutData>
-											<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
-										</layoutData>
-									</Button>
-								</OverflowToolbar>
-							</headerToolbar>
-							<columns>
-								<Column width="95%">
-									<Text text="{i18n>colFacilityType}"/>
-								</Column>
-								<Column width="5%">
-									<Text text="{i18n>colEdit}"/>
-								</Column>
-							</columns>
-							<items>
-								<ColumnListItem>
-									<cells>
-										<Text text="{FacilityType}"/>
-										<Button icon="sap-icon://edit" press="onEdit" type="Transparent"/>
-									</cells>
-								</ColumnListItem>
-							</items>
-						</Table>
-					</IconTabFilter>
-					<IconTabFilter text="{worklistView>/masterRelationship}" key="Relationship">
-						<Table id="table2" width="auto"
-							items="{ path: '/MasterRelationshipSet', filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false } ] }"
-							noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
-							updateFinished=".onUpdateFinished2">
-							<headerToolbar>
-								<OverflowToolbar>
-									<ToolbarSpacer/>
-									<Button text="{i18n>btnRefresh}" icon="sap-icon://refresh" press="onRefreshView">
-										<layoutData>
-											<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
-										</layoutData>
-									</Button>
-								</OverflowToolbar>
-							</headerToolbar>
-							<columns>
-								<Column width="95%">
-									<Text text="{i18n>colRelationship}"/>
-								</Column>
-								<Column width="5%">
-									<Text text="{i18n>colEdit}"/>
-								</Column>
-							</columns>
-							<items>
-								<ColumnListItem>
-									<cells>
-										<Text text="{Relationship}"/>
-										<Button icon="sap-icon://edit" press="onEdit" type="Transparent"/>
-									</cells>
-								</ColumnListItem>
-							</items>
-						</Table>
-					</IconTabFilter>
-					<IconTabFilter text="{worklistView>/masterFaqCategory}" key="FAQ">
-						<Table id="table3" width="auto"
-							items="{ path: '/MasterFaqCategorySet', filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false } ] }"
-							noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
-							updateFinished=".onUpdateFinished3">
-							<headerToolbar>
-								<OverflowToolbar>
-									<ToolbarSpacer/>
-									<Button text="{i18n>btnRefresh}" icon="sap-icon://refresh" press="onRefreshView">
-										<layoutData>
-											<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
-										</layoutData>
-									</Button>
-								</OverflowToolbar>
-							</headerToolbar>
-							<columns>
-								<Column width="5%">
-									<Text text=""/>
-								</Column>
-								<Column width="90%">
-									<Text text="{i18n>colFaqCategory}"/>
-								</Column>
-								<Column width="5%">
-									<Text text="{i18n>colEdit}"/>
-								</Column>
-							</columns>
-							<items>
-								<ColumnListItem>
-									<cells>
-										<Image width="2rem" class="sapUiTinyMargin" height="2rem" src="{ path : '__metadata' , formatter : '.formatter.giveImage' }"/>
-										<Text text="{FaqCategory}"/>
-										<Button icon="sap-icon://edit" press="onEdit" type="Transparent"/>
-									</cells>
-								</ColumnListItem>
-							</items>
-						</Table>
-					</IconTabFilter>
 					<IconTabFilter text="{worklistView>/masterEventAttraction}" key="Event">
 						<Table id="table4" width="auto"
-							items="{ path: '/MasterEventAttractionTypeSet', filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false } ] }"
+							items="{ path: '/MasterEventAttractionTypeSet', filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false } ], sorter: { path: 'Id', descending: false } }"
 							noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
 							updateFinished=".onUpdateFinished4">
 							<headerToolbar>
@@ -184,13 +24,18 @@
 											<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
 										</layoutData>
 									</Button>
+									<Button text="{i18n>btnAddMDM}" icon="sap-icon://add" press="onAdd">
+										<layoutData>
+											<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
+										</layoutData>
+									</Button>
 								</OverflowToolbar>
 							</headerToolbar>
 							<columns>
 								<Column width="15%">
 									<Text text="{i18n>colEventAttractionType}"/>
 								</Column>
-								<Column width="50%">
+								<Column width="43%">
 									<Text text="{i18n>colDescription}"/>
 								</Column>
 								<Column width="7%">
@@ -208,6 +53,9 @@
 								<Column width="5%">
 									<Text text="{i18n>colEdit}"/>
 								</Column>
+								<Column width="7%">
+									<Text text="{i18n>colRemove}"/>
+								</Column>
 							</columns>
 							<items>
 								<ColumnListItem>
@@ -217,8 +65,51 @@
 										<CheckBox selected="{IsBuilding}" editable="false"/>
 										<CheckBox selected="{IsCategory}" editable="false"/>
 										<CheckBox selected="{IsTheme}" editable="false"/>
-										<Button text="{i18n>LnkViewImage}" enabled="{= ${Image} !== null }" press=".onViewImage($event, 'I')"/>
+										<Button text="{i18n>LnkViewImage}" press=".onViewImage($event, 'I')"/>
 										<Button icon="sap-icon://edit" press="onEdit" type="Transparent"/>
+										<Button icon="sap-icon://delete" press="onDelete" type="Transparent" tooltip="remove"/>
+									</cells>
+								</ColumnListItem>
+							</items>
+						</Table>
+					</IconTabFilter>
+					<IconTabFilter text="{worklistView>/masterFacility}" key="Facility">
+						<Table id="table1" width="auto"
+							items="{ path: '/MasterFacilityTypeSet', filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false } ], sorter: { path: 'Id', descending: false }}"
+							noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
+							updateFinished=".onUpdateFinished1">
+							<headerToolbar>
+								<OverflowToolbar>
+									<ToolbarSpacer/>
+									<Button text="{i18n>btnRefresh}" icon="sap-icon://refresh" press="onRefreshView">
+										<layoutData>
+											<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
+										</layoutData>
+									</Button>
+									<Button text="{i18n>btnAddMDM}" icon="sap-icon://add" press="onAdd">
+										<layoutData>
+											<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
+										</layoutData>
+									</Button>
+								</OverflowToolbar>
+							</headerToolbar>
+							<columns>
+								<Column width="88%">
+									<Text text="{i18n>colFacilityType}"/>
+								</Column>
+								<Column width="5%">
+									<Text text="{i18n>colEdit}"/>
+								</Column>
+								<Column width="7%">
+									<Text text="{i18n>colRemove}"/>
+								</Column>
+							</columns>
+							<items>
+								<ColumnListItem>
+									<cells>
+										<Text text="{FacilityType}"/>
+										<Button icon="sap-icon://edit" press="onEdit" type="Transparent"/>
+										<Button icon="sap-icon://delete" press="onDelete" type="Transparent" tooltip="remove"/>
 									</cells>
 								</ColumnListItem>
 							</items>
@@ -226,13 +117,18 @@
 					</IconTabFilter>
 					<IconTabFilter text="{worklistView>/masterNavigation}" key="Navigation">
 						<Table id="table5" width="auto"
-							items="{ path: '/MasterNavigationTypeSet', filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false } ] }"
+							items="{ path: '/MasterNavigationTypeSet', filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false } ],sorter: { path: 'Id', descending: false } }"
 							noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
 							updateFinished=".onUpdateFinished5">
 							<headerToolbar>
 								<OverflowToolbar>
 									<ToolbarSpacer/>
 									<Button text="{i18n>btnRefresh}" icon="sap-icon://refresh" press="onRefreshView">
+										<layoutData>
+											<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
+										</layoutData>
+									</Button>
+									<Button text="{i18n>btnAddMDM}" icon="sap-icon://add" press="onAdd">
 										<layoutData>
 											<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
 										</layoutData>
@@ -249,11 +145,14 @@
 								<!--<Column width="15%">-->
 								<!--	<Text text="{i18n>colNavigationTypeId}"/>-->
 								<!--</Column>-->
-								<Column width="60%">
+								<Column width="53%">
 									<Text text="{i18n>colNavigationTypeName}"/>
 								</Column>
 								<Column width="5%">
 									<Text text="{i18n>colEdit}"/>
+								</Column>
+								<Column width="7%">
+									<Text text="{i18n>colRemove}"/>
 								</Column>
 							</columns>
 							<items>
@@ -264,13 +163,126 @@
 										<!--<Text text="{NavigationTypeId}"/>-->
 										<Text text="{NavigationTypeName}"/>
 										<Button icon="sap-icon://edit" press="onEdit" type="Transparent"/>
+										<Button icon="sap-icon://delete" press="onDelete" type="Transparent" tooltip="remove"/>
+									</cells>
+								</ColumnListItem>
+							</items>
+						</Table>
+					</IconTabFilter>
+					<IconTabFilter text="{worklistView>/masterService}" key="Service">
+						<Table id="table" width="auto"
+							items="{ path: '/MasterServiceTypeSet', parameters : { expand : 'Navigation,IncidentType' }, filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path : 'IsChild' , operator : 'EQ' , value1 : false } ],sorter: { path: 'Id', descending: false } }"
+							noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
+							updateFinished=".onUpdateFinished">
+							<headerToolbar>
+								<OverflowToolbar>
+									<ToolbarSpacer/>
+									<Button text="{i18n>btnRefresh}" icon="sap-icon://refresh" press="onRefreshView">
+										<layoutData>
+											<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
+										</layoutData>
+									</Button>
+									<Button text="{i18n>btnAddMDM}" icon="sap-icon://add" press="onAdd">
+										<layoutData>
+											<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
+										</layoutData>
+									</Button>
+								</OverflowToolbar>
+							</headerToolbar>
+							<columns>
+								<Column width="5%">
+									<Text text=""/>
+								</Column>
+								<Column width="15%">
+									<Text text="{i18n>colServiceType}"/>
+								</Column>
+								<Column width="31%">
+									<Text text="{i18n>colServiceMessage}"/>
+								</Column>
+								<Column width="11%">
+									<Text text="{i18n>colContactNumber}"/>
+								</Column>
+								<Column width="8%">
+									<Text text="{i18n>colIsCancelable}"/>
+								</Column>
+								<Column width="9%">
+									<Text text="{i18n>colIncidentTypeId}"/>
+								</Column>
+								<Column width="9%">
+									<Text text="{i18n>colNavigationId}"/>
+								</Column>
+								<Column width="5%">
+									<Text text="{i18n>colEdit}"/>
+								</Column>
+								<Column width="7%">
+									<Text text="{i18n>colRemove}"/>
+								</Column>
+							</columns>
+							<items>
+								<ColumnListItem>
+									<cells>
+										<Image width="2rem" class="sapUiTinyMargin" height="2rem" src="{ path : '__metadata' , formatter : '.formatter.giveImage' }"/>
+										<Text text="{ServiceType}"/>
+										<Text text="{ServiceMessage}"/>
+										<Text text="{ContactNumber}"/>
+										<CheckBox selected="{IsCancelable}" editable="false"/>
+										<ObjectStatus text="{IncidentType/IncidentType}" state="{= ${IncidentType/IncidentType} === 'Emergency' ? 'Error' : 'Success' }"/>
+										<Text text="{Navigation/NavigationTypeName}"/>
+										<Button icon="sap-icon://edit" press="onEdit" type="Transparent"/>
+										<Button icon="sap-icon://delete" press="onDelete" type="Transparent" tooltip="remove"/>
+									</cells>
+								</ColumnListItem>
+							</items>
+						</Table>
+					</IconTabFilter>
+					<IconTabFilter text="{worklistView>/masterFaqCategory}" key="FAQ">
+						<Table id="table3" width="auto"
+							items="{ path: '/MasterFaqCategorySet', filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false } ],sorter: { path: 'Id', descending: false } }"
+							noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
+							updateFinished=".onUpdateFinished3">
+							<headerToolbar>
+								<OverflowToolbar>
+									<ToolbarSpacer/>
+									<Button text="{i18n>btnRefresh}" icon="sap-icon://refresh" press="onRefreshView">
+										<layoutData>
+											<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
+										</layoutData>
+									</Button>
+									<Button text="{i18n>btnAddMDM}" icon="sap-icon://add" press="onAdd">
+										<layoutData>
+											<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
+										</layoutData>
+									</Button>
+								</OverflowToolbar>
+							</headerToolbar>
+							<columns>
+								<Column width="5%">
+									<Text text=""/>
+								</Column>
+								<Column width="83%">
+									<Text text="{i18n>colFaqCategory}"/>
+								</Column>
+								<Column width="5%">
+									<Text text="{i18n>colEdit}"/>
+								</Column>
+								<Column width="7%">
+									<Text text="{i18n>colRemove}"/>
+								</Column>
+							</columns>
+							<items>
+								<ColumnListItem>
+									<cells>
+										<Image width="2rem" class="sapUiTinyMargin" height="2rem" src="{ path : '__metadata' , formatter : '.formatter.giveImage' }"/>
+										<Text text="{FaqCategory}"/>
+										<Button icon="sap-icon://edit" press="onEdit" type="Transparent"/>
+										<Button icon="sap-icon://delete" press="onDelete" type="Transparent" tooltip="remove"/>
 									</cells>
 								</ColumnListItem>
 							</items>
 						</Table>
 					</IconTabFilter>
 					<IconTabFilter text="{worklistView>/building}" key="Building">
-						<Table id="table6" width="auto" items="{ path: '/BuildingSet', filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false } ] }"
+						<Table id="table6" width="auto" items="{ path: '/BuildingSet', filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false } ],sorter: { path: 'Id', descending: false } }"
 							noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
 							updateFinished=".onUpdateFinished6">
 							<headerToolbar>
@@ -281,20 +293,28 @@
 											<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
 										</layoutData>
 									</Button>
+									<Button text="{i18n>btnAddMDM}" icon="sap-icon://add" press="onAdd">
+										<layoutData>
+											<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
+										</layoutData>
+									</Button>
 								</OverflowToolbar>
 							</headerToolbar>
 							<columns>
-								<Column width="55%">
+								<Column width="58%">
 									<Text text="{i18n>colBuildingName}"/>
 								</Column>
-								<Column width="20%">
+								<Column width="15%">
 									<Text text="{i18n>colLatitude}"/>
 								</Column>
-								<Column width="20%">
+								<Column width="15%">
 									<Text text="{i18n>colLongitude}"/>
 								</Column>
 								<Column width="5%">
 									<Text text="{i18n>colEdit}"/>
+								</Column>
+								<Column width="7%">
+									<Text text="{i18n>colRemove}"/>
 								</Column>
 							</columns>
 							<items>
@@ -304,13 +324,14 @@
 										<Text text="{Latitude}"/>
 										<Text text="{Longitude}"/>
 										<Button icon="sap-icon://edit" press="onEdit" type="Transparent"/>
+										<Button icon="sap-icon://delete" press="onDelete" type="Transparent" tooltip="remove"/>
 									</cells>
 								</ColumnListItem>
 							</items>
 						</Table>
 					</IconTabFilter>
 					<IconTabFilter text="{worklistView>/theme}" key="Theme">
-						<Table id="table7" width="auto" items="{ path: '/ThemeSet', filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false } ] }"
+						<Table id="table7" width="auto" items="{ path: '/ThemeSet', filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false } ],sorter: { path: 'Id', descending: false } }"
 							noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
 							updateFinished=".onUpdateFinished7">
 							<headerToolbar>
@@ -321,14 +342,22 @@
 											<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
 										</layoutData>
 									</Button>
+									<Button text="{i18n>btnAddMDM}" icon="sap-icon://add" press="onAdd">
+										<layoutData>
+											<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
+										</layoutData>
+									</Button>
 								</OverflowToolbar>
 							</headerToolbar>
 							<columns>
-								<Column width="95%">
+								<Column width="88%">
 									<Text text="{i18n>colTheme}"/>
 								</Column>
 								<Column width="5%">
 									<Text text="{i18n>colEdit}"/>
+								</Column>
+								<Column width="7%">
+									<Text text="{i18n>colRemove}"/>
 								</Column>
 							</columns>
 							<items>
@@ -336,13 +365,14 @@
 									<cells>
 										<Text text="{Theme}"/>
 										<Button icon="sap-icon://edit" press="onEdit" type="Transparent"/>
+										<Button icon="sap-icon://delete" press="onDelete" type="Transparent" tooltip="remove"/>
 									</cells>
 								</ColumnListItem>
 							</items>
 						</Table>
 					</IconTabFilter>
 					<IconTabFilter text="{worklistView>/category}" key="Category">
-						<Table id="table8" width="auto" items="{ path: '/CategorySet', filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false } ] }"
+						<Table id="table8" width="auto" items="{ path: '/CategorySet', filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false } ],sorter: { path: 'Id', descending: false } }"
 							noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
 							updateFinished=".onUpdateFinished8">
 							<headerToolbar>
@@ -353,14 +383,22 @@
 											<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
 										</layoutData>
 									</Button>
+									<Button text="{i18n>btnAddMDM}" icon="sap-icon://add" press="onAdd">
+										<layoutData>
+											<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
+										</layoutData>
+									</Button>
 								</OverflowToolbar>
 							</headerToolbar>
 							<columns>
-								<Column width="95%">
+								<Column width="88%">
 									<Text text="{i18n>colCategory}"/>
 								</Column>
 								<Column width="5%">
 									<Text text="{i18n>colEdit}"/>
+								</Column>
+								<Column width="7%">
+									<Text text="{i18n>colRemove}"/>
 								</Column>
 							</columns>
 							<items>
@@ -368,6 +406,7 @@
 									<cells>
 										<Text text="{Category}"/>
 										<Button icon="sap-icon://edit" press="onEdit" type="Transparent"/>
+										<Button icon="sap-icon://delete" press="onDelete" type="Transparent" tooltip="remove"/>
 									</cells>
 								</ColumnListItem>
 							</items>
@@ -375,7 +414,7 @@
 					</IconTabFilter>
 					<IconTabFilter text="{worklistView>/speciality}" key="Speciality">
 						<Table id="table9" width="auto"
-							items="{ path: '/MasterSpecialitySet', filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false } ] }"
+							items="{ path: '/MasterSpecialitySet', filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false } ],sorter: { path: 'Id', descending: false } }"
 							noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
 							updateFinished=".onUpdateFinished9">
 							<headerToolbar>
@@ -386,14 +425,22 @@
 											<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
 										</layoutData>
 									</Button>
+									<Button text="{i18n>btnAddMDM}" icon="sap-icon://add" press="onAdd">
+										<layoutData>
+											<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
+										</layoutData>
+									</Button>
 								</OverflowToolbar>
 							</headerToolbar>
 							<columns>
-								<Column width="95%">
+								<Column width="88%">
 									<Text text="{i18n>colSpeciality}"/>
 								</Column>
 								<Column width="5%">
 									<Text text="{i18n>colEdit}"/>
+								</Column>
+								<Column width="7%">
+									<Text text="{i18n>colRemove}"/>
 								</Column>
 							</columns>
 							<items>
@@ -401,6 +448,49 @@
 									<cells>
 										<Text text="{Speciality}"/>
 										<Button icon="sap-icon://edit" press="onEdit" type="Transparent"/>
+										<Button icon="sap-icon://delete" press="onDelete" type="Transparent" tooltip="remove"/>
+									</cells>
+								</ColumnListItem>
+							</items>
+						</Table>
+					</IconTabFilter>
+					<IconTabFilter text="{worklistView>/masterRelationship}" key="Relationship">
+						<Table id="table2" width="auto"
+							items="{ path: '/MasterRelationshipSet', filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false } ],sorter: { path: 'Id', descending: false } }"
+							noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
+							updateFinished=".onUpdateFinished2">
+							<headerToolbar>
+								<OverflowToolbar>
+									<ToolbarSpacer/>
+									<Button text="{i18n>btnRefresh}" icon="sap-icon://refresh" press="onRefreshView">
+										<layoutData>
+											<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
+										</layoutData>
+									</Button>
+									<Button text="{i18n>btnAddMDM}" icon="sap-icon://add" press="onAdd">
+										<layoutData>
+											<OverflowToolbarLayoutData maxWidth="200px" priority="NeverOverflow"/>
+										</layoutData>
+									</Button>
+								</OverflowToolbar>
+							</headerToolbar>
+							<columns>
+								<Column width="88%">
+									<Text text="{i18n>colRelationship}"/>
+								</Column>
+								<Column width="5%">
+									<Text text="{i18n>colEdit}"/>
+								</Column>
+								<Column width="7%">
+									<Text text="{i18n>colRemove}"/>
+								</Column>
+							</columns>
+							<items>
+								<ColumnListItem>
+									<cells>
+										<Text text="{Relationship}"/>
+										<Button icon="sap-icon://edit" press="onEdit" type="Transparent"/>
+										<Button icon="sap-icon://delete" press="onDelete" type="Transparent" tooltip="remove"/>
 									</cells>
 								</ColumnListItem>
 							</items>

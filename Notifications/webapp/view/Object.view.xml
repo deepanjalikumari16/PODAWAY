@@ -19,7 +19,7 @@
 								<TextArea width="100%" value="{objectView>Body}" rows="4" maxLength="250" placeholder="{i18n>MessagePlaceHolder}" showExceededText="true"/>
 							</VBox>
 							<VBox>
-								<Label required="true" text="{i18n>colRedirectionType}"/>
+								<Label text="{i18n>colRedirectionType}"/>
 								<ComboBox width="100%" selectedKey="{objectView>RedirectionType}">
 									<items>
 										<core:Item text="{i18n>screen}" key="SCREEN"/>
@@ -83,7 +83,7 @@
 				<Button text="{i18n>btnCancel}" press="onCancel"/>
 				<Button text="{i18n>btnDraft}" type="Accept" press="onDraft"/>
 				<Button text="{i18n>btnSchedule}" type="Emphasized" visible="{= ${objectView>IsLater} === true}" press="onPublish"/>
-				<Button text="{i18n>btnSend}" type="Emphasized" visible="{= ${objectView>IsLater} === false}" press="onPublish"/>
+				<Button text="{i18n>btnSend}" type="Emphasized" visible="{= ${objectView>IsLater} === false}" press="onSend"/>
 			</Toolbar>
 		</uxap:footer>
 	</uxap:ObjectPageLayout>

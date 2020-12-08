@@ -123,8 +123,8 @@ sap.ui.define([
 				this.onRefresh();
 			} else {
 				var aTableSearchState = [];
-				var sQuery = oEvent.getParameter("query");
-
+				// var sQuery = oEvent.getParameter("query");
+				var sQuery = oEvent.getParameter("query").toLowerCase();
 				sQuery = "'" + sQuery + "'";
 				if (sQuery && sQuery.length > 0) {
 
@@ -132,8 +132,7 @@ sap.ui.define([
 						new Filter("IsArchived", FilterOperator.EQ, false)
 					];
 				} else {
-					aTableSearchState = [new Filter("IsArchived", FilterOperator.EQ, false)
-					];
+					aTableSearchState = [new Filter("IsArchived", FilterOperator.EQ, false)];
 				}
 				this._applySearch(aTableSearchState);
 			}

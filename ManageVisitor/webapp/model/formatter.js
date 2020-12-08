@@ -23,7 +23,7 @@ sap.ui.define([], function () {
 		 * @returns concat string
 		 */
 		EmergencyNumber : function(code, num){
-			if(!num || num.length == 0){
+			if(!code || !num || num.length == 0){
 				return "";
 			}
 			return code.concat(num); 

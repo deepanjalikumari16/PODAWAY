@@ -29,8 +29,7 @@ sap.ui.define([
 			this.setModel(models.createDeviceModel(), "device");
 			// set the FLP model
 			this.setModel(models.createFLPModel(), "FLP");
-
-			// create the views based on the url/hash
+		
 			this.getRouter().initialize();
 		},
 

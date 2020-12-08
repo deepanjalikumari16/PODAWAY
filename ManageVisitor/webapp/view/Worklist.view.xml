@@ -21,6 +21,11 @@
 									</ComboBox>
 								</fb:control>
 							</fb:FilterGroupItem>
+							<fb:FilterGroupItem visibleInFilterBar="true" groupName="A" name="Mobile" groupTitle="Filters" label="{i18n>LblMobile}">
+								<fb:control>
+									<Input type="Number" />
+								</fb:control>
+							</fb:FilterGroupItem>
 							<fb:FilterGroupItem visibleInFilterBar="true" groupName="A" name="Category" groupTitle="Filters" label="{i18n>colPODCategory}">
 								<fb:control>
 									<ComboBox

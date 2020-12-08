@@ -61,7 +61,7 @@
 							<headerToolbar>
 								<Toolbar>
 									<ToolbarSpacer/>
-									<Button press="addChild" text="{i18n>btnAdd}"/>
+									<Button press="addChild" text="{i18n>btnAdd}" visible="{= ${objectView>/sMode} === 'E'}"/>
 								</Toolbar>
 							</headerToolbar>
 							<columns>

@@ -10,7 +10,7 @@
 			</f:SimpleForm>
 		</VBox>
 		<buttons>
-			<Button text="{i18n>comment}" press=".comment"/>
+			<Button text="{i18n>done}" press=".comment"/>
 			<Button text="{i18n>cancel}" press=".closeCommentDialog"/>
 		</buttons>
 	</Dialog>

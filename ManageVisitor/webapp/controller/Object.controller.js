@@ -42,16 +42,18 @@ sap.ui.define([
 		},
 
 		onAfterRendering: function () {
-			var oStartUpParams = this.getOwnerComponent().oStartUpParams;
-			if (oStartUpParams.bWithParams) {
-				this.getModel().metadataLoaded().then(function () {
-					var sObjectPath = this.getModel().createKey("UserSet", {
-						Id: oStartUpParams.VisitorId
-					});
-					this._bindView("/" + sObjectPath, oStartUpParams.VisitorId);
-				}.bind(this));
 
-			}
+			/*	var oStartUpParams = this.getOwnerComponent().oStartUpParams;
+				if (oStartUpParams.bWithParams) {
+					this.getModel().metadataLoaded().then(function () {
+						var sObjectPath = this.getModel().createKey("UserSet", {
+							Id: oStartUpParams.VisitorId
+						});
+						this._bindView("/" + sObjectPath, oStartUpParams.VisitorId);
+					}.bind(this));
+
+				}*/
+
 		},
 
 		/* =========================================================== */
@@ -67,12 +69,18 @@ sap.ui.define([
 
 		onCall: function () {
 			var oContext = this.getView().getBindingContext();
-			sap.m.URLHelper.triggerTel(oContext.getProperty("DialCode").concat(oContext.getProperty("Mobile")));
+			if (oContext.getProperty("DialCode") && oContext.getProperty("Mobile"))
+				sap.m.URLHelper.triggerTel(oContext.getProperty("DialCode").concat(oContext.getProperty("Mobile")));
+			else
+				sap.m.MessageToast.show(this.getResourceBundle().getText("ERR_Mobile_no"));
 		},
 
 		onSMS: function () {
 			var oContext = this.getView().getBindingContext();
-			sap.m.URLHelper.triggerSms(oContext.getProperty("DialCode").concat(oContext.getProperty("Mobile")));
+			if (oContext.getProperty("DialCode") && oContext.getProperty("Mobile"))
+				sap.m.URLHelper.triggerSms(oContext.getProperty("DialCode").concat(oContext.getProperty("Mobile")));
+			else
+				sap.m.MessageToast.show(this.getResourceBundle().getText("ERR_Mobile_no"));
 		},
 		/**
 		 * Event handler when the share in JAM button has been clicked
@@ -198,65 +206,65 @@ sap.ui.define([
 		},
 
 		_getColumnListTemplae: function () {
-			var oColumnListTemplate = new sap.m.ColumnListItem();
+				var oColumnListTemplate = new sap.m.ColumnListItem();
 
-			oColumnListTemplate.addCell(new sap.m.Text({
-				text: "{ServiceType/ServiceType}"
-			}));
-			
-			oColumnListTemplate.addCell(new sap.m.Text({
-				text: "{ServiceType/IncidentType/IncidentType}"
-			}));
-			
-			
-			oColumnListTemplate.addCell(new sap.m.Text({
-				text: "{ServiceType/IncidentType/ServiceMessage}"
-			}));
+				oColumnListTemplate.addCell(new sap.m.Text({
+					text: "{ServiceType/ServiceType}"
+				}));
 
-			oColumnListTemplate.addCell(new sap.m.Text({
-				text: "{Comments}"
-			}));
+				oColumnListTemplate.addCell(new sap.m.Text({
+					text: "{ServiceType/IncidentType/IncidentType}"
+				}));
 
-			oColumnListTemplate.addCell(new sap.m.Button({
-				type: "Transparent",
-				icon: "sap-icon://locate-me",
-				press: this.onNavigate.bind(this)
-			}));
+				oColumnListTemplate.addCell(new sap.m.Text({
+					text: "{ServiceType/IncidentType/ServiceMessage}"
+				}));
 
-			return oColumnListTemplate;
+				oColumnListTemplate.addCell(new sap.m.Text({
+					text: "{Comments}"
+				}));
 
-		}/*,
-		_onBindingChange: function () {
-			var oView = this.getView(),
-				oViewModel = this.getModel("objectView"),
-				oElementBinding = oView.getElementBinding();
+				oColumnListTemplate.addCell(new sap.m.Button({
+					type: "Transparent",
+					icon: "sap-icon://locate-me",
+					press: this.onNavigate.bind(this)
+				}));
 
-			// No data for the binding
-			if (!oElementBinding.getBoundContext()) {
-				this.getRouter().getTargets().display("objectNotFound");
-				return;
+				return oColumnListTemplate;
+
 			}
+			/*,
+					_onBindingChange: function () {
+						var oView = this.getView(),
+							oViewModel = this.getModel("objectView"),
+							oElementBinding = oView.getElementBinding();
 
-			var oResourceBundle = this.getResourceBundle(),
-				oObject = oView.getBindingContext().getObject(),
-				sObjectId = oObject.Id,
-				sObjectName = oObject.FirstName;
+						// No data for the binding
+						if (!oElementBinding.getBoundContext()) {
+							this.getRouter().getTargets().display("objectNotFound");
+							return;
+						}
 
-			oViewModel.setProperty("/busy", false);
-			// Add the object page to the flp routing history
-			this.addHistoryEntry({
-				title: this.getResourceBundle().getText("objectTitle") + " - " + sObjectName,
-				icon: "sap-icon://enter-more",
-				intent: "#PODiumVisitorManagement-display&/UserSet/" + sObjectId
-			});
+						var oResourceBundle = this.getResourceBundle(),
+							oObject = oView.getBindingContext().getObject(),
+							sObjectId = oObject.Id,
+							sObjectName = oObject.FirstName;
 
-			oViewModel.setProperty("/saveAsTileTitle", oResourceBundle.getText("saveAsTileTitle", [sObjectName]));
-			oViewModel.setProperty("/shareOnJamTitle", sObjectName);
-			oViewModel.setProperty("/shareSendEmailSubject",
-				oResourceBundle.getText("shareSendEmailObjectSubject", [sObjectId]));
-			oViewModel.setProperty("/shareSendEmailMessage",
-				oResourceBundle.getText("shareSendEmailObjectMessage", [sObjectName, sObjectId, location.href]));
-		}*/
+						oViewModel.setProperty("/busy", false);
+						// Add the object page to the flp routing history
+						this.addHistoryEntry({
+							title: this.getResourceBundle().getText("objectTitle") + " - " + sObjectName,
+							icon: "sap-icon://enter-more",
+							intent: "#PODiumVisitorManagement-display&/UserSet/" + sObjectId
+						});
+
+						oViewModel.setProperty("/saveAsTileTitle", oResourceBundle.getText("saveAsTileTitle", [sObjectName]));
+						oViewModel.setProperty("/shareOnJamTitle", sObjectName);
+						oViewModel.setProperty("/shareSendEmailSubject",
+							oResourceBundle.getText("shareSendEmailObjectSubject", [sObjectId]));
+						oViewModel.setProperty("/shareSendEmailMessage",
+							oResourceBundle.getText("shareSendEmailObjectMessage", [sObjectName, sObjectId, location.href]));
+					}*/
 
 	});
 

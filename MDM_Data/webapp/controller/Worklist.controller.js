@@ -106,7 +106,7 @@ sap.ui.define([
 				icon: "sap-icon://table-view",
 				intent: "#MasterDataManagement-display"
 			}, true);
-			
+
 		},
 
 		/* =========================================================== */
@@ -466,6 +466,10 @@ sap.ui.define([
 			//Determine selected Tab
 			var sSelectedKey = this.getView().byId("idIconTabBar3").getSelectedKey(),
 				oViewModel = this.getModel("worklistView");
+				
+			var opMode = this.getResourceBundle().getText("colEdit");
+			oViewModel.setProperty("/opMode", opMode);				
+			oViewModel.setProperty("/operation", "E");
 			//Set Visible flag 
 			var bEditOptions = {
 				Service: false,
@@ -486,7 +490,6 @@ sap.ui.define([
 				oViewModel.setProperty("/bEditOptions", bEditOptions);
 				//Set Data to dialog
 				var data = oEvent.getSource().getBindingContext().getObject();
-
 				oViewModel.setProperty("/oEditData", data);
 				oViewModel.setProperty("/sEditPath", oEvent.getSource().getBindingContext().getPath());
 
@@ -509,6 +512,176 @@ sap.ui.define([
 					this.byId("detailsDialog").open();
 				}
 			}
+		},
+
+		onAdd: function (oEvent) {
+			//Determine selected Tab
+			var sSelectedKey = this.getView().byId("idIconTabBar3").getSelectedKey(),
+				oViewModel = this.getModel("worklistView");
+
+			var opMode = this.getResourceBundle().getText("colAdd");
+			oViewModel.setProperty("/opMode", opMode);
+			oViewModel.setProperty("/operation", "C");
+			//Set Visible flag 
+			var bEditOptions = {
+				Service: false,
+				Facility: false,
+				Relationship: false,
+				FAQ: false,
+				Event: false,
+				Navigation: false,
+				Building: false,
+				Theme: false,
+				Category: false,
+				Speciality: false
+			};
+			if (sSelectedKey === "Service") {
+				this.getRouter().navTo("createObject");
+			} else {
+				bEditOptions[sSelectedKey] = true;
+				oViewModel.setProperty("/bEditOptions", bEditOptions);
+				// Set Data to dialog
+				oViewModel.setProperty("/oEditData", {
+					EventAttractionType: "",
+					Description: "",
+					IsBuilding: false,
+					IsCategory: false,
+					IsTheme: false,
+					FacilityType: "",
+					NavigationGroupId: 0,
+					NavigationTypeName: "",
+					// ServiceType: "",
+					// ServiceMessage: "",
+					// IncidentTypeId: 0,
+					// NavigationId: 0,
+					// ContactNumber: "",
+					// IsCancelable: false,
+					FaqCategory: "",
+					BuildingName: "",
+					Theme: "",
+					Category: "",
+					Speciality: "",
+					Relationship: "",
+					IsArchived: false
+				});
+
+				if (sSelectedKey === "Event") {
+					oViewModel.setProperty("/sEditPath", "/MasterEventAttractionTypeSet");
+					oViewModel.setProperty("/oEditData", {
+						EventAttractionType: "",
+						Description: "",
+						IsBuilding: false,
+						IsCategory: false,
+						IsTheme: false,
+						IsArchived: false
+					});
+				} else if (sSelectedKey === "Facility") {
+					oViewModel.setProperty("/sEditPath", "/MasterFacilityTypeSet");
+					oViewModel.setProperty("/oEditData", {
+						FacilityType: "",
+						IsArchived: false
+					});
+				} else if (sSelectedKey === "Navigation") {
+					oViewModel.setProperty("/sEditPath", "/MasterNavigationTypeSet");
+					oViewModel.setProperty("/oEditData", {
+						NavigationGroupId: 0,
+						NavigationTypeName: "",
+						IsArchived: false
+					});
+				} else if (sSelectedKey === "FAQ") {
+					oViewModel.setProperty("/sEditPath", "/MasterFaqCategorySet");
+					oViewModel.setProperty("/oEditData", {
+						FaqCategory: "",
+						IsArchived: false
+					});
+				} else if (sSelectedKey === "Building") {
+					oViewModel.setProperty("/sEditPath", "/BuildingSet");
+					oViewModel.setProperty("/oEditData", {
+						BuildingName: "",
+						IsArchived: false
+					});
+				} else if (sSelectedKey === "Theme") {
+					oViewModel.setProperty("/sEditPath", "/ThemeSet");
+					oViewModel.setProperty("/oEditData", {
+						Theme: "",
+						IsArchived: false
+					});
+				} else if (sSelectedKey === "Category") {
+					oViewModel.setProperty("/sEditPath", "/CategorySet");
+					oViewModel.setProperty("/oEditData", {
+						Category: "",
+						IsArchived: false
+					});
+				} else if (sSelectedKey === "Speciality") {
+					oViewModel.setProperty("/sEditPath", "/MasterSpecialitySet");
+					oViewModel.setProperty("/oEditData", {
+						Speciality: "",
+						IsArchived: false
+					});
+				} else if (sSelectedKey === "Relationship") {
+					oViewModel.setProperty("/sEditPath", "/MasterRelationshipSet");
+					oViewModel.setProperty("/oEditData", {
+						Relationship: "",
+						IsArchived: false
+					});
+				}
+
+				oViewModel.setProperty("/sDialogTitle", sSelectedKey);
+
+				var oView = this.getView();
+
+				if (!this.byId("detailsDialog")) {
+					// load asynchronous XML fragment
+					Fragment.load({
+						id: oView.getId(),
+						name: "com.coil.podium.MDM_Data.dialog.details",
+						controller: this
+					}).then(function (oDialog) {
+						// connect dialog to the root view of this component (models, lifecycle)
+						oView.addDependent(oDialog);
+						oDialog.open();
+					});
+				} else {
+					this.byId("detailsDialog").open();
+				}
+			}
+		},
+
+		/*
+		 * @function: To remove Admin
+		 * @param oEvent : Get Line item context
+		 */
+
+		onDelete: function (oEvent) {
+			var sPath = oEvent.getSource().getBindingContext().getPath();
+			var data = this.getModel().getData(sPath);
+			var oValid = this._fnValidationCantDelete(data);
+			if (oValid.IsNotValid) {
+				this.showError(this._fnMsgConcatinator(oValid.sMsg));
+				return;
+			}
+
+			function onYes() {
+				var data = this.getModel().getData(sPath);
+				this.getModel().update(sPath, {
+					IsArchived: true
+				}, {
+					success: this.showToast.bind(this, "MSG_SUCCESS_REMOVE")
+				});
+			}
+			this.showWarning("MSG_CONFIRM_MDM_DELETE", onYes);
+		},
+
+		_fnValidationCantDelete: function (data) {
+			var oReturn = {
+				IsNotValid: false,
+				sMsg: []
+			};
+			if (data.CreatedBy === null) {
+				oReturn.IsNotValid = true;
+				oReturn.sMsg.push("MSG_CANNOT_DELETE_SYSTEM_DATA");
+			}
+			return oReturn;
 		},
 
 		onRefreshView: function () {
@@ -571,22 +744,24 @@ sap.ui.define([
 			delete data.__metadata;
 			delete data.Id;
 
-			if (data.ContactNumber !== "" && typeof data.ContactNumber !== "undefined") {
-				var mobile = this.getView().byId("mobileInput").getValue();
-				var mobileregex = /^[0-9,+]{5,15}$/;
-				if (!mobileregex.test(mobile)) {
-					this.showToast.call(this, "MSG_INVALID_MOBILE");
-				} else {
-					this.getModel().update(sPath, data, {
-						success: this._UploadImage(sPath, oViewModel.getProperty("/oImage")).then(this._Success.bind(this, oEvent), this._Error.bind(
-							this)),
-						error: this._Error.bind(this)
-					});
-				}
-			} else {
+			var operation = oViewModel.getProperty("/operation");
+			if (operation === "E") {
 				this.getModel().update(sPath, data, {
-					success: this._UploadImage(sPath, oViewModel.getProperty("/oImage")).then(this._Success.bind(this, oEvent), this._Error.bind(
-						this)),
+					success: function () {
+						this._UploadImage(sPath, oViewModel.getProperty("/oImage")).then(this._Success.bind(this, oEvent), this._Error.bind(
+							this))
+					}.bind(this),
+					error: this._Error.bind(this)
+				});
+			} else if (operation === "C") {
+				var that = this;
+				this.getModel().create(sPath, data, {
+					success: function (createddata) {
+						var newSpath = sPath + "(" + createddata.Id + ")";
+						that._UploadImage(newSpath, oViewModel.getProperty("/oImage")).then(that._SuccessAdd.bind(that, oEvent), that._Error
+							.bind(
+								that))
+					},
 					error: this._Error.bind(this)
 				});
 			}
@@ -885,6 +1060,11 @@ sap.ui.define([
 
 		_Success: function (oEvent) {
 			MessageToast.show(this.getResourceBundle().getText("MSG_SUCCESS"));
+			this.onClose(oEvent);
+		},
+
+		_SuccessAdd: function (oEvent) {
+			MessageToast.show(this.getResourceBundle().getText("MSG_SUCCESS_ADD"));
 			this.onClose(oEvent);
 		},
 

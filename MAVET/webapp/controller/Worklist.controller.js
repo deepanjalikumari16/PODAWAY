@@ -55,6 +55,9 @@ sap.ui.define([
 			});
 			//Table items binding	
 			this.getOwnerComponent().getModel().metadataLoaded().then(this._fnInitialBindings.bind(this));
+
+			//Portal feedback 07/12/2020 search by Name	
+			this._setSearchField();
 		},
 
 		/* =========================================================== */
@@ -167,9 +170,22 @@ sap.ui.define([
 			this._oDlgAddOption.close();
 		},
 		//END: Image and Plan Life cycle
-		onSearch: function () {
+		onSearch: function (oEvent) {
 			var aFilters = this.getFiltersfromFB(),
 				oTable = this.getView().byId("table");
+				
+			var sQuery = oEvent.getSource().getBasicSearchValue();
+			
+			if (sQuery && sQuery.length > 0) {
+				aFilters.push(new Filter({
+						path: "Name",
+						operator: FilterOperator.Contains,
+						value1: sQuery,
+						caseSensitive: false
+					})
+				);
+
+			}
 
 			oTable.getBinding("items").filter(aFilters);
 
@@ -261,8 +277,8 @@ sap.ui.define([
 				},
 				// sorter: [ new sap.ui.model.Sorter("Index"),
 				// 		   new sap.ui.model.Sorter("CreatedAt") ],
-						   
-				sorter: [ new sap.ui.model.Sorter("Name") ],						   
+
+				sorter: [new sap.ui.model.Sorter("Name")],
 				events: {
 					dataRequested: this._fnbusyItems.bind(this),
 					dataReceived: this._fnbusyItems.bind(this)
@@ -327,11 +343,29 @@ sap.ui.define([
 			}
 
 		},
-		
-		_setPrefilledAttarctionType: function(){
-			var oFBCtrl = this.getView().byId("filterbar");
-		    this.getModel("appView").setProperty("/prefilledType", oFBCtrl.getAllFilterItems()[0].getControl().getSelectedKey());
-		}
 
+		_setPrefilledAttarctionType: function () {
+			var oFBCtrl = this.getView().byId("filterbar");
+			this.getModel("appView").setProperty("/prefilledType", oFBCtrl.getAllFilterItems()[0].getControl().getSelectedKey());
+		},
+		_setSearchField: function (oEvent) {
+			var oSearchField = this.getView().byId("filterbar").getBasicSearch();
+			var oBasicSearch;
+			if (!oSearchField) {
+				oBasicSearch = new sap.m.SearchField({
+					showSearchButton: false
+				});
+			} else {
+				oSearchField = null;
+			}
+
+			this.getView().byId("filterbar").setBasicSearch(oBasicSearch);
+
+			oBasicSearch.attachBrowserEvent("keyup", function (e) {
+				if (e.which === 13) {
+					this.getView().byId("filterbar").fireSearch();
+				}
+			}.bind(this));
+		}
 	});
 });

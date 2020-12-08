@@ -499,7 +499,6 @@ sap.ui.define([
 			this.byId("commentDialog").close();
 		},
 		comment: function () {
-			debugger;
 			var enteredComment = this.getModel("worklistView").getProperty("/comments");
 			if (enteredComment === null || enteredComment === "") {
 				this.showToast.call(this, "MSG_ENTER_COMMENT");
@@ -783,6 +782,44 @@ sap.ui.define([
 				this._oPopover.openBy(oButton);
 				this._oPopover.bindElement(sPath);
 			}
+		},
+
+		onDisplayContact: function (oEvent) {
+			var sPath = oEvent.getSource().getBindingContext().getPath(),
+				oButton = oEvent.getSource();
+			// create popover
+			if (!this._oPopover) {
+				Fragment.load({
+					name: "Assignment_List.Assignment_List.view.MobileNumberDialog",
+					controller: this
+				}).then(function (pPopover) {
+					this._oPopover = pPopover;
+					this.getView().addDependent(this._oPopover);
+					this._oPopover.bindElement(sPath);
+					this._oPopover.openBy(oButton);
+
+				}.bind(this));
+			} else {
+				this._oPopover.openBy(oButton);
+				this._oPopover.bindElement(sPath);
+			}
+		},
+
+		onCancelAssignment: function (oEvent) {
+			var sPath = oEvent.getSource().getBindingContext().getPath();
+			var data = this.getModel().getData(sPath);
+			var dat = this;
+			var oModel = dat.getModel();
+			oModel.callFunction("/CancelAssignment", {
+				method: "GET",
+				urlParameters: {
+					AssignmentId: data.Id
+				},
+				success: function (adata) {
+					dat.showToast.call(dat, "MSG_SUCCESS_MARKED_CANCELLED");
+					oModel.refresh(true);
+				}
+			});
 		},
 
 		onSearch: function () {

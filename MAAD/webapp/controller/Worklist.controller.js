@@ -474,18 +474,28 @@ sap.ui.define([
 				var sQuery = oEvent.getParameter("query").toLowerCase();
 				sQuery = "'" + sQuery + "'";
 				if (sQuery && sQuery.length > 0) {
+					var firstSelectRoleId = this.getModel("appView").getProperty("/selectedRoleId");
+					if (!firstSelectRoleId) {
+						if (this.getModel("worklistView").getProperty("/loggedRoleId") === 1) {
+							firstSelectRoleId = "1";
+						} else {
+							firstSelectRoleId = "3";
+						}
+					}
+					var InputFilter = new sap.ui.model.Filter({
+						filters: [
+							new sap.ui.model.Filter('tolower(FirstName)', sap.ui.model.FilterOperator.Contains, sQuery),
+							new sap.ui.model.Filter('tolower(LastName)', sap.ui.model.FilterOperator.Contains, sQuery),
+							new sap.ui.model.Filter('tolower(Email)', sap.ui.model.FilterOperator.Contains, sQuery)
+						],
+						and: false
+					});
 
-					aTableSearchState = [new Filter('tolower(FirstName)', FilterOperator.Contains, sQuery),
-						// aTableSearchState = [new Filter( {
-						// 		path: 'FirstName',
-						// 		caseSensitive: false,
-						// 		operator: FilterOperator.Contains,
-						// 		value1: sQuery
-						// 	} ),
+					aTableSearchState = [InputFilter,
 						new Filter("IsArchived", FilterOperator.EQ, false),
-						new Filter("RoleId", FilterOperator.EQ, this.getModel("appView").getProperty("/selectedRoleId"))
-						// selectId
+						new Filter("RoleId", FilterOperator.EQ, firstSelectRoleId)
 					];
+
 				} else {
 					aTableSearchState = [new Filter("IsArchived", FilterOperator.EQ, false),
 						new Filter("RoleId", FilterOperator.EQ, this.getModel("appView").getProperty("/selectedRoleId"))
@@ -493,6 +503,21 @@ sap.ui.define([
 				}
 				this._applySearch(aTableSearchState);
 			}
+
+			// var InputFilter = new sap.ui.model.Filter({
+			//   filters: [
+			//     new sap.ui.model.Filter("Name", sap.ui.model.FilterOperator.EQ, inptval),
+			//     new sap.ui.model.Filter("ID", sap.ui.model.FilterOperator.EQ, inptval)
+			//   ],
+			//   and: false
+			// });
+
+			// aTableSearchState = [new Filter( {
+			// 		path: 'FirstName',
+			// 		caseSensitive: false,
+			// 		operator: FilterOperator.Contains,
+			// 		value1: sQuery
+			// 	} ),
 
 		},
 

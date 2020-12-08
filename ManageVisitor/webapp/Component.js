@@ -30,15 +30,14 @@ sap.ui.define([
 			// set the FLP model
 			this.setModel(models.createFLPModel(), "FLP");
 			
-		
-			this.oStartUpParams = this.getComponentData().startupParameters;
+		/*	this.oStartUpParams = this.getComponentData().startupParameters;
 		
 			if(Object.entries(this.oStartUpParams).length > 0 && this.oStartUpParams.hasOwnProperty("VisitorId") )
 			{
 			this.oStartUpParams.bWithParams = true;
 			this.getRouter().getTarget("object").display();
 			return;
-			}
+			}*/
 			
 
 			// create the views based on the url/hash

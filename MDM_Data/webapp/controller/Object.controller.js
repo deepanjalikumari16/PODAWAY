@@ -202,6 +202,15 @@ sap.ui.define([
 				oViewModel.setProperty("/oDetails", data);
 				return;
 			}
+			oViewModel.setProperty("/oDetails", {
+				ServiceType: "",
+				ServiceMessage: "",
+				IncidentTypeId: 0,
+				NavigationId: 0,
+				ContactNumber: "",
+				IsCancelable: false,
+				IsArchived: false
+			});
 		},
 
 		/*
@@ -365,9 +374,7 @@ sap.ui.define([
 			delete data.CreatedAt;
 			delete data.IncidentType;
 			delete data.Navigation;
-			delete data.Icon;
 			delete data.__metadata;
-			delete data.Id;
 
 			if (oViewModel.getProperty("/sChildMode") === "E") {
 				this.getModel().update(sPath, data, {
@@ -442,9 +449,6 @@ sap.ui.define([
 
 			var oViewModel = this.getModel("objectView"),
 				data = oViewModel.getProperty("/oDetails");
-			var sPath = this.getModel().createKey("/MasterServiceTypeSet", {
-				Id: data.Id
-			});
 
 			var oValid = this._fnValidation(data);
 			if (oValid.IsNotValid) {
@@ -460,13 +464,30 @@ sap.ui.define([
 			delete data.Navigation;
 			delete data.Icon;
 			delete data.__metadata;
-			delete data.Id;
 
-			this.getModel().update(sPath, data, {
-				success: this._UploadImage(sPath, oViewModel.getProperty("/oImage")).then(this._Success.bind(this, oEvent), this._Error.bind(
-					this)),
-				error: this._Error.bind(this)
-			});
+			if (oViewModel.getProperty("/sMode") === "E") {
+				var sPath = this.getModel().createKey("/MasterServiceTypeSet", {
+					Id: data.Id
+				});
+				this.getModel().update(sPath, data, {
+					success: this._UploadImage(sPath, oViewModel.getProperty("/oImage")).then(this._Success.bind(this, oEvent), this._Error.bind(
+						this)),
+					error: this._Error.bind(this)
+				});
+			}
+			if (oViewModel.getProperty("/sMode") === "C") {
+				var that = this;
+				sPath = "/MasterServiceTypeSet";
+				this.getModel().create(sPath, data, {
+					success: function (createddata) {
+						var newSpath = sPath + "(" + createddata.Id + ")";
+						that._UploadImage(newSpath, oViewModel.getProperty("/oImage")).then(that._SuccessAdd.bind(that, oEvent), that._Error
+							.bind(
+								that))
+					},
+					error: this._Error.bind(this)
+				});
+			}
 		},
 
 		_fnValidation: function (data) {
@@ -560,6 +581,12 @@ sap.ui.define([
 		_Success: function (oEvent) {
 			this.getRouter().navTo("worklist", true);
 			MessageToast.show(this.getResourceBundle().getText("MSG_SUCCESS"));
+			this.onClose(oEvent);
+		},
+		
+		_SuccessAdd: function (oEvent) {
+			this.getRouter().navTo("worklist", true);
+			MessageToast.show(this.getResourceBundle().getText("MSG_SUCCESS_ADD"));
 			this.onClose(oEvent);
 		},
 

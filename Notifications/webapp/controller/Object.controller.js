@@ -146,7 +146,7 @@ sap.ui.define([
 				Receivers: [],
 				ScheduledDate: null,
 				ScheduledTime: null,
-				IsLater: true
+				IsLater: false
 			});
 		},
 
@@ -183,6 +183,11 @@ sap.ui.define([
 
 		onPublish: function () {
 			var notifystatus = 'SCHEDULED';
+			this.run(notifystatus);
+		},
+
+		onSend: function () {
+			var notifystatus = "TRIGGERED";
 			this.run(notifystatus);
 		},
 
@@ -249,7 +254,6 @@ sap.ui.define([
 				aCtrlMessage = [],
 				url = data.RedirectionTo,
 				regex =
-				// /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/;
 				/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
 
 			if (!data.Subject) {
@@ -268,15 +272,7 @@ sap.ui.define([
 					target: "/oDetails/Body"
 				});
 			} else
-			if (!data.RedirectionType) {
-				oReturn.IsNotValid = true;
-				oReturn.sMsg.push("MSG_VALDTN_ERR_RTYPE");
-				aCtrlMessage.push({
-					message: "MSG_VALDTN_ERR_RTYPE",
-					target: "/oDetails/RedirectionType"
-				});
-			} else
-			if (!data.RedirectionTo) {
+			if (!data.RedirectionTo && data.RedirectionType) {
 				oReturn.IsNotValid = true;
 				oReturn.sMsg.push("MSG_VALDTN_ERR_RTO");
 				aCtrlMessage.push({
