@@ -114,9 +114,6 @@ sap.ui.define([
 							formatter: this.formatter.giveImage
 						}
 					}),
-					// new sap.m.Label({
-					// 	text: "{ServiceType}"
-					// }),
 					new sap.m.Label({
 						text: "{ServiceType}"
 					}),
@@ -155,7 +152,6 @@ sap.ui.define([
 				parameters: {
 					expand: "Navigation,IncidentType"
 				},
-				// expand: "Navigation,IncidentType",
 				filters: afilter1,
 				template: oItemTemplate,
 				templateShareable: true
@@ -418,14 +414,14 @@ sap.ui.define([
 					message: "MSG_VALDTN_SERVMSG",
 					target: "/oServiceData/ServiceMessage"
 				});
-			} else if (data.Mobile) {
+			} else if (data.ContactNumber) {
 				var mobileregex = /^[0-9]{5,15}$/;
-				if (!mobileregex.test(data.Mobile)) {
+				if (!mobileregex.test(data.ContactNumber)) {
 					oReturn.IsNotValid = true;
 					oReturn.sMsg.push("MSG_INVALID_MOBILE");
 					aCtrlMessage.push({
 						message: "MSG_INVALID_MOBILE",
-						target: "/oServiceData/Mobile"
+						target: "/oServiceData/ContactNumber"
 					});
 				}
 			}
@@ -449,7 +445,6 @@ sap.ui.define([
 
 			var oViewModel = this.getModel("objectView"),
 				data = oViewModel.getProperty("/oDetails");
-
 			var oValid = this._fnValidation(data);
 			if (oValid.IsNotValid) {
 				this.showError(this._fnMsgConcatinator(oValid.sMsg));
@@ -466,13 +461,14 @@ sap.ui.define([
 			delete data.__metadata;
 
 			if (oViewModel.getProperty("/sMode") === "E") {
-				var sPath = this.getModel().createKey("/MasterServiceTypeSet", {
+				var that = this;
+				var sPath = that.getModel().createKey("/MasterServiceTypeSet", {
 					Id: data.Id
 				});
-				this.getModel().update(sPath, data, {
-					success: this._UploadImage(sPath, oViewModel.getProperty("/oImage")).then(this._Success.bind(this, oEvent), this._Error.bind(
-						this)),
-					error: this._Error.bind(this)
+				that.getModel().update(sPath, data, {
+					success: that._UploadImage(sPath, oViewModel.getProperty("/oImage")).then(that._Success.bind(that, oEvent), that._Error.bind(
+						that)),
+					error: that._Error.bind(that)
 				});
 			}
 			if (oViewModel.getProperty("/sMode") === "C") {
@@ -510,14 +506,14 @@ sap.ui.define([
 					message: "MSG_VALDTN_SERVMSG",
 					target: "/oDetails/ServiceMessage"
 				});
-			} else if (data.Mobile) {
+			} else if (data.ContactNumber) {
 				var mobileregex = /^[0-9]{5,15}$/;
-				if (!mobileregex.test(data.Mobile)) {
+				if (!mobileregex.test(data.ContactNumber)) {
 					oReturn.IsNotValid = true;
 					oReturn.sMsg.push("MSG_INVALID_MOBILE");
 					aCtrlMessage.push({
 						message: "MSG_INVALID_MOBILE",
-						target: "/oDetails/Mobile"
+						target: "/oDetails/ContactNumber"
 					});
 				}
 			}
@@ -578,16 +574,16 @@ sap.ui.define([
 			});
 		},
 
-		_Success: function (oEvent) {
+		_Success: function () {
 			this.getRouter().navTo("worklist", true);
 			MessageToast.show(this.getResourceBundle().getText("MSG_SUCCESS"));
-			this.onClose(oEvent);
+			var oModel = this.getModel();
+			oModel.refresh(true);
 		},
-		
-		_SuccessAdd: function (oEvent) {
+
+		_SuccessAdd: function () {
 			this.getRouter().navTo("worklist", true);
 			MessageToast.show(this.getResourceBundle().getText("MSG_SUCCESS_ADD"));
-			this.onClose(oEvent);
 		},
 
 		_SuccessChildEdit: function (oEvent) {

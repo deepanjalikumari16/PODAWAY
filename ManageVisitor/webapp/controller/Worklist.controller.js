@@ -136,7 +136,7 @@ sap.ui.define([
 				var aCustomQuery = {};
 				if (sQuery && sQuery.length > 0) {
 
-					aTableSearchState = [
+					/*aTableSearchState = [
 						new Filter({
 							filters: [
 								new Filter({
@@ -155,8 +155,11 @@ sap.ui.define([
 							bAnd: false,
 							and: false
 						})
-					];
-
+					];*/
+					
+					//Name search using custom query
+					aCustomQuery["Query"] = sQuery;
+				
 				}
 
 				if (oEvent.getParameter("selectionSet")) {
@@ -188,7 +191,7 @@ sap.ui.define([
 
 			oFilterBar.getFilterGroupItems().forEach(function (ele) {
 				if (ele.getName() === "Mobile" && ele.getControl().getValue().length > 1) {
-					aFilters.push(
+					/*aFilters.push(
 						new Filter({
 							filters: [
 								new Filter({
@@ -205,7 +208,10 @@ sap.ui.define([
 							bAnd: false,
 							and: false
 						})
-					);
+					);*/
+					//encodeURIComponent(ele.getControl().getValue());
+					aCustomQuery["Mobile"] = ele.getControl().getValue();
+					
 				}
 
 				if (ele.getControl().getSelectedKey())
@@ -260,7 +266,7 @@ sap.ui.define([
 			if (customQuery && Object.keys(customQuery).length) {
 				Object.assign(urlParameters, customQuery);
 			}
-
+			debugger;
 			this.getModel().read("/UserSet", {
 				filters: [new Filter({
 					filters: defaultFilters,

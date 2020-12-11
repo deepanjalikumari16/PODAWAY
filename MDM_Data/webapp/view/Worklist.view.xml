@@ -145,13 +145,13 @@
 								<!--<Column width="15%">-->
 								<!--	<Text text="{i18n>colNavigationTypeId}"/>-->
 								<!--</Column>-->
-								<Column width="53%">
+								<Column width="65%">
 									<Text text="{i18n>colNavigationTypeName}"/>
 								</Column>
 								<Column width="5%">
 									<Text text="{i18n>colEdit}"/>
 								</Column>
-								<Column width="7%">
+								<Column width="10%">
 									<Text text="{i18n>colRemove}"/>
 								</Column>
 							</columns>

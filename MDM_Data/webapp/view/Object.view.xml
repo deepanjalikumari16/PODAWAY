@@ -93,22 +93,6 @@
 									<Text text="{i18n>colRemove}"/>
 								</Column>
 							</columns>
-							<!--<items>-->
-							<!--	<ColumnListItem>-->
-							<!--		<cells>-->
-							<!--			<Image width="2rem" class="sapUiTinyMargin" height="2rem" src="{ path : '__metadata' , formatter : '.formatter.giveImage' }"/>-->
-							<!--			<Text text="{ServiceType}"/>-->
-							<!--			<Text text="{ServiceMessage}"/>-->
-							<!--			<Text text="{ContactNumber}"/>-->
-							<!--			<CheckBox selected="{IsCancelable}" editable="false"/>-->
-							<!--			<ObjectStatus text="{IncidentType/IncidentType}"-->
-							<!--				state="{= ${IncidentType/IncidentType} === 'Emergency' ? 'Error' : 'Success' }"/>-->
-							<!--			<Text text="{Navigation/NavigationTypeName}"/>-->
-							<!--			<Button icon="sap-icon://edit" press="onEdit" type="Transparent"/>-->
-							<!--			<Button icon="sap-icon://delete" press="onDeleteChild" type="Transparent" tooltip="remove"/>-->
-							<!--		</cells>-->
-							<!--	</ColumnListItem>-->
-							<!--</items>-->
 						</Table>
 					</uxap:ObjectPageSubSection>
 				</uxap:subSections>
