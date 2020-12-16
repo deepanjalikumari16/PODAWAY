@@ -14,7 +14,7 @@
 			</SearchField>
 		</l:VerticalLayout>
 		<content>
-			<Table id="table" width="auto" visible="{= !${worklistView>/bShowVolunteer} &amp;&amp; ${worklistView>/loggedRoleId} === 1 }"
+			<Table id="table" width="auto" visible="{= !${worklistView>/bShowVolunteer} &amp;&amp; ${worklistView>/loggedRoleId} === 1}"
 				items="{ path: '/UserSet', filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path : 'RoleId' , operator : 'EQ' , value1 : 1 } ], sorter: { path: 'Id', descending: false } }"
 				noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
 				updateFinished=".onUpdateFinished">
@@ -61,17 +61,16 @@
 					</Column>
 				</columns>
 				<items>
-					<ColumnListItem>
+					<ColumnListItem id="AdminTeam">
 						<cells>
 							<Text text="{FirstName}"/>
 							<Text text="{LastName}"/>
 							<Text text="{Mobile}"/>
 							<Text text="{Email}"/>
-							<Button icon="sap-icon://email" press="onMessage" visible="{= ${worklistView>/loggedUserId} !== ${Id} }" type="Transparent"
-								tooltip="Email"/>
+							<Button icon="sap-icon://email" press="onMessage" enabled="{= ${worklistView>/loggedUserId} !== ${Id} }" type="Transparent" tooltip="Email"/>
 							<Button icon="sap-icon://comment" press="onComment" type="Transparent" tooltip="Note"/>
 							<Button icon="sap-icon://edit" enabled="{= ${worklistView>/selectId} !== '3' }" press="onEdit" type="Transparent" tooltip="Edit"/>
-							<Button icon="sap-icon://delete" visible="{= ${worklistView>/loggedUserId} !== ${Id} }" press="onDelete" type="Transparent" tooltip="Remove"/>
+							<Button icon="sap-icon://delete" enabled="{= ${worklistView>/loggedUserId} !== ${Id} }" press="onDelete" type="Transparent" tooltip="Remove"/>
 						</cells>
 					</ColumnListItem>
 				</items>
@@ -81,7 +80,7 @@
 				<items>
 					<IconTabFilter text="{worklistView>/all}">
 						<Table id="table1" width="auto"
-							items="{ path: '/UserSet', parameters : { expand : 'VolunteerAssignment/PODVisitor, Manager, VolunteerAssignment/PODConditions, VolunteerAssignment/ServiceType/IncidentType, Specialities' }, filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path : 'RoleId' , operator : 'EQ' , value1 : 4 } ], sorter: { path: 'Id', descending: false } }"
+							items="{ path: '/UserSet', parameters : { expand : 'Manager, Specialities' }, filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path : 'RoleId' , operator : 'EQ' , value1 : 4 } ], sorter: { path: 'Id', descending: false } }"
 							noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
 							updateFinished=".onUpdateFinished1">
 							<headerToolbar>
@@ -130,15 +129,14 @@
 								</Column>
 							</columns>
 							<items>
-								<ColumnListItem>
+								<ColumnListItem id="VolAll">
 									<cells>
 										<Text text="{FirstName}"/>
 										<Text text="{LastName}"/>
 										<ObjectStatus text="{= ${IsAvailable} === false ? 'Unavailable' : 'Available' }" state="{= ${IsAvailable} === false ? 'Error' : 'Success' }"/>
 										<Text text="{Manager/FirstName} {Manager/LastName}"/>
 										<Button text="{= ${Specialities}.length }" visible="{= ${Specialities}.length !== 0}" press="onSpeciality"/>
-										<Button icon="sap-icon://email" visible="{= ${worklistView>/loggedUserId} !== ${Id} }" press="onMessage" type="Transparent"
-											tooltip="Email"/>
+										<Button icon="sap-icon://email" visible="{= ${worklistView>/loggedUserId} !== ${Id} }" press="onMessage" type="Transparent" tooltip="Email"/>
 										<Button icon="sap-icon://comment" press="onComment" type="Transparent" tooltip="Note"/>
 										<Button icon="sap-icon://edit" press="onEdit" type="Transparent" tooltip="Edit"/>
 										<Button icon="sap-icon://delete" enabled="{= ${IsAvailable} === true}" press="onDelete" type="Transparent" tooltip="Remove"/>
@@ -149,7 +147,7 @@
 					</IconTabFilter>
 					<IconTabFilter text="{worklistView>/available}">
 						<Table id="table2" width="auto"
-							items="{ path: '/UserSet', parameters : { expand : 'VolunteerAssignment/PODVisitor, Manager, VolunteerAssignment/ServiceType/IncidentType, Specialities' }, filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path : 'RoleId' , operator : 'EQ' , value1 : 4 }, { path : 'IsAvailable' , operator : 'EQ' , value1 : true } ], sorter: { path: 'Id', descending: false } }"
+							items="{ path: '/UserSet', parameters : { expand : 'Manager, Specialities' }, filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path : 'RoleId' , operator : 'EQ' , value1 : 4 }, { path : 'IsAvailable' , operator : 'EQ' , value1 : true } ], sorter: { path: 'Id', descending: false } }"
 							noDataText="{worklistView>/tableNoDataText}" busyIndicatorDelay="{worklistView>/tableBusyDelay}" growing="true" growingScrollToLoad="true"
 							updateFinished=".onUpdateFinished2">
 							<headerToolbar>
@@ -195,17 +193,16 @@
 								</Column>
 							</columns>
 							<items>
-								<ColumnListItem>
+								<ColumnListItem id="VolAvlbl">
 									<cells>
 										<Text text="{FirstName}"/>
 										<Text text="{LastName}"/>
 										<Text text="{Manager/FirstName} {Manager/LastName}"/>
 										<Button text="{= ${Specialities}.length }" visible="{= ${Specialities}.length !== 0}" press="onSpeciality"/>
-										<Button icon="sap-icon://email" visible="{= ${worklistView>/loggedUserId} !== ${Id} }" press="onMessage" type="Transparent"
-											tooltip="Email"/>
+										<Button icon="sap-icon://email" visible="{= ${worklistView>/loggedUserId} !== ${Id} }" press="onMessage" type="Transparent" tooltip="Email"/>
 										<Button icon="sap-icon://comment" press="onComment" type="Transparent" tooltip="Note"/>
 										<Button icon="sap-icon://edit" press="onEdit" type="Transparent" tooltip="Edit"/>
-										<Button icon="sap-icon://delete" visible="{= ${worklistView>/loggedUserId} !== ${Id} }" press="onDelete" type="Transparent" tooltip="Remove"/>
+										<Button icon="sap-icon://delete" press="onDelete" type="Transparent" tooltip="Remove"/>
 									</cells>
 								</ColumnListItem>
 							</items>
@@ -236,7 +233,7 @@
 								<Column width="11%">
 									<Text text="{i18n>colFirstName}"/>
 								</Column>
-								<Column width="11%">
+								<Column width="9%">
 									<Text text="{i18n>colLastName}"/>
 								</Column>
 								<Column width="15%">
@@ -248,7 +245,7 @@
 								<Column width="10%">
 									<Text text="{i18n>colIncidentType}"/>
 								</Column>
-								<Column width="14%">
+								<Column width="15%">
 									<Text text="{i18n>colTeamManager}"/>
 								</Column>
 								<Column width="8%">
@@ -260,12 +257,15 @@
 								<Column width="8%">
 									<Text text="{i18n>colComment}"/>
 								</Column>
-								<Column width="5%">
+								<Column width="6%">
 									<Text text="{i18n>colEdit}"/>
 								</Column>
+								<!--<Column width="10%">-->
+								<!--	<Text text="{i18n>colRemove}"/>-->
+								<!--</Column>-->
 							</columns>
 							<items>
-								<ColumnListItem>
+								<ColumnListItem id="VolUnavl">
 									<cells>
 										<Text text="{FirstName}"/>
 										<Text text="{LastName}"/>
@@ -276,10 +276,10 @@
 											state="{= ${VolunteerAssignment/ServiceType/IncidentType/IncidentType} === 'Emergency' ? 'Error' : 'Success' }"/>
 										<Text text="{Manager/FirstName} {Manager/LastName}"/>
 										<Button text="{= ${Specialities}.length }" visible="{= ${Specialities}.length !== 0}" press="onSpeciality"/>
-										<Button icon="sap-icon://email" visible="{= ${worklistView>/loggedUserId} !== ${Id} }" press="onMessage" type="Transparent"
-											tooltip="Email"/>
+										<Button icon="sap-icon://email" visible="{= ${worklistView>/loggedUserId} !== ${Id} }" press="onMessage" type="Transparent" tooltip="Email"/>
 										<Button icon="sap-icon://comment" press="onComment" type="Transparent" tooltip="Note"/>
 										<Button icon="sap-icon://edit" press="onEdit" type="Transparent" tooltip="Edit"/>
+										<!--<Button icon="sap-icon://delete" press="onDelete" type="Transparent" tooltip="Remove"/>-->
 									</cells>
 								</ColumnListItem>
 							</items>

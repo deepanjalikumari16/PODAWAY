@@ -709,7 +709,7 @@ sap.ui.define([
 			Promise.all(aProms)
 	   			   .then(function () {
 						oViewModel.setProperty("/busy", false);
-						that.showToast.call(that, "MSG_SUCCESS_CREATE");
+						that.showToast.call(that, "MSG_SUCCESS_UPDATE");
 						that.onCancel.apply(that);
 					},
 					function () {

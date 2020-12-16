@@ -106,7 +106,7 @@
 			</VBox>
 		</l:Grid>
 		<buttons>
-			<Button text="{i18n>btnClose}" press="onClose"/>
+			<Button text="{i18n>btnCancel}" press="onClose"/>
 			<Button text="{i18n>btnSave}" visible="{= ${worklistView>/bEditOptions/Service} === false }" type="Emphasized" press="onSave"/>
 			<Button text="{i18n>btnDone}" visible="{= ${worklistView>/bEditOptions/Service} === true }" type="Emphasized" press="onDone"/>
 		</buttons>

@@ -16,7 +16,7 @@
 							</VBox>
 							<VBox>
 								<Label required="true" text="{i18n>colServiceMessage}"/>
-								<Input value="{objectView>ServiceMessage}"/>
+								<TextArea width="100%" value="{objectView>ServiceMessage}" rows="4" maxLength="250" showExceededText="true"/>
 							</VBox>
 							<VBox>
 								<Label text="{i18n>colContactNumber}"/>
@@ -54,14 +54,14 @@
 					</uxap:ObjectPageSubSection>
 				</uxap:subSections>
 			</uxap:ObjectPageSection>
-			<uxap:ObjectPageSection title="{i18n>childs}">
+			<uxap:ObjectPageSection title="{i18n>childs}" visible="{= ${objectView>/sMode} === 'E'}">
 				<uxap:subSections>
 					<uxap:ObjectPageSubSection>
 						<Table id="table" width="auto" headerText="{i18n>colChilds}" growing="true">
 							<headerToolbar>
 								<Toolbar>
 									<ToolbarSpacer/>
-									<Button press="addChild" text="{i18n>btnAdd}" visible="{= ${objectView>/sMode} === 'E'}"/>
+									<Button press="addChild" text="{i18n>btnAdd}"/>
 								</Toolbar>
 							</headerToolbar>
 							<columns>

@@ -25,7 +25,7 @@
  		onInit: function () {
  			var oViewModel,
  				iOriginalBusyDelay, oTable = this.getView().byId("table");
- 				 			// Put down worklist table's original value for busy indicator delay,
+ 			// Put down worklist table's original value for busy indicator delay,
  			// so it can be restored later on. Busy handling on the table is
  			// taken care of by the table itself.
  			iOriginalBusyDelay = oTable.getBusyIndicatorDelay();
@@ -65,22 +65,20 @@
  		},
 
  		onAfterRendering: function () {
- 			
- 		if(!(this.getModel("device").getProperty("/system/desktop"))){
- 			
- 			var bCompact = !!this.getView().$().closest(".sapUiSizeCompact").length;
-			sap.m.MessageBox.error(	this.getResourceBundle().getText("ERR_DEVICE"),
-				{
-					styleClass: bCompact ? "sapUiSizeCompact" : "",
-					onClose: function() {
-						this.getView().setBlocked(true);
-					}.bind(this)
-				}
-			);
- 			
- 			return;
- 		}
- 			
+
+ 			if (!(this.getModel("device").getProperty("/system/desktop"))) {
+
+ 				var bCompact = !!this.getView().$().closest(".sapUiSizeCompact").length;
+ 				sap.m.MessageBox.error(this.getResourceBundle().getText("ERR_DEVICE"), {
+ 					styleClass: bCompact ? "sapUiSizeCompact" : "",
+ 					onClose: function () {
+ 						this.getView().setBlocked(true);
+ 					}.bind(this)
+ 				});
+
+ 				return;
+ 			}
+
  			this.getModel().metadataLoaded().then(this._loadConfigData.bind(this));
  		},
 
@@ -93,7 +91,7 @@
 
  			//Load appConfig only for first time
  			if (!(this.getModel("worklistView").getProperty("/appConfig")))
- 			aPromises.push(
+ 				aPromises.push(
  					new Promise(function (res, rej) {
  						that.getModel().read("/MasterApplicationConfigSet(1)", {
  							success: function (data) {
@@ -109,7 +107,7 @@
  				new Promise(function (res, rej) {
  					that.getModel().read("/EventAttractionSet", {
  						filters: [new Filter("EventAttractionTypeId", FilterOperator.EQ, 1), new Filter("IsArchived", FilterOperator.EQ, false)],
- 						sorters: [new sap.ui.model.Sorter("Index"), new sap.ui.model.Sorter("CreatedAt")],
+ 						sorters: [new sap.ui.model.Sorter("Index"), new sap.ui.model.Sorter("Name")],
  						urlParameters: {
  							"$expand": "Building"
  						},
@@ -141,7 +139,7 @@
  		_setData: function (data) {
  			var oWorklistViewModel = this.getModel("worklistView");
 
- 			var iPodTopInitiative = oWorklistViewModel.getProperty("/appConfig/PodTopInitiative");
+ 			var iPodTopInitiative = oWorklistViewModel.getProperty("/appConfig/Value");
 
  			var jouneys = [],
  				restEvents = [];
@@ -329,8 +327,8 @@
  			oModel.setProperty("/bSave", true);
 
  			//Validation
- 			if (Journeydata.length >= oModel.getProperty("/appConfig/PodTopInitiative")) {
- 				MessageToast.show(this.getResourceBundle().getText("MSG_JLIMIT", [oModel.getProperty("/appConfig/PodTopInitiative")]));
+ 			if (Journeydata.length >= oModel.getProperty("/appConfig/Value")) {
+ 				MessageToast.show(this.getResourceBundle().getText("MSG_JLIMIT", [oModel.getProperty("/appConfig/Value")]));
  				return;
  			}
 
@@ -392,9 +390,12 @@
  		},
 
  		onSave: function () {
- 			
+
  			var sJourneys = this.getModel("worklistView")
  				.getProperty("/aJourneys")
+ 				.sort(function (a, b) {
+ 					return a.Index - b.Index;
+ 				})
  				.map(function (ele) {
  					return ele.Id;
  				}).join();

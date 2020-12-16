@@ -26,7 +26,7 @@
 		</imgEditor:ImageEditorResponsiveContainer>
 		<buttons>
 			<Button press="onCancelAddOption"  text="{i18n>btnCancel}"/>
-			<Button press="onSaveAddOption" text="{i18n>btnSave}"/>
+			<Button press="onSaveAddOption" type="Emphasized" text="{i18n>btnSave}"/>
 		</buttons>
 	</Dialog>
 </core:FragmentDefinition>

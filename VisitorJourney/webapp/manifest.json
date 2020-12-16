@@ -76,7 +76,7 @@
 				"preload": true,
 				"settings": {
 					"useBatch": false,
-					"defaultOperationMode": "Auto",
+					"defaultOperationMode": "Client",
 					"defaultBindingMode": "Default",
 					"defaultCountMode": "None"
 				}

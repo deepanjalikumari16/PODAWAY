@@ -94,7 +94,7 @@ sap.ui.define([
 			var sObjectId = oEvent.getParameter("arguments").objectId;
 
 			this.getModel("objectView").setProperty("/parentId", sObjectId);
-
+			
 			//Begin of To do dynamic fetch for child list
 			var parentId = parseInt(sObjectId);
 			var oChildTable = this.getView().byId("table");
@@ -154,7 +154,7 @@ sap.ui.define([
 				},
 				filters: afilter1,
 				template: oItemTemplate,
-				templateShareable: true
+				templateShareable: false
 			});
 			//End of To do dynamic fetch for child list
 
@@ -556,10 +556,11 @@ sap.ui.define([
 				}
 
 				var settings = {
-					url: "/EXPO_PODIUM_API" + sPath + "/$value",
+					url: "/EXPO_PODIUM_API/api/v2/odata.svc" + sPath + "/$value",
 					//	data : fd,
 					data: oImage.Image,
 					method: "PUT",
+					headers: that.getModel().getHeaders(),
 					contentType: "multipart/form-data",
 					processData: false,
 					success: function () {

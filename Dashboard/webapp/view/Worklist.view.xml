@@ -9,7 +9,7 @@
 					<l:titleLink>
 						<Link press="toPODVisitors" text="{i18n>TtlPODCategory}"/>
 					</l:titleLink>
-					<FlexBox alignItems="End" height="auto" justifyContent="Start">
+					<FlexBox alignItems="End" height="auto" justifyContent="SpaceAround">
 						<items>
 							<!-- height="10px" width="10px" -->
 							<VBox class="sapUiTinyMarginEnd">
@@ -19,11 +19,26 @@
 								</HBox>
 								<Label text="{i18n>TxtTotalPODUsers}"/>
 							</VBox>
-							<micro:ColumnMicroChart class="chartScroll" width="100%" size="L" columns="{dashboard>/PODByCatrgory}" allowColumnLabels="true">
+							<VBox class="sapUiTinyMarginEnd">
+								<!--<HBox renderType="Bare">-->
+									<!--<Image class="wheelchair" src="{dashboard>/logo}"/>-->
+									<Text class="large-font" text="{dashboard>/iTotalPODActive}"/>
+								<!--</HBox>-->
+								<Label text="{i18n>TtlTotalPODActiveUsers}"/>
+							</VBox>
+							<VBox>
+								<Button icon="sap-icon://bar-chart" press=".onOpenPODCategoriesDialog" class="sapUiSmallMarginBottom"/>
+								<Button id="BadgedButton" text="{path : '/GetNotifications'}" icon="sap-icon://bell" press="handleNotificationPopoverPress" />
+									<!--<customData>-->
+									<!--	<BadgeCustomData key="badge" value="" visible=""/>-->
+									<!--</customData>-->
+								
+							</VBox>
+							<!--<micro:ColumnMicroChart class="chartScroll" width="100%" size="L" columns="{dashboard>/PODByCatrgory}" allowColumnLabels="true">
 								<micro:columns>
 									<micro:ColumnMicroChartData value="{dashboard>Total}" label="{dashboard>Name}"/>
 								</micro:columns>
-							</micro:ColumnMicroChart>
+							</micro:ColumnMicroChart>-->
 						</items>
 					</FlexBox>
 				</l:BlockLayoutCell>
@@ -35,7 +50,7 @@
 						<items>
 							<FlexBox direction="Column" alignItems="Start">
 								<ObjectStatus class="large-font" text="{dashboard>/EmergecnyIncidents}" press="Navigate" icon="sap-icon://alert" state="Error"/>
-								<Text class="pod-users pod-user-text" text="{i18n>NeedImmidiateattention}"/>
+								<Text class="sapUITinyMarginBegin pod-users pod-user-text" text="{i18n>NeedImmidiateattention}"/>
 							</FlexBox>
 						</items>
 					</FlexBox>
@@ -108,17 +123,16 @@
 								<Text class="pod-users" text="Emergency Incidents"/>
 							</HBox>
 						</HBox>
-						<HBox  renderType="Bare" >
-						<VBox renderType="Bare" width="45%" class="sapUiSmallMargin"  >
-						<Text  text="Heat Map" class="tempFont sapUiTinyMarginBottom" />
-						<HBox id="heatMap"  class=" MapContainer" renderType="Bare" />
-						</VBox>
-						<VBox renderType="Bare"   width="45%" class="sapUiSmallMargin" >
-						<Text text="Cluster Map" class="tempFont sapUiTinyMarginBottom" />
-						<HBox id="map" class="MapContainer" renderType="Bare" />
-						</VBox>
+						<HBox renderType="Bare">
+							<VBox renderType="Bare" width="45%" class="sapUiSmallMargin">
+								<Text text="Heat Map" class="tempFont sapUiTinyMarginBottom"/>
+								<HBox id="heatMap" class=" MapContainer" renderType="Bare"/>
+							</VBox>
+							<VBox renderType="Bare" width="45%" class="sapUiSmallMargin">
+								<Text text="Cluster Map" class="tempFont sapUiTinyMarginBottom"/>
+								<HBox id="map" class="MapContainer" renderType="Bare"/>
+							</VBox>
 						</HBox>
-						
 					</VBox>
 				</l:BlockLayoutCell>
 			</l:BlockLayoutRow>

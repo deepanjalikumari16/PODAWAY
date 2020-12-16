@@ -58,17 +58,6 @@ sap.ui.define([
 			oTable.attachEventOnce("updateFinished", function () {
 				// Restore original busy indicator delay for worklist's table
 				oViewModel.setProperty("/tableBusyDelay", iOriginalBusyDelay);
-				//Fetch loggedIn User ID to disable delete button for loggedIn user
-				var oModel = dat.getModel();
-				oModel.callFunction("/GetLoggedInUser", {
-					method: "GET",
-					success: function (data) {
-						oViewModel.setProperty("/loggedUserId", data.results[0].Id);
-						oViewModel.setProperty("/loggedRoleId", data.results[0].RoleId);
-						dat.getModel("appView").setProperty("/loggedRoleId", data.results[0].RoleId);
-						dat.loadVolunteer();
-					}
-				});
 			});
 
 			oTable1.attachEventOnce("updateFinished1", function () {
@@ -206,65 +195,256 @@ sap.ui.define([
 
 		onChange: function (oEvent) {
 			var sSelectedKey = oEvent.getSource().getSelectedKey();
+			var sQuery = null;
 
 			this.getModel("appView").setProperty("/selectedRoleId", sSelectedKey);
 			this.getModel("worklistView").setProperty("/selectId", sSelectedKey);
-
-			if (+sSelectedKey !== 4) { //
+			
+			if (+sSelectedKey !== 4) {
 				this.getModel("worklistView").setProperty("/bShowVolunteer", false);
 
-				var oTable = this.getView().byId("table");
-				var itemBinding = oTable.getBinding("items");
-				var afilter = [new Filter("RoleId", FilterOperator.EQ, sSelectedKey),
-					new Filter("IsArchived", FilterOperator.EQ, false)
-				];
-				if (itemBinding) itemBinding.filter(afilter, "Application");
+				this.bindAdminTeamManagerVolunteerTable(sQuery, sSelectedKey);
 			} else {
 				this.getModel("worklistView").setProperty("/bShowVolunteer", true);
-				this.loadVolunteer();
+				this.bindVolunteerTable(sQuery, sSelectedKey);
 			}
 		},
 
-		loadVolunteer: function () {
-			var oViewModel = this.getModel("worklistView");
+		onAfterRendering: function () {
+			//Init Validation framework
+			var that = this;
+			this.getOwnerComponent().getModel().metadataLoaded().then(function () {
+				// Restore original busy indicator delay for the object view
+				//Fetch loggedIn User ID to disable delete button for loggedIn user
+				var oModel = that.getModel();
+				var oViewModel = that.getModel("worklistView");
+				oModel.callFunction("/GetLoggedInUser", {
+					method: "GET",
+					success: function (data) {
+						oViewModel.setProperty("/loggedUserId", data.results[0].Id);
+						oViewModel.setProperty("/loggedRoleId", data.results[0].RoleId);
+						that.getModel("appView").setProperty("/loggedUserId", data.results[0].Id);
+						that.getModel("appView").setProperty("/loggedRoleId", data.results[0].RoleId);
 
-			var loggedUserId = oViewModel.getProperty("/loggedUserId");
-			var loggedRoleId = oViewModel.getProperty("/loggedRoleId");
+						if (data.results[0].RoleId === 1) {
+							that.bindAdminTeamManagerVolunteerTable.call(that);
+						}
+						if (data.results[0].RoleId === 2) {
+							this.getModel("worklistView").setProperty("/bShowVolunteer", true);
+							that.bindVolunteerbyTeamManagerTable.call(that);
+						}
+					}.bind(that)
+				});
+			});
+		},
 
-			if (loggedRoleId === 2) {
-				this.getModel("worklistView").setProperty("/bShowVolunteer", true);
+		bindAdminTeamManagerVolunteerTable: function (sQuery, firstSelectRoleId) {
+			var sPath = "/UserSet";
 
-				this.getModel("appView").setProperty("/selectedRoleId", 4);
-				this.getModel("worklistView").setProperty("/selectId", 4);
+			if (sQuery) {
+				var oCustomParam = {
+					Query: sQuery
+				};
+			}
 
-				var managerFilter = new Filter("ManagerId", FilterOperator.EQ, loggedUserId);
-				var oTable1 = this.getView().byId("table1");
-				var itemBinding1 = oTable1.getBinding("items");
-				var afilter1 = [new Filter("RoleId", FilterOperator.EQ, 4),
-					new Filter("IsArchived", FilterOperator.EQ, false),
-					managerFilter
-				];
-				if (itemBinding1) itemBinding1.filter(afilter1, "Application");
+			var sSortBy = "Id, asc";
+			var oSorter = {
+				$orderby: sSortBy
+			};
 
-				var oTable2 = this.getView().byId("table2");
-				var itemBinding2 = oTable2.getBinding("items");
-				var afilter2 = [new Filter("RoleId", FilterOperator.EQ, 4),
-					new Filter("IsArchived", FilterOperator.EQ, false),
-					new Filter("IsAvailable", FilterOperator.EQ, true),
-					managerFilter
-				];
-				if (itemBinding2) itemBinding2.filter(afilter2, "Application");
+			// var oSorter = {
+			// 	Id: "asc"
+			// };
 
-				var oTable3 = this.getView().byId("table3");
-				var itemBinding3 = oTable3.getBinding("items");
-				var afilter3 = [new Filter("RoleId", FilterOperator.EQ, 4),
-					new Filter("IsArchived", FilterOperator.EQ, false),
-					new Filter("IsAvailable", FilterOperator.EQ, false),
-					managerFilter
-				];
-				if (itemBinding3) itemBinding3.filter(afilter3, "Application");
+			if (!firstSelectRoleId) {
+				firstSelectRoleId = "1";
+			}
+			if (firstSelectRoleId === "1" || firstSelectRoleId === "2") {
+				this._adminTemplate = this._adminTemplate ? this._adminTemplate : this.getView().byId("AdminTeam");
+				firstSelectRoleId = parseInt(firstSelectRoleId);
+				var aFilters = new sap.ui.model.Filter({
+					filters: [
+						new sap.ui.model.Filter('IsArchived', sap.ui.model.FilterOperator.EQ, false),
+						new sap.ui.model.Filter('RoleId', sap.ui.model.FilterOperator.EQ, firstSelectRoleId)
+					],
+					and: true
+				});
+
+				//Call bindTable with function parameters....
+				if (sQuery) {
+					this.bindTable("table", sPath, this._adminTemplate, aFilters, oSorter, oCustomParam);
+				} else {
+					this.bindTable("table", sPath, this._adminTemplate, aFilters, oSorter);
+				}
+			}
+
+			if (firstSelectRoleId === "4") {
+
+				this.bindVolunteerTable(sQuery, firstSelectRoleId);
 
 			}
+		},
+
+		/** 
+		 * 
+		 * @param sTableId - Table Id
+		 * @param sPath - binding path
+		 * @param oTemplate - Item template 
+		 * Optional? @param aFilters - filters array
+		 * Optional? @param aCustomParam - Custom paramter
+		 * Optional? @param sExpand
+		 */
+		bindTable: function (sTableId, sPath, oTemplate, aFilters, oSorter, oCustomParam, sExpand) {
+			var oBindSettings = {
+				path: sPath,
+				template: oTemplate.clone(),
+				parameters: {}
+			};
+
+			if (!!aFilters) {
+				oBindSettings.filters = aFilters;
+			}
+
+			if (!!oCustomParam) {
+				oBindSettings.parameters.custom = oCustomParam;
+
+			}
+
+			if (!!sExpand) {
+				oBindSettings.parameters.expand = sExpand;
+			}
+
+			if (!!oSorter) {
+				oBindSettings.sorter = oSorter;
+			}
+
+			this.getView().byId(sTableId).bindItems(oBindSettings);
+
+		},
+
+		bindVolunteerTable: function (sQuery, firstSelectRoleId) {
+			var sPath = "/UserSet";
+			var sSortBy = "Id, asc";
+			var oSorter = {
+				$orderby: sSortBy
+			};
+			// var oSorter = {
+			// 	Path: "Id",
+			// 	Descending: false
+			// };
+			if (!firstSelectRoleId) {
+				firstSelectRoleId = "4";
+			}
+			var oCustomParamVolAll = {
+				Query: sQuery
+			};
+			var sExpand = "Manager, Specialities";
+			this._VolAllTemplate = this._VolAllTemplate ? this._VolAllTemplate : this.getView().byId("VolAll");
+			var aFiltersVolAll = new sap.ui.model.Filter({
+				filters: [
+					new sap.ui.model.Filter('IsArchived', sap.ui.model.FilterOperator.EQ, false),
+					new sap.ui.model.Filter('RoleId', sap.ui.model.FilterOperator.EQ, firstSelectRoleId)
+				],
+				and: true
+			});
+
+			//Call bindTable with function parameters....
+			this.bindTable("table1", sPath, this._VolAllTemplate, aFiltersVolAll, oSorter, oCustomParamVolAll, sExpand);
+
+			this._VolAvlblTemplate = this._VolAvlblTemplate ? this._VolAvlblTemplate : this.getView().byId("VolAvlbl");
+			var aFiltersVolAvlbl = new sap.ui.model.Filter({
+				filters: [
+					new sap.ui.model.Filter('IsArchived', sap.ui.model.FilterOperator.EQ, false),
+					new sap.ui.model.Filter('RoleId', sap.ui.model.FilterOperator.EQ, firstSelectRoleId),
+					new sap.ui.model.Filter('IsAvailable', sap.ui.model.FilterOperator.EQ, true)
+				],
+				and: true
+			});
+
+			//Call bindTable with function parameters....
+			this.bindTable("table2", sPath, this._VolAvlblTemplate, aFiltersVolAvlbl, oSorter, oCustomParamVolAll, sExpand);
+
+			var oCustomParamVolUnavl = {
+				Query: sQuery
+			};
+			var sExpandUnavl =
+				"VolunteerAssignment/PODVisitor, Manager, VolunteerAssignment/PODConditions, VolunteerAssignment/ServiceType/IncidentType, Specialities";
+			this._VolUnavlTemplate = this._VolUnavlTemplate ? this._VolUnavlTemplate : this.getView().byId("VolUnavl");
+			var aFiltersVolUnavl = new sap.ui.model.Filter({
+				filters: [
+					new sap.ui.model.Filter('IsArchived', sap.ui.model.FilterOperator.EQ, false),
+					new sap.ui.model.Filter('RoleId', sap.ui.model.FilterOperator.EQ, firstSelectRoleId),
+					new sap.ui.model.Filter('IsAvailable', sap.ui.model.FilterOperator.EQ, false)
+				],
+				and: true
+			});
+
+			//Call bindTable with function parameters....
+			this.bindTable("table3", sPath, this._VolUnavlTemplate, aFiltersVolUnavl, oSorter, oCustomParamVolUnavl, sExpandUnavl);
+		},
+
+		bindVolunteerbyTeamManagerTable: function (sQuery, firstSelectRoleId) {
+			var oViewModel = this.getModel("worklistView");
+			var loggedUserId = oViewModel.getProperty("/loggedUserId");
+			this.getModel("appView").setProperty("/selectedRoleId", 4);
+			this.getModel("worklistView").setProperty("/selectId", 4);
+			var sPath = "/UserSet";
+			var oSorter = {
+				Path: "Id",
+				Descending: false
+			};
+			var oCustomParamVolAll = {
+				Query: sQuery
+			};
+			var sExpand = "Manager, Specialities";
+			if (!firstSelectRoleId) {
+				firstSelectRoleId = "4";
+			}
+			this._VolAllTemplate = this._VolAllTemplate ? this._VolAllTemplate : this.getView().byId("VolAll");
+			var aFiltersVolAll = new sap.ui.model.Filter({
+				filters: [
+					new sap.ui.model.Filter('IsArchived', sap.ui.model.FilterOperator.EQ, false),
+					new sap.ui.model.Filter('RoleId', sap.ui.model.FilterOperator.EQ, firstSelectRoleId),
+					new sap.ui.model.Filter('ManagerId', sap.ui.model.FilterOperator.EQ, loggedUserId)
+				],
+				and: true
+			});
+
+			//Call bindTable with function parameters....
+			this.bindTable("table1", sPath, this._VolAllTemplate, aFiltersVolAll, oSorter, oCustomParamVolAll, sExpand);
+
+			this._VolAvlblTemplate = this._VolAvlblTemplate ? this._VolAvlblTemplate : this.getView().byId("VolAvlbl");
+			var aFiltersVolAvlbl = new sap.ui.model.Filter({
+				filters: [
+					new sap.ui.model.Filter('IsArchived', sap.ui.model.FilterOperator.EQ, false),
+					new sap.ui.model.Filter('RoleId', sap.ui.model.FilterOperator.EQ, firstSelectRoleId),
+					new sap.ui.model.Filter('ManagerId', sap.ui.model.FilterOperator.EQ, loggedUserId),
+					new sap.ui.model.Filter('IsAvailable', sap.ui.model.FilterOperator.EQ, true)
+				],
+				and: true
+			});
+
+			//Call bindTable with function parameters....
+			this.bindTable("table2", sPath, this._VolAvlblTemplate, aFiltersVolAvlbl, oSorter, oCustomParamVolAll, sExpand);
+
+			var oCustomParamVolUnavl = {
+				Query: sQuery
+			};
+			var sExpandUnavl =
+				"VolunteerAssignment/PODVisitor, Manager, VolunteerAssignment/PODConditions, VolunteerAssignment/ServiceType/IncidentType, Specialities";
+			this._VolUnavlTemplate = this._VolUnavlTemplate ? this._VolUnavlTemplate : this.getView().byId("VolUnavl");
+			var aFiltersVolUnavl = new sap.ui.model.Filter({
+				filters: [
+					new sap.ui.model.Filter('IsArchived', sap.ui.model.FilterOperator.EQ, false),
+					new sap.ui.model.Filter('RoleId', sap.ui.model.FilterOperator.EQ, firstSelectRoleId),
+					new sap.ui.model.Filter('ManagerId', sap.ui.model.FilterOperator.EQ, loggedUserId),
+					new sap.ui.model.Filter('IsAvailable', sap.ui.model.FilterOperator.EQ, false)
+				],
+				and: true
+			});
+
+			//Call bindTable with function parameters....
+			this.bindTable("table3", sPath, this._VolUnavlTemplate, aFiltersVolUnavl, oSorter, oCustomParamVolUnavl, sExpandUnavl);
 		},
 
 		onMessage: function (oEvent) {
@@ -469,55 +649,70 @@ sap.ui.define([
 				// refresh the list binding.
 				this.onRefresh();
 			} else {
-				var aTableSearchState = [];
-				// var tQuery = oEvent.getParameter("query");
 				var sQuery = oEvent.getParameter("query").toLowerCase();
-				sQuery = "'" + sQuery + "'";
+				var firstSelectRoleId = this.getModel("appView").getProperty("/selectedRoleId");
+				if (!firstSelectRoleId) {
+					if (this.getModel("worklistView").getProperty("/loggedRoleId") === 1) {
+						firstSelectRoleId = "1";
+					} else {
+						firstSelectRoleId = "4";
+					}
+				}
 				if (sQuery && sQuery.length > 0) {
-					var firstSelectRoleId = this.getModel("appView").getProperty("/selectedRoleId");
-					if (!firstSelectRoleId) {
-						if (this.getModel("worklistView").getProperty("/loggedRoleId") === 1) {
-							firstSelectRoleId = "1";
+					if (firstSelectRoleId === "1" || firstSelectRoleId === "2") {
+						this.bindAdminTeamManagerVolunteerTable(sQuery, firstSelectRoleId);
+					} else {
+						if (this.getModel("worklistView").getProperty("/loggedRoleId") === 2) {
+							this.bindVolunteerbyTeamManagerTable(sQuery, firstSelectRoleId);
 						} else {
-							firstSelectRoleId = "3";
+							this.bindVolunteerTable(sQuery, firstSelectRoleId);
 						}
 					}
-					var InputFilter = new sap.ui.model.Filter({
-						filters: [
-							new sap.ui.model.Filter('tolower(FirstName)', sap.ui.model.FilterOperator.Contains, sQuery),
-							new sap.ui.model.Filter('tolower(LastName)', sap.ui.model.FilterOperator.Contains, sQuery),
-							new sap.ui.model.Filter('tolower(Email)', sap.ui.model.FilterOperator.Contains, sQuery)
-						],
-						and: false
-					});
-
-					aTableSearchState = [InputFilter,
-						new Filter("IsArchived", FilterOperator.EQ, false),
-						new Filter("RoleId", FilterOperator.EQ, firstSelectRoleId)
-					];
-
 				} else {
-					aTableSearchState = [new Filter("IsArchived", FilterOperator.EQ, false),
-						new Filter("RoleId", FilterOperator.EQ, this.getModel("appView").getProperty("/selectedRoleId"))
-					];
+					if (firstSelectRoleId === "1" || firstSelectRoleId === "2") {
+						this.bindAdminTeamManagerVolunteerTable(sQuery, firstSelectRoleId);
+					} else {
+						if (this.getModel("worklistView").getProperty("/loggedRoleId") === 2) {
+							this.bindVolunteerbyTeamManagerTable(sQuery, firstSelectRoleId);
+						} else {
+							this.bindVolunteerTable(sQuery, firstSelectRoleId);
+						}
+					}
 				}
-				this._applySearch(aTableSearchState);
+
+				// 	var aTableSearchState = [];
+				// 	var sQuery = oEvent.getParameter("query").toLowerCase();
+				// 	sQuery = "'" + sQuery + "'";
+				// 	if (sQuery && sQuery.length > 0) {
+				// 		var firstSelectRoleId = this.getModel("appView").getProperty("/selectedRoleId");
+				// 		if (!firstSelectRoleId) {
+				// 			if (this.getModel("worklistView").getProperty("/loggedRoleId") === 1) {
+				// 				firstSelectRoleId = "1";
+				// 			} else {
+				// 				firstSelectRoleId = "3";
+				// 			}
+				// 		}
+				// 		var InputFilter = new sap.ui.model.Filter({
+				// 			filters: [
+				// 				new sap.ui.model.Filter('tolower(FirstName)', sap.ui.model.FilterOperator.Contains, sQuery),
+				// 				new sap.ui.model.Filter('tolower(LastName)', sap.ui.model.FilterOperator.Contains, sQuery),
+				// 				new sap.ui.model.Filter('tolower(Email)', sap.ui.model.FilterOperator.Contains, sQuery)
+				// 			],
+				// 			and: false
+				// 		});
+
+				// 		aTableSearchState = [InputFilter,
+				// 			new Filter("IsArchived", FilterOperator.EQ, false),
+				// 			new Filter("RoleId", FilterOperator.EQ, firstSelectRoleId)
+				// 		];
+
+				// 	} else {
+				// 		aTableSearchState = [new Filter("IsArchived", FilterOperator.EQ, false),
+				// 			new Filter("RoleId", FilterOperator.EQ, this.getModel("appView").getProperty("/selectedRoleId"))
+				// 		];
+				// 	}
+				// 	this._applySearch(aTableSearchState);
 			}
-
-			// var InputFilter = new sap.ui.model.Filter({
-			//   filters: [
-			//     new sap.ui.model.Filter("Name", sap.ui.model.FilterOperator.EQ, inptval),
-			//     new sap.ui.model.Filter("ID", sap.ui.model.FilterOperator.EQ, inptval)
-			//   ],
-			//   and: false
-			// });
-
-			// aTableSearchState = [new Filter( {
-			// 		path: 'FirstName',
-			// 		caseSensitive: false,
-			// 		operator: FilterOperator.Contains,
-			// 		value1: sQuery
-			// 	} ),
 
 		},
 
@@ -549,6 +744,37 @@ sap.ui.define([
 
 			function onYes() {
 				var data = this.getModel().getData(sPath);
+				// if (data.IsAvailable === false) {
+				// 	function onYes() {
+				// 		// var data = this.getModel().getData(sPath);
+				// 		if (data.IsAvailable === false) {
+
+				// 		} else {
+				// 			this.getModel().update(sPath, {
+				// 				FirstName: data.FirstName,
+				// 				LastName: data.LastName,
+				// 				Email: data.Email,
+				// 				Username: data.Username,
+				// 				PhotoURL: data.PhotoURL,
+				// 				Address: data.Address,
+				// 				City: data.City,
+				// 				State: data.State,
+				// 				Zip: data.Zip,
+				// 				Country: data.Country,
+				// 				DialCode: data.DialCode,
+				// 				Mobile: data.Mobile,
+				// 				EmergencyDialCode: data.EmergencyDialCode,
+				// 				EmergencyMobile: data.EmergencyMobile,
+				// 				RoleId: data.RoleId,
+				// 				IsArchived: true
+				// 			}, {
+				// 				success: this.showToast.bind(this, "MSG_SUCCESS_ADM_REMOVE")
+				// 			});
+				// 		}
+				// 	}
+
+				// 	this.showWarning("MSG_CONFIRM_DELETE_UNAVAILABLE_VOLUNTEER", onYes);
+				// } else {
 				this.getModel().update(sPath, {
 					FirstName: data.FirstName,
 					LastName: data.LastName,
@@ -569,6 +795,7 @@ sap.ui.define([
 				}, {
 					success: this.showToast.bind(this, "MSG_SUCCESS_ADM_REMOVE")
 				});
+				// }
 			}
 
 			this.showWarning("MSG_CONFIRM_DELETE", onYes);

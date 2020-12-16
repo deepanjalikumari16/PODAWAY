@@ -1,1 +1,1 @@
-{"type":"approuter.nodejs","builders":{"default":"sap.nodejs","configs":{}},"runners":{"configs":{}},"attributes":{},"description":"mta-podium-approuter","mixinTypes":["mtamodule"]}
+{"type":"approuter.nodejs","builders":{"default":"sap.nodejs","configs":{}},"runners":{"configs":{}},"attributes":{"sap.watt.common.setting":["{\"projectType\":[\"approuter.nodejs\"]}"]},"description":"mta-podium-approuter","mixinTypes":["mtamodule"]}

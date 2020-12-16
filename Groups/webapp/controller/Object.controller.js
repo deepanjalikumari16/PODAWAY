@@ -353,25 +353,90 @@ sap.ui.define([
 
 		handleSearch: function (oEvent) {
 
-			var sValue = oEvent.getParameter("value").toLowerCase();
-			sValue = "'" + sValue + "'";
+			var sQuery = oEvent.getParameter("value").toLowerCase();
+			sQuery = "'" + sQuery + "'";
 
-			var InputFilter = new sap.ui.model.Filter({
-				filters: [
-					new sap.ui.model.Filter('tolower(FirstName)', sap.ui.model.FilterOperator.Contains, sValue),
-					new sap.ui.model.Filter('tolower(LastName)', sap.ui.model.FilterOperator.Contains, sValue),
-					new sap.ui.model.Filter('tolower(Email)', sap.ui.model.FilterOperator.Contains, sValue)
-				],
-				and: false
-			});
+			if (sQuery && sQuery.length > 0) {
 
-			var oFilter = [InputFilter,
-				new Filter("IsArchived", FilterOperator.EQ, false)
-			];
+				// var sPath = "/UserSet";
+				// if (sQuery) {
+				// 	var oCustomParam = {
+				// 		Query: sQuery
+				// 	};
+				// }
+				// var oSorter = {
+				// 	Path: "Id",
+				// 	Descending: false
+				// };
+				// var sExpand = "Role";
+				// var sSelect = "Id,FirstName,LastName,Email,RoleId,Role/Role";
+				// this._Template = this._Template ? this._Template : this.getView("SelectMemberDialogfragment").byId("userDialog");
+				// var aFilters = new sap.ui.model.Filter({
+				// 	filters: [
+				// 		new sap.ui.model.Filter('IsArchived', sap.ui.model.FilterOperator.EQ, false)
+				// 	]
+				// });
 
-			var oBinding = oEvent.getSource().getBinding("items");
-			oBinding.filter([oFilter]);
+				// //Call bindTable with function parameters....
+				// if (sQuery) {
+				// 	this.bindTable("tableDialog", sPath, this._Template, aFilters, sExpand, sSelect, oCustomParam);
+				// } else {
+				// 	this.bindTable("tableDialog", sPath, this._Template, aFilters, sExpand, sSelect);
+				// }
+
+				var InputFilter = new sap.ui.model.Filter({
+					filters: [
+						new sap.ui.model.Filter("tolower(FirstName)", sap.ui.model.FilterOperator.Contains, sQuery, false),
+						new sap.ui.model.Filter("tolower(LastName)", sap.ui.model.FilterOperator.Contains, sQuery, false),
+						new sap.ui.model.Filter("tolower(Email)", sap.ui.model.FilterOperator.Contains, sQuery, false)
+					],
+					and: false
+				});
+
+				var oBinding = oEvent.getSource().getBinding("items");
+				oBinding.filter([InputFilter]);
+			}
 		}
+
+		/** 
+		 * 
+		 * @param sTableId - Table Id
+		 * @param sPath - binding path
+		 * @param oTemplate - Item template 
+		 * Optional? @param aFilters - filters array
+		 * Optional? @param aCustomParam - Custom paramter
+		 */
+		// bindTable: function (sTableId, sPath, oTemplate, aFilters, sExpand, sSelect, oCustomParam) {
+		// 	// debugger;
+		// 	var oBindSettings = {
+		// 		path: sPath,
+		// 		template: oTemplate.clone(),
+		// 		parameters: {}
+		// 	};
+
+		// 	if (!!aFilters) {
+		// 		oBindSettings.filters = aFilters;
+		// 	}
+
+		// 	if (!!oCustomParam) {
+		// 		oBindSettings.parameters.custom = oCustomParam;
+		// 	}
+
+		// 	if (!!sExpand) {
+		// 		oBindSettings.parameters.expand = sExpand;
+		// 	}
+
+		// 	if (!!sSelect) {
+		// 		oBindSettings.parameters.select = sSelect;
+		// 	}
+
+		// 	// if (!!oSorter) {
+		// 	// 	oBindSettings.sorter = oSorter;
+		// 	// }
+
+		// 	this.getView().byId(sTableId).bindItems(oBindSettings);
+
+		// }
 
 	});
 

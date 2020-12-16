@@ -64,9 +64,8 @@
 								"componentData": {
 									"config": {
 										"applications": {
-											"Shell-home": {},
-											"Shell-plugin":{}	
-											}
+											"Shell-home": {}
+										}
 									}
 								}
 							}

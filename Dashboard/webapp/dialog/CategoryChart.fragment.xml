@@ -1,0 +1,30 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:viz="sap.viz.ui5.controls"
+	xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds" xmlns:viz.data="sap.viz.ui5.data">
+	<Dialog id="dlgAddOptn" busyIndicatorDelay="0" contentWidth="auto" contentHeight="auto" class="sapUiResponsiveContentPadding"
+		title="{i18n>TtlPODCategoryChart}">
+		<FlexBox renderType="Bare" width="700px" height="500px" justifyContent="SpaceAround" alignContent="Start" alignItems="Start">
+			<viz:VizFrame id="idVizFrame" width="100%" height="100%" uiConfig="{applicationSet:'fiori'}" vizType='column'>
+				<viz:dataset>
+					<viz.data:FlattenedDataset data="{dashboard>/PODByOnsiteCategory}">
+						<viz.data:dimensions>
+							<viz.data:DimensionDefinition name="POD Category" value="{dashboard>Name}"/>
+						</viz.data:dimensions>
+						<viz.data:measures>
+							<viz.data:MeasureDefinition name="Users" value="{dashboard>Total}"/>
+							<!-- Will be added after data wrangling -->
+							<!--  <viz.data:MeasureDefinition name="Cost"
+                                value="{Cost}" />-->
+						</viz.data:measures>
+					</viz.data:FlattenedDataset>
+				</viz:dataset>
+				<viz:feeds>
+					<viz.feeds:FeedItem id='valueAxisFeed' uid="valueAxis" type="Measure" values="Users"/>
+					<viz.feeds:FeedItem id='categoryAxisFeed' uid="categoryAxis" type="Dimension" values="POD Category"/>
+				</viz:feeds>
+			</viz:VizFrame>
+		</FlexBox>
+		<endButton>
+			<Button text="{i18n>btnClose}" press="onCloseCategoryDlg"/>
+		</endButton>
+	</Dialog>
+</core:FragmentDefinition>

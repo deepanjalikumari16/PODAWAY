@@ -215,7 +215,8 @@ sap.ui.define([
 		 * @returns to terminate further execution
 		 */
 		_setView: function (data) {
-
+			var loggedRoleId = this.getModel("appView").getProperty("/loggedRoleId");
+			var ManagerId = null;
 			this._oMessageManager.removeAllMessages();
 			var oViewModel = this.getModel("objectView");
 			oViewModel.setProperty("/busy", false);
@@ -233,7 +234,9 @@ sap.ui.define([
 			if (selectedRole === null || selectedRole === 0) {
 				selectedRole = 1;
 			}
-
+			if (loggedRoleId === 2) {
+				ManagerId = this.getModel("appView").getProperty("/loggedUserId");
+			}
 			oViewModel.setProperty("/oDetails", {
 				// RoleId: selectedRole.toString(),
 				RoleId: selectedRole,
@@ -250,6 +253,7 @@ sap.ui.define([
 				EmergencyDialCode: "",
 				EmergencyMobile: "",
 				Specialities: [],
+				ManagerId: ManagerId,
 				IsArchived: false
 			});
 		},
