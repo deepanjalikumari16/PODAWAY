@@ -379,7 +379,7 @@ sap.ui.define([
 			oViewModel.setProperty("/oPlan", null);
 			oViewModel.setProperty("/oDetails", {
 				BuildingId: null,
-				EventAttractionTypeId:  this.getModel("appView").getProperty("/prefilledType"),
+				EventAttractionTypeId: this.getModel("appView").getProperty("/prefilledType"),
 				Latitude: "",
 				Longitude: "",
 				IsArchived: false,
@@ -690,7 +690,6 @@ sap.ui.define([
 					target: "/oDetails/EventAttractionTypeId"
 				});
 			}
-			
 
 			if (!(data.Title.length)) {
 				oReturn.IsNotValid = true;
@@ -774,7 +773,7 @@ sap.ui.define([
 			//Redirection link for Offers
 			var regex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
 			var url = data.ReferenceLink;
-			if (data.EventAttractionTypeId === 2 && (data.ReferenceLink.length > 0 && !(url.match(regex)))) {
+			if (data.EventAttractionTypeId === 2 && ( !!(data.ReferenceLink) && data.ReferenceLink.length > 0 && !(url.match(regex)))) {
 				oReturn.IsNotValid = true;
 				oReturn.sMsg.push("ERR_Invalid_link");
 				aCtrlMessage.push({
@@ -805,8 +804,12 @@ sap.ui.define([
 				path: "/MasterEventAttractionTypeSet",
 				filters: [
 					new Filter("IsArchived", FilterOperator.EQ, false),
-					new Filter("Id", this.getOwnerComponent().iEvtType === 1 ? FilterOperator.EQ : FilterOperator.NE , 1)],
-				template: new sap.ui.core.Item({	key: "{Id}",		text: "{EventAttractionType}"		})
+					new Filter("Id", this.getOwnerComponent().iEvtType === 1 ? FilterOperator.EQ : FilterOperator.NE, 1)
+				],
+				template: new sap.ui.core.Item({
+					key: "{Id}",
+					text: "{EventAttractionType}"
+				})
 			});
 
 		},
