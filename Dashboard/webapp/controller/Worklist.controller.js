@@ -45,7 +45,12 @@
 					icon: "sap-icon://table-view",
 					intent: "#Dashboard-Display"
 				}, true);
+				
+				
+				this._enableDesktopNotification();
 			},
+			
+			
 			onAfterRendering: function () {
 				this.getModel().metadataLoaded().then(this._getUsers.bind(this));
 				//Auto refresh in every 30 secs
@@ -69,13 +74,61 @@
 			onObject: function () {
 				this.getRouter().navTo("object");
 			},
+
+			handleNotificationPopoverPress: function (oEvent) {
+				var oView = this.getView();
+				var oButton = oEvent.getSource();
+				if (!this._oPopover) {
+					Fragment.load({
+						name: "com.coil.podium.Dashboard.dialog.Notifications",
+						controller: this
+					}).then(function (oPopover) {
+						oView.addDependent(oPopover);
+						this._oPopover = oPopover;
+						this._oPopover.openBy(oButton);
+					}.bind(this));
+				} else {
+					this._oPopover.openBy(oButton);
+				}
+			},
+			onItemClose: function (oEvent) {
+			var oItem = oEvent.getSource(),
+				oList = oItem.getParent();
+
+			oList.removeItem(oItem);
+
+		//	MessageToast.show('Item Closed: ' + oEvent.getSource().getTitle());
+			},
 			/* =========================================================== */
 			/* Internal function                                           */
 			/* =========================================================== */
+			loadNotifications: function(oEvent){
+			var oViewModel = this.getView().getModel("dashboard");
+			//debugger;
+			oViewModel.setProperty("/bNotificationBusy", true);
+		//	var oList = oEvent.getSource().getContent()[0];
+			function onSuccess(data){
+					oViewModel.setProperty("/bNotificationBusy", false);
+					oViewModel.setProperty("/aNotifications", data.results);
+					oViewModel.refresh(true);
+				//	oList.refreshAggregation("items");
+			}
+			
+			this.getModel().read("/GetNotifications", {
+				urlParameters: {
+							"$expand": "Notification,Notification/Redirection"
+						},	
+				success : onSuccess.bind(this)
+			});
+			
+				
+			},		
+				
 			setLocalModel: function () {
 
 				var oDashboardModel = new JSONModel({
 					bMapBusy: true,
+					aNotifications : [],
 					bViewBusy: false,
 					logo: sap.ui.require.toUrl("com/coil/podium/Dashboard/css/wheelchair.svg"),
 					EmergencyLogo: sap.ui.require.toUrl("com/coil/podium/Dashboard/css/wheelchair_1.svg"),
@@ -133,6 +186,7 @@
 				this.getModel("dashboard").setProperty("/bHeapMap", !(this.getModel("dashboard").getProperty("/bHeapMap")));
 			},
 
+			
 			_getUsers: function () {
 				var aPromises = [],
 					that = this;
@@ -185,24 +239,63 @@
 					});
 
 				}));
-				
-				/*	aPromises.push(new Promise(function (res, rej) {
-					that.getModel().read("/GetDashboardKPI", {
+
+				aPromises.push(new Promise(function (res, rej) {
+					that.getModel().read("/GetNotifications", {
 						urlParameters: {
-							$expand: "TotalVisitorsByCategory,TotalOnsiteVisitorsByCategory,TotalAssignmentsByIncidentType,TotalAssignmentsByStatus"
-						},
+							"$select": "UUID",
+								"Top" : 100,
+								"Skip" : 0
+							
+						},	
 						success: function (data) {
 							res(data);
 						},
 						error: function (err) {
-								rej(err);
-							} //this.loadMap.bind(this)
+							rej(err);
+						}
 					});
 
-				}));*/
+				}));
 
 				Promise.all(aPromises)
 					.then(that._setView.bind(that));
+
+			},
+
+		_setView: function (aResults) {
+			var oViewModel = this.getModel("dashboard");
+				oViewModel.setProperty("/bViewBusy", false);
+
+				var that = this,
+					aUsers = aResults[0].results,
+					aEmUsers = aResults[1].results.map(function (ele) {
+						return ele.PODVisitor;
+					});
+
+				//set HERE Map and Add user markers
+				that._setMap(aUsers, aEmUsers);
+
+				//set DashBoard KPIs
+				that._setCharts(aResults[2].results[0]);
+
+				//set Notifications count
+				//Get Property getINotifications check for mismatch
+				//if mismatch, turn green
+				
+				if(oViewModel.getProperty("/iNotificationCount") && oViewModel.getProperty("/sLastUUID") !==  aResults[3].results[0].UUID )
+				{
+					
+					this.getView().byId("BadgedButton").setType(sap.m.ButtonType.Accept);
+				if(	Notification.permission === "granted")
+				{
+					new Notification('Expo 2021 Incidents', { body: "You have new notifications" });
+				}
+				
+				}
+				
+				this.getModel("dashboard").setProperty("/sLastUUID", aResults[3].results[0].UUID );
+				this.getModel("dashboard").setProperty("/iNotificationCount", aResults[3].results.length);
 
 			},
 			_setCharts: function (data) {
@@ -224,10 +317,7 @@
 				oViewModel.setProperty("/PODByCategory", data.TotalVisitorsByCategory.results);
 				// Request backed for wraggled total and Onsite data
 				oViewModel.setProperty("/PODByOnsiteCategory", data.TotalOnsiteVisitorsByCategory.results);
-				
-				
-				
-				
+
 				oViewModel.setProperty("/AssignmentStatues", {
 					pending: data.TotalAssignmentsByStatus.results[0].Total,
 					inprogress: data.TotalAssignmentsByStatus.results[1].Total,
@@ -250,9 +340,9 @@
 					}).then(function (oDialog) {
 						that._oDlgChartOption = oDialog;
 
-						  Format.numericFormatter(ChartFormatter.getInstance());
-        				var formatPattern = ChartFormatter.DefaultPattern;
-					
+						Format.numericFormatter(ChartFormatter.getInstance());
+						var formatPattern = ChartFormatter.DefaultPattern;
+
 						var oVizFrame = oDialog.getContent()[0].getItems()[0];
 						oVizFrame.setVizProperties({
 							plotArea: {
@@ -292,22 +382,7 @@
 				this._oDlgChartOption.close();
 			},
 
-			_setView: function (aResults) {
-				this.getModel("dashboard").setProperty("/bViewBusy", false);
-
-				var that = this,
-					aUsers = aResults[0].results,
-					aEmUsers = aResults[1].results.map(function (ele) {
-						return ele.PODVisitor;
-					});
-
-				//set HERE Map and Add user markers
-				that._setMap(aUsers, aEmUsers);
-
-				//set DashBoard KPIs
-				that._setCharts(aResults[2].results[0]);
-
-			},
+		
 
 			_setMap: function (aUsers, aEmUsers) {
 				var oViewModel = this.getModel("dashboard");
@@ -554,6 +629,13 @@
 
 				return [oAndFilter, new Filter("IsArchived",
 					FilterOperator.EQ, false), new Filter("ServiceType/IncidentType/IncidentType", FilterOperator.EQ, "Emergency")];
+			},
+			
+			_enableDesktopNotification: function(){
+			if(	Notification.permission === "default")
+			{
+				Notification.requestPermission();
+			}
 			}
 
 		});

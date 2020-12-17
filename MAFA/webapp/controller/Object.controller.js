@@ -521,7 +521,7 @@ sap.ui.define([
 				function () {
 					oViewModel.setProperty("/busy", false);
 					that.showToast("MSG_SUCCESS_IMG_UPLAOD");
-					that.onCancel();
+					that.onCancel.call(that);
 				}
 			);
 

@@ -1,0 +1,14 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+	<ResponsivePopover title="{i18n>TtlNotiifications}" contentHeight="auto" contentWidth="auto" busy="{dashboard>/bNotificationBusy}" busyIndicatorDelay="0"
+		beforeOpen="loadNotifications" class="sapUiPopupWithPadding" placement="Auto">
+		<content>
+			<List items="{path: 'dashboard>/aNotifications' }">
+				<NotificationListItem showCloseButton="false"
+				priority="{= ${dashboard>Notification/IsSystemGenerated} ? 'High' : 'Low' }"
+				authorName="{= !!${dashboard>Notification/CreatorName} ? ${dashboard>Notification/CreatorName} : 'System' }" 
+				description="{dashboard>Notification/Body}" 
+				title="{dashboard>Notification/Subject}"/>
+			</List>
+		</content>
+	</ResponsivePopover>
+</core:FragmentDefinition>

@@ -288,11 +288,12 @@ sap.ui.define([
 
 		// Below function triggers when user enter any value in Contact field
 		onMobileValidate: function () {
-			var mobile = this.getView().byId("mobileInput").getValue();
-			var mobileregex = /^[0-9,+]{5,15}$/;
-			if (!mobileregex.test(mobile)) {
-				this.showToast.call(this, "MSG_INVALID_MOBILE");
-			}
+			// var mobile = this.getView().byId("mobileInput").getValue();
+			// var mobileregex = /^[+][0-9,+]{5,15}$/;
+			// // var mobileregex = /^([0|\+[0-9]{1,5})?([7-9][0-9]{9})$/;
+			// if (!mobileregex.test(mobile)) {
+			// 	this.showToast.call(this, "MSG_INVALID_MOBILE");
+			// }
 		},
 
 		/**
@@ -785,35 +786,6 @@ sap.ui.define([
 				},
 				aCtrlMessage = [];
 			var oViewModel = this.getModel("worklistView");
-			if (oViewModel.getProperty("/bEditOptions").Service === true) {
-				if (!data.ServiceType) {
-					oReturn.IsNotValid = true;
-					oReturn.sMsg.push("MSG_VALDTN_SERVTYPE");
-					aCtrlMessage.push({
-						message: "MSG_VALDTN_SERVTYPE",
-						target: "/oEditData/ServiceType"
-					});
-				}
-				if (!data.ServiceMessage) {
-					oReturn.IsNotValid = true;
-					oReturn.sMsg.push("MSG_VALDTN_SERVMSG");
-					aCtrlMessage.push({
-						message: "MSG_VALDTN_SERVMSG",
-						target: "/oEditData/ServiceMessage"
-					});
-				}
-				if (data.Mobile) {
-					var mobileregex = /^[0-9]{5,15}$/;
-					if (!mobileregex.test(data.Mobile)) {
-						oReturn.IsNotValid = true;
-						oReturn.sMsg.push("MSG_INVALID_MOBILE");
-						aCtrlMessage.push({
-							message: "MSG_INVALID_MOBILE",
-							target: "/oEditData/Mobile"
-						});
-					}
-				}
-			}
 			if (oViewModel.getProperty("/bEditOptions").Facility === true) {
 				if (!data.FacilityType) {
 					oReturn.IsNotValid = true;

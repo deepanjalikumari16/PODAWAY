@@ -30,13 +30,19 @@ sap.ui.define([
 					busy: true,
 					delay: 0
 				});
-
+			
 			this.getRouter().getRoute("object").attachPatternMatched(this._onObjectMatched, this);
 			this.getRouter().getRoute("createObject").attachPatternMatched(this._onCreateObjectMatched, this);
 
 			// Store original busy indicator delay, so it can be restored later on
 			iOriginalBusyDelay = this.getView().getBusyIndicatorDelay();
 			this.setModel(oViewModel, "objectView");
+			
+			var sCurrentLocale = sap.ui.getCore().getConfiguration().getLanguage();
+			this.getModel("objectView").setProperty("/loggedInLanguage", sCurrentLocale);
+			this.getModel("objectView").setProperty("/languageEn", "en-US");
+			this.getModel("objectView").setProperty("/languageAr", "ar-AE");
+			
 			this.getOwnerComponent().getModel().metadataLoaded().then(function () {
 				// Restore original busy indicator delay for the object view
 				oViewModel.setProperty("/delay", iOriginalBusyDelay);
@@ -94,7 +100,7 @@ sap.ui.define([
 			var sObjectId = oEvent.getParameter("arguments").objectId;
 
 			this.getModel("objectView").setProperty("/parentId", sObjectId);
-			
+
 			//Begin of To do dynamic fetch for child list
 			var parentId = parseInt(sObjectId);
 			var oChildTable = this.getView().byId("table");
@@ -121,7 +127,8 @@ sap.ui.define([
 						text: "{ServiceMessage}"
 					}),
 					new sap.m.Label({
-						text: "{ContactNumber}"
+						text: "{ContactNumber}",
+						textDirection: "LTR"
 					}),
 					new sap.m.CheckBox({
 						selected: "{IsCancelable}",
@@ -415,7 +422,7 @@ sap.ui.define([
 					target: "/oServiceData/ServiceMessage"
 				});
 			} else if (data.ContactNumber) {
-				var mobileregex = /^[0-9]{5,15}$/;
+				var mobileregex = /^[+][0-9]{5,15}$/;
 				if (!mobileregex.test(data.ContactNumber)) {
 					oReturn.IsNotValid = true;
 					oReturn.sMsg.push("MSG_INVALID_MOBILE");
@@ -507,7 +514,7 @@ sap.ui.define([
 					target: "/oDetails/ServiceMessage"
 				});
 			} else if (data.ContactNumber) {
-				var mobileregex = /^[0-9]{5,15}$/;
+				var mobileregex = /^[+][0-9]{5,15}$/;
 				if (!mobileregex.test(data.ContactNumber)) {
 					oReturn.IsNotValid = true;
 					oReturn.sMsg.push("MSG_INVALID_MOBILE");

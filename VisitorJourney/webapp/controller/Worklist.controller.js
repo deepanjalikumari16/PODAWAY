@@ -456,7 +456,7 @@
  			);
  		},
  		_onSaveSuccess: function () {
-
+			this.getModel("worklistView").setProperty("/bSave", false);
  			var bCompact = !!this.getView().$().closest(".sapUiSizeCompact").length;
  			MessageBox.success(
  				this.getResourceBundle().getText("MSG_SAVE_SUCCESS"), {

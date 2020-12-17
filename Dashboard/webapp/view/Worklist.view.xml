@@ -28,7 +28,7 @@
 							</VBox>
 							<VBox>
 								<Button icon="sap-icon://bar-chart" press=".onOpenPODCategoriesDialog" class="sapUiSmallMarginBottom"/>
-								<Button id="BadgedButton" text="{path : '/GetNotifications'}" icon="sap-icon://bell" press="handleNotificationPopoverPress" />
+								<Button id="BadgedButton" text="{ path : 'dashboard>/iNotificationCount' }" icon="sap-icon://bell" press="handleNotificationPopoverPress" />
 									<!--<customData>-->
 									<!--	<BadgeCustomData key="badge" value="" visible=""/>-->
 									<!--</customData>-->

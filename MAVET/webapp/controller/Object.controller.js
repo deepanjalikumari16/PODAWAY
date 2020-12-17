@@ -803,7 +803,9 @@ sap.ui.define([
 
 			oTypeCtrl.bindItems({
 				path: "/MasterEventAttractionTypeSet",
-				filters: [new Filter("Id", this.getOwnerComponent().iEvtType === 1 ? FilterOperator.EQ : FilterOperator.NE , 1)],
+				filters: [
+					new Filter("IsArchived", FilterOperator.EQ, false),
+					new Filter("Id", this.getOwnerComponent().iEvtType === 1 ? FilterOperator.EQ : FilterOperator.NE , 1)],
 				template: new sap.ui.core.Item({	key: "{Id}",		text: "{EventAttractionType}"		})
 			});
 

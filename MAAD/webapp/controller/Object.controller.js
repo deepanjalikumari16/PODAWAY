@@ -29,6 +29,12 @@ sap.ui.define([
 				});
 			this.setModel(oViewModel, "objectView");
 
+			debugger;
+			var sCurrentLocale = sap.ui.getCore().getConfiguration().getLanguage();
+			this.getModel("objectView").setProperty("/loggedInLanguage", sCurrentLocale);
+			this.getModel("objectView").setProperty("/languageEn", "en-US");
+			this.getModel("objectView").setProperty("/languageAr", "ar-AE");
+
 			this.getRouter().getRoute("object").attachPatternMatched(this._onObjectMatched, this);
 			this.getRouter().getRoute("createObject").attachPatternMatched(this._onCreateObjectMatched, this);
 			/*
@@ -165,7 +171,10 @@ sap.ui.define([
 
 		// Below function triggers when user enter any value in Mobile input field
 		onMobileValidate: function () {
-			var mobile = this.getView().byId("mobileInput").getValue();
+			var mobile = this.getView().byId("mobileInputEn").getValue();
+			if (!mobile) {
+				mobile = this.getView().byId("mobileInputAr").getValue();
+			}
 			var mobileregex = /^[0-9]{5,15}$/;
 			if (!mobileregex.test(mobile)) {
 				this.showToast.call(this, "MSG_INVALID_MOBILE");
@@ -340,7 +349,10 @@ sap.ui.define([
 			var email = this.getView().byId("emailInput").getValue();
 			var mailregex = /^\w+[\w-+\.]*\@\w+([-\.]\w+)*\.[a-zA-Z]{2,}$/;
 
-			var mobile = this.getView().byId("mobileInput").getValue();
+			var mobile = this.getView().byId("mobileInputEn").getValue();
+			if (!mobile) {
+				mobile = this.getView().byId("mobileInputAr").getValue();
+			}
 			var mobileregex = /^[0-9]{5,15}$/;
 
 			if (!data.RoleId) {

@@ -90,18 +90,18 @@ sap.ui.define([
 			};
 		})(),
 		
-		_getAccName : function(iAccType){
+		_getAccName : function(iAccType, bMsg){
 			var	sAccType;
 			switch(iAccType){
-				case 1 : sAccType = this.getResourceBundle().getText("Device"); break;
-				case 2 : sAccType = this.getResourceBundle().getText("Condition"); break;
-				case 3 : sAccType = this.getResourceBundle().getText("Place");
+				case 1 : sAccType = bMsg ? this.getResourceBundle().getText("Device") : "Device"; break;
+				case 2 : sAccType = bMsg ? this.getResourceBundle().getText("Condition") : "Condition"; break;
+				case 3 : sAccType = bMsg ? this.getResourceBundle().getText("Place") : "Place";
 			}
 			return sAccType;
 		},
 		
 		_fnSuccessToast: function(sText){
-						MessageToast.show(this.getResourceBundle().getText(sText,[this._getAccName(this.getOwnerComponent().sAccType)] ) );
+						MessageToast.show(this.getResourceBundle().getText(sText,[this._getAccName(this.getOwnerComponent().sAccType, true)] ) );
 					},
 		
 		_ErrorBox : function(sMsg){

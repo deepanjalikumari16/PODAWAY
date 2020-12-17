@@ -224,7 +224,7 @@
 										<Image width="2rem" class="sapUiTinyMargin" height="2rem" src="{ path : '__metadata' , formatter : '.formatter.giveImage' }"/>
 										<Text text="{ServiceType}"/>
 										<Text text="{ServiceMessage}"/>
-										<Text text="{ContactNumber}"/>
+										<Text text="{ContactNumber}" textDirection="LTR"/>
 										<CheckBox selected="{IsCancelable}" editable="false"/>
 										<ObjectStatus text="{IncidentType/IncidentType}" state="{= ${IncidentType/IncidentType} === 'Emergency' ? 'Error' : 'Success' }"/>
 										<Text text="{Navigation/NavigationTypeName}"/>
@@ -321,8 +321,8 @@
 								<ColumnListItem>
 									<cells>
 										<Text text="{BuildingName}"/>
-										<Text text="{Latitude}"/>
-										<Text text="{Longitude}"/>
+										<Text text="{Latitude}" textDirection="LTR"/>
+										<Text text="{Longitude}" textDirection="LTR"/>
 										<Button icon="sap-icon://edit" press="onEdit" type="Transparent"/>
 										<Button icon="sap-icon://delete" press="onDelete" type="Transparent" tooltip="remove"/>
 									</cells>

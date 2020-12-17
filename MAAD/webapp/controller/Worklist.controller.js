@@ -199,7 +199,7 @@ sap.ui.define([
 
 			this.getModel("appView").setProperty("/selectedRoleId", sSelectedKey);
 			this.getModel("worklistView").setProperty("/selectId", sSelectedKey);
-			
+
 			if (+sSelectedKey !== 4) {
 				this.getModel("worklistView").setProperty("/bShowVolunteer", false);
 
@@ -247,14 +247,7 @@ sap.ui.define([
 				};
 			}
 
-			var sSortBy = "Id, asc";
-			var oSorter = {
-				$orderby: sSortBy
-			};
-
-			// var oSorter = {
-			// 	Id: "asc"
-			// };
+			var oSorter = new sap.ui.model.Sorter("Id", false );
 
 			if (!firstSelectRoleId) {
 				firstSelectRoleId = "1";
@@ -324,14 +317,7 @@ sap.ui.define([
 
 		bindVolunteerTable: function (sQuery, firstSelectRoleId) {
 			var sPath = "/UserSet";
-			var sSortBy = "Id, asc";
-			var oSorter = {
-				$orderby: sSortBy
-			};
-			// var oSorter = {
-			// 	Path: "Id",
-			// 	Descending: false
-			// };
+			var oSorter = new sap.ui.model.Sorter("Id", false );
 			if (!firstSelectRoleId) {
 				firstSelectRoleId = "4";
 			}
@@ -389,10 +375,8 @@ sap.ui.define([
 			this.getModel("appView").setProperty("/selectedRoleId", 4);
 			this.getModel("worklistView").setProperty("/selectId", 4);
 			var sPath = "/UserSet";
-			var oSorter = {
-				Path: "Id",
-				Descending: false
-			};
+
+			var oSorter = new sap.ui.model.Sorter("Id", false );
 			var oCustomParamVolAll = {
 				Query: sQuery
 			};

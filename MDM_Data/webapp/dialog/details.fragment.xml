@@ -83,8 +83,8 @@
 			</VBox>
 			<VBox>
 				<Label required="true" text="{i18n>colCoordinates}"/>
-				<Input width="200%" description="{i18n>colLatitude}" value="{worklistView>Latitude}" showValueHelp="true" valueHelpRequest="onMap"/>
-				<Input width="200%" description="{i18n>colLongitude}" value="{worklistView>Longitude}" showValueHelp="true" valueHelpRequest="onMap"/>
+				<Input width="200%" description="{i18n>colLatitude}" value="{worklistView>Latitude}" showValueHelp="true" valueHelpRequest="onMap" textDirection="LTR"/>
+				<Input width="200%" description="{i18n>colLongitude}" value="{worklistView>Longitude}" showValueHelp="true" valueHelpRequest="onMap" textDirection="LTR"/>
 			</VBox>
 		</l:Grid>
 		<l:Grid visible="{worklistView>/bEditOptions/Theme}" hSpacing="2" defaultSpan="XL12 L12 M12 S12" defaultIndent="XL0 L0 M1 S1">

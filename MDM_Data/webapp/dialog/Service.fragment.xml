@@ -11,9 +11,13 @@
 				<Label required="true" text="{i18n>colServiceMessage}"/>
 				<Input value="{objectView>ServiceMessage}"/>
 			</VBox>
-			<VBox>
+			<VBox visible="{= ${objectView>/loggedInLanguage} !== ${objectView>/languageAr} }">
 				<Label text="{i18n>colContactNumber}"/>
-				<Input id="mobileDetailInput" value="{objectView>ContactNumber}" type="Tel" change="onMobileValidate"/>
+				<Input id="mobileDetailInputEn" value="{objectView>ContactNumber}" type="Tel" change="onMobileValidate"/>
+			</VBox>
+			<VBox visible="{= ${objectView>/loggedInLanguage} === ${objectView>/languageAr} }">
+				<Label text="{i18n>colContactNumber}"/>
+				<Input id="mobileDetailInputAr" value="{objectView>ContactNumber}" type="Tel" change="onMobileValidate" textDirection="LTR" textAlign="Right"/>
 			</VBox>
 			<VBox>
 				<Label text="{i18n>colIsCancelable}"/>

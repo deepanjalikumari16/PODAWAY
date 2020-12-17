@@ -37,11 +37,15 @@
 							</VBox>
 							<VBox>
 								<Label text="{i18n>colDialCode}"/>
-								<Input width="100%" value="{objectView>DialCode}" editable="false"/>
+								<Input width="100%" value="{objectView>DialCode}" editable="false" textDirection="LTR"/>
 							</VBox>
-							<VBox>
+							<VBox visible="{= ${objectView>/loggedInLanguage} !== ${objectView>/languageAr} }">
 								<Label text="{i18n>colMobile}"/>
-								<Input width="100%" id="mobileInput" value="{objectView>Mobile}" type="Tel" change="onMobileValidate"/>
+								<Input width="100%" id="mobileInputEn" value="{objectView>Mobile}" type="Tel" change="onMobileValidate"/>
+							</VBox>
+							<VBox visible="{= ${objectView>/loggedInLanguage} === ${objectView>/languageAr} }">
+								<Label text="{i18n>colMobile}"/>
+								<Input width="100%" id="mobileInputAr" value="{objectView>Mobile}" type="Tel" change="onMobileValidate" textDirection="LTR" textAlign="Right"/>
 							</VBox>
 							<VBox visible="{= ${objectView>RoleId} === 4 || ${objectView>splflg} === true}">
 								<Label required="true" text="{i18n>colTeamManager}"/>

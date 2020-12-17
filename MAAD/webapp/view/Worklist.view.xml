@@ -65,7 +65,7 @@
 						<cells>
 							<Text text="{FirstName}"/>
 							<Text text="{LastName}"/>
-							<Text text="{Mobile}"/>
+							<Text text="{Mobile}" textDirection="LTR"/>
 							<Text text="{Email}"/>
 							<Button icon="sap-icon://email" press="onMessage" enabled="{= ${worklistView>/loggedUserId} !== ${Id} }" type="Transparent" tooltip="Email"/>
 							<Button icon="sap-icon://comment" press="onComment" type="Transparent" tooltip="Note"/>
