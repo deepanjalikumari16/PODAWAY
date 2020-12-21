@@ -31,9 +31,9 @@ sap.ui.define([
 
 			debugger;
 			var sCurrentLocale = sap.ui.getCore().getConfiguration().getLanguage();
-			this.getModel("objectView").setProperty("/loggedInLanguage", sCurrentLocale);
-			this.getModel("objectView").setProperty("/languageEn", "en-US");
-			this.getModel("objectView").setProperty("/languageAr", "ar-AE");
+			var firstTwoCharLang = sCurrentLocale.substring(0,2);
+			this.getModel("objectView").setProperty("/loggedInLanguage", firstTwoCharLang);
+			this.getModel("objectView").setProperty("/languageAr", "ar");
 
 			this.getRouter().getRoute("object").attachPatternMatched(this._onObjectMatched, this);
 			this.getRouter().getRoute("createObject").attachPatternMatched(this._onCreateObjectMatched, this);

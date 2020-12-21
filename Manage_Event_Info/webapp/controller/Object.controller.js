@@ -195,6 +195,7 @@ sap.ui.define([
 				TimezoneId: "",
 				Title: "",
 				Description: "",
+				HighlightsTitle: "",
 				Highlights: [],
 				IsArchived: false
 			});
@@ -586,6 +587,14 @@ sap.ui.define([
 				aCtrlMessage.push({
 					message: "MSG_VALDTN_ERR_TITLE",
 					target: "/oDetails/Title"
+				});
+			} else 
+			if (!data.HighlightsTitle) {
+				oReturn.IsNotValid = true;
+				oReturn.sMsg.push("MSG_VALDTN_ERR_HIGHLIGHT_TITLE");
+				aCtrlMessage.push({
+					message: "MSG_VALDTN_ERR_HIGHLIGHT_TITLE",
+					target: "/oDetails/HighlightsTitle"
 				});
 			} 
 			if (data.Highlights !== null && data.Highlights.length > 0) {

@@ -45,12 +45,10 @@
 					icon: "sap-icon://table-view",
 					intent: "#Dashboard-Display"
 				}, true);
-				
-				
+
 				this._enableDesktopNotification();
 			},
-			
-			
+
 			onAfterRendering: function () {
 				this.getModel().metadataLoaded().then(this._getUsers.bind(this));
 				//Auto refresh in every 30 secs
@@ -90,45 +88,45 @@
 				} else {
 					this._oPopover.openBy(oButton);
 				}
+						this.getView().byId("BadgedButton").setType(sap.m.ButtonType.Default);
 			},
 			onItemClose: function (oEvent) {
-			var oItem = oEvent.getSource(),
-				oList = oItem.getParent();
+				var oItem = oEvent.getSource(),
+					oList = oItem.getParent();
 
-			oList.removeItem(oItem);
+				oList.removeItem(oItem);
 
-		//	MessageToast.show('Item Closed: ' + oEvent.getSource().getTitle());
+				//	MessageToast.show('Item Closed: ' + oEvent.getSource().getTitle());
 			},
 			/* =========================================================== */
 			/* Internal function                                           */
 			/* =========================================================== */
-			loadNotifications: function(oEvent){
-			var oViewModel = this.getView().getModel("dashboard");
-			//debugger;
-			oViewModel.setProperty("/bNotificationBusy", true);
-		//	var oList = oEvent.getSource().getContent()[0];
-			function onSuccess(data){
+			loadNotifications: function (oEvent) {
+				var oViewModel = this.getView().getModel("dashboard");
+				//debugger;
+				oViewModel.setProperty("/bNotificationBusy", true);
+				//	var oList = oEvent.getSource().getContent()[0];
+				function onSuccess(data) {
 					oViewModel.setProperty("/bNotificationBusy", false);
 					oViewModel.setProperty("/aNotifications", data.results);
 					oViewModel.refresh(true);
-				//	oList.refreshAggregation("items");
-			}
-			
-			this.getModel().read("/GetNotifications", {
-				urlParameters: {
-							"$expand": "Notification,Notification/Redirection"
-						},	
-				success : onSuccess.bind(this)
-			});
-			
-				
-			},		
-				
+					//	oList.refreshAggregation("items");
+				}
+
+				this.getModel().read("/GetNotifications", {
+					urlParameters: {
+						"$expand": "Notification,Notification/Redirection"
+					},
+					success: onSuccess.bind(this)
+				});
+
+			},
+
 			setLocalModel: function () {
 
 				var oDashboardModel = new JSONModel({
 					bMapBusy: true,
-					aNotifications : [],
+					aNotifications: [],
 					bViewBusy: false,
 					logo: sap.ui.require.toUrl("com/coil/podium/Dashboard/css/wheelchair.svg"),
 					EmergencyLogo: sap.ui.require.toUrl("com/coil/podium/Dashboard/css/wheelchair_1.svg"),
@@ -186,7 +184,6 @@
 				this.getModel("dashboard").setProperty("/bHeapMap", !(this.getModel("dashboard").getProperty("/bHeapMap")));
 			},
 
-			
 			_getUsers: function () {
 				var aPromises = [],
 					that = this;
@@ -241,13 +238,7 @@
 				}));
 
 				aPromises.push(new Promise(function (res, rej) {
-					that.getModel().read("/GetNotifications", {
-						urlParameters: {
-							"$select": "UUID",
-								"Top" : 100,
-								"Skip" : 0
-							
-						},	
+					that.getModel().read("/GetNotificationCount", {
 						success: function (data) {
 							res(data);
 						},
@@ -263,8 +254,8 @@
 
 			},
 
-		_setView: function (aResults) {
-			var oViewModel = this.getModel("dashboard");
+			_setView: function (aResults) {
+				var oViewModel = this.getModel("dashboard");
 				oViewModel.setProperty("/bViewBusy", false);
 
 				var that = this,
@@ -282,20 +273,24 @@
 				//set Notifications count
 				//Get Property getINotifications check for mismatch
 				//if mismatch, turn green
-				
-				if(oViewModel.getProperty("/iNotificationCount") && oViewModel.getProperty("/sLastUUID") !==  aResults[3].results[0].UUID )
-				{
+
+				if (oViewModel.getProperty("/iNotificationCount") && oViewModel.getProperty("/iNotificationCount") !== aResults[3].Count) {
+
+					this.getView().byId("BadgedButton").setType(sap.m.ButtonType.Emphasized);
+					sap.m.MessageToast.show(
+						this.getResourceBundle().getText("MSG_NEW_NOTO", [Math.abs(oViewModel.getProperty("/iNotificationCount") - aResults[3].Count)])
+					);
 					
-					this.getView().byId("BadgedButton").setType(sap.m.ButtonType.Accept);
-				if(	Notification.permission === "granted")
-				{
-					new Notification('Expo 2021 Incidents', { body: "You have new notifications" });
+					// if (Notification.permission === "granted") {
+					// 	new Notification('Expo 2021 Incidents', {
+					// 		body: "You have new notifications"
+					// 	});
+					// }
+
 				}
-				
-				}
-				
-				this.getModel("dashboard").setProperty("/sLastUUID", aResults[3].results[0].UUID );
-				this.getModel("dashboard").setProperty("/iNotificationCount", aResults[3].results.length);
+
+				//	this.getModel("dashboard").setProperty("/iNotifications", aResults[3].results[0].UUID );
+				this.getModel("dashboard").setProperty("/iNotificationCount", aResults[3].Count);
 
 			},
 			_setCharts: function (data) {
@@ -382,8 +377,6 @@
 				this._oDlgChartOption.close();
 			},
 
-		
-
 			_setMap: function (aUsers, aEmUsers) {
 				var oViewModel = this.getModel("dashboard");
 				//Set to store unique values 
@@ -450,11 +443,11 @@
 				map[0].addLayer(layer);
 
 				// Add an event listener to the Provider - this listener is called when a maker// has been tapped:
-				clusteredDataProvider.addEventListener('tap', function (event) {
-					// Log data bound to the marker that has been tapped:
-					alert(event.target.getData());
-					console.log(event.target.getData());
-				});
+				/*	clusteredDataProvider.addEventListener('tap', function (event) {
+						// Log data bound to the marker that has been tapped:
+						alert(event.target.getData());
+						console.log(event.target.getData());
+					});*/
 
 				//	this.bindMapProperties();
 
@@ -630,12 +623,11 @@
 				return [oAndFilter, new Filter("IsArchived",
 					FilterOperator.EQ, false), new Filter("ServiceType/IncidentType/IncidentType", FilterOperator.EQ, "Emergency")];
 			},
-			
-			_enableDesktopNotification: function(){
-			if(	Notification.permission === "default")
-			{
-				Notification.requestPermission();
-			}
+
+			_enableDesktopNotification: function () {
+				if (Notification.permission === "default") {
+					Notification.requestPermission();
+				}
 			}
 
 		});

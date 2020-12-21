@@ -6,6 +6,7 @@
 				<NotificationListItem showCloseButton="false"
 				priority="{= ${dashboard>Notification/IsSystemGenerated} ? 'High' : 'Low' }"
 				authorName="{= !!${dashboard>Notification/CreatorName} ? ${dashboard>Notification/CreatorName} : 'System' }" 
+				datetime="{ path: 'dashboard>TriggeredAt' , formatter : '.formatter.TimeAgo' }"
 				description="{dashboard>Notification/Body}" 
 				title="{dashboard>Notification/Subject}"/>
 			</List>

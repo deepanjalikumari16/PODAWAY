@@ -177,17 +177,12 @@ sap.ui.define([
 		 * Save edit or create FAQ details 
 		 */
 		onDraft: function () {
-			var notifystatus = 'DRAFT';
+			var notifystatus = "DRAFT";
 			this.run(notifystatus);
 		},
 
 		onPublish: function () {
-			var notifystatus = 'SCHEDULED';
-			this.run(notifystatus);
-		},
-
-		onSend: function () {
-			var notifystatus = "TRIGGERED";
+			var notifystatus = "SCHEDULED";
 			this.run(notifystatus);
 		},
 

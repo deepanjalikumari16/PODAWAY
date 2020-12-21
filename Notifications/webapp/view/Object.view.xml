@@ -83,7 +83,7 @@
 				<Button text="{i18n>btnCancel}" press="onCancel"/>
 				<Button text="{i18n>btnDraft}" type="Accept" press="onDraft"/>
 				<Button text="{i18n>btnSchedule}" type="Emphasized" visible="{= ${objectView>IsLater} === true}" press="onPublish"/>
-				<Button text="{i18n>btnSend}" type="Emphasized" visible="{= ${objectView>IsLater} === false}" press="onSend"/>
+				<Button text="{i18n>btnSend}" type="Emphasized" visible="{= ${objectView>IsLater} === false}" press="onPublish"/>
 			</Toolbar>
 		</uxap:footer>
 	</uxap:ObjectPageLayout>

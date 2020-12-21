@@ -39,9 +39,9 @@ sap.ui.define([
 			this.setModel(oViewModel, "objectView");
 			
 			var sCurrentLocale = sap.ui.getCore().getConfiguration().getLanguage();
-			this.getModel("objectView").setProperty("/loggedInLanguage", sCurrentLocale);
-			this.getModel("objectView").setProperty("/languageEn", "en-US");
-			this.getModel("objectView").setProperty("/languageAr", "ar-AE");
+			var firstTwoCharLang = sCurrentLocale.substring(0,2);
+			this.getModel("objectView").setProperty("/loggedInLanguage", firstTwoCharLang);
+			this.getModel("objectView").setProperty("/languageAr", "ar");
 			
 			this.getOwnerComponent().getModel().metadataLoaded().then(function () {
 				// Restore original busy indicator delay for the object view

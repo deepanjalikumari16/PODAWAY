@@ -87,6 +87,10 @@
 								<TextArea width="100%" value="{objectView>Description}" rows="3" maxLength="500"/>
 							</VBox>
 							<VBox>
+								<Label required="true" text="{i18n>colHighlightTitle}"/>
+								<Input width="100%" value="{objectView>HighlightsTitle}" maxLength="50"/>
+							</VBox>
+							<VBox>
 								<Label text="{i18n>colHighlights}"/>
 								<List id="List" mode="Delete" delete="handleDelete" enableBusyIndicator="true" headerText="{i18n>colHighlights}" growing="true"
 									items="{path: 'objectView>Highlights' , filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false } ] }">
