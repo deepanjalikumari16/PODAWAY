@@ -1,7 +1,7 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
 	<TableSelectDialog id="tableDialog" noDataText="{i18n>NoUsersFound}" title="{i18n>SelectUsers}" search=".handleSearch"
 		confirm=".handleConfirm" cancel=".handleClose"
-		items="{ path : '/UserSet', parameters : { expand : 'Role', select : 'Id,FirstName,LastName,Email,RoleId,Role/Role' }, filters : { path : 'IsArchived' , operator : 'EQ' , value1 : false }, sorter : [ { path : 'RoleId', descending : false }, { path : 'FirstName', descending : false } ] }">
+		items="{ path : '/UserSet', parameters : { expand : 'Role', select : 'Id,FirstName,LastName,Email,RoleId,Role/Role' }, filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path : 'RoleId' , operator : 'NE' , value1 : 4 } ], sorter : [ { path : 'RoleId', descending : false }, { path : 'FirstName', descending : false } ] }">
 		<ColumnListItem id ="userDialog">
 			<cells>
 				<Text text="{FirstName}"/>

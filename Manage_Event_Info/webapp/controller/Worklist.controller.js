@@ -79,17 +79,36 @@ sap.ui.define([
 		 */
 		onUpdateFinished: function (oEvent) {
 			// update the worklist's object counter after the table update
+			// this.getModel("worklistView").setProperty("/countryId", null);
+
 			var sTitle,
-				oTable = oEvent.getSource(),
-				iTotalItems = oEvent.getParameter("total");
-			// only update the counter if the length is final and
-			// the table is not empty
-			if (iTotalItems && oTable.getBinding("items").isLengthFinal()) {
-				sTitle = this.getResourceBundle().getText("worklistTableTitleCount", [iTotalItems]);
+				aFilters,
+				that = this,
+				countryId = this.getModel("worklistView").getProperty("/countryId");
+			if (countryId) {
+				aFilters = new sap.ui.model.Filter({
+					filters: [
+						new sap.ui.model.Filter('IsArchived', sap.ui.model.FilterOperator.EQ, false),
+						new sap.ui.model.Filter('Country/Id', sap.ui.model.FilterOperator.EQ, countryId)
+					],
+					and: true
+				});
 			} else {
-				sTitle = this.getResourceBundle().getText("worklistTableTitle");
+				aFilters = new sap.ui.model.Filter({
+					filters: [
+						new sap.ui.model.Filter('IsArchived', sap.ui.model.FilterOperator.EQ, false)
+					],
+					and: true
+				});
 			}
-			this.getModel("worklistView").setProperty("/worklistTableTitle", sTitle);
+			this.getModel().read("/EventInfoSet/$count", {
+				filters: [aFilters],
+				async: true,
+				success: function (counter) {
+					sTitle = that.getResourceBundle().getText("worklistTableTitleCount", [counter]);
+					that.getModel("worklistView").setProperty("/worklistTableTitle", sTitle);
+				}
+			});
 		},
 
 		/**
@@ -108,8 +127,8 @@ sap.ui.define([
 		onAdd: function (oEvent) {
 			this.getRouter().navTo("createObject");
 		},
-		
-		onRefreshView  : function () {
+
+		onRefreshView: function () {
 			var oModel = this.getModel();
 			oModel.refresh(true);
 		},
@@ -173,32 +192,15 @@ sap.ui.define([
 			oShareDialog.open();
 		},
 
-		// onSearch : function (oEvent) {
-		// 	var aFilters = this.getFiltersfromFB();
-		// 	if (oEvent.getParameters().refreshButtonPressed) {
-		// 		// Search field's 'refresh' button has been pressed.
-		// 		// This is visible if you select any master list item.
-		// 		// In this case no new search is triggered, we only
-		// 		// refresh the list binding.
-		// 		this.onRefresh();
-		// 	} else {
-		// 		var aTableSearchState = [];
-		// 		var sQuery = oEvent.getParameter("query");
-
-		// 		if (sQuery && sQuery.length > 0) {
-		// 			aTableSearchState = [new Filter("Name", FilterOperator.Contains, sQuery)];
-		// 		}
-		// 		this._applySearch(aTableSearchState);
-		// 	}
-
-		// },
-
 		onSearch: function () {
 			var aFilters = this.getFiltersfromFB(),
 				oTable = this.getView().byId("table");
 			oTable.getBinding("items").filter(aFilters);
 			if (aFilters.length !== 0) {
+				this.getModel("worklistView").setProperty("/countryId", aFilters[0].oValue1);
 				this.getModel("worklistView").setProperty("/tableNoDataText", this.getResourceBundle().getText("worklistNoDataWithSearchText"));
+			} else {
+				this.getModel("worklistView").setProperty("/countryId", null);
 			}
 		},
 

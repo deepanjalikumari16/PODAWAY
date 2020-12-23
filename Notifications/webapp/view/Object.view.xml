@@ -52,7 +52,7 @@
 								</ComboBox>
 								<Label visible="{= ${objectView>IsGroupNotification} === false}" required="true" text="{i18n>colReceivers}"/>
 								<MultiComboBox visible="{= ${objectView>IsGroupNotification} === false}" width="100%" selectedKeys="{objectView>Receivers}"
-									items="{ path : '/UserSet', parameters : { expand : 'Role', 'select' : 'Id,FirstName,LastName,Email,RoleId,Role/Role' }, filters : { path : 'IsArchived' , operator : 'EQ' , value1 : false }, sorter : [ { path : 'Role/Role', descending : false, group: true }, { path : 'FirstName', descending : false } ], groupHeaderFactory: '.getGroupHeader' }">
+									items="{ path : '/UserSet', parameters : { expand : 'Role', 'select' : 'Id,FirstName,LastName,Email,RoleId,Role/Role' }, filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path : 'RoleId' , operator : 'NE' , value1 : 4 } ], sorter : [ { path : 'Role/Role', descending : false, group: true }, { path : 'FirstName', descending : false } ], groupHeaderFactory: '.getGroupHeader' }">
 									<core:Item key="{Id}" text="{FirstName} {LastName} ({Email})"/>
 								</MultiComboBox>
 							</VBox>

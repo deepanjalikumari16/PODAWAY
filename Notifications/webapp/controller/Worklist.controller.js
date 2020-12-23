@@ -85,46 +85,110 @@ sap.ui.define([
 		onUpdateFinished: function (oEvent) {
 			// update the worklist's object counter after the table update
 			var sDraft,
-				oTable = oEvent.getSource(),
-				iTotalItems = oEvent.getParameter("total");
-			// only update the counter if the length is final and
-			// the table is not empty
-			if (iTotalItems && oTable.getBinding("items").isLengthFinal()) {
-				sDraft = this.getResourceBundle().getText("draftCount", [iTotalItems]);
+				that = this,
+				aFilters,
+				sQuery = this.getModel("worklistView").getProperty("/sQuery");
+			if (sQuery && sQuery.length > 0) {
+				aFilters = new sap.ui.model.Filter({
+					filters: [
+						new sap.ui.model.Filter('IsArchived', sap.ui.model.FilterOperator.EQ, false),
+						new sap.ui.model.Filter('IsSystemGenerated', sap.ui.model.FilterOperator.EQ, false),
+						new sap.ui.model.Filter('NotificationStatus', sap.ui.model.FilterOperator.EQ, "DRAFT"),
+						new sap.ui.model.Filter('tolower(Subject)', sap.ui.model.FilterOperator.Contains, sQuery)
+					],
+					and: true
+				});
 			} else {
-				sDraft = this.getResourceBundle().getText("draft");
+				aFilters = new sap.ui.model.Filter({
+					filters: [
+						new sap.ui.model.Filter('IsArchived', sap.ui.model.FilterOperator.EQ, false),
+						new sap.ui.model.Filter('IsSystemGenerated', sap.ui.model.FilterOperator.EQ, false),
+						new sap.ui.model.Filter('NotificationStatus', sap.ui.model.FilterOperator.EQ, "DRAFT")
+					],
+					and: true
+				});
 			}
-			this.getModel("worklistView").setProperty("/draft", sDraft);
+			this.getModel().read("/NotificationSet/$count", {
+				filters: [aFilters],
+				async: true,
+				success: function (counter) {
+					sDraft = that.getResourceBundle().getText("draftCount", [counter]);
+					that.getModel("worklistView").setProperty("/draft", sDraft);
+				}
+			});
 		},
 
 		onUpdateFinished1: function (oEvent) {
 			// update the worklist's object counter after the table update
 			var sScheduled,
-				oTable1 = oEvent.getSource(),
-				iTotalItems1 = oEvent.getParameter("total");
-			// only update the counter if the length is final and
-			// the table is not empty
-			if (iTotalItems1 && oTable1.getBinding("items").isLengthFinal()) {
-				sScheduled = this.getResourceBundle().getText("scheduledCount", [iTotalItems1]);
+				that = this,
+				aFilters,
+				sQuery = this.getModel("worklistView").getProperty("/sQuery");
+			if (sQuery && sQuery.length > 0) {
+				aFilters = new sap.ui.model.Filter({
+					filters: [
+						new sap.ui.model.Filter('IsArchived', sap.ui.model.FilterOperator.EQ, false),
+						new sap.ui.model.Filter('IsSystemGenerated', sap.ui.model.FilterOperator.EQ, false),
+						new sap.ui.model.Filter('NotificationStatus', sap.ui.model.FilterOperator.EQ, "SCHEDULED"),
+						new sap.ui.model.Filter('tolower(Subject)', sap.ui.model.FilterOperator.Contains, sQuery)
+					],
+					and: true
+				});
 			} else {
-				sScheduled = this.getResourceBundle().getText("scheduled");
+				aFilters = new sap.ui.model.Filter({
+					filters: [
+						new sap.ui.model.Filter('IsArchived', sap.ui.model.FilterOperator.EQ, false),
+						new sap.ui.model.Filter('IsSystemGenerated', sap.ui.model.FilterOperator.EQ, false),
+						new sap.ui.model.Filter('NotificationStatus', sap.ui.model.FilterOperator.EQ, "SCHEDULED")
+					],
+					and: true
+				});
 			}
-			this.getModel("worklistView").setProperty("/scheduled", sScheduled);
+
+			this.getModel().read("/NotificationSet/$count", {
+				filters: [aFilters],
+				async: true,
+				success: function (counter) {
+					sScheduled = that.getResourceBundle().getText("scheduledCount", [counter]);
+					that.getModel("worklistView").setProperty("/scheduled", sScheduled);
+				}
+			});
 		},
 
 		onUpdateFinished2: function (oEvent) {
 			// update the worklist's object counter after the table update
 			var sTriggered,
-				oTable2 = oEvent.getSource(),
-				iTotalItems2 = oEvent.getParameter("total");
-			// only update the counter if the length is final and
-			// the table is not empty
-			if (iTotalItems2 && oTable2.getBinding("items").isLengthFinal()) {
-				sTriggered = this.getResourceBundle().getText("triggeredCount", [iTotalItems2]);
+				that = this,
+				aFilters,
+				sQuery = this.getModel("worklistView").getProperty("/sQuery");
+			if (sQuery && sQuery.length > 0) {
+				aFilters = new sap.ui.model.Filter({
+					filters: [
+						new sap.ui.model.Filter('IsArchived', sap.ui.model.FilterOperator.EQ, false),
+						new sap.ui.model.Filter('IsSystemGenerated', sap.ui.model.FilterOperator.EQ, false),
+						new sap.ui.model.Filter('NotificationStatus', sap.ui.model.FilterOperator.EQ, "TRIGGERED"),
+						new sap.ui.model.Filter('tolower(Subject)', sap.ui.model.FilterOperator.Contains, sQuery)
+					],
+					and: true
+				});
 			} else {
-				sTriggered = this.getResourceBundle().getText("triggered");
+				aFilters = new sap.ui.model.Filter({
+					filters: [
+						new sap.ui.model.Filter('IsArchived', sap.ui.model.FilterOperator.EQ, false),
+						new sap.ui.model.Filter('IsSystemGenerated', sap.ui.model.FilterOperator.EQ, false),
+						new sap.ui.model.Filter('NotificationStatus', sap.ui.model.FilterOperator.EQ, "TRIGGERED")
+					],
+					and: true
+				});
 			}
-			this.getModel("worklistView").setProperty("/triggered", sTriggered);
+			this.getModel().read("/NotificationSet/$count", {
+				filters: [aFilters],
+				async: true,
+				success: function (counter) {
+					sTriggered = that.getResourceBundle().getText("triggeredCount", [counter]);
+					that.getModel("worklistView").setProperty("/triggered", sTriggered);
+				}
+			});
 		},
 
 		/**
@@ -166,14 +230,15 @@ sap.ui.define([
 				var aTableSearchState = [];
 				// var sQuery = oEvent.getParameter("query");
 				var sQuery = oEvent.getParameter("query").toLowerCase();
-				sQuery = "'" + sQuery + "'";
 				if (sQuery && sQuery.length > 0) {
-
+					sQuery = "'" + sQuery + "'";
+					this.getModel("worklistView").setProperty("/sQuery", sQuery);
 					aTableSearchState = [new Filter('tolower(Subject)', FilterOperator.Contains, sQuery),
 						new Filter("IsArchived", FilterOperator.EQ, false),
 						new Filter('IsSystemGenerated', FilterOperator.EQ, false)
 					];
 				} else {
+					this.getModel("worklistView").setProperty("/sQuery", null);
 					aTableSearchState = [new Filter("IsArchived", FilterOperator.EQ, false),
 						new Filter('IsSystemGenerated', FilterOperator.EQ, false)
 					];
@@ -262,8 +327,8 @@ sap.ui.define([
 				oTable1 = this.byId("table1"),
 				oTable2 = this.byId("table2"),
 				oViewModel = this.getModel("worklistView");
-				// "Application"
-			oTable.getBinding("items").filter(aTableSearchState);    
+			// "Application"
+			oTable.getBinding("items").filter(aTableSearchState);
 			oTable1.getBinding("items").filter(aTableSearchState);
 			oTable2.getBinding("items").filter(aTableSearchState);
 			// changes the noDataText of the list in case there are no filter results

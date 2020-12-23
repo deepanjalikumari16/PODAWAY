@@ -125,151 +125,202 @@ sap.ui.define([
 		onUpdateFinished: function (oEvent) {
 			// update the worklist's object counter after the table update
 			var smasterServiceTitle,
-				oTable = oEvent.getSource(),
-				iTotalItems = oEvent.getParameter("total");
-			// only update the counter if the length is final and
-			// the table is not empty
-			if (iTotalItems && oTable.getBinding("items").isLengthFinal()) {
-				smasterServiceTitle = this.getResourceBundle().getText("masterServiceCount", [iTotalItems]);
-			} else {
-				smasterServiceTitle = this.getResourceBundle().getText("masterService");
-			}
-			this.getModel("worklistView").setProperty("/masterService", smasterServiceTitle);
+				that = this,
+				aFilters = new sap.ui.model.Filter({
+					filters: [
+						new sap.ui.model.Filter('IsArchived', sap.ui.model.FilterOperator.EQ, false),
+						new sap.ui.model.Filter('IsChild', sap.ui.model.FilterOperator.EQ, false)
+					],
+					and: true
+				});
+			this.getModel().read("/MasterServiceTypeSet/$count", {
+				filters: [aFilters],
+				async: true,
+				success: function (counter) {
+					smasterServiceTitle = that.getResourceBundle().getText("masterServiceCount", [counter]);
+					that.getModel("worklistView").setProperty("/masterService", smasterServiceTitle);
+				}
+			});
 		},
 
 		onUpdateFinished1: function (oEvent) {
 			// update the worklist's object counter after the table update
 			var smasterFacilityTitle,
-				oTable1 = oEvent.getSource(),
-				iTotalItems1 = oEvent.getParameter("total");
-			// only update the counter if the length is final and
-			// the table is not empty
-			if (iTotalItems1 && oTable1.getBinding("items").isLengthFinal()) {
-				smasterFacilityTitle = this.getResourceBundle().getText("masterFacilityCount", [iTotalItems1]);
-			} else {
-				smasterFacilityTitle = this.getResourceBundle().getText("masterFacility");
-			}
-			this.getModel("worklistView").setProperty("/masterFacility", smasterFacilityTitle);
+				that = this,
+				aFilters = new sap.ui.model.Filter({
+					filters: [
+						new sap.ui.model.Filter('IsArchived', sap.ui.model.FilterOperator.EQ, false)
+					],
+					and: true
+				});
+			this.getModel().read("/MasterFacilityTypeSet/$count", {
+				filters: [aFilters],
+				async: true,
+				success: function (counter) {
+					smasterFacilityTitle = that.getResourceBundle().getText("masterFacilityCount", [counter]);
+					that.getModel("worklistView").setProperty("/masterFacility", smasterFacilityTitle);
+				}
+			});
 		},
 
 		onUpdateFinished2: function (oEvent) {
 			// update the worklist's object counter after the table update
 			var smasterRelationshipTitle,
-				oTable2 = oEvent.getSource(),
-				iTotalItems2 = oEvent.getParameter("total");
-			// only update the counter if the length is final and
-			// the table is not empty
-			if (iTotalItems2 && oTable2.getBinding("items").isLengthFinal()) {
-				smasterRelationshipTitle = this.getResourceBundle().getText("masterRelationshipCount", [iTotalItems2]);
-			} else {
-				smasterRelationshipTitle = this.getResourceBundle().getText("masterRelationship");
-			}
-			this.getModel("worklistView").setProperty("/masterRelationship", smasterRelationshipTitle);
+				that = this,
+				aFilters = new sap.ui.model.Filter({
+					filters: [
+						new sap.ui.model.Filter('IsArchived', sap.ui.model.FilterOperator.EQ, false)
+					],
+					and: true
+				});
+			this.getModel().read("/MasterRelationshipSet/$count", {
+				filters: [aFilters],
+				async: true,
+				success: function (counter) {
+					smasterRelationshipTitle = that.getResourceBundle().getText("masterRelationshipCount", [counter]);
+					that.getModel("worklistView").setProperty("/masterRelationship", smasterRelationshipTitle);
+				}
+			});
 		},
 
 		onUpdateFinished3: function (oEvent) {
 			// update the worklist's object counter after the table update
 			var smasterFaqCategoryTitle,
-				oTable3 = oEvent.getSource(),
-				iTotalItems3 = oEvent.getParameter("total");
-			// only update the counter if the length is final and
-			// the table is not empty
-			if (iTotalItems3 && oTable3.getBinding("items").isLengthFinal()) {
-				smasterFaqCategoryTitle = this.getResourceBundle().getText("masterFaqCategoryCount", [iTotalItems3]);
-			} else {
-				smasterFaqCategoryTitle = this.getResourceBundle().getText("masterFaqCategory");
-			}
-			this.getModel("worklistView").setProperty("/masterFaqCategory", smasterFaqCategoryTitle);
+				that = this,
+				aFilters = new sap.ui.model.Filter({
+					filters: [
+						new sap.ui.model.Filter('IsArchived', sap.ui.model.FilterOperator.EQ, false)
+					],
+					and: true
+				});
+			this.getModel().read("/MasterFaqCategorySet/$count", {
+				filters: [aFilters],
+				async: true,
+				success: function (counter) {
+					smasterFaqCategoryTitle = that.getResourceBundle().getText("masterFaqCategoryCount", [counter]);
+					that.getModel("worklistView").setProperty("/masterFaqCategory", smasterFaqCategoryTitle);
+				}
+			});
 		},
 
 		onUpdateFinished4: function (oEvent) {
 			// update the worklist's object counter after the table update
 			var smasterEventAttractionTitle,
-				oTable4 = oEvent.getSource(),
-				iTotalItems4 = oEvent.getParameter("total");
-			// only update the counter if the length is final and
-			// the table is not empty
-			if (iTotalItems4 && oTable4.getBinding("items").isLengthFinal()) {
-				smasterEventAttractionTitle = this.getResourceBundle().getText("masterEventAttractionCount", [iTotalItems4]);
-			} else {
-				smasterEventAttractionTitle = this.getResourceBundle().getText("masterEventAttraction");
-			}
-			this.getModel("worklistView").setProperty("/masterEventAttraction", smasterEventAttractionTitle);
+				that = this,
+				aFilters = new sap.ui.model.Filter({
+					filters: [
+						new sap.ui.model.Filter('IsArchived', sap.ui.model.FilterOperator.EQ, false)
+					],
+					and: true
+				});
+			this.getModel().read("/MasterEventAttractionTypeSet/$count", {
+				filters: [aFilters],
+				async: true,
+				success: function (counter) {
+					smasterEventAttractionTitle = that.getResourceBundle().getText("masterEventAttractionCount", [counter]);
+					that.getModel("worklistView").setProperty("/masterEventAttraction", smasterEventAttractionTitle);
+				}
+			});
 		},
 
 		onUpdateFinished5: function (oEvent) {
 			// update the worklist's object counter after the table update
 			var smasterNavigationTitle,
-				oTable5 = oEvent.getSource(),
-				iTotalItems5 = oEvent.getParameter("total");
-			// only update the counter if the length is final and
-			// the table is not empty
-			if (iTotalItems5 && oTable5.getBinding("items").isLengthFinal()) {
-				smasterNavigationTitle = this.getResourceBundle().getText("masterNavigationCount", [iTotalItems5]);
-			} else {
-				smasterNavigationTitle = this.getResourceBundle().getText("masterNavigation");
-			}
-			this.getModel("worklistView").setProperty("/masterNavigation", smasterNavigationTitle);
+				that = this,
+				aFilters = new sap.ui.model.Filter({
+					filters: [
+						new sap.ui.model.Filter('IsArchived', sap.ui.model.FilterOperator.EQ, false)
+					],
+					and: true
+				});
+			this.getModel().read("/MasterNavigationTypeSet/$count", {
+				filters: [aFilters],
+				async: true,
+				success: function (counter) {
+					smasterNavigationTitle = that.getResourceBundle().getText("masterNavigationCount", [counter]);
+					that.getModel("worklistView").setProperty("/masterNavigation", smasterNavigationTitle);
+				}
+			});
 		},
 
 		onUpdateFinished6: function (oEvent) {
 			// update the worklist's object counter after the table update
 			var sbuildingTitle,
-				oTable6 = oEvent.getSource(),
-				iTotalItems6 = oEvent.getParameter("total");
-			// only update the counter if the length is final and
-			// the table is not empty
-			if (iTotalItems6 && oTable6.getBinding("items").isLengthFinal()) {
-				sbuildingTitle = this.getResourceBundle().getText("buildingCount", [iTotalItems6]);
-			} else {
-				sbuildingTitle = this.getResourceBundle().getText("building");
-			}
-			this.getModel("worklistView").setProperty("/building", sbuildingTitle);
+				that = this,
+				aFilters = new sap.ui.model.Filter({
+					filters: [
+						new sap.ui.model.Filter('IsArchived', sap.ui.model.FilterOperator.EQ, false)
+					],
+					and: true
+				});
+			this.getModel().read("/BuildingSet/$count", {
+				filters: [aFilters],
+				async: true,
+				success: function (counter) {
+					sbuildingTitle = that.getResourceBundle().getText("buildingCount", [counter]);
+					that.getModel("worklistView").setProperty("/building", sbuildingTitle);
+				}
+			});
 		},
 
 		onUpdateFinished7: function (oEvent) {
 			// update the worklist's object counter after the table update
 			var sthemeTitle,
-				oTable7 = oEvent.getSource(),
-				iTotalItems7 = oEvent.getParameter("total");
-			// only update the counter if the length is final and
-			// the table is not empty
-			if (iTotalItems7 && oTable7.getBinding("items").isLengthFinal()) {
-				sthemeTitle = this.getResourceBundle().getText("themeCount", [iTotalItems7]);
-			} else {
-				sthemeTitle = this.getResourceBundle().getText("theme");
-			}
-			this.getModel("worklistView").setProperty("/theme", sthemeTitle);
+				that = this,
+				aFilters = new sap.ui.model.Filter({
+					filters: [
+						new sap.ui.model.Filter('IsArchived', sap.ui.model.FilterOperator.EQ, false)
+					],
+					and: true
+				});
+			this.getModel().read("/ThemeSet/$count", {
+				filters: [aFilters],
+				async: true,
+				success: function (counter) {
+					sthemeTitle = that.getResourceBundle().getText("themeCount", [counter]);
+					that.getModel("worklistView").setProperty("/theme", sthemeTitle);
+				}
+			});
 		},
 
 		onUpdateFinished8: function (oEvent) {
 			// update the worklist's object counter after the table update
 			var scategoryTitle,
-				oTable8 = oEvent.getSource(),
-				iTotalItems8 = oEvent.getParameter("total");
-			// only update the counter if the length is final and
-			// the table is not empty
-			if (iTotalItems8 && oTable8.getBinding("items").isLengthFinal()) {
-				scategoryTitle = this.getResourceBundle().getText("categoryCount", [iTotalItems8]);
-			} else {
-				scategoryTitle = this.getResourceBundle().getText("category");
-			}
-			this.getModel("worklistView").setProperty("/category", scategoryTitle);
+				that = this,
+				aFilters = new sap.ui.model.Filter({
+					filters: [
+						new sap.ui.model.Filter('IsArchived', sap.ui.model.FilterOperator.EQ, false)
+					],
+					and: true
+				});
+			this.getModel().read("/CategorySet/$count", {
+				filters: [aFilters],
+				async: true,
+				success: function (counter) {
+					scategoryTitle = that.getResourceBundle().getText("categoryCount", [counter]);
+					that.getModel("worklistView").setProperty("/category", scategoryTitle);
+				}
+			});
 		},
 
 		onUpdateFinished9: function (oEvent) {
 			// update the worklist's object counter after the table update
 			var sspecialityTitle,
-				oTable9 = oEvent.getSource(),
-				iTotalItems9 = oEvent.getParameter("total");
-			// only update the counter if the length is final and
-			// the table is not empty
-			if (iTotalItems9 && oTable9.getBinding("items").isLengthFinal()) {
-				sspecialityTitle = this.getResourceBundle().getText("specialityCount", [iTotalItems9]);
-			} else {
-				sspecialityTitle = this.getResourceBundle().getText("speciality");
-			}
-			this.getModel("worklistView").setProperty("/speciality", sspecialityTitle);
+				that = this,
+				aFilters = new sap.ui.model.Filter({
+					filters: [
+						new sap.ui.model.Filter('IsArchived', sap.ui.model.FilterOperator.EQ, false)
+					],
+					and: true
+				});
+			this.getModel().read("/MasterSpecialitySet/$count", {
+				filters: [aFilters],
+				async: true,
+				success: function (counter) {
+					sspecialityTitle = that.getResourceBundle().getText("specialityCount", [counter]);
+					that.getModel("worklistView").setProperty("/speciality", sspecialityTitle);
+				}
+			});
 		},
 
 		/**

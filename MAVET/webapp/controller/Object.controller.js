@@ -380,8 +380,8 @@ sap.ui.define([
 			oViewModel.setProperty("/oDetails", {
 				BuildingId: null,
 				EventAttractionTypeId: this.getModel("appView").getProperty("/prefilledType"),
-				Latitude: "",
-				Longitude: "",
+				Latitude: +(this.getModel("appView").getProperty("/EventLocation/lat")),
+				Longitude: +(this.getModel("appView").getProperty("/EventLocation/lng")),
 				IsArchived: false,
 				Description: "",
 				AccessibilityDevices: [],

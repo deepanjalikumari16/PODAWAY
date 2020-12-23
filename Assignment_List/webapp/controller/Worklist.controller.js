@@ -135,62 +135,137 @@ sap.ui.define([
 		onUpdateFinished: function (oEvent) {
 			// update the worklist's object counter after the table update
 			var sPendingTitle,
-				oTable = oEvent.getSource(),
-				iTotalItems = oEvent.getParameter("total");
-
-			// only update the counter if the length is final and
-			// the table is not empty
-			if (iTotalItems && oTable.getBinding("items").isLengthFinal()) {
-				sPendingTitle = this.getResourceBundle().getText("pendingCount", [iTotalItems]);
+				that = this,
+				aFilters,
+				selectedIncidentTypeId = this.getModel("worklistView").getProperty("/selectedIncidentTypeId");
+			if (selectedIncidentTypeId) {
+				aFilters = new sap.ui.model.Filter({
+					filters: [
+						new sap.ui.model.Filter('IsArchived', sap.ui.model.FilterOperator.EQ, false),
+						new sap.ui.model.Filter('AssignmentStatusId', sap.ui.model.FilterOperator.EQ, 1),
+						new sap.ui.model.Filter('ServiceType/IncidentTypeId', sap.ui.model.FilterOperator.EQ, selectedIncidentTypeId)
+					],
+					and: true
+				});
 			} else {
-				sPendingTitle = this.getResourceBundle().getText("pending");
+				aFilters = new sap.ui.model.Filter({
+					filters: [
+						new sap.ui.model.Filter('IsArchived', sap.ui.model.FilterOperator.EQ, false),
+						new sap.ui.model.Filter('AssignmentStatusId', sap.ui.model.FilterOperator.EQ, 1)
+					],
+					and: true
+				});
 			}
-			this.getModel("worklistView").setProperty("/pending", sPendingTitle);
+			this.getModel().read("/AssignmentSet/$count", {
+				filters: [aFilters],
+				async: true,
+				success: function (counter) {
+					sPendingTitle = that.getResourceBundle().getText("pendingCount", [counter]);
+					that.getModel("worklistView").setProperty("/pending", sPendingTitle);
+				}
+			});
 		},
 
 		onUpdateFinished1: function (oEvent) {
 			// update the worklist's object counter after the table update
 			var sinprogressTitle,
-				oTable1 = oEvent.getSource(),
-				iTotalItems1 = oEvent.getParameter("total");
-			// only update the counter if the length is final and
-			// the table is not empty
-			if (iTotalItems1 && oTable1.getBinding("items").isLengthFinal()) {
-				sinprogressTitle = this.getResourceBundle().getText("inprogressCount", [iTotalItems1]);
+				that = this,
+				aFilters,
+				selectedIncidentTypeId = this.getModel("worklistView").getProperty("/selectedIncidentTypeId");
+			if (selectedIncidentTypeId) {
+				aFilters = new sap.ui.model.Filter({
+					filters: [
+						new sap.ui.model.Filter('IsArchived', sap.ui.model.FilterOperator.EQ, false),
+						new sap.ui.model.Filter('AssignmentStatusId', sap.ui.model.FilterOperator.EQ, 2),
+						new sap.ui.model.Filter('ServiceType/IncidentTypeId', sap.ui.model.FilterOperator.EQ, selectedIncidentTypeId)
+					],
+					and: true
+				});
 			} else {
-				sinprogressTitle = this.getResourceBundle().getText("inprogress");
+				aFilters = new sap.ui.model.Filter({
+					filters: [
+						new sap.ui.model.Filter('IsArchived', sap.ui.model.FilterOperator.EQ, false),
+						new sap.ui.model.Filter('AssignmentStatusId', sap.ui.model.FilterOperator.EQ, 2)
+					],
+					and: true
+				});
 			}
-			this.getModel("worklistView").setProperty("/inprogress", sinprogressTitle);
+			this.getModel().read("/AssignmentSet/$count", {
+				filters: [aFilters],
+				async: true,
+				success: function (counter) {
+					sinprogressTitle = that.getResourceBundle().getText("inprogressCount", [counter]);
+					that.getModel("worklistView").setProperty("/inprogress", sinprogressTitle);
+				}
+			});
 		},
 
 		onUpdateFinished2: function (oEvent) {
 			// update the worklist's object counter after the table update
 			var sCompletedTitle,
-				oTable2 = oEvent.getSource(),
-				iTotalItems2 = oEvent.getParameter("total");
-			// only update the counter if the length is final and
-			// the table is not empty
-			if (iTotalItems2 && oTable2.getBinding("items").isLengthFinal()) {
-				sCompletedTitle = this.getResourceBundle().getText("completedCount", [iTotalItems2]);
+				that = this,
+				aFilters,
+				selectedIncidentTypeId = this.getModel("worklistView").getProperty("/selectedIncidentTypeId");
+			if (selectedIncidentTypeId) {
+				aFilters = new sap.ui.model.Filter({
+					filters: [
+						new sap.ui.model.Filter('IsArchived', sap.ui.model.FilterOperator.EQ, false),
+						new sap.ui.model.Filter('AssignmentStatusId', sap.ui.model.FilterOperator.EQ, 3),
+						new sap.ui.model.Filter('ServiceType/IncidentTypeId', sap.ui.model.FilterOperator.EQ, selectedIncidentTypeId)
+					],
+					and: true
+				});
 			} else {
-				sCompletedTitle = this.getResourceBundle().getText("completed");
+				aFilters = new sap.ui.model.Filter({
+					filters: [
+						new sap.ui.model.Filter('IsArchived', sap.ui.model.FilterOperator.EQ, false),
+						new sap.ui.model.Filter('AssignmentStatusId', sap.ui.model.FilterOperator.EQ, 3)
+					],
+					and: true
+				});
 			}
-			this.getModel("worklistView").setProperty("/completed", sCompletedTitle);
+			this.getModel().read("/AssignmentSet/$count", {
+				filters: [aFilters],
+				async: true,
+				success: function (counter) {
+					sCompletedTitle = that.getResourceBundle().getText("completedCount", [counter]);
+					that.getModel("worklistView").setProperty("/completed", sCompletedTitle);
+				}
+			});
 		},
 
 		onUpdateFinished3: function (oEvent) {
 			// update the worklist's object counter after the table update
 			var sCancelledTitle,
-				oTable3 = oEvent.getSource(),
-				iTotalItems3 = oEvent.getParameter("total");
-			// only update the counter if the length is final and
-			// the table is not empty
-			if (iTotalItems3 && oTable3.getBinding("items").isLengthFinal()) {
-				sCancelledTitle = this.getResourceBundle().getText("cancelledCount", [iTotalItems3]);
+				that = this,
+				aFilters,
+				selectedIncidentTypeId = this.getModel("worklistView").getProperty("/selectedIncidentTypeId");
+			if (selectedIncidentTypeId) {
+				aFilters = new sap.ui.model.Filter({
+					filters: [
+						new sap.ui.model.Filter('IsArchived', sap.ui.model.FilterOperator.EQ, false),
+						new sap.ui.model.Filter('AssignmentStatusId', sap.ui.model.FilterOperator.EQ, 4),
+						new sap.ui.model.Filter('ServiceType/IncidentTypeId', sap.ui.model.FilterOperator.EQ, selectedIncidentTypeId)
+					],
+					and: true
+				});
 			} else {
-				sCancelledTitle = this.getResourceBundle().getText("cancelled");
+				aFilters = new sap.ui.model.Filter({
+					filters: [
+						new sap.ui.model.Filter('IsArchived', sap.ui.model.FilterOperator.EQ, false),
+						new sap.ui.model.Filter('AssignmentStatusId', sap.ui.model.FilterOperator.EQ, 4)
+					],
+					and: true
+				});
 			}
-			this.getModel("worklistView").setProperty("/cancelled", sCancelledTitle);
+			this.getModel().read("/AssignmentSet/$count", {
+				filters: [aFilters],
+				async: true,
+				success: function (counter) {
+					sCancelledTitle = that.getResourceBundle().getText("cancelledCount", [counter]);
+					that.getModel("worklistView").setProperty("/cancelled", sCancelledTitle);
+				}
+			});
 		},
 
 		/**
@@ -371,7 +446,6 @@ sap.ui.define([
 			var dat = this;
 			var oModel = dat.getModel();
 			var chkRequest = false;
-			debugger;
 			var sAssignmentPath = "/AssignmentSet";
 
 			var afilter = [new Filter("AssignmentStatusId", FilterOperator.EQ, 2),
@@ -629,7 +703,6 @@ sap.ui.define([
 			var EXPO_LatLong = that.getModel("appView").getProperty("/EXPO_Latitude") + "," + that.getModel("appView").getProperty(
 				"/EXPO_Longitude");
 			// TODO: Get from location from ODATA entity call, using test location for now lng: 55.147110, lat: 24.962762
-			//	debugger;
 			var router = platform.getRoutingService();
 			var routeRequestParams = {
 				mode: 'shortest;pedestrian',
@@ -828,13 +901,16 @@ sap.ui.define([
 				oTable1 = this.getView().byId("table1"),
 				oTable2 = this.getView().byId("table2"),
 				oTable3 = this.getView().byId("table3");
-
+				
 			oTable.getBinding("items").filter(aFilters);
 			oTable1.getBinding("items").filter(aFilters);
 			oTable2.getBinding("items").filter(aFilters);
 			oTable3.getBinding("items").filter(aFilters);
 			if (aFilters.length !== 0) {
+				this.getModel("worklistView").setProperty("/selectedIncidentTypeId", aFilters[0].oValue1);
 				this.getModel("worklistView").setProperty("/tableNoDataText", this.getResourceBundle().getText("worklistNoDataWithSearchText"));
+			} else {
+				this.getModel("worklistView").setProperty("/selectedIncidentTypeId", null);
 			}
 
 		},

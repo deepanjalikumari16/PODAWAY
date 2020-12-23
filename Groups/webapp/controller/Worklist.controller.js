@@ -74,16 +74,33 @@ sap.ui.define([
 		onUpdateFinished: function (oEvent) {
 			// update the worklist's object counter after the table update
 			var sTitle,
-				oTable = oEvent.getSource(),
-				iTotalItems = oEvent.getParameter("total");
-			// only update the counter if the length is final and
-			// the table is not empty
-			if (iTotalItems && oTable.getBinding("items").isLengthFinal()) {
-				sTitle = this.getResourceBundle().getText("worklistTableTitleCount", [iTotalItems]);
+				that = this,
+				aFilters,
+				sQuery = this.getModel("worklistView").getProperty("/sQuery");
+			if (sQuery && sQuery.length > 0) {
+				aFilters = new sap.ui.model.Filter({
+					filters: [
+						new sap.ui.model.Filter('IsArchived', sap.ui.model.FilterOperator.EQ, false),
+						new sap.ui.model.Filter('tolower(GroupName)', sap.ui.model.FilterOperator.Contains, sQuery)
+					],
+					and: true
+				});
 			} else {
-				sTitle = this.getResourceBundle().getText("worklistTableTitle");
+				aFilters = new sap.ui.model.Filter({
+					filters: [
+						new sap.ui.model.Filter('IsArchived', sap.ui.model.FilterOperator.EQ, false)
+					],
+					and: true
+				});
 			}
-			this.getModel("worklistView").setProperty("/worklistTableTitle", sTitle);
+			this.getModel().read("/NotificationGroupSet/$count", {
+				filters: [aFilters],
+				async: true,
+				success: function (counter) {
+					sTitle = that.getResourceBundle().getText("worklistTableTitleCount", [counter]);
+					that.getModel("worklistView").setProperty("/worklistTableTitle", sTitle);
+				}
+			});
 		},
 
 		/**
@@ -123,15 +140,15 @@ sap.ui.define([
 				this.onRefresh();
 			} else {
 				var aTableSearchState = [];
-				// var sQuery = oEvent.getParameter("query");
 				var sQuery = oEvent.getParameter("query").toLowerCase();
-				sQuery = "'" + sQuery + "'";
 				if (sQuery && sQuery.length > 0) {
-
+					sQuery = "'" + sQuery + "'";
+					this.getModel("worklistView").setProperty("/sQuery", sQuery);
 					aTableSearchState = [new Filter('tolower(GroupName)', FilterOperator.Contains, sQuery),
 						new Filter("IsArchived", FilterOperator.EQ, false)
 					];
 				} else {
+					this.getModel("worklistView").setProperty("/sQuery", null);
 					aTableSearchState = [new Filter("IsArchived", FilterOperator.EQ, false)];
 				}
 				this._applySearch(aTableSearchState);

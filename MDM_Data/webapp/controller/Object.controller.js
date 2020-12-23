@@ -38,6 +38,7 @@ sap.ui.define([
 			iOriginalBusyDelay = this.getView().getBusyIndicatorDelay();
 			this.setModel(oViewModel, "objectView");
 			
+			debugger;
 			var sCurrentLocale = sap.ui.getCore().getConfiguration().getLanguage();
 			var firstTwoCharLang = sCurrentLocale.substring(0,2);
 			this.getModel("objectView").setProperty("/loggedInLanguage", firstTwoCharLang);

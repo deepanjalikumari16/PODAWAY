@@ -74,16 +74,66 @@ sap.ui.define([
 		onUpdateFinished: function (oEvent) {
 			// update the worklist's object counter after the table update
 			var sTitle,
-				oTable = oEvent.getSource(),
-				iTotalItems = oEvent.getParameter("total");
-			// only update the counter if the length is final and
-			// the table is not empty
-			if (iTotalItems && oTable.getBinding("items").isLengthFinal()) {
-				sTitle = this.getResourceBundle().getText("worklistTableTitleCount", [iTotalItems]);
-			} else {
-				sTitle = this.getResourceBundle().getText("worklistTableTitle");
+				aFilters,
+				that = this,
+				FaqCategoryId = this.getModel("worklistView").getProperty("/FaqCategoryId"),
+				NavigationId = this.getModel("worklistView").getProperty("/NavigationId");
+			if (FaqCategoryId && NavigationId) {
+				aFilters = new sap.ui.model.Filter({
+					filters: [
+						new sap.ui.model.Filter('IsArchived', sap.ui.model.FilterOperator.EQ, false),
+						new sap.ui.model.Filter('FaqCategoryId', sap.ui.model.FilterOperator.EQ, FaqCategoryId),
+						new sap.ui.model.Filter('NavigationId', sap.ui.model.FilterOperator.EQ, NavigationId)
+					],
+					and: true
+				});
+			} else
+			if (FaqCategoryId && !NavigationId) {
+				aFilters = new sap.ui.model.Filter({
+					filters: [
+						new sap.ui.model.Filter('IsArchived', sap.ui.model.FilterOperator.EQ, false),
+						new sap.ui.model.Filter('FaqCategoryId', sap.ui.model.FilterOperator.EQ, FaqCategoryId),
+					],
+					and: true
+				});
+			} else
+			if (!FaqCategoryId && NavigationId) {
+				aFilters = new sap.ui.model.Filter({
+					filters: [
+						new sap.ui.model.Filter('IsArchived', sap.ui.model.FilterOperator.EQ, false),
+						new sap.ui.model.Filter('NavigationId', sap.ui.model.FilterOperator.EQ, NavigationId)
+					],
+					and: true
+				});
+			} else
+			if (!FaqCategoryId && !NavigationId) {
+				aFilters = new sap.ui.model.Filter({
+					filters: [
+						new sap.ui.model.Filter('IsArchived', sap.ui.model.FilterOperator.EQ, false)
+					],
+					and: true
+				});
 			}
-			this.getModel("worklistView").setProperty("/worklistTableTitle", sTitle);
+			this.getModel().read("/FaqSet/$count", {
+				filters: [aFilters],
+				async: true,
+				success: function (counter) {
+					sTitle = that.getResourceBundle().getText("worklistTableTitleCount", [counter]);
+					that.getModel("worklistView").setProperty("/worklistTableTitle", sTitle);
+				}
+			});
+
+			// var sTitle,
+			// 	oTable = oEvent.getSource(),
+			// 	iTotalItems = oEvent.getParameter("total");
+			// // only update the counter if the length is final and
+			// // the table is not empty
+			// if (iTotalItems && oTable.getBinding("items").isLengthFinal()) {
+			// 	sTitle = this.getResourceBundle().getText("worklistTableTitleCount", [iTotalItems]);
+			// } else {
+			// 	sTitle = this.getResourceBundle().getText("worklistTableTitle");
+			// }
+			// this.getModel("worklistView").setProperty("/worklistTableTitle", sTitle);
 		},
 
 		/**
@@ -170,10 +220,34 @@ sap.ui.define([
 		onSearch: function () {
 			var aFilters = this.getFiltersfromFB(),
 				oTable = this.getView().byId("table");
-
 			oTable.getBinding("items").filter(aFilters);
 			if (aFilters.length !== 0) {
+				if (aFilters[0].sPath === "FaqCategoryId") {
+					this.getModel("worklistView").setProperty("/FaqCategoryId", aFilters[0].oValue1);
+				} else {
+					this.getModel("worklistView").setProperty("/FaqCategoryId", null);
+				}
+
+				if (aFilters.length === 1) {
+					if (aFilters[0].sPath === "NavigationId") {
+						this.getModel("worklistView").setProperty("/NavigationId", aFilters[0].oValue1);
+					} else {
+						this.getModel("worklistView").setProperty("/NavigationId", null);
+					}
+				}
+
+				if (aFilters.length === 2) {
+					if (aFilters[1].sPath === "NavigationId") {
+						this.getModel("worklistView").setProperty("/NavigationId", aFilters[1].oValue1);
+					} else {
+						this.getModel("worklistView").setProperty("/NavigationId", null);
+					}
+				}
+
 				this.getModel("worklistView").setProperty("/tableNoDataText", this.getResourceBundle().getText("worklistNoDataWithSearchText"));
+			} else {
+				this.getModel("worklistView").setProperty("/FaqCategoryId", null);
+				this.getModel("worklistView").setProperty("/NavigationId", null);
 			}
 		},
 
