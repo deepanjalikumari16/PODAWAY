@@ -5,7 +5,7 @@ sap.ui.define([
 	"sap/m/MessageToast",
 	"sap/ui/core/Fragment",
 	"./model/models"
-], function (Component, Button, Bar, MessageToast,Fragment,models) {
+], function (Component, Button, Bar, MessageToast, Fragment, models) {
 	"use strict";
 
 	return Component.extend("com.coil.podium.Plugin.Component", {
@@ -21,22 +21,30 @@ sap.ui.define([
 		 */
 		init: function () {
 			var rendererPromise = this._getRenderer();
-	
+
 			//set Notifications Model
-			this.setModel(models.createNotificationModel() ,"Notifications"  );
+			this.setModel(models.createNotificationModel(), "Notifications");
 			/**
 			 * Add item to the header
 			 */
-			 var that = this;
+			var that = this;
 			rendererPromise.then(function (oRenderer) {
-				oRenderer.addHeaderEndItem({
-					icon: "sap-icon://bell",
-					tooltip: "Notifications",
-					press: that._openPopOver.bind(that)
-				}, true, true);
+				// oRenderer.addHeaderEndItem({
+				// 	icon: "sap-icon://bell",
+				// 	tooltip: "Notifications",
+				// 	press: that._openPopOver.bind(that)
+				// }, true, true);
+
+				oRenderer.addHeaderEndItem(
+					"sap.ushell.ui.shell.ShellHeadItem", {
+						id: "notificationBellItem",
+						icon: "sap-icon://bell",
+						tooltip: "Notifications",
+						press: that._openPopOver.bind(that)
+					}, true, true);
 			});
 		},
-		
+
 		/**
 		 * Returns the shell renderer instance in a reliable way,
 		 * i.e. independent from the initialization time of the plug-in.
@@ -77,48 +85,47 @@ sap.ui.define([
 			}
 			return oDeferred.promise();
 		},
-		
-		
-		_openPopOver : function(oEvent){
+
+		_openPopOver: function (oEvent) {
 			var oButton = oEvent.getSource();
 			if (!this._oPopover) {
 				Fragment.load({
 					name: "com.coil.podium.Plugin.Notifications",
 					controller: this
-				}).then(function(oPopover){
+				}).then(function (oPopover) {
 					this._oPopover = oPopover;
-				//	this.getView().addDependent(this._oPopover);
-				//	this._oPopover.bindElement("/ProductCollection/0");
+					//	this.getView().addDependent(this._oPopover);
+					//	this._oPopover.bindElement("/ProductCollection/0");
 					this._oPopover.openBy(oButton);
 				}.bind(this));
 			} else {
 				this._oPopover.openBy(oButton);
 			}
-			
-			this._fetchNotifications().then(function(data){
+
+			this._fetchNotifications().then(function (data) {
 				//	debugger;
-					this.getModel("Notifications").setProperty("/aNotifications", data.results);
-					this.getModel("Notifications").refresh(true);
-				}.bind(this));
+				this.getModel("Notifications").setProperty("/aNotifications", data.results);
+				this.getModel("Notifications").refresh(true);
+			}.bind(this));
 		},
-		
-		_fetchNotifications: function(){
+
+		_fetchNotifications: function () {
 			var that = this;
-		
-		return new Promise(function(res,rej) {
-			
-			that.getModel().callFunction("/GetNotifications", {
-							urlParameters: {
-							"$expand":"Notification,Notification/Redirection"
-							},
-							success: function (data) {
-								res(data);
-							},
-							error: function (err) {
-								rej(err);
-							}
-						});
-		});
+
+			return new Promise(function (res, rej) {
+
+				that.getModel().callFunction("/GetNotifications", {
+					urlParameters: {
+						"$expand": "Notification,Notification/Redirection"
+					},
+					success: function (data) {
+						res(data);
+					},
+					error: function (err) {
+						rej(err);
+					}
+				});
+			});
 		},
 		onItemClose: function (oEvent) {
 			var oItem = oEvent.getSource(),
@@ -128,10 +135,6 @@ sap.ui.define([
 
 			MessageToast.show('Item Closed: ' + oEvent.getSource().getTitle());
 		}
-		
-		
-		
-		
-		
+
 	});
 });

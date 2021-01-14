@@ -47,12 +47,65 @@
 				}, true);
 
 				this._enableDesktopNotification();
+
+			},
+		/*	_getRenderer: function () {
+				var that = this,
+					oDeferred = new jQuery.Deferred(),
+					oRenderer;
+				that._oShellContainer = jQuery.sap.getObject("sap.ushell.Container");
+				if (!that._oShellContainer) {
+					oDeferred.reject(
+						"Illegal state: shell container not available. This component must be executed in a unified shell runtime context.");
+				} else {
+					oRenderer = that._oShellContainer.getRenderer();
+					if (oRenderer) {
+						oDeferred.resolve(oRenderer);
+					} else { //renderer not initialized yet, listen to rendererCreated event
+						that._onRendererCreated = function (oEvent) {
+							oRenderer = oEvent.getParameter('renderer');
+							if (oRenderer) {
+								oDeferred.resolve(oRenderer);
+							} else {
+								oDeferred.reject('Illegal state: shell renderer not available after receiving rendererLoaded event');
+							}
+						};
+						that._oShellContainer.attachRendererCreatedEvent(that._onRendererCreated);
+					}
+				}
+				return oDeferred.promise();
+			},*/
+
+			onUpdateNotifications: function (oevet) {
+				debugger;
 			},
 
 			onAfterRendering: function () {
 				this.getModel().metadataLoaded().then(this._getUsers.bind(this));
 				//Auto refresh in every 30 secs
 				setInterval(this._getUsers.bind(this), 30000)
+
+				//rederer button adding in the launchpad
+				//	var othat = this;
+				/*	var rendererPromise = this._getRenderer();
+					rendererPromise.then(function (oRenderer) {
+						oRenderer.r("sap.ushell.ui.shell.ShellHeadItem", {
+							icon: "sap-icon://bell",
+							id: "BadgedButton",
+							text: "{ path : 'dashboard>/iNotificationCount' }",
+							tooltip: "{ path : 'dashboard>/iNotificationCount' }",
+							press: function(oEvent){
+								othat.handleNotificationPopoverPress.call(othat, oEvent);
+							}
+						}, true, true);
+					});*/
+				/*	var oRenderer = sap.ushell.Container.getRenderer("fiori2");
+				var oItem = oRenderer.addHeaderItem({
+					icon: "sap-icon://bell",
+					press: function(oEvent){
+								othat.handleNotificationPopoverPress.call(othat, oItem);
+							}
+				}, true, false, [oRenderer.LaunchpadState.App]);*/
 
 			},
 			/* =========================================================== */
@@ -87,8 +140,11 @@
 					}.bind(this));
 				} else {
 					this._oPopover.openBy(oButton);
+
 				}
-						this.getView().byId("BadgedButton").setType(sap.m.ButtonType.Default);
+
+				//sap.ui.getCore().byId("BadgedButton").setType(sap.m.ButtonType.Default);
+
 			},
 			onItemClose: function (oEvent) {
 				var oItem = oEvent.getSource(),
@@ -130,6 +186,7 @@
 					bViewBusy: false,
 					logo: sap.ui.require.toUrl("com/coil/podium/Dashboard/css/wheelchair.svg"),
 					EmergencyLogo: sap.ui.require.toUrl("com/coil/podium/Dashboard/css/wheelchair_1.svg"),
+					AlertLogo: sap.ui.require.toUrl("com/coil/podium/Dashboard/css/triangle.svg"),
 					bHeapMap: false
 				});
 
@@ -276,11 +333,11 @@
 
 				if (oViewModel.getProperty("/iNotificationCount") && oViewModel.getProperty("/iNotificationCount") !== aResults[3].Count) {
 
-					this.getView().byId("BadgedButton").setType(sap.m.ButtonType.Emphasized);
+					//this.getView().byId("BadgedButton").setType(sap.m.ButtonType.Emphasized);
 					sap.m.MessageToast.show(
 						this.getResourceBundle().getText("MSG_NEW_NOTO", [Math.abs(oViewModel.getProperty("/iNotificationCount") - aResults[3].Count)])
 					);
-					
+
 					// if (Notification.permission === "granted") {
 					// 	new Notification('Expo 2021 Incidents', {
 					// 		body: "You have new notifications"

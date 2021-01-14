@@ -1,15 +1,18 @@
 <mvc:View controllerName="com.coil.podium.Dashboard.controller.Worklist" xmlns:chart="sap.suite.ui.microchart" xmlns:core="sap.ui.core"
 	xmlns:l="sap.ui.layout" xmlns:micro="sap.suite.ui.microchart" xmlns="sap.m" xmlns:cards="sap.f.cards" xmlns:u="sap.ui.unified"
 	xmlns:f="sap.f" xmlns:mvc="sap.ui.core.mvc" xmlns:html="http://www.w3.org/1999/xhtml">
-	<Page title="{i18n>worklistViewTitle}" busy="{dashboard>/bViewBusy}" busyIndicatorDelay="0" class="sapUiResponsivePadding"
-		showHeader="false" showFooter="false">
+	<Page busy="{dashboard>/bViewBusy}" busyIndicatorDelay="0" class="sapUiResponsivePadding" showHeader="true" showFooter="false">
+		<!-- title="{i18n>worklistViewTitle}" -->
+		<headerContent>
+			<Button class="sapUiSmallMarginEnd" press="handleNotificationPopoverPress" icon="sap-icon://bell" text="{ path : 'dashboard>/iNotificationCount' }"/>
+		</headerContent>
 		<l:BlockLayout background="Dashboard" class="podium-dashboard">
 			<l:BlockLayoutRow scrollable="true" class="podium-dashboard_grid">
 				<l:BlockLayoutCell class="podium-dashboard_item" titleLevel="H4" width="30%">
 					<l:titleLink>
 						<Link press="toPODVisitors" text="{i18n>TtlPODCategory}"/>
 					</l:titleLink>
-					<FlexBox alignItems="End" height="auto" justifyContent="SpaceAround">
+					<FlexBox alignItems="Center" height="90%" justifyContent="SpaceAround">
 						<items>
 							<!-- height="10px" width="10px" -->
 							<VBox class="sapUiTinyMarginEnd">
@@ -17,22 +20,21 @@
 									<Image class="wheelchair" src="{dashboard>/logo}"/>
 									<Text class="large-font" text="{dashboard>/iTotalPOD}"/>
 								</HBox>
-								<Label text="{i18n>TxtTotalPODUsers}"/>
+								<Label class="pod-user-text" text="{i18n>TxtTotalPODUsers}"/>
 							</VBox>
 							<VBox class="sapUiTinyMarginEnd">
 								<!--<HBox renderType="Bare">-->
-									<!--<Image class="wheelchair" src="{dashboard>/logo}"/>-->
-									<Text class="large-font" text="{dashboard>/iTotalPODActive}"/>
+								<!--<Image class="wheelchair" src="{dashboard>/logo}"/>-->
+								<Text class="large-font" text="{dashboard>/iTotalPODActive}"/>
 								<!--</HBox>-->
-								<Label text="{i18n>TtlTotalPODActiveUsers}"/>
+								<Label class="pod-user-text " text="{i18n>TtlTotalPODActiveUsers}"/>
 							</VBox>
 							<VBox>
 								<Button icon="sap-icon://bar-chart" press=".onOpenPODCategoriesDialog" class="sapUiSmallMarginBottom"/>
-								<Button id="BadgedButton" text="{ path : 'dashboard>/iNotificationCount' }" icon="sap-icon://bell" press="handleNotificationPopoverPress" />
-									<!--<customData>-->
-									<!--	<BadgeCustomData key="badge" value="" visible=""/>-->
-									<!--</customData>-->
-								
+								<!--	<Button id="BadgedButton" text="{ path : 'dashboard>/iNotificationCount' }" icon="sap-icon://bell" press="handleNotificationPopoverPress"/>-->
+								<!--<customData>-->
+								<!--	<BadgeCustomData key="badge" value="" visible=""/>-->
+								<!--</customData>-->
 							</VBox>
 							<!--<micro:ColumnMicroChart class="chartScroll" width="100%" size="L" columns="{dashboard>/PODByCatrgory}" allowColumnLabels="true">
 								<micro:columns>
@@ -49,8 +51,11 @@
 					<FlexBox alignItems="Center" height="90%" justifyContent="Start">
 						<items>
 							<FlexBox direction="Column" alignItems="Start">
-								<ObjectStatus class="large-font" text="{dashboard>/EmergecnyIncidents}" press="Navigate" icon="sap-icon://alert" state="Error"/>
-								<Text class="sapUITinyMarginBegin pod-users pod-user-text" text="{i18n>NeedImmidiateattention}"/>
+								<HBox renderType="Bare">
+									<Image class="wheelchair" src="{dashboard>/AlertLogo}"/>
+									<ObjectStatus class="large-font incident-text" text="{dashboard>/EmergecnyIncidents}" press="Navigate" state="Error"/>
+								</HBox>
+								<Text class="pod-users pod-user-text" text="{i18n>NeedImmidiateattention}"/>
 							</FlexBox>
 						</items>
 					</FlexBox>
@@ -109,26 +114,28 @@
 			<l:BlockLayoutRow class="podium-dashboard_graph">
 				<l:BlockLayoutCell>
 					<VBox>
-						<HBox class="sapUiResponsiveMargin cust-legend-grid">
-							<HBox class="cust-legend1">
-								<Text class="total-incident" text="Total Incidents"/>
-								<Text class="pod-users" text="of POD users"/>
+						<HBox renderType="Bare" class="sapUiResponsiveMargin cust-legend-grid">
+							<HBox >
+								<Text text="POD Users"/>
+								<!--  class="cust-legend1" class="total-incident"  -->
 							</HBox>
-							<HBox class="cust-legend">
-								<core:Icon class="sapUiLargeMarginBegin sapUiTinyMarginEnd" src="sap-icon://color-fill" color="green"/>
-								<Text class="pod-users" text="Density of POD Users"/>
-							</HBox>
-							<HBox class="cust-legend">
-								<core:Icon class="sapUiTinyMarginBeginEnd" src="sap-icon://color-fill" color="red"/>
-								<Text class="pod-users" text="Emergency Incidents"/>
+							<HBox justifyContent="End" width="100%">
+								<HBox class="cust-legend">
+									<core:Icon class="sapUiLargeMarginBegin sapUiTinyMarginEnd" src="sap-icon://color-fill" color="green"/>
+									<Text class="pod-users" text="Density of POD Users"/>
+								</HBox>
+								<HBox class="cust-legend">
+									<core:Icon class="sapUiTinyMarginBeginEnd" src="sap-icon://color-fill" color="red"/>
+									<Text class="pod-users" text="Emergency Incidents"/>
+								</HBox>
 							</HBox>
 						</HBox>
 						<HBox renderType="Bare">
-							<VBox renderType="Bare" width="45%" class="sapUiSmallMargin">
+							<VBox renderType="Bare" width="50%" class="sapUiSmallMarginBegin">
 								<Text text="Heat Map" class="tempFont sapUiTinyMarginBottom"/>
 								<HBox id="heatMap" class=" MapContainer" renderType="Bare"/>
 							</VBox>
-							<VBox renderType="Bare" width="45%" class="sapUiSmallMargin">
+							<VBox renderType="Bare" width="50%" class="sapUiSmallMarginBegin">
 								<Text text="Cluster Map" class="tempFont sapUiTinyMarginBottom"/>
 								<HBox id="map" class="MapContainer" renderType="Bare"/>
 							</VBox>
