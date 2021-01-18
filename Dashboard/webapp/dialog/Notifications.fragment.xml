@@ -1,24 +1,22 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
-	<ResponsivePopover title="{i18n>TtlNotiifications}" contentHeight="auto" contentWidth="auto" busy="{dashboard>/bNotificationBusy}" busyIndicatorDelay="0"
-		beforeOpen="loadNotifications" class="sapUiPopupWithPadding" placement="Auto">
+	<ResponsivePopover title="{i18n>TtlNotiifications}" contentHeight="auto" contentWidth="auto" busy="{dashboard>/bNotificationBusy}"
+ 	 beforeOpen="loadNotifications"	busyIndicatorDelay="0"  class="sapUiPopupWithPadding" placement="Auto">
 		<content>
-		<!--	<List items="{path: 'dashboard>/aNotifications' }">
-				<NotificationListItem showCloseButton="false"
-				priority="{= ${dashboard>Notification/IsSystemGenerated} ? 'High' : 'Low' }"
-				authorName="{= !!${dashboard>Notification/CreatorName} ? ${dashboard>Notification/CreatorName} : 'System' }" 
-				datetime="{ path: 'dashboard>TriggeredAt' , formatter : '.formatter.TimeAgo' }"
-				description="{dashboard>Notification/Body}" 
-				title="{dashboard>Notification/Subject}"/>
-			</List>-->
-			<List growing="true"  growingScrollToLoad="false" growingThreshold="10" updateStarted="onUpdateNotifications" items="{path: '/GetNotifications', urlParameters: { '$expand' : 'Notification,Notification/Redirection'   } }"  >
+			<List growing="true"  growingScrollToLoad="false" growingThreshold="9" updateStarted="onUpdateNotifications" items="{path: 'dashboard>/aNotifications' }">
+				<NotificationListItem showCloseButton="false"  priority="{= ${dashboard>Notification/IsSystemGenerated} ? 'High' : 'Low' }"
+					authorName="{= !!${dashboard>Notification/CreatorName} ? ${dashboard>Notification/CreatorName} : 'System' }"
+					datetime="{ path: 'dashboard>TriggeredAt' , formatter : '.formatter.TimeAgo' }" description="{dashboard>Notification/Body}"
+					title="{dashboard>Notification/Subject}"/>
+			</List>
+			<!--<List growing="true"  growingScrollToLoad="false" growingThreshold="10" updateStarted="onUpdateNotifications" items="{path: '/GetNotifications', urlParameters: { '$expand' : 'Notification,Notification/Redirection'   } }"  >
 				<NotificationListItem showCloseButton="false"
 				priority="{= ${Notification/IsSystemGenerated} ? 'High' : 'Low' }"
 				authorName="{= !!${Notification/CreatorName} ? ${Notification/CreatorName} : 'System' }" 
 				datetime="{ path: 'TriggeredAt' , formatter : '.formatter.TimeAgo' }"
 				description="{Notification/Body}" 
 				title="{Notification/Subject}"/>
-			</List>
-			
+			</List>-->
+			<!-- -->
 		</content>
 	</ResponsivePopover>
 </core:FragmentDefinition>

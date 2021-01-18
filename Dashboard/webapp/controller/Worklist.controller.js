@@ -76,14 +76,20 @@
 					return oDeferred.promise();
 				},*/
 
-			onUpdateNotifications: function (oevet) {
-				debugger;
+			onUpdateNotifications: function (oEvent) {
+				//	debugger;
+				var oViewModel = this.getView().getModel("dashboard");
+				if ( oEvent.getParameter("reason") === "Growing" ) {
+					this.iNotificationTop += 10;
+					this.iNotificationSkip += 10;
+					this.loadNotifications();
+				}
 			},
 
 			onAfterRendering: function () {
 				this.getModel().metadataLoaded().then(this._getUsers.bind(this));
 				//Auto refresh in every 30 secs
-				setInterval(this._getUsers.bind(this), 30000)
+				//	setInterval(this._getUsers.bind(this), 30000)
 
 				//rederer button adding in the launchpad
 				//	var othat = this;
@@ -129,6 +135,13 @@
 			handleNotificationPopoverPress: function (oEvent) {
 				var oView = this.getView();
 				var oButton = oEvent.getSource();
+				//Pagination
+				this.iNotificationTop = 10;
+				this.iNotificationSkip = 0;
+
+				//clear read
+				this._MarkAsRead();
+
 				if (!this._oPopover) {
 					Fragment.load({
 						name: "com.coil.podium.Dashboard.dialog.Notifications",
@@ -157,35 +170,47 @@
 			/* =========================================================== */
 			/* Internal function                                           */
 			/* =========================================================== */
-			loadNotifications: function (oEvent) {
+			loadNotifications: function () {
+				var that = this;
 				var oViewModel = this.getView().getModel("dashboard");
 				//debugger;
 				oViewModel.setProperty("/bNotificationBusy", true);
-				//	var oList = oEvent.getSource().getContent()[0];
-				function onSuccess(data) {
-					oViewModel.setProperty("/bNotificationBusy", false);
-					oViewModel.setProperty("/aNotifications", data.results);
-					oViewModel.refresh(true);
-					//	oList.refreshAggregation("items");
-				}
+				
 
-				this._MarkAsRead();
+			//	return new Promise(function (res, rej) {
+					that.getModel().read("/GetNotifications", {
+						urlParameters: {
+							"$expand": "Notification,Notification/Redirection",
+							"$orderby": "TriggeredAt desc",
+							"Top": this.iNotificationTop,
+							"Skip": this.iNotificationSkip
+						},
+						success: function (data) {
+							
+							oViewModel.setProperty("/bNotificationBusy", false);
+							var prevNotifications = oViewModel.getProperty("/aNotifications");
 
-				this.getModel().read("/GetNotifications", {
-					urlParameters: {
-						"$expand": "Notification,Notification/Redirection"
-					},
-					success: onSuccess.bind(this)
-				});
+							if (prevNotifications.length > 0) {
+								oViewModel.setProperty("/aNotifications", prevNotifications.concat(data.results));
+							} else {
+								oViewModel.setProperty("/aNotifications", data.results);
+							}
+						
+							//oViewModel.refresh(true);
+						
+						}
+					});
+
+			//	});
 
 			},
 
 			_MarkAsRead: function () {
 				var oViewModel = this.getView().getModel("dashboard");
 				var oModel = this.getModel();
-				if ( +(oViewModel.getProperty("/iNotificationCount")) > 0) {
-					oModel.callFunction("/MarkAsReadNotification",{
-						success : function(){
+				if (+(oViewModel.getProperty("/iNotificationCount")) > 0) {
+					oModel.callFunction("/MarkAsReadNotification", {
+						success: function () {
 							oViewModel.setProperty("/iNotificationCount", "");
 						}
 					});
@@ -260,7 +285,11 @@
 				var aPromises = [],
 					that = this;
 
-				this.getModel("dashboard").setProperty("/bViewBusy", true);
+				if (!(this.binitLoadDone)) {
+					this.getModel("dashboard").setProperty("/bViewBusy", true);
+
+					this.binitLoadDone = true;
+				}
 
 				aPromises.push(new Promise(function (res, rej) {
 					that.getModel().read("/UserSet", {
@@ -345,10 +374,10 @@
 				//set Notifications count
 				//Get Property getINotifications check for mismatch
 				//if mismatch, turn green
-				
+
 				var iNotiCount = +(oViewModel.getProperty("/iNotificationCount"));
-				
-				if ( iNotiCount && iNotiCount !== aResults[3].Count) {
+
+				if (iNotiCount && iNotiCount !== aResults[3].Count) {
 
 					//this.getView().byId("BadgedButton").setType(sap.m.ButtonType.Emphasized);
 					sap.m.MessageToast.show(
