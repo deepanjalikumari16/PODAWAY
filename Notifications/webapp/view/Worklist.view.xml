@@ -49,7 +49,7 @@
 								<Column width="15%">
 									<Text text="{i18n>colSubject}"/>
 								</Column>
-								<Column width="30%">
+								<Column width="25%">
 									<Text text="{i18n>colBody}"/>
 								</Column>
 								<Column width="10%">
@@ -63,6 +63,9 @@
 								</Column>
 								<Column width="5%">
 									<Text text="{i18n>colEdit}"/>
+								</Column>
+								<Column width="5%">
+									<Text text="{i18n>colView}"/>
 								</Column>
 								<Column width="6%">
 									<Text text="{i18n>colRemove}"/>
@@ -83,6 +86,7 @@
 										</VBox>
 										<Text text="{CreatorName}"/>
 										<Button icon="sap-icon://edit" press="onEdit" type="Transparent"/>
+										<Button icon="sap-icon://display" press="onView" type="Transparent" tooltip="View notification"/>
 										<Button icon="sap-icon://delete" press="onDelete" type="Transparent" tooltip="remove"/>
 									</cells>
 								</ColumnListItem>
@@ -114,7 +118,7 @@
 								<Column width="15%">
 									<Text text="{i18n>colSubject}"/>
 								</Column>
-								<Column width="30%">
+								<Column width="25%">
 									<Text text="{i18n>colBody}"/>
 								</Column>
 								<Column width="10%">
@@ -128,6 +132,9 @@
 								</Column>
 								<Column width="5%">
 									<Text text="{i18n>colEdit}"/>
+								</Column>
+								<Column width="5%">
+									<Text text="{i18n>colView}"/>
 								</Column>
 								<Column width="6%">
 									<Text text="{i18n>colRemove}"/>
@@ -147,6 +154,7 @@
 										</VBox>
 										<Text text="{CreatorName}"/>
 										<Button icon="sap-icon://edit" press="onEdit" type="Transparent"/>
+										<Button icon="sap-icon://display" press="onView" type="Transparent" tooltip="View notification"/>
 										<Button icon="sap-icon://delete" press="onDelete" type="Transparent" tooltip="remove"/>
 									</cells>
 								</ColumnListItem>
@@ -178,7 +186,7 @@
 								<Column width="20%">
 									<Text text="{i18n>colSubject}"/>
 								</Column>
-								<Column width="35%">
+								<Column width="30%">
 									<Text text="{i18n>colBody}"/>
 								</Column>
 								<Column width="10%">
@@ -189,6 +197,9 @@
 								</Column>
 								<Column width="15%">
 									<Text text="{i18n>colCreatorName}"/>
+								</Column>
+								<Column width="5%">
+									<Text text="{i18n>colView}"/>
 								</Column>
 							</columns>
 							<items>
@@ -204,6 +215,7 @@
 												visible="{= !${ScheduledDate}}"/>
 										</VBox>
 										<Text text="{CreatorName}"/>
+										<Button icon="sap-icon://display" press="onView" type="Transparent" tooltip="View notification"/>
 									</cells>
 								</ColumnListItem>
 							</items>

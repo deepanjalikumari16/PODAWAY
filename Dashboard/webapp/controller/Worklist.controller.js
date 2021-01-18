@@ -49,32 +49,32 @@
 				this._enableDesktopNotification();
 
 			},
-		/*	_getRenderer: function () {
-				var that = this,
-					oDeferred = new jQuery.Deferred(),
-					oRenderer;
-				that._oShellContainer = jQuery.sap.getObject("sap.ushell.Container");
-				if (!that._oShellContainer) {
-					oDeferred.reject(
-						"Illegal state: shell container not available. This component must be executed in a unified shell runtime context.");
-				} else {
-					oRenderer = that._oShellContainer.getRenderer();
-					if (oRenderer) {
-						oDeferred.resolve(oRenderer);
-					} else { //renderer not initialized yet, listen to rendererCreated event
-						that._onRendererCreated = function (oEvent) {
-							oRenderer = oEvent.getParameter('renderer');
-							if (oRenderer) {
-								oDeferred.resolve(oRenderer);
-							} else {
-								oDeferred.reject('Illegal state: shell renderer not available after receiving rendererLoaded event');
-							}
-						};
-						that._oShellContainer.attachRendererCreatedEvent(that._onRendererCreated);
+			/*	_getRenderer: function () {
+					var that = this,
+						oDeferred = new jQuery.Deferred(),
+						oRenderer;
+					that._oShellContainer = jQuery.sap.getObject("sap.ushell.Container");
+					if (!that._oShellContainer) {
+						oDeferred.reject(
+							"Illegal state: shell container not available. This component must be executed in a unified shell runtime context.");
+					} else {
+						oRenderer = that._oShellContainer.getRenderer();
+						if (oRenderer) {
+							oDeferred.resolve(oRenderer);
+						} else { //renderer not initialized yet, listen to rendererCreated event
+							that._onRendererCreated = function (oEvent) {
+								oRenderer = oEvent.getParameter('renderer');
+								if (oRenderer) {
+									oDeferred.resolve(oRenderer);
+								} else {
+									oDeferred.reject('Illegal state: shell renderer not available after receiving rendererLoaded event');
+								}
+							};
+							that._oShellContainer.attachRendererCreatedEvent(that._onRendererCreated);
+						}
 					}
-				}
-				return oDeferred.promise();
-			},*/
+					return oDeferred.promise();
+				},*/
 
 			onUpdateNotifications: function (oevet) {
 				debugger;
@@ -169,12 +169,27 @@
 					//	oList.refreshAggregation("items");
 				}
 
+				this._MarkAsRead();
+
 				this.getModel().read("/GetNotifications", {
 					urlParameters: {
 						"$expand": "Notification,Notification/Redirection"
 					},
 					success: onSuccess.bind(this)
 				});
+
+			},
+
+			_MarkAsRead: function () {
+				var oViewModel = this.getView().getModel("dashboard");
+				var oModel = this.getModel();
+				if ( +(oViewModel.getProperty("/iNotificationCount")) > 0) {
+					oModel.callFunction("/MarkAsReadNotification",{
+						success : function(){
+							oViewModel.setProperty("/iNotificationCount", "");
+						}
+					});
+				}
 
 			},
 
@@ -330,12 +345,14 @@
 				//set Notifications count
 				//Get Property getINotifications check for mismatch
 				//if mismatch, turn green
-
-				if (oViewModel.getProperty("/iNotificationCount") && oViewModel.getProperty("/iNotificationCount") !== aResults[3].Count) {
+				
+				var iNotiCount = +(oViewModel.getProperty("/iNotificationCount"));
+				
+				if ( iNotiCount && iNotiCount !== aResults[3].Count) {
 
 					//this.getView().byId("BadgedButton").setType(sap.m.ButtonType.Emphasized);
 					sap.m.MessageToast.show(
-						this.getResourceBundle().getText("MSG_NEW_NOTO", [Math.abs(oViewModel.getProperty("/iNotificationCount") - aResults[3].Count)])
+						this.getResourceBundle().getText("MSG_NEW_NOTO", [aResults[3].Count])
 					);
 
 					// if (Notification.permission === "granted") {

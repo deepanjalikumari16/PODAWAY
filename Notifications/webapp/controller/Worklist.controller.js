@@ -230,8 +230,8 @@ sap.ui.define([
 				var aTableSearchState = [];
 				// var sQuery = oEvent.getParameter("query");
 				var sQuery = oEvent.getParameter("query").toLowerCase();
+				sQuery = "'" + sQuery + "'";
 				if (sQuery && sQuery.length > 0) {
-					sQuery = "'" + sQuery + "'";
 					this.getModel("worklistView").setProperty("/sQuery", sQuery);
 					aTableSearchState = [new Filter('tolower(Subject)', FilterOperator.Contains, sQuery),
 						new Filter("IsArchived", FilterOperator.EQ, false),
@@ -249,6 +249,7 @@ sap.ui.define([
 		},
 
 		onAdd: function (oEvent) {
+			this.getModel("appView").setProperty("/viewFlag", "Y");
 			this.getRouter().navTo("createObject");
 		},
 
@@ -276,6 +277,12 @@ sap.ui.define([
 		// },
 
 		onEdit: function (oEvent) {
+			this.getModel("appView").setProperty("/viewFlag", "Y");
+			this._showObject(oEvent.getSource());
+		},
+		
+		onView: function (oEvent) {
+			this.getModel("appView").setProperty("/viewFlag", "X");
 			this._showObject(oEvent.getSource());
 		},
 

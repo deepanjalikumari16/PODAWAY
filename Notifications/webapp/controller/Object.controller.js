@@ -80,7 +80,17 @@ sap.ui.define([
 		 */
 		_onObjectMatched: function (oEvent) {
 			var that = this;
-			that.getModel("objectView").setProperty("/sMode", "E");
+			var TtlNotification;
+			var viewchar = this.getModel("appView").getProperty("/viewFlag");
+			if (viewchar === "X") {
+				that.getModel("objectView").setProperty("/sMode", "X");
+				TtlNotification = this.getView().getModel("i18n").getResourceBundle().getText("TtlViewNotification");
+				this.getModel("objectView").setProperty("/TtlNotification", TtlNotification);
+			} else {
+				that.getModel("objectView").setProperty("/sMode", "E");
+				TtlNotification = this.getView().getModel("i18n").getResourceBundle().getText("TtlEditNotification");
+				this.getModel("objectView").setProperty("/TtlNotification", TtlNotification);
+			}
 			that.getModel("objectView").setProperty("/busy", true);
 			var sObjectId = oEvent.getParameter("arguments").objectId;
 			this.getModel().metadataLoaded().then(function () {
@@ -106,6 +116,9 @@ sap.ui.define([
 		 */
 		_onCreateObjectMatched: function () {
 			this.getModel("objectView").setProperty("/sMode", "C");
+			// this.getModel("objectView").setProperty("/TtlNotification", "Add Notification");
+			var TtlNotification = this.getView().getModel("i18n").getResourceBundle().getText("TtlAddNotification");
+			this.getModel("objectView").setProperty("/TtlNotification", TtlNotification);
 			this.getModel("objectView").setProperty("/busy", true);
 			this._setView();
 		},
@@ -177,16 +190,6 @@ sap.ui.define([
 		 * Save edit or create FAQ details 
 		 */
 		onDraft: function () {
-			var notifystatus = "DRAFT";
-			this.run(notifystatus);
-		},
-
-		onPublish: function () {
-			var notifystatus = "SCHEDULED";
-			this.run(notifystatus);
-		},
-
-		run: function (notifystatus) {
 			this._oMessageManager.removeAllMessages();
 
 			var oViewModel = this.getModel("objectView");
@@ -208,7 +211,52 @@ sap.ui.define([
 				oPayload.ScheduledTime = null;
 			}
 
-			oPayload.NotificationStatus = notifystatus;
+			oPayload.NotificationStatus = "DRAFT";
+
+			if (oPayload.GroupId !== null) {
+				oPayload.GroupId = parseInt(oPayload.GroupId);
+			}
+
+			var oValid = this._fnValidationView(oPayload);
+
+			if (oValid.IsNotValid) {
+				this.showError(this._fnMsgConcatinator(oValid.sMsg));
+				return;
+			}
+
+			oPayload.Receivers = oPayload.Receivers.map(function (ele) {
+				return {
+					Id: ele
+				};
+			});
+
+			oViewModel.setProperty("/busy", true);
+			this.CUOperation(oPayload);
+		},
+
+		onPublish: function () {
+			this._oMessageManager.removeAllMessages();
+
+			var oViewModel = this.getModel("objectView");
+			var oPayload = oViewModel.getProperty("/oDetails");
+
+			if (oPayload.IsGroupNotification === false) {
+				oPayload.GroupId = null;
+			}
+
+			if (oPayload.IsGroupNotification === true) {
+				oPayload.Receivers = [];
+				if (oPayload.GroupId !== null) {
+					oPayload.GroupId = parseInt(oPayload.GroupId);
+				}
+			}
+
+			if (oPayload.IsLater === false) {
+				oPayload.ScheduledDate = null;
+				oPayload.ScheduledTime = null;
+			}
+
+			oPayload.NotificationStatus = "SCHEDULED";
 
 			if (oPayload.GroupId !== null) {
 				oPayload.GroupId = parseInt(oPayload.GroupId);
@@ -316,6 +364,24 @@ sap.ui.define([
 				});
 			}
 
+			if (aCtrlMessage.length) this._genCtrlMessages(aCtrlMessage);
+			return oReturn;
+		},
+
+		_fnValidationView: function (data) {
+			var oReturn = {
+					IsNotValid: false,
+					sMsg: []
+				},
+				aCtrlMessage = [];
+			if (!data.Subject) {
+				oReturn.IsNotValid = true;
+				oReturn.sMsg.push("MSG_VALDTN_ERR_SUBJECT");
+				aCtrlMessage.push({
+					message: "MSG_VALDTN_ERR_SUBJECT",
+					target: "/oDetails/Subject"
+				});
+			}
 			if (aCtrlMessage.length) this._genCtrlMessages(aCtrlMessage);
 			return oReturn;
 		},

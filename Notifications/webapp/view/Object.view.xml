@@ -3,7 +3,9 @@
 	<uxap:ObjectPageLayout id="ObjectPageLayout" showAnchorBar="true" showFooter="true" subSectionLayout="TitleOnLeft"
 		binding="{objectView>/oDetails}" busy="{objectView>/busy}" busyIndicatorDelay="0" class="sapUiResponsiveContentPadding">
 		<uxap:headerTitle>
-			<uxap:ObjectPageHeader objectTitle="{= ${objectView>/sMode} === 'C' ? ${i18n>TtlAddNotification} : ${i18n>TtlEditNotification} }"/>
+			<!--<uxap:ObjectPageHeader objectTitle="{= ${objectView>/sMode} === 'C' ? ${i18n>TtlAddNotification} : ${i18n>TtlEditNotification} }"/>-->
+			<!--<uxap:ObjectPageHeader objectTitle="{i18n>TtlAddNotification}" visible="{= ${objectView>/sMode} === 'C'}"/>-->
+			<uxap:ObjectPageHeader objectTitle="{objectView>/TtlNotification}"/>
 		</uxap:headerTitle>
 		<uxap:sections>
 			<uxap:ObjectPageSection title="{i18n>objectViewTitle}">
@@ -12,15 +14,16 @@
 						<l:Grid width="100%" defaultSpan="XL6 L6 M6 S12">
 							<VBox>
 								<Label required="true" text="{i18n>colSubject}"/>
-								<Input width="100%" value="{objectView>Subject}" maxLength="50"/>
+								<Input width="100%" value="{objectView>Subject}" maxLength="50" editable="{= ${appView>/viewFlag} === 'Y'}"/>
 							</VBox>
 							<VBox>
 								<Label required="true" text="{i18n>colBody}"/>
-								<TextArea width="100%" value="{objectView>Body}" rows="4" maxLength="250" placeholder="{i18n>MessagePlaceHolder}" showExceededText="true"/>
+								<TextArea width="100%" value="{objectView>Body}" rows="4" maxLength="250" placeholder="{i18n>MessagePlaceHolder}" showExceededText="true"
+									editable="{= ${appView>/viewFlag} === 'Y'}"/>
 							</VBox>
 							<VBox>
 								<Label text="{i18n>colRedirectionType}"/>
-								<ComboBox width="100%" selectedKey="{objectView>RedirectionType}">
+								<ComboBox width="100%" selectedKey="{objectView>RedirectionType}" editable="{= ${appView>/viewFlag} === 'Y'}">
 									<items>
 										<core:Item text="{i18n>screen}" key="SCREEN"/>
 										<core:Item text="{i18n>link}" key="LINK"/>
@@ -29,16 +32,17 @@
 							</VBox>
 							<VBox>
 								<Label visible="{= ${objectView>RedirectionType} === 'LINK'}" required="true" text="{i18n>colRedirectionTo}"/>
-								<Input visible="{= ${objectView>RedirectionType} === 'LINK'}" width="100%" value="{objectView>RedirectionTo}" placeholder="{i18n>linkPlaceHolder}"/>
+								<Input visible="{= ${objectView>RedirectionType} === 'LINK'}" width="100%" value="{objectView>RedirectionTo}"
+									placeholder="{i18n>linkPlaceHolder}" editable="{= ${appView>/viewFlag} === 'Y'}"/>
 								<Label visible="{= ${objectView>RedirectionType} === 'SCREEN'}" required="true" text="{i18n>colRedirectionTo}"/>
 								<ComboBox visible="{= ${objectView>RedirectionType} === 'SCREEN'}" width="100%" selectedKey="{objectView>RedirectionTo}"
-									items="{ path: '/MasterRedirectionSet' }">
+									items="{ path: '/MasterRedirectionSet' }" editable="{= ${appView>/viewFlag} === 'Y'}">
 									<core:Item key="{RedirectionKey}" text="{RedirectionValue}"/>
 								</ComboBox>
 							</VBox>
 							<VBox>
 								<Label text="{i18n>colIsGroupNotification}"/>
-								<Switch state="{objectView>IsGroupNotification}" customTextOn="Yes" customTextOff="No">
+								<Switch state="{objectView>IsGroupNotification}" customTextOn="Yes" customTextOff="No" enabled="{= ${appView>/viewFlag} === 'Y'}">
 									<layoutData>
 										<FlexItemData growFactor="1"/>
 									</layoutData>
@@ -47,18 +51,19 @@
 							<VBox>
 								<Label visible="{= ${objectView>IsGroupNotification} === true}" required="true" text="{i18n>colGroup}"/>
 								<ComboBox visible="{= ${objectView>IsGroupNotification} === true}" width="100%" selectedKey="{objectView>GroupId}"
-									items="{ path: '/NotificationGroupSet' }">
+									items="{ path: '/NotificationGroupSet' }" editable="{= ${appView>/viewFlag} === 'Y'}">
 									<core:Item key="{Id}" text="{GroupName}"/>
 								</ComboBox>
 								<Label visible="{= ${objectView>IsGroupNotification} === false}" required="true" text="{i18n>colReceivers}"/>
 								<MultiComboBox visible="{= ${objectView>IsGroupNotification} === false}" width="100%" selectedKeys="{objectView>Receivers}"
-									items="{ path : '/UserSet', parameters : { expand : 'Role', 'select' : 'Id,FirstName,LastName,Email,RoleId,Role/Role' }, filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path : 'RoleId' , operator : 'NE' , value1 : 4 } ], sorter : [ { path : 'Role/Role', descending : false, group: true }, { path : 'FirstName', descending : false } ], groupHeaderFactory: '.getGroupHeader' }">
-									<core:Item key="{Id}" text="{FirstName} {LastName} ({Email})"/>
+									items="{ path : '/UserSet', parameters : { expand : 'Role', 'select' : 'Id,FirstName,LastName,Email,RoleId,Role/Role' }, filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path : 'RoleId' , operator : 'NE' , value1 : 4 } ], sorter : [ { path : 'Role/Role', descending : false, group: true }, { path : 'FirstName', descending : false } ], groupHeaderFactory: '.getGroupHeader' }"
+									editable="{= ${appView>/viewFlag} === 'Y'}">
+									<core:Item key="{Id}" text="{FirstName} {LastName} - {Email}"/>
 								</MultiComboBox>
 							</VBox>
 							<VBox>
 								<Label text="{i18n>colIsLater}"/>
-								<Switch state="{objectView>IsLater}" customTextOn="Yes" customTextOff="No">
+								<Switch state="{objectView>IsLater}" customTextOn="Yes" customTextOff="No" enabled="{= ${appView>/viewFlag} === 'Y'}">
 									<layoutData>
 										<FlexItemData growFactor="1"/>
 									</layoutData>
@@ -66,11 +71,13 @@
 							</VBox>
 							<VBox visible="{= ${objectView>IsLater} === true}">
 								<Label required="true" text="{i18n>colScheduledDate}"/>
-								<DatePicker width="100%" valueFormat="dd MMM yyyy" displayFormat="dd MMM yyyy" value="{objectView>ScheduledDate}"/>
+								<DatePicker width="100%" valueFormat="dd MMM yyyy" displayFormat="dd MMM yyyy" value="{objectView>ScheduledDate}"
+									editable="{= ${appView>/viewFlag} === 'Y'}"/>
 							</VBox>
 							<VBox visible="{= ${objectView>IsLater} === true}">
 								<Label required="true" text="{i18n>colScheduledTime}"/>
-								<TimePicker width="100%" valueFormat="HH:mm" displayFormat="hh:mm a" value="{objectView>ScheduledTime}"/>
+								<TimePicker width="100%" valueFormat="HH:mm" displayFormat="hh:mm a" value="{objectView>ScheduledTime}"
+									editable="{= ${appView>/viewFlag} === 'Y'}"/>
 							</VBox>
 						</l:Grid>
 					</uxap:ObjectPageSubSection>
@@ -81,9 +88,11 @@
 			<Toolbar>
 				<ToolbarSpacer/>
 				<Button text="{i18n>btnCancel}" press="onCancel"/>
-				<Button text="{i18n>btnDraft}" type="Accept" press="onDraft"/>
-				<Button text="{i18n>btnSchedule}" type="Emphasized" visible="{= ${objectView>IsLater} === true}" press="onPublish"/>
-				<Button text="{i18n>btnSend}" type="Emphasized" visible="{= ${objectView>IsLater} === false}" press="onPublish"/>
+				<Button text="{i18n>btnDraft}" type="Accept" press="onDraft" enabled="{= ${appView>/viewFlag} === 'Y'}"/>
+				<Button text="{i18n>btnSchedule}" type="Emphasized" visible="{= ${objectView>IsLater} === true}" press="onPublish"
+					enabled="{= ${appView>/viewFlag} === 'Y'}"/>
+				<Button text="{i18n>btnSend}" type="Emphasized" visible="{= ${objectView>IsLater} === false}" press="onPublish"
+					enabled="{= ${appView>/viewFlag} === 'Y'}"/>
 			</Toolbar>
 		</uxap:footer>
 	</uxap:ObjectPageLayout>
