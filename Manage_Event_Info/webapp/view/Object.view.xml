@@ -50,8 +50,8 @@
 							</VBox>
 							<VBox>
 								<Label required="true" text="{i18n>colCoOrdinates}"/>
-								<Input width="100%" description="longitude" value="{objectView>Latitude}" showValueHelp="true" valueHelpRequest="onMap"/>
-								<Input width="100%" description="latitude" value="{objectView>Longitude}" showValueHelp="true" valueHelpRequest="onMap"/>
+								<Input width="100%" description="latitude" value="{objectView>Latitude}" showValueHelp="true" valueHelpRequest="onMap"/>
+								<Input width="100%" description="longitude" value="{objectView>Longitude}" showValueHelp="true" valueHelpRequest="onMap"/>
 							</VBox>
 							<VBox>
 								<Label required="true" text="{i18n>colCountry}"/>

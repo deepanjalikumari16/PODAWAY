@@ -283,7 +283,8 @@ sap.ui.define([
 					dataRequested: this._fnbusyItems.bind(this),
 					dataReceived: this._fnbusyItems.bind(this)
 				},
-				filters: [new Filter("EventAttractionTypeId", FilterOperator.EQ, this.getOwnerComponent().iEvtType),
+				filters: [new Filter("EventAttractionTypeId",
+				this.getModel("worklistView").getProperty("/iEvtType") == 1 ?  FilterOperator.EQ : FilterOperator.NE , 1),
 					new Filter("IsArchived", FilterOperator.EQ, false)
 				],
 				templateShareable: true
