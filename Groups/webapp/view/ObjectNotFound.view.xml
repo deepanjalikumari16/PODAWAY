@@ -1,5 +1,5 @@
 <mvc:View
-	controllerName="com.coil.podium.Groups.controller.NotFound"
+	controllerName="com.coil.podway.Groups.controller.NotFound"
 	xmlns="sap.m"
 	xmlns:mvc="sap.ui.core.mvc">
 

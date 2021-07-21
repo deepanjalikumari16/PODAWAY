@@ -5,9 +5,9 @@
     "logoutEndpoint": "/do/logout"
   },
   "routes": [{
-			"source": "^/EXPO_PODIUM_API/(.*)$",
+			"source": "^/EXPO_PODWAY_API/(.*)$",
 			"target": "$1",
-			"destination": "EXPO_PODIUM_API"
+			"destination": "EXPO_PODWAY_API"
 		}, 
     {
       "source": "^(.*)$",

@@ -1,5 +1,5 @@
 <mvc:View
-	controllerName="com.coil.podium.Notifications.controller.NotFound"
+	controllerName="com.coil.podway.Notifications.controller.NotFound"
 	xmlns="sap.m"
 	xmlns:mvc="sap.ui.core.mvc">
 

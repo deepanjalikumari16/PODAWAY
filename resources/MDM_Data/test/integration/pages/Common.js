@@ -1,0 +1,1 @@
+sap.ui.define(["sap/ui/test/Opa5","../../../localService/mockserver"],function(t,e){"use strict";return t.extend("com.coil.podium.MDM_Data.test.integration.pages.Common",{getEntitySet:function(t){return e.getMockServer().getEntitySetData(t)}})});

@@ -1,0 +1,1 @@
+sap.ui.define(["./BaseController"],function(n){"use strict";return n.extend("Assignment_List.Assignment_List.controller.NotFound",{onLinkPressed:function(){this.getRouter().navTo("worklist")}})});

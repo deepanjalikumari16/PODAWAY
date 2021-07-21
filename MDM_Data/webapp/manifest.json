@@ -1,7 +1,7 @@
 {
 	"_version": "1.12.0",
 	"sap.app": {
-		"id": "com.coil.podium.MDM_Data",
+		"id": "com.coil.podway.MDM_Data",
 		"type": "application",
 		"i18n": "i18n/i18n.properties",
 		"title": "{{appTitle}}",
@@ -12,7 +12,7 @@
 		"resources": "resources.json",
 		"dataSources": {
 			"mainService": {
-				"uri": "/EXPO_PODIUM_API/api/v2/odata.svc/",
+				"uri": "/EXPO_PODWAY_API/api/v2/odata.svc/",
 				"type": "OData",
 				"settings": {
 					"odataVersion": "2.0",
@@ -43,7 +43,7 @@
 	},
 	"sap.ui5": {
 		"rootView": {
-			"viewName": "com.coil.podium.MDM_Data.view.App",
+			"viewName": "com.coil.podway.MDM_Data.view.App",
 			"type": "XML",
 			"async": true,
 			"id": "app"
@@ -68,7 +68,7 @@
 			"i18n": {
 				"type": "sap.ui.model.resource.ResourceModel",
 				"settings": {
-					"bundleName": "com.coil.podium.MDM_Data.i18n.i18n"
+					"bundleName": "com.coil.podway.MDM_Data.i18n.i18n"
 				}
 			},
 			"": {
@@ -96,7 +96,7 @@
 			"config": {
 				"routerClass": "sap.m.routing.Router",
 				"viewType": "XML",
-				"viewPath": "com.coil.podium.MDM_Data.view",
+				"viewPath": "com.coil.podway.MDM_Data.view",
 				"controlId": "app",
 				"controlAggregation": "pages",
 				"bypassed": {

@@ -1,3 +1,10 @@
 /mta_archives/
 
 mta.yaml
+
+/node_modules/
+*/node_modules/
+*/dist/
+*/resources/
+
+*.sh

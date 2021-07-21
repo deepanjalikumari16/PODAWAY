@@ -1,0 +1,180 @@
+{
+    "resources": [
+        {
+            "name": "../../podium/Dashboard/localService/mockserver.js"
+        },
+        {
+            "name": "../../podium/Dashboard/i18n/i18n.properties",
+            "raw": "i18n/i18n.properties"
+        },
+        {
+            "name": "../../podium/Dashboard/libs/mapsjs-service.js"
+        },
+        {
+            "name": "../../podium/Dashboard/model/models.js"
+        },
+        {
+            "name": "../../podium/Dashboard/model/formatter.js"
+        },
+        {
+            "name": "../../podium/Dashboard/i18n/i18n_ar.properties",
+            "raw": "i18n/i18n.properties",
+            "locale": "_ar"
+        },
+        {
+            "name": "../../podium/Dashboard/libs/mapsjs-ui.js"
+        },
+        {
+            "name": "../../podium/Dashboard/manifest.json"
+        },
+        {
+            "name": "../../podium/Dashboard/libs/mapsjs-mapevents.js"
+        },
+        {
+            "name": "../../podium/Dashboard/libs/mapsjs-data.js"
+        },
+        {
+            "name": "../../podium/Dashboard/libs/mapsjs-core.js"
+        },
+        {
+            "name": "../../podium/Dashboard/libs/mapsjs-clustering.js"
+        },
+        {
+            "name": "../../podium/Dashboard/controller/Worklist.controller.js"
+        },
+        {
+            "name": "../../podium/Dashboard/controller/Object.controller.js"
+        },
+        {
+            "name": "../../podium/Dashboard/controller/NotFound.controller.js"
+        },
+        {
+            "name": "../../podium/Dashboard/controller/ErrorHandler.js"
+        },
+        {
+            "name": "../../podium/Dashboard/controller/BaseController.js"
+        },
+        {
+            "name": "../../podium/Dashboard/controller/App.controller.js"
+        },
+        {
+            "name": "../../podium/Dashboard/Component.js"
+        },
+        {
+            "name": "../../podium/Dashboard/manifest-bundle.zip"
+        },
+        {
+            "name": "../../podium/Dashboard/Component-preload.js",
+            "merged": true
+        },
+        {
+            "name": "../../podium/Dashboard/model/models-dbg.js",
+            "isDebug": true
+        },
+        {
+            "name": "../../podium/Dashboard/model/formatter-dbg.js",
+            "isDebug": true
+        },
+        {
+            "name": "../../podium/Dashboard/localService/mockserver-dbg.js",
+            "isDebug": true
+        },
+        {
+            "name": "../../podium/Dashboard/libs/mapsjs-ui-dbg.js",
+            "isDebug": true
+        },
+        {
+            "name": "../../podium/Dashboard/libs/mapsjs-service-dbg.js",
+            "isDebug": true
+        },
+        {
+            "name": "../../podium/Dashboard/libs/mapsjs-mapevents-dbg.js",
+            "isDebug": true
+        },
+        {
+            "name": "../../podium/Dashboard/libs/mapsjs-data-dbg.js",
+            "isDebug": true
+        },
+        {
+            "name": "../../podium/Dashboard/libs/mapsjs-core-dbg.js",
+            "isDebug": true
+        },
+        {
+            "name": "../../podium/Dashboard/libs/mapsjs-clustering-dbg.js",
+            "isDebug": true
+        },
+        {
+            "name": "../../podium/Dashboard/controller/Worklist-dbg.controller.js",
+            "isDebug": true
+        },
+        {
+            "name": "../../podium/Dashboard/controller/Object-dbg.controller.js",
+            "isDebug": true
+        },
+        {
+            "name": "../../podium/Dashboard/controller/NotFound-dbg.controller.js",
+            "isDebug": true
+        },
+        {
+            "name": "../../podium/Dashboard/controller/ErrorHandler-dbg.js",
+            "isDebug": true
+        },
+        {
+            "name": "../../podium/Dashboard/controller/BaseController-dbg.js",
+            "isDebug": true
+        },
+        {
+            "name": "../../podium/Dashboard/controller/App-dbg.controller.js",
+            "isDebug": true
+        },
+        {
+            "name": "../../podium/Dashboard/Component-dbg.js",
+            "isDebug": true
+        },
+        {
+            "name": "../../../../sap-ui-version.json"
+        },
+        {
+            "name": "../../podium/Dashboard/view/Worklist.view.xml"
+        },
+        {
+            "name": "../../podium/Dashboard/view/ObjectNotFound.view.xml"
+        },
+        {
+            "name": "../../podium/Dashboard/view/Object.view.xml"
+        },
+        {
+            "name": "../../podium/Dashboard/view/NotFound.view.xml"
+        },
+        {
+            "name": "../../podium/Dashboard/view/App.view.xml"
+        },
+        {
+            "name": "../../podium/Dashboard/localService/metadata.xml"
+        },
+        {
+            "name": "../../podium/Dashboard/css/wheelchair_1.svg"
+        },
+        {
+            "name": "../../podium/Dashboard/css/wheelchair.svg"
+        },
+        {
+            "name": "../../podium/Dashboard/css/triangle.svg"
+        },
+        {
+            "name": "../../podium/Dashboard/css/style.css"
+        },
+        {
+            "name": "../../podium/Dashboard/css/mapsjs-ui.css"
+        },
+        {
+            "name": "../../podium/Dashboard/dialog/Notifications.fragment.xml"
+        },
+        {
+            "name": "../../podium/Dashboard/dialog/CategoryChart.fragment.xml"
+        },
+        {
+            "name": "../../podium/Dashboard/extended_runnable_file.html"
+        }
+    ]
+}

@@ -1,0 +1,1 @@
+sap.ui.define(["./BaseController"],function(o){"use strict";return o.extend("com.coil.podway.MAAD.controller.NotFound",{onLinkPressed:function(){this.getRouter().navTo("worklist")}})});

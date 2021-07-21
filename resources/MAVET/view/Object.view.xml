@@ -1,0 +1,154 @@
+<mvc:View controllerName="com.coil.podium.MAEVAT.controller.Object" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" xmlns:core="sap.ui.core"
+ xmlns:u="sap.ui.unified" xmlns:uxap="sap.uxap" xmlns:l="sap.ui.layout">
+<uxap:ObjectPageLayout id="ObjectPageLayout" showAnchorBar="true" showFooter="true" subSectionLayout="TitleOnLeft"
+		binding="{objectView>/oDetails}" busy="{objectView>/busy}" busyIndicatorDelay="0" class="sapUiResponsiveContentPadding">
+		<uxap:headerTitle>
+			<uxap:ObjectPageHeader objectTitle="{= ${objectView>/sMode} === 'C' ? (${i18n>TtlCreateEvent}).concat(' ',${appView>/sAppName}) : (${i18n>TtlEditEventDetails}).concat(' ' ,${appView>/sAppName}) }"/>
+		</uxap:headerTitle>
+		<uxap:sections>
+			<uxap:ObjectPageSection title="{i18n>TtlEventdetails}">
+				<uxap:subSections>
+					<uxap:ObjectPageSubSection>
+						<l:Grid width="100%" defaultSpan="XL6 L6 M6 S12">
+							<VBox>
+								<Label text="{i18n>LblType}" />
+								<ComboBox id="dpAttarctiontype"  selectedKey="{objectView>EventAttractionTypeId}">
+								<!--
+								 items="{ path: '/MasterEventAttractionTypeSet' }"
+								<core:Item key="{Id}" text="{EventAttractionType}"/>-->
+								</ComboBox>	
+							</VBox>
+							<VBox>
+								<Label required="true" text="{i18n>LblName}"/>
+								<Input value="{objectView>Name}"/>
+							</VBox>
+							<VBox>
+								<Label required="true" text="{i18n>LblTitle}"/>
+								<Input value="{objectView>Title}"/>
+							</VBox>
+							<VBox>
+								<Label required="true" text="{i18n>LblDescription}"/>
+								<TextArea  value="{objectView>Description}" width="100%" rows="6" cols="45"/>
+							</VBox>
+							<VBox visible="{appView>/EvtTypeConfig/Theme}" >
+								<Label text="{i18n>colTheme}"/>
+							<!--	<HBox renderType="Bare">-->
+								<ComboBox change="onComboBoxChange" selectedKey="{path:'objectView>ThemeId', type: 'sap.ui.model.odata.type.String', constraints : {  nullable : false } }" items="{/ThemeSet}">
+									<core:Item key="{Id}" text="{Theme}"/>
+								</ComboBox>
+							<!--	<Button class="sapUiTinyMarginBegin" icon="sap-icon://delete" press="onDelTheme" type="Transparent" tooltip="{i18n>TxtClearSelections}" />
+								</HBox>-->
+							</VBox>
+							<VBox visible="{appView>/EvtTypeConfig/Category}" >
+								<Label text="{i18n>LblCategory}"/>
+								<MultiComboBox selectedKeys="{objectView>Categories}"
+									items="{ path: '/CategorySet', filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : 'false' } ], parameters : { 'select' : 'Id,Category' } }">
+									<core:Item key="{Id}" text="{Category}"/>
+								</MultiComboBox>
+							</VBox>
+							<VBox visible="{= ${objectView>EventAttractionTypeId} === 1 }" >
+								<Label text="{i18n>LblAccessibilityEquipmentRequired}"/>
+								<MultiComboBox selectedKeys="{objectView>AccessibilityDevices}"
+									items="{ path: '/AccessibilityItemSet', filters : [ { path : 'AccessibilityId' , operator : 'EQ' , value1 : 1 }, { path : 'IsArchived' , operator : 'EQ' , value1 : 'false' } ], parameters : { 'select' : 'Id,Title' } }">
+									<core:Item key="{Id}" text="{Title}"/>
+								</MultiComboBox>
+							</VBox>
+							<VBox visible="{= ${objectView>EventAttractionTypeId} === 1 }" >
+								<Label text="{i18n>LblPlacestoAvoid}"/>
+								<MultiComboBox selectedKeys="{objectView>AvoidablePlaces}"
+									items="{ path: '/AccessibilityItemSet', filters : [ { path : 'AccessibilityId' , operator : 'EQ' , value1 : 3 }, { path : 'IsArchived' , operator : 'EQ' , value1 : 'false' } ], parameters : { 'select' : 'Id,Title' } }">
+									<core:Item key="{Id}" text="{Title}"/>
+								</MultiComboBox>
+							</VBox>
+							<VBox visible="{= ${objectView>EventAttractionTypeId} === 2 }" >
+								<Label text="{i18n>LblReferenceLink}"/>
+								<Input  value="{objectView>ReferenceLink}"  />
+							</VBox>
+							
+							<VBox>
+								<Label text="{i18n>LblHighlights}"/>
+								<List items="{path: 'objectView>Highlights', filters : [  {  path : 'IsArchived', operator: 'EQ' , value1: false }  ], sorter: { path: 'Id', descending: false } }" mode="Delete" delete="onDelHighlight" >
+									<headerToolbar>
+										<Toolbar>
+											<ToolbarSpacer />
+											<Button icon="sap-icon://add" press="onAddHighlight" />
+										</Toolbar>
+									</headerToolbar>
+									<CustomListItem>
+										<Input placeholder="{i18n>PhdHighlights}" value="{objectView>Highlight}"/>
+									</CustomListItem>
+								</List>
+							</VBox>
+						</l:Grid>
+					</uxap:ObjectPageSubSection>
+				</uxap:subSections>
+			</uxap:ObjectPageSection>
+			<uxap:ObjectPageSection title="{i18n>LblLocation}">
+						<uxap:subSections>
+						<uxap:ObjectPageSubSection>
+						<l:Grid width="100%" defaultSpan="XL6 L6 M6 S12">
+							<VBox>
+								<Label required="{= ${objectView>EventAttractionTypeId} !== 2 }" text="{i18n>LblCoordinates}" />
+								<HBox>
+								<Input width="100%" description="{i18n>TxtLatitude}" value="{objectView>Latitude}" showValueHelp="true" valueHelpRequest="onMap"/>
+								<Input width="100%" description="{i18n>TxtLongitude}" value="{objectView>Longitude}" showValueHelp="true" valueHelpRequest="onMap"/>
+								</HBox>
+							</VBox>
+							<VBox visible="{appView>/EvtTypeConfig/Building}" >
+								<Label text="{i18n>LblBuildingName}" />
+								<ComboBox change="onComboBoxChange" items="{/BuildingSet}" selectedKey="{objectView>BuildingId}">
+									<core:Item key="{Id}" text="{BuildingName}"/>
+								</ComboBox>
+							</VBox>
+							<VBox>
+								<HBox renderType="Bare" >
+										<Label text="{i18n>LblUploadPlan}" />
+										<core:Icon class="sapUiTinyMarginBegin" src="sap-icon://message-information" tooltip="{i18n>TxtFileSizeLimit}" />
+								</HBox>
+							
+								<HBox width="100%" visible="{= ${objectView>/oPlan} === null ? false:true }">
+										<Link text="{objectView>/oPlan/FileName}" press="onLnkPlan"/>
+										<Button press="onDeletePlan" icon="sap-icon://delete" type="Transparent"/>
+								</HBox>
+								<u:FileUploader visible="{= ${objectView>/oPlan} === null ? true:false }" maximumFileSize="2" fileAllowed="onUpload"
+										tooltip="{i18n>TtpUploadyourfile}"/>
+							</VBox>
+							<VBox>
+								<Label text="{i18n>LblUploadImages}" />
+								<List delete="onDelete"
+										items="{ path : 'objectView>/oImages' , templateShareable:true, filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false } ]}"
+										noDataText="{i18n>TxtNoFileUpload}" mode="Delete">
+										<headerToolbar>
+											<Toolbar>
+												<ToolbarSpacer/>
+												<u:FileUploader maximumFileSize="2" fileAllowed="onUpload" tooltip="Upload your file" buttonOnly="true" buttonText="{i18n>btnAdd}"/>
+											</Toolbar>
+										</headerToolbar>
+										<!--										<StandardListItem title="{objectView>FileName}" icon="{  parts :  [{ path: 'objectView>__metadata' }, { path: 'objectView>Image' } ], formatter : '.formatter.giveImage'      }"
+											iconDensityAware="false" iconInset="false"/>-->
+										<CustomListItem >
+											<FlexBox alignItems="Start" justifyContent="SpaceBetween">
+												<HBox>
+													<Image height="5rem" width="5rem"
+														src="{ parts : [{ path: 'objectView>__metadata' }, { path: 'objectView>Image' } ], formatter : '.formatter.giveImage' }"/>
+													<Text class="sapUiTinyMargin" text="{objectView>FileName}"/>
+												</HBox>
+												<RadioButton text="{i18n>TxtCoverImage}" groupName="g1" selected="{objectView>IsCoverImage}"/>
+											</FlexBox>
+										</CustomListItem>
+									</List>
+							</VBox>
+						</l:Grid>
+						</uxap:ObjectPageSubSection>
+						</uxap:subSections>
+				</uxap:ObjectPageSection>
+		</uxap:sections>
+		<uxap:footer>
+			<Toolbar>
+				<ToolbarSpacer/>
+				<Button text="{i18n>btnCancel}" press="onCancel"/>
+				<Button text="{i18n>btnSave}" type="Emphasized" press="onSave"/>
+			</Toolbar>
+		</uxap:footer>
+	</uxap:ObjectPageLayout>
+</mvc:View>

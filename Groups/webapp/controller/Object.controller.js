@@ -9,7 +9,7 @@ sap.ui.define([
 ], function (BaseController, JSONModel, formatter, Filter, FilterOperator, Fragment, syncStyleClass) {
 	"use strict";
 
-	return BaseController.extend("com.coil.podium.Groups.controller.Object", {
+	return BaseController.extend("com.coil.podway.Groups.controller.Object", {
 
 		formatter: formatter,
 

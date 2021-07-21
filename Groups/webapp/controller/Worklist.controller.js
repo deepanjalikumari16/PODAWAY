@@ -7,7 +7,7 @@ sap.ui.define([
 ], function (BaseController, JSONModel, formatter, Filter, FilterOperator) {
 	"use strict";
 
-	return BaseController.extend("com.coil.podium.Groups.controller.Worklist", {
+	return BaseController.extend("com.coil.podway.Groups.controller.Worklist", {
 
 		formatter: formatter,
 

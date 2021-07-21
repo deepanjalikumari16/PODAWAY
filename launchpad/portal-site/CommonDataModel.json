@@ -29,23 +29,7 @@
 				"i18n": "i18n/defaultGroupId.properties"
 			},
 			"payload": {
-				"viz": [{
-					"id": "com.coil.podium.MAACDE-0-1597672368722",
-					"appId": "com.coil.podium.MAACDE",
-					"vizId": "Manage-Device"
-				}, {
-					"id": "com.coil.podium.MAACDE-1-1597672368722",
-					"appId": "com.coil.podium.MAACDE",
-					"vizId": "Manage-Place"
-				}, {
-					"id": "com.coil.podium.MAACDE-2-1597672368722",
-					"appId": "com.coil.podium.MAACDE",
-					"vizId": "Manage-Condition"
-				}, {
-					"id": "com.coil.podium.MAFA-3-1597842948147",
-					"appId": "com.coil.podium.MAFA",
-					"vizId": "Manage-Facility"
-				}]
+				"viz": []
 			}
 		}],
 		"sites": [{

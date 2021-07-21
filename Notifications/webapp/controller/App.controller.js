@@ -4,7 +4,7 @@ sap.ui.define([
 ], function (BaseController, JSONModel) {
 	"use strict";
 
-	return BaseController.extend("com.coil.podium.Notifications.controller.App", {
+	return BaseController.extend("com.coil.podway.Notifications.controller.App", {
 
 		onInit : function () {
 			var oViewModel,

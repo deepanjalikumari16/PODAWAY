@@ -1,217 +1,225 @@
-ID: podium
-_schema-version: '2.1'
+ID: podway
+_schema-version: '3.1'
 parameters:
-  deploy_mode: html5-repo
+  enable-parallel-deployments: true
 version: 0.0.1
 modules:
-  - name: podium-approuter
+  - name: podway-web-approuter
     type: approuter.nodejs
-    path: podium-approuter
+    path: podway-approuter
+    properties:
+      TENANT_HOST_PATTERN: ^(.*)-podway-web-router.${default-domain}
     parameters:
       disk-quota: 256M
       memory: 256M
+      routes:
+       - route: uat-podway-web-router.${default-domain}
     requires:
-      - name: staging-podium-uaa
-      - name: podium_html5_repo_runtime
-      - name: portal_resources_podium
+      - name: staging-podway-uaa
+      - name: podway_html5_repo_runtime
+      - name: portal_resources_podway
         group: destinations
         properties:
-          name: EXPO_PODIUM_API
-          url: 'https://staging-podium.cfapps.ap11.hana.ondemand.com/'
+          name: EXPO_PODWAY_API
+          url: 'https://uat-podway-api.cfapps.eu10.hana.ondemand.com/'
           forwardAuthToken: true
-  - name: podium_ui_deployer
-    type: com.sap.html5.application-content
-    path: podium_ui_deployer
+  - name: podway_ui_deployer
+    type: com.sap.application.content
+    path: .
     requires:
-      - name: podium_html5_repo_host
+      - name: podway_html5_repo_host
+        parameters:
+           content-target: true
     build-parameters:
+      build-result: resources
       requires:
         - name: MAACDE
           artifacts:
-            - './*'
-          target-path: resources/MAACDE
+            - MAACDE-content.zip
+          target-path: resources/
         - name: Manage_FAQ
           artifacts:
-            - './*'
-          target-path: resources/Manage_FAQ
+            - Manage_FAQ-content.zip
+          target-path: resources/
         - name: MAFA
           artifacts:
-            - './*'
-          target-path: resources/MAFA          
+            -  MAFA-content.zip
+          target-path: resources/          
         - name: Assignment_List
           artifacts:
-            - './*'
-          target-path: resources/Assignment_List          
+            - Assignment_List-content.zip
+          target-path: resources/          
         - name: MAAD
           artifacts:
-            - './*'
-          target-path: resources/MAAD          
+            - MAAD-content.zip
+          target-path: resources/          
         - name: Manage_Event_Info
           artifacts:
-            - './*'
-          target-path: resources/Manage_Event_Info          
+            - Manage_Event_Info-content.zip
+          target-path: resources/          
         - name: MAVET
           artifacts:
-            - './*'
-          target-path: resources/MAVET          
+            - MAVET-content.zip
+          target-path: resources/          
         - name: ManageVisitor
           artifacts:
-            - './*'
-          target-path: resources/ManageVisitor          
+            - ManageVisitor-content.zip
+          target-path: resources/          
         - name: Dashboard
           artifacts:
-            - './*'
-          target-path: resources/Dashboard          
+            - Dashboard-content.zip
+          target-path: resources/          
         - name: VisitorJourney
           artifacts:
-            - './*'
-          target-path: resources/VisitorJourney          
+            - VisitorJourney-content.zip
+          target-path: resources/          
         - name: MDM_Data
           artifacts:
-            - './*'
-          target-path: resources/MDM_Data          
+            - MDM_Data-content.zip
+          target-path: resources/          
   - name: MAACDE
     type: html5
     path: MAACDE
     build-parameters:
       builder: custom
       commands:
-        - npm install
-        - npm run build
+       - npm run build
       supported-platforms: []
-      build-result: dist
+
   - name: MAFA
     type: html5
     path: MAFA
     build-parameters:
       builder: custom
       commands:
-        - npm install
-        - npm run build
+       - npm run build
       supported-platforms: []
-      build-result: dist
+
   - name: Manage_FAQ
     type: html5
     path: Manage_FAQ
     build-parameters:
       builder: custom
       commands:
-        - npm install
-        - npm run build
+       - npm run build
       supported-platforms: []
-      build-result: dist      
+
   - name: Assignment_List
     type: html5
     path: Assignment_List
     build-parameters:
       builder: custom
       commands:
-        - npm install
-        - npm run build
+       - npm run build
       supported-platforms: []
-      build-result: dist     
+
   - name: MAAD
     type: html5
     path: MAAD
     build-parameters:
       builder: custom
       commands:
-        - npm install
-        - npm run build
+       - npm run build
       supported-platforms: []
-      build-result: dist      
+  
   - name: Manage_Event_Info
     type: html5
     path: Manage_Event_Info
     build-parameters:
       builder: custom
       commands:
-        - npm install
-        - npm run build
+       - npm run build
       supported-platforms: []
-      build-result: dist      
+    
   - name: MAVET
     type: html5
     path: MAVET
     build-parameters:
       builder: custom
       commands:
-        - npm install
-        - npm run build
+       - npm run build
       supported-platforms: []
-      build-result: dist      
+ 
   - name: ManageVisitor
     type: html5
     path: ManageVisitor
     build-parameters:
       builder: custom
       commands:
-        - npm install
-        - npm run build
+       - npm run build
       supported-platforms: []
-      build-result: dist      
+  
   - name: Dashboard
     type: html5
     path: Dashboard
     build-parameters:
       builder: custom
       commands:
-        - npm install
-        - npm run build
+       - npm run build
       supported-platforms: []
-      build-result: dist      
+
   - name: VisitorJourney
     type: html5
     path: VisitorJourney
     build-parameters:
       builder: custom
       commands:
-        - npm install
-        - npm run build
+       - npm run build
       supported-platforms: []
-      build-result: dist      
+    
   - name: MDM_Data
     type: html5
     path: MDM_Data
     build-parameters:
       builder: custom
       commands:
-        - npm install
-        - npm run build
+       - npm run build
       supported-platforms: []
-      build-result: dist      
+   
   - name: launchpad
-    type: com.sap.portal.content
+    type: com.sap.application.content
     path: launchpad
-    parameters:
-      stack: cflinuxfs3
-      memory: 128M
-      buildpack: 'https://github.com/cloudfoundry/nodejs-buildpack/releases/download/v1.6.39/nodejs-buildpack-cflinuxfs3-v1.6.39.zip'
     requires:
-      - name: portal_resources_podium
-      - name: staging-podium-uaa
-      - name: podium_html5_repo_host
-      - name: podium_ui_deployer
+      - name: portal_resources_podway
+        parameters:
+          content-target: true
+          service-key:
+            config:
+              content-endpoint: developer
+            name: content-deploy-key
+      - name: podway_html5_repo_host
+      - name: staging-podway-uaa
+    parameters:
+      config:
+        TENANT_HOST_PATTERN: ^(.*)-podway-web-router.${default-domain}
+    deployed-after:
+      - podway_ui_deployer
+      
 resources:
-  - name: podium_html5_repo_runtime
+  - name: podway_html5_repo_runtime
     parameters:
       service-plan: app-runtime
       service: html5-apps-repo
     type: org.cloudfoundry.managed-service
-  - name: podium_html5_repo_host
+  - name: podway_html5_repo_host
     parameters:
       service-plan: app-host
       path: ./app-host.json
       service: html5-apps-repo
     type: org.cloudfoundry.managed-service
-  - name: staging-podium-uaa
+  - name: staging-podway-uaa
     parameters:
-      path: ./xs-security.json
       service-plan: application
       service: xsuaa
-    type: org.cloudfoundry.managed-service    
-  - name: portal_resources_podium
+      service-name: uat-podway-uaa
+    type: org.cloudfoundry.existing-service    
+  - name: portal_resources_podway
     parameters:
       service-plan: standard
       service: portal
     type: org.cloudfoundry.managed-service
+build-parameters:
+  before-all:
+  - builder: custom
+    commands:
+    - npm install

@@ -40,9 +40,9 @@
       "path": "/api/v2/odata.svc/",
       "target": {
         "type": "destination",
-        "name": "EXPO_PODIUM_API"
+        "name": "EXPO_PODWAY_API"
       },
-      "description": "Expo PODium API"
+      "description": "Expo PODway API"
     }
   ],
   "welcomeFile": "/webapp/test/flpSandbox.html",

@@ -1,0 +1,110 @@
+{
+    "resources": [
+        {
+            "name": "../../podium/MAACDE/i18n/i18n.properties",
+            "raw": "i18n/i18n.properties"
+        },
+        {
+            "name": "../../podium/MAACDE/manifest.json"
+        },
+        {
+            "name": "../../podium/MAACDE/model/models.js"
+        },
+        {
+            "name": "../../podium/MAACDE/model/formatter.js"
+        },
+        {
+            "name": "../../podium/MAACDE/localService/mockserver.js"
+        },
+        {
+            "name": "../../podium/MAACDE/controller/Worklist.controller.js"
+        },
+        {
+            "name": "../../podium/MAACDE/controller/NotFound.controller.js"
+        },
+        {
+            "name": "../../podium/MAACDE/controller/ErrorHandler.js"
+        },
+        {
+            "name": "../../podium/MAACDE/controller/BaseController.js"
+        },
+        {
+            "name": "../../podium/MAACDE/controller/App.controller.js"
+        },
+        {
+            "name": "../../podium/MAACDE/Component.js"
+        },
+        {
+            "name": "../../podium/MAACDE/manifest-bundle.zip"
+        },
+        {
+            "name": "../../podium/MAACDE/Component-preload.js",
+            "merged": true
+        },
+        {
+            "name": "../../podium/MAACDE/i18n/i18n_ar.properties",
+            "raw": "i18n/i18n.properties",
+            "locale": "_ar"
+        },
+        {
+            "name": "../../podium/MAACDE/model/models-dbg.js",
+            "isDebug": true
+        },
+        {
+            "name": "../../podium/MAACDE/model/formatter-dbg.js",
+            "isDebug": true
+        },
+        {
+            "name": "../../podium/MAACDE/localService/mockserver-dbg.js",
+            "isDebug": true
+        },
+        {
+            "name": "../../podium/MAACDE/controller/Worklist-dbg.controller.js",
+            "isDebug": true
+        },
+        {
+            "name": "../../podium/MAACDE/controller/NotFound-dbg.controller.js",
+            "isDebug": true
+        },
+        {
+            "name": "../../podium/MAACDE/controller/ErrorHandler-dbg.js",
+            "isDebug": true
+        },
+        {
+            "name": "../../podium/MAACDE/controller/BaseController-dbg.js",
+            "isDebug": true
+        },
+        {
+            "name": "../../podium/MAACDE/controller/App-dbg.controller.js",
+            "isDebug": true
+        },
+        {
+            "name": "../../podium/MAACDE/Component-dbg.js",
+            "isDebug": true
+        },
+        {
+            "name": "../../../../sap-ui-version.json"
+        },
+        {
+            "name": "../../podium/MAACDE/view/Worklist.view.xml"
+        },
+        {
+            "name": "../../podium/MAACDE/view/ObjectNotFound.view.xml"
+        },
+        {
+            "name": "../../podium/MAACDE/view/NotFound.view.xml"
+        },
+        {
+            "name": "../../podium/MAACDE/view/App.view.xml"
+        },
+        {
+            "name": "../../podium/MAACDE/localService/metadata.xml"
+        },
+        {
+            "name": "../../podium/MAACDE/dialog/AddOption.fragment.xml"
+        },
+        {
+            "name": "../../podium/MAACDE/css/style.css"
+        }
+    ]
+}

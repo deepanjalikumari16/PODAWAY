@@ -1,6 +1,6 @@
 {
-    "xsappname": "staging-podium-uaa",
-    "description": "XSUAA Service for Podium app",
+    "xsappname": "staging-podway-uaa",
+    "description": "XSUAA Service for Podway app",
     "tenant-mode": "dedicated",
     "scopes": [],
     "role-templates": [

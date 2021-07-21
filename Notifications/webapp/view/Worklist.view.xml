@@ -1,4 +1,4 @@
-<mvc:View controllerName="com.coil.podium.Notifications.controller.Worklist" xmlns:core="sap.ui.core" xmlns="sap.m"
+<mvc:View controllerName="com.coil.podway.Notifications.controller.Worklist" xmlns:core="sap.ui.core" xmlns="sap.m"
 	xmlns:mvc="sap.ui.core.mvc" xmlns:f="sap.f" xmlns:l="sap.ui.layout" xmlns:fb="sap.ui.comp.filterbar">
 	<f:DynamicPage id="page">
 		<f:title>

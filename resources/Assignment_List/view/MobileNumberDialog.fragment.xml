@@ -1,0 +1,7 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+	<Popover title="{PODVisitor/DialCode} {PODVisitor/Mobile}">
+		<!--<List>-->
+		<!--	<StandardListItem title="{PODVisitor/Mobile}" />-->
+		<!--</List>-->
+	</Popover>
+</core:FragmentDefinition>

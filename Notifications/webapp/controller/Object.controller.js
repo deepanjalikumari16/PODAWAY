@@ -6,7 +6,7 @@ sap.ui.define([
 ], function (BaseController, JSONModel, formatter, SeparatorItem) {
 	"use strict";
 
-	return BaseController.extend("com.coil.podium.Notifications.controller.Object", {
+	return BaseController.extend("com.coil.podway.Notifications.controller.Object", {
 
 		formatter: formatter,
 

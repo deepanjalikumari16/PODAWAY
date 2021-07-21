@@ -37,13 +37,13 @@
       "description": "SAPUI5 Test Resources"
     },
     {
-      "path": "/EXPO_PODIUM_API",
+      "path": "/EXPO_PODWAY_API",
       "target": {
       	"entryPath": "/",
         "type": "destination",
-        "name": "EXPO_PODIUM_API"
+        "name": "EXPO_PODWAY_API"
       },
-      "description": "Expo PODium API"
+      "description": "Expo PODway API"
     }
   ],
   "welcomeFile": "/webapp/test/flpSandbox.html",

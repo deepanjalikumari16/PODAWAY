@@ -1,0 +1,17 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:f="sap.ui.layout.form">
+	<Dialog id="messageDialog" title="{i18n>email}">
+		<VBox class="sapUiSmallMargin">
+			<f:SimpleForm id="SimpleFormDisplay356" editable="true" layout="ResponsiveGridLayout" labelSpanXL="3" labelSpanL="3" labelSpanM="3"
+				labelSpanS="12" adjustLabelSpan="false" emptySpanXL="4" emptySpanL="4" emptySpanM="4" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1"
+				singleContainerFullSize="false">
+				<f:content>
+					<TextArea id="mymessagearea" value="{worklistView>/message}" rows="8" maxLength="500" showExceededText="true"/>
+				</f:content>
+			</f:SimpleForm>
+		</VBox>
+		<buttons>
+			<Button text="{i18n>send}" press=".send"/>
+			<Button text="{i18n>cancel}" press=".closeMessageDialog"/>
+		</buttons>
+	</Dialog>
+</core:FragmentDefinition>
