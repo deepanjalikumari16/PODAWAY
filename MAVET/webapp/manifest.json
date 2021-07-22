@@ -1,7 +1,7 @@
 {
 	"_version": "1.12.0",
 	"sap.app": {
-		"id": "com.coil.podway.MAEVAT",
+		"id": "com.coil.podway.MAVET",
 		"type": "application",
 		"i18n": "i18n/i18n.properties",
 		"title": "{{appTitle}}",
@@ -66,7 +66,7 @@
 	},
 	"sap.ui5": {
 		"rootView": {
-			"viewName": "com.coil.podway.MAEVAT.view.App",
+			"viewName": "com.coil.podway.MAVET.view.App",
 			"type": "XML",
 			"async": true,
 			"id": "app"
@@ -88,7 +88,7 @@
 			"i18n": {
 				"type": "sap.ui.model.resource.ResourceModel",
 				"settings": {
-					"bundleName": "com.coil.podway.MAEVAT.i18n.i18n"
+					"bundleName": "com.coil.podway.MAVET.i18n.i18n"
 				}
 			},
 			"": {
@@ -112,7 +112,7 @@
 			"config": {
 				"routerClass": "sap.m.routing.Router",
 				"viewType": "XML",
-				"viewPath": "com.coil.podway.MAEVAT.view",
+				"viewPath": "com.coil.podway.MAVET.view",
 				"controlId": "app",
 				"controlAggregation": "pages",
 				"bypassed": {

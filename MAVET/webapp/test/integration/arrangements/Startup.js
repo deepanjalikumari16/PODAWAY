@@ -1,14 +1,14 @@
 sap.ui.define([
 	"sap/ui/test/Opa5",
-	"com/coil/podium/MAEVAT/localService/mockserver",
+	"com/coil/podium/MAVET/localService/mockserver",
 	"sap/ui/model/odata/v2/ODataModel",
 	"sap/ui/core/routing/HashChanger",
-	"com/coil/podium/MAEVAT/test/flpSandbox",
+	"com/coil/podium/MAVET/test/flpSandbox",
 	"sap/ui/fl/FakeLrepConnectorLocalStorage"
 ], function(Opa5, mockserver, ODataModel, HashChanger, flpSandbox, FakeLrepConnectorLocalStorage) {
 	"use strict";
 
-	return Opa5.extend("com.coil.podium.MAEVAT.test.integration.arrangements.Startup", {
+	return Opa5.extend("com.coil.podium.MAVET.test.integration.arrangements.Startup", {
 
 		/**
 		 * Initializes mock server and flp sandbox, then sets the hash intent to simulate pressing on the app tile

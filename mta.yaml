@@ -76,7 +76,15 @@ modules:
         - name: MDM_Data
           artifacts:
             - MDM_Data-content.zip
-          target-path: resources/          
+          target-path: resources/     
+        - name: Groups
+          artifacts:
+            - Groups-content.zip
+          target-path: resources/
+        - name: Notifications
+          artifacts:
+            - Notifications-content.zip
+          target-path: resources/       
   - name: MAACDE
     type: html5
     path: MAACDE
@@ -175,7 +183,25 @@ modules:
       commands:
        - npm run build
       supported-platforms: []
-   
+
+  - name: Groups
+    type: html5
+    path: Groups
+    build-parameters:
+      builder: custom
+      commands:
+       - npm run build
+      supported-platforms: []
+
+  - name: Notifications
+    type: html5
+    path: Notifications
+    build-parameters:
+      builder: custom
+      commands:
+       - npm run build
+      supported-platforms: []
+
   - name: launchpad
     type: com.sap.application.content
     path: launchpad

@@ -6,9 +6,9 @@ mta.yaml
 */node_modules/
 */dist/
 
-**/resources/
+/resources/
+*/resources/
 
 *.sh
 
 *.zip
-

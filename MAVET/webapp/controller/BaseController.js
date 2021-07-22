@@ -10,7 +10,7 @@ sap.ui.define([
 	// shortcut for sap.m.URLHelper
 	var URLHelper = mobileLibrary.URLHelper;
 
-	return Controller.extend("com.coil.podway.MAEVAT.controller.BaseController", {
+	return Controller.extend("com.coil.podway.MAVET.controller.BaseController", {
 		/**
 		 * Convenience method for accessing the router.
 		 * @public

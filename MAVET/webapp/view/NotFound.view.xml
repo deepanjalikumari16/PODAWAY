@@ -1,5 +1,5 @@
 <mvc:View
-	controllerName="com.coil.podway.MAEVAT.controller.NotFound"
+	controllerName="com.coil.podway.MAVET.controller.NotFound"
 	xmlns="sap.m"
 	xmlns:mvc="sap.ui.core.mvc">
 

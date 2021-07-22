@@ -1,1 +1,0 @@
-sap.ui.define([],function(){"use strict";return{numberUnit:function(e){if(!e){return""}return parseFloat(e).toFixed(2)},giveOnlyBoolean:function(e){return!!e},giveImage:function(e,n){if(e&&e.media_src&&!n){var r=new URL(e.media_src).pathname;return"/EXPO_PODWAY_API".concat(r)}if(n)return URL.createObjectURL(n.Image)}}});

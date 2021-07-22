@@ -5,7 +5,7 @@ sap.ui.getCore().attachInit(function () {
 	"use strict";
 
 	sap.ui.require([
-		"com/coil/podium/MAEVAT/test/unit/AllTests"
+		"com/coil/podium/MAVET/test/unit/AllTests"
 	], function () {
 		QUnit.start();
 	});

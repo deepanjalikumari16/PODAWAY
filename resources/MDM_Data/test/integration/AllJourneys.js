@@ -1,1 +1,0 @@
-sap.ui.define(["sap/ui/test/Opa5","./arrangements/FLP","./WorklistJourney","./NavigationJourney","./NotFoundJourney","./ObjectJourney","./FLPIntegrationJourney"],function(e,n){"use strict";e.extendConfig({arrangements:new n,assertions:new n,viewNamespace:"com.coil.podium.MDM_Data.view.",autoWait:true})});

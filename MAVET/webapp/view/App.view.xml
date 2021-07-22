@@ -1,5 +1,5 @@
 <mvc:View
-	controllerName="com.coil.podway.MAEVAT.controller.App"
+	controllerName="com.coil.podway.MAVET.controller.App"
 	displayBlock="true"
 	xmlns="sap.m"
 	xmlns:mvc="sap.ui.core.mvc">

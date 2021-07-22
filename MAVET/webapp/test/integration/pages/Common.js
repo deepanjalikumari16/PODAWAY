@@ -3,7 +3,7 @@ sap.ui.define([
 ], function(Opa5) {
 	"use strict";
 
-	return Opa5.extend("com.coil.podium.MAEVAT.test.integration.pages.Common", {
+	return Opa5.extend("com.coil.podium.MAVET.test.integration.pages.Common", {
 
 		createAWaitForAnEntitySet : function  (oOptions) {
 			return {
@@ -26,7 +26,7 @@ sap.ui.define([
 
 		getMockServer : function () {
 			return new Promise(function (success) {
-				Opa5.getWindow().sap.ui.require(["com/coil/podium/MAEVAT/localService/mockserver"], function (mockserver) {
+				Opa5.getWindow().sap.ui.require(["com/coil/podium/MAVET/localService/mockserver"], function (mockserver) {
 					success(mockserver.getMockServer());
 				});
 			});

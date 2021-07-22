@@ -8,7 +8,7 @@ sap.ui.define([
 ], function (BaseController, JSONModel, formatter, Filter, FilterOperator, Fragment) {
 	"use strict";
 
-	return BaseController.extend("com.coil.podway.MAEVAT.controller.Worklist", {
+	return BaseController.extend("com.coil.podway.MAVET.controller.Worklist", {
 
 		formatter: formatter,
 
@@ -119,7 +119,7 @@ sap.ui.define([
 				// load asynchronous XML fragment
 				Fragment.load({
 					id: oView.getId(),
-					name: "com.coil.podway.MAEVAT.dialog.Images",
+					name: "com.coil.podway.MAVET.dialog.Images",
 					controller: that
 				}).then(function (oDialog) {
 					that._oDlgAddOption = oDialog;

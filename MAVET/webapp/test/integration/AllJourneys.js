@@ -13,7 +13,7 @@ sap.ui.define([
 	Opa5.extendConfig({
 		arrangements: new Startup(),
 		assertions: new FLP(),
-		viewNamespace: "com.coil.podium.MAEVAT.view.",
+		viewNamespace: "com.coil.podium.MAVET.view.",
 		autoWait: true
 	});
 

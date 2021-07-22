@@ -1,7 +1,7 @@
 /*global QUnit*/
 
 sap.ui.define([
-	"com/coil/podium/MAEVAT/model/formatter"
+	"com/coil/podium/MAVET/model/formatter"
 ], function (formatter) {
 	"use strict";
 

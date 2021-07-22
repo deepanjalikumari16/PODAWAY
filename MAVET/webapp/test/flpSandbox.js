@@ -61,8 +61,8 @@ sap.ui.define([
 								},
 								"resolutionResult": {
 									"applicationType": "SAPUI5",
-									"additionalInformation": "SAPUI5.Component=com.coil.podium.MAEVAT",
-									"url": sap.ui.require.toUrl("com/coil/podium/MAEVAT")
+									"additionalInformation": "SAPUI5.Component=com.coil.podium.MAVET",
+									"url": sap.ui.require.toUrl("com/coil/podium/MAVET")
 								}
 							}
 						}

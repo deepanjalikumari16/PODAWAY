@@ -1,7 +1,7 @@
 /*global QUnit*/
 
 sap.ui.define([
-	"com/coil/podium/MAEVAT/model/models",
+	"com/coil/podium/MAVET/model/models",
 	"sap/ui/Device"
 ], function (models, Device) {
 	"use strict";

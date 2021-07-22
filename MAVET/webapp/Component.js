@@ -6,7 +6,7 @@ sap.ui.define([
 ], function (UIComponent, Device, models, ErrorHandler) {
 	"use strict";
 
-	return UIComponent.extend("com.coil.podway.MAEVAT.Component", {
+	return UIComponent.extend("com.coil.podway.MAVET.Component", {
 
 		metadata : {
 			manifest: "json"

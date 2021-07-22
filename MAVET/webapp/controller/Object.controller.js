@@ -8,7 +8,7 @@ sap.ui.define([
 ], function (BaseController, JSONModel, formatter, Fragment, Filter, FilterOperator) {
 	"use strict";
 
-	return BaseController.extend("com.coil.podway.MAEVAT.controller.Object", {
+	return BaseController.extend("com.coil.podway.MAVET.controller.Object", {
 
 		formatter: formatter,
 
@@ -109,7 +109,7 @@ sap.ui.define([
 			Fragment.load({
 				id: that.getView().getId(),
 				type: "HTML",
-				name: "com.coil.podway.MAEVAT.dialog.HEREMaps",
+				name: "com.coil.podway.MAVET.dialog.HEREMaps",
 				controller: that
 			}).then(function (oDialog) {
 
@@ -818,10 +818,10 @@ sap.ui.define([
 
 			this.getModel("appView").setProperty("/bHEREMapsLibLoaded", true);
 
-			jQuery.sap.require("com.coil.podway.MAEVAT.libs.mapsjs-core");
-			jQuery.sap.require("com.coil.podway.MAEVAT.libs.mapsjs-service");
-			jQuery.sap.require("com.coil.podway.MAEVAT.libs.mapsjs-ui");
-			jQuery.sap.require("com.coil.podway.MAEVAT.libs.mapsjs-mapevents");
+			jQuery.sap.require("com.coil.podway.MAVET.libs.mapsjs-core");
+			jQuery.sap.require("com.coil.podway.MAVET.libs.mapsjs-service");
+			jQuery.sap.require("com.coil.podway.MAVET.libs.mapsjs-ui");
+			jQuery.sap.require("com.coil.podway.MAVET.libs.mapsjs-mapevents");
 
 		}
 

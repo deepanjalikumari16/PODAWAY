@@ -1,1 +1,0 @@
-sap.ui.define([],function(){"use strict";return{numberUnit:function(n){if(!n){return""}return parseFloat(n).toFixed(2)},EmergencyNumber:function(n,e){if(!n||!e||e.length==0){return""}return n.concat(e)},giveImage:function(n,e){if(n){var t=new URL(n.media_src).pathname;return"/EXPO_PODWAY_API".concat(t)}return"data:image/png;base64,".concat(e)}}});

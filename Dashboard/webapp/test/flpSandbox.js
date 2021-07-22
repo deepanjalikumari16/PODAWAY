@@ -61,8 +61,8 @@ sap.ui.define([
 								},
 								"resolutionResult": {
 									"applicationType": "SAPUI5",
-									"additionalInformation": "SAPUI5.Component=com.coil.podium.Dashboard",
-									"url": sap.ui.require.toUrl("com/coil/podium/Dashboard")
+									"additionalInformation": "SAPUI5.Component=com.coil.podway.Dashboard",
+									"url": sap.ui.require.toUrl("com/coil/podway/Dashboard")
 								}
 							}
 						}
