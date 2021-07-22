@@ -5,6 +5,8 @@
 		"logoutEndpoint": "/do/logout"
 	},
 	"routes": [{
+           "authenticationType": "xsuaa",
+            "csrfProtection": false,
 			"source": "^/EXPO_PODWAY_API/(.*)$",
 			"target": "$1",
 			"destination": "EXPO_PODWAY_API"

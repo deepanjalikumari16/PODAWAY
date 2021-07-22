@@ -7,7 +7,7 @@ sap.ui.define([
 	"use strict";
 
 	var oMockServer,
-		_sAppPath = "com/coil/podium/Manage_Event_Info/",
+		_sAppPath = "com/coil/podway/Manage_Event_Info/",
 		_sJsonFilesPath = _sAppPath + "localService/mockdata";
 
 	var oMockServerInterface = {

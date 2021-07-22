@@ -1,6 +1,6 @@
 specVersion: '1.0'
 metadata:
-  name: MAEVAT
+  name: MAVET
 type: application
 resources:
   configuration:

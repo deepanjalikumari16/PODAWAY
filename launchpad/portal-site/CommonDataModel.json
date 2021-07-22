@@ -14,10 +14,7 @@
 				"i18n": "i18n/defaultCatalogId.properties"
 			},
 			"payload": {
-				"viz": [{
-					"id": "com.coil.podium.Plugin",
-					"vizId": "Shell-plugin"
-				}]
+				"viz": []
 			}
 		}],
 		"groups": [{

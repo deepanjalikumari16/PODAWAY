@@ -1,4 +1,4 @@
-<mvc:View controllerName="com.coil.podium.MAEVAT.controller.Worklist"  xmlns:fb="sap.ui.comp.filterbar" xmlns:core="sap.ui.core" 	xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc"	xmlns:f="sap.f"	>
+<mvc:View controllerName="com.coil.podway.MAEVAT.controller.Worklist"  xmlns:fb="sap.ui.comp.filterbar" xmlns:core="sap.ui.core" 	xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc"	xmlns:f="sap.f"	>
 <f:DynamicPage>
 	<f:title>
 			<f:DynamicPageTitle>

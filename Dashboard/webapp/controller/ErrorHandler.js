@@ -11,7 +11,7 @@ sap.ui.define([
 		 * @class
 		 * @param {sap.ui.core.UIComponent} oComponent reference to the app's component
 		 * @public
-		 * @alias com.coil.podium.Dashboard.controller.ErrorHandler
+		 * @alias com.coil.podway.Dashboard.controller.ErrorHandler
 		 */
 		constructor : function (oComponent) {
 			this._oResourceBundle = oComponent.getModel("i18n").getResourceBundle();

@@ -33,7 +33,7 @@
                     }
                 }
             },
-            applications : {"fioriHtmlBuilder-display":{"additionalInformation":"SAPUI5.Component=com.coil.podium.Dashboard","applicationType":"URL","url":"/webapp/"}}
+            applications : {"fioriHtmlBuilder-display":{"additionalInformation":"SAPUI5.Component=com.coil.podway.Dashboard","applicationType":"URL","url":"/webapp/"}}
         };
     </script>
 
@@ -41,7 +41,7 @@
 
     <!-- Bootstrap the UI5 core library -->
     <!--data-sap-ui-resourceroots='{"projectNameResRoot": "../"}'-->
-    <script id="sap-ui-bootstrap" src="../resources/sap-ui-core.js" data-sap-ui-libs="sap.m, sap.ushell, sap.collaboration" data-sap-ui-theme="sap_belize" data-sap-ui-compatversion="edge" data-sap-ui-resourceroots="{&quot;com.coil.podium.Dashboard&quot;: &quot;./&quot;}" data-sap-ui-frameoptions="allow"> // NON-SECURE setting for testing environment
+    <script id="sap-ui-bootstrap" src="../resources/sap-ui-core.js" data-sap-ui-libs="sap.m, sap.ushell, sap.collaboration" data-sap-ui-theme="sap_belize" data-sap-ui-compatversion="edge" data-sap-ui-resourceroots="{&quot;com.coil.podway.Dashboard&quot;: &quot;./&quot;}" data-sap-ui-frameoptions="allow"> // NON-SECURE setting for testing environment
     </script>
 	
 <script>
@@ -52,9 +52,9 @@ bRunWithMock = false;
 }
 if (bRunWithMock) {
 jQuery.sap.require('sap.ui.core.util.MockServer');
-var uri = '/EXPO_PODIUM_API/api/v2/odata.svc/';
+var uri = '/EXPO_PODWAY_API/api/v2/odata.svc/';
 var oMock = new sap.ui.core.util.MockServer({rootUri : uri});
-var _sAppModulePath = "com.coil.podium.Dashboard/";
+var _sAppModulePath = "com.coil.podway.Dashboard/";
 var sMetadataPath = "localService/metadata.xml";
 var sMetadataUrl = jQuery.sap.getModulePath(_sAppModulePath) + "/" + sMetadataPath;
 oMock.simulate(sMetadataUrl);

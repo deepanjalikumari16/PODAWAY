@@ -6,7 +6,7 @@ sap.ui.define([
 ], function (UIComponent, Device, models, ErrorHandler) {
 	"use strict";
 
-	return UIComponent.extend("com.coil.podium.Manage_FAQ.Component", {
+	return UIComponent.extend("com.coil.podway.Manage_FAQ.Component", {
 
 		metadata : {
 			manifest: "json"

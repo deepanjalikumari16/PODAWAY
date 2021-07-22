@@ -34,7 +34,7 @@ sap.ui.define([
 			if(oMetadata)
 			{   
 				var sPathname = new URL(oMetadata.media_src).pathname
-				return ("/EXPO_PODIUM_API").concat(sPathname) ;
+				return ("/EXPO_PODWAY_API").concat(sPathname) ;
 			}
 			return ("data:image/png;base64,").concat(ImageData);
 		},

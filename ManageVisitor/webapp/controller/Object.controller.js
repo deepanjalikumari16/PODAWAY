@@ -255,7 +255,7 @@ sap.ui.define([
 						this.addHistoryEntry({
 							title: this.getResourceBundle().getText("objectTitle") + " - " + sObjectName,
 							icon: "sap-icon://enter-more",
-							intent: "#PODiumVisitorManagement-display&/UserSet/" + sObjectId
+							intent: "#PODwayVisitorManagement-display&/UserSet/" + sObjectId
 						});
 
 						oViewModel.setProperty("/saveAsTileTitle", oResourceBundle.getText("saveAsTileTitle", [sObjectName]));

@@ -8,7 +8,7 @@ sap.ui.define([
 ], function (Component, Button, Bar, MessageToast, Fragment, models) {
 	"use strict";
 
-	return Component.extend("com.coil.podium.Plugin.Component", {
+	return Component.extend("com.coil.podway.Plugin.Component", {
 
 		metadata: {
 			manifest: "json"
@@ -90,7 +90,7 @@ sap.ui.define([
 			var oButton = oEvent.getSource();
 			if (!this._oPopover) {
 				Fragment.load({
-					name: "com.coil.podium.Plugin.Notifications",
+					name: "com.coil.podway.Plugin.Notifications",
 					controller: this
 				}).then(function (oPopover) {
 					this._oPopover = oPopover;

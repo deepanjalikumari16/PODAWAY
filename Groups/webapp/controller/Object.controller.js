@@ -322,7 +322,7 @@ sap.ui.define([
 		addMember: function (oEvent) {
 			if (!this._oDialog) {
 				Fragment.load({
-					name: "com.coil.podium.Groups.view.SelectMemberDialog",
+					name: "com.coil.podway.Groups.view.SelectMemberDialog",
 					controller: this
 				}).then(function (oDialog) {
 					this._oDialog = oDialog;

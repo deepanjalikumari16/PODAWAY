@@ -54,7 +54,7 @@ sap.ui.define([
 			this.addHistoryEntry({
 				title: this.getResourceBundle().getText("worklistViewTitle"),
 				icon: "sap-icon://table-view",
-				intent: "#PODiumVisitorManagement-display"
+				intent: "#PODwayVisitorManagement-display"
 			}, true);
 
 			this.getRouter().getRoute("worklist").attachPatternMatched(this._onHomeMatched, this);

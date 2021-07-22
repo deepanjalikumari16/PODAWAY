@@ -309,7 +309,7 @@ sap.ui.define([
 				// load asynchronous XML fragment
 				Fragment.load({
 					id: oView.getId(),
-					name: "com.coil.podium.MDM_Data.dialog.Service",
+					name: "com.coil.podway.MDM_Data.dialog.Service",
 					controller: this
 				}).then(function (oDialog) {
 					// connect dialog to the root view of this component (models, lifecycle)
