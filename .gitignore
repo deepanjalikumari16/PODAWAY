@@ -5,6 +5,10 @@ mta.yaml
 /node_modules/
 */node_modules/
 */dist/
-*/resources/
+
+**/resources/
 
 *.sh
+
+*.zip
+
