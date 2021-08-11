@@ -52,7 +52,7 @@ sap.ui.define([
 					"config": {
 						"inbounds": {
 							"ManageAccessibilityDevices-display": {
-								"semanticObject": "ManageAccessibilityDevices",
+								"semanticObject": "Manage",
 								"action": "display",
 								"description": "Manage Accessibility Devices for admin",
 								"title": "Manage Accessibility Devices",
@@ -60,9 +60,12 @@ sap.ui.define([
 									"parameters": {}
 								},
 								"resolutionResult": {
-									"applicationType": "SAPUI5",
-									"additionalInformation": "SAPUI5.Component=com.coil.podium.MAACDE",
-									"url": sap.ui.require.toUrl("com/coil/podium/MAACDE")
+                                    "applicationType": "SAPUI5",
+                                    // "additionalInformation": "SAPUI5.Component=com.coil.podium.MAACDE",
+									// "url": sap.ui.require.toUrl("com/coil/podium/MAACDE")
+									"additionalInformation": "SAPUI5.Component=com.coil.podway.MAACDE",
+                                    "url": sap.ui.require.toUrl("com/coil/podway/MAACDE")
+                                    
 								}
 							}
 						}

@@ -14,33 +14,24 @@
 					</l:titleLink>
 					<FlexBox alignItems="Center" height="90%" justifyContent="SpaceAround">
 						<items>
-							<!-- height="10px" width="10px" -->
-							<VBox class="sapUiTinyMarginEnd">
+                            <FlexBox direction="Column" alignItems="Start">
 								<HBox renderType="Bare">
 									<Image class="wheelchair" src="{dashboard>/logo}"/>
 									<Text class="large-font" text="{dashboard>/iTotalPOD}"/>
 								</HBox>
 								<Label class="pod-user-text" text="{i18n>TxtTotalPODUsers}"/>
-							</VBox>
-							<VBox class="sapUiTinyMarginEnd">
-								<!--<HBox renderType="Bare">-->
-								<!--<Image class="wheelchair" src="{dashboard>/logo}"/>-->
-								<Text class="large-font" text="{dashboard>/iTotalPODActive}"/>
-								<!--</HBox>-->
+							</FlexBox>
+                            <FlexBox direction="Column" alignItems="Start">
+								<HBox renderType="Bare">
+									<Text class="large-font" text="{dashboard>/iTotalPODActive}"/>
+								</HBox>
 								<Label class="pod-user-text " text="{i18n>TtlTotalPODActiveUsers}"/>
-							</VBox>
-							<VBox>
-								<Button icon="sap-icon://bar-chart" press=".onOpenPODCategoriesDialog" class="sapUiSmallMarginBottom"/>
-								<!--	<Button id="BadgedButton" text="{ path : 'dashboard>/iNotificationCount' }" icon="sap-icon://bell" press="handleNotificationPopoverPress"/>-->
-								<!--<customData>-->
-								<!--	<BadgeCustomData key="badge" value="" visible=""/>-->
-								<!--</customData>-->
-							</VBox>
-							<!--<micro:ColumnMicroChart class="chartScroll" width="100%" size="L" columns="{dashboard>/PODByCatrgory}" allowColumnLabels="true">
-								<micro:columns>
-									<micro:ColumnMicroChartData value="{dashboard>Total}" label="{dashboard>Name}"/>
-								</micro:columns>
-							</micro:ColumnMicroChart>-->
+							</FlexBox>
+                            <FlexBox direction="Column" alignItems="Start">
+								<HBox renderType="Bare">
+									<Button icon="sap-icon://bar-chart" press=".onOpenPODCategoriesDialog" class="sapUiSmallMarginBottom"/>
+								</HBox>
+							</FlexBox>
 						</items>
 					</FlexBox>
 				</l:BlockLayoutCell>
@@ -98,8 +89,8 @@
 						</FlexBox>
 						<FlexBox fitContainer="true" alignItems="Start" justifyContent="SpaceBetween" renderType="Bare">
 							<Text wrapping="false" text="{i18n>TxtCompleted}" class="sapUiTinyMarginEnd sapUiTinyMarginTop"/>
-							<ProgressIndicator width="80%" displayValue="{dashboard>/AssignmentStatues/inprogress}"
-								percentValue="{parts : [ {path : 'dashboard>/AssignmentStatues/inprogress' }, { path : 'dashboard>/TotalAssignments' } ], formatter : '.formatter.givePercentValue'}"
+							<ProgressIndicator width="80%" displayValue="{dashboard>/AssignmentStatues/completed}"
+								percentValue="{parts : [ {path : 'dashboard>/AssignmentStatues/completed' }, { path : 'dashboard>/TotalAssignments' } ], formatter : '.formatter.givePercentValue'}"
 								state="Success"/>
 						</FlexBox>
 						<FlexBox fitContainer="true" alignItems="Start" justifyContent="SpaceBetween" renderType="Bare">

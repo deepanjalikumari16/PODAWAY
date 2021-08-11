@@ -23,6 +23,19 @@
 		"sourceTemplate": {
 			"id": "sap.ui.ui5-template-plugin.1worklist",
 			"version": "1.78.1"
+        },
+        	"crossNavigation": {
+			"inbounds": {
+				"intent1": {
+					"signature": {
+						"parameters": {},
+						"additionalParameters": "allowed"
+					},
+					"semanticObject": "Manage",
+					"action": "Assignment",
+					"title": "Assignments"
+				}
+			}
 		}
 	},
 	"sap.ui": {

@@ -12,3 +12,14 @@ mta.yaml
 *.sh
 
 *.zip
+
+# auto generated wildcard
+MAACDE/.env1
+# auto generated wildcard
+MAFA/.env1
+# auto generated wildcard
+MAACDE/.env2
+# auto generated wildcard
+MAACDE/.env3
+# auto generated wildcard
+Dashboard/.env2

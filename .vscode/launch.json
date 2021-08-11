@@ -1,0 +1,145 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "MAFA",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/podway-approuter/node_modules/@sap/html5-repo-mock/index.js",
+      "args": [
+        "--standalone",
+        "/comcoilpodwayMAFA/test.html",
+        "--ui5",
+        "{\"version\":\".\"}"
+      ],
+      "cwd": "${workspaceFolder}/MAFA",
+      "env": {
+        "PORT": "6004",
+        "MOCK_LOOKUP_DIRS": "[\"webapp\"]",
+        "run.config": "{\"handlerId\":\"ui5_run_config_handler_id\",\"runnableId\":\"/home/user/projects/sap_coil_expo_podium/MAFA\"}"
+      },
+      "envFile": "${workspaceFolder}/MAFA/.env1",
+      "preLaunchTask": "Build sap_coil_expo_podium"
+    },
+    {
+      "name": "MAACDE",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/podway-approuter/node_modules/@sap/html5-repo-mock/index.js",
+      "args": [
+        "--standalone",
+        "/comcoilpodwayMAACDE/test.html",
+        "--ui5",
+        "{\"version\":\".\"}"
+      ],
+      "cwd": "${workspaceFolder}/MAACDE",
+      "env": {
+        "PORT": "6004",
+        "MOCK_LOOKUP_DIRS": "[\"webapp\"]",
+        "run.config": "{\"handlerId\":\"ui5_run_config_handler_id\",\"runnableId\":\"/home/user/projects/sap_coil_expo_podium/MAACDE\"}"
+      },
+      "envFile": "${workspaceFolder}/MAACDE/.env1",
+      "preLaunchTask": "Build sap_coil_expo_podium"
+    },
+    // {
+    //   "name": "Run sap_coil_expo_podium-MAACDE",
+    //   "type": "node",
+    //   "request": "launch",
+    //   "program": "${workspaceFolder}/podway-approuter/node_modules/@sap/html5-repo-mock/index.js",
+    //   "args": [
+    //     "--standalone",
+    //     "/comcoilpodwayMAACDE/test.html",
+    //     "--ui5",
+    //     "{\"version\":\"1.90.3\"}"
+    //   ],
+    //   "cwd": "${workspaceFolder}/MAACDE",
+    //   "env": {
+    //     "PORT": "6004",
+    //     "MOCK_LOOKUP_DIRS": "[\"dist\"]",
+    //     "run.config": "{\"handlerId\":\"ui5_run_config_handler_id\",\"runnableId\":\"/home/user/projects/sap_coil_expo_podium/MAACDE\"}"
+    //   },
+    //   "envFile": "${workspaceFolder}/MAACDE/.env1",
+    //   "preLaunchTask": "Build sap_coil_expo_podium"
+    // },
+    // {
+    //   "name": "Run sap_coil_expo_podium-MAFA",
+    //   "type": "node",
+    //   "request": "launch",
+    //   "program": "${workspaceFolder}/podway-approuter/node_modules/@sap/html5-repo-mock/index.js",
+    //   "args": [
+    //     "--standalone",
+    //     "/comcoilpodwayMAFA/test.html",
+    //     "--ui5",
+    //     "{\"version\":\".\"}"
+    //   ],
+    //   "cwd": "${workspaceFolder}/MAFA",
+    //   "env": {
+    //     "PORT": "6004",
+    //     "MOCK_LOOKUP_DIRS": "[\"webapp\"]",
+    //     "run.config": "{\"handlerId\":\"ui5_run_config_handler_id\",\"runnableId\":\"/home/user/projects/sap_coil_expo_podium/MAFA\"}"
+    //   },
+    //   "envFile": "${workspaceFolder}/MAFA/.env1",
+    //   "preLaunchTask": "Build sap_coil_expo_podium"
+    // },
+    // {
+    //   "name": "Run sap_coil_expo_podium-123",
+    //   "type": "node",
+    //   "request": "launch",
+    //   "program": "${workspaceFolder}/podway-approuter/node_modules/@sap/html5-repo-mock/index.js",
+    //   "args": [
+    //     "--standalone",
+    //     "/comcoilpodwayMAACDE/test.html",
+    //     "--ui5",
+    //     "{\"version\":\"1.90.3\"}"
+    //   ],
+    //   "cwd": "${workspaceFolder}/MAACDE",
+    //   "env": {
+    //     "PORT": "6004",
+    //     "MOCK_LOOKUP_DIRS": "[\"dist\"]",
+    //     "run.config": "{\"handlerId\":\"ui5_run_config_handler_id\",\"runnableId\":\"/home/user/projects/sap_coil_expo_podium/MAACDE\"}"
+    //   },
+    //   "envFile": "${workspaceFolder}/MAACDE/.env2",
+    //   "preLaunchTask": "Build sap_coil_expo_podium"
+    // },
+    // {
+    //   "name": "Run sap_coil_expo_podium-234",
+    //   "type": "node",
+    //   "request": "launch",
+    //   "program": "${workspaceFolder}/podway-approuter/node_modules/@sap/html5-repo-mock/index.js",
+    //   "args": [
+    //     "--standalone",
+    //     "/comcoilpodwayMAACDE/test.html",
+    //     "--ui5",
+    //     "{\"version\":\"1.90.3\"}"
+    //   ],
+    //   "cwd": "${workspaceFolder}/MAACDE",
+    //   "env": {
+    //     "PORT": "6004",
+    //     "MOCK_LOOKUP_DIRS": "[\"dist\"]",
+    //     "run.config": "{\"handlerId\":\"ui5_run_config_handler_id\",\"runnableId\":\"/home/user/projects/sap_coil_expo_podium/MAACDE\"}"
+    //   },
+    //   "envFile": "${workspaceFolder}/MAACDE/.env3",
+    //   "preLaunchTask": "Build sap_coil_expo_podium"
+    // },
+    {
+      "name": "Run sap_coil_expo_podium-Dashboard",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/podway-approuter/node_modules/@sap/html5-repo-mock/index.js",
+      "args": [
+        "--standalone",
+        "/comcoilpodwayDashboard/test.html",
+        "--ui5",
+        "{\"version\":\".\"}"
+      ],
+      "cwd": "${workspaceFolder}/Dashboard",
+      "env": {
+        "PORT": "6004",
+        "MOCK_LOOKUP_DIRS": "[\"webapp\"]",
+        "run.config": "{\"handlerId\":\"ui5_run_config_handler_id\",\"runnableId\":\"/home/user/projects/sap_coil_expo_podium/Dashboard\"}"
+      },
+      "envFile": "${workspaceFolder}/Dashboard/.env2",
+      "preLaunchTask": "Build sap_coil_expo_podium"
+    }
+  ]
+}

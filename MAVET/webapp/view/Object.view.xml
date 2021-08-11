@@ -46,21 +46,21 @@
 									<core:Item key="{Id}" text="{Category}"/>
 								</MultiComboBox>
 							</VBox>
-							<VBox visible="{= ${objectView>EventAttractionTypeId} === 1 }" >
+							<VBox visible="{= +${objectView>EventAttractionTypeId} === 1 }" >
 								<Label text="{i18n>LblAccessibilityEquipmentRequired}"/>
 								<MultiComboBox selectedKeys="{objectView>AccessibilityDevices}"
 									items="{ path: '/AccessibilityItemSet', filters : [ { path : 'AccessibilityId' , operator : 'EQ' , value1 : 1 }, { path : 'IsArchived' , operator : 'EQ' , value1 : 'false' } ], parameters : { 'select' : 'Id,Title' } }">
 									<core:Item key="{Id}" text="{Title}"/>
 								</MultiComboBox>
 							</VBox>
-							<VBox visible="{= ${objectView>EventAttractionTypeId} === 1 }" >
+							<VBox visible="{= +${objectView>EventAttractionTypeId} === 1 }" >
 								<Label text="{i18n>LblPlacestoAvoid}"/>
 								<MultiComboBox selectedKeys="{objectView>AvoidablePlaces}"
 									items="{ path: '/AccessibilityItemSet', filters : [ { path : 'AccessibilityId' , operator : 'EQ' , value1 : 3 }, { path : 'IsArchived' , operator : 'EQ' , value1 : 'false' } ], parameters : { 'select' : 'Id,Title' } }">
 									<core:Item key="{Id}" text="{Title}"/>
 								</MultiComboBox>
 							</VBox>
-							<VBox visible="{= ${objectView>EventAttractionTypeId} === 2 }" >
+							<VBox visible="{= +${objectView>EventAttractionTypeId} === 2 }" >
 								<Label text="{i18n>LblReferenceLink}"/>
 								<Input  value="{objectView>ReferenceLink}"  />
 							</VBox>

@@ -1,3 +1,4 @@
+
 sap.ui.define([
 	"sap/base/util/ObjectPath",
 	"sap/ushell/services/Container"
@@ -52,7 +53,7 @@ sap.ui.define([
 					"config": {
 						"inbounds": {
 							"ManageFacilities-display": {
-								"semanticObject": "ManageFacilities",
+								"semanticObject": "Manage",
 								"action": "display",
 								"description": "Manage Facilities for admin",
 								"title": "Manage Facilities",
@@ -61,8 +62,10 @@ sap.ui.define([
 								},
 								"resolutionResult": {
 									"applicationType": "SAPUI5",
-									"additionalInformation": "SAPUI5.Component=com.coil.podium.MAFA",
-									"url": sap.ui.require.toUrl("com/coil/podium/MAFA")
+									// "additionalInformation": "SAPUI5.Component=com.coil.podium.MAFA",
+                                    // "url": sap.ui.require.toUrl("com/coil/podium/MAFA")
+                                    "additionalInformation": "SAPUI5.Component=com.coil.podway.MAFA",
+                                    "url": sap.ui.require.toUrl("com/coil/podway/MAFA")
 								}
 							}
 						}

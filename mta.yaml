@@ -15,6 +15,7 @@ modules:
       routes:
        - route: uat-podway-web-router.${default-domain}
     requires:
+      - name: portal_destination_podway
       - name: staging-podway-uaa
       - name: podway_html5_repo_runtime
       - name: portal_resources_podway
@@ -222,6 +223,11 @@ modules:
       - podway_ui_deployer
       
 resources:
+  - name: portal_destination_podway
+    parameters:
+      service-plan: lite
+      service: destination
+    type: org.cloudfoundry.managed-service
   - name: podway_html5_repo_runtime
     parameters:
       service-plan: app-runtime

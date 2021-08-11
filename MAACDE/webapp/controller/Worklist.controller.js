@@ -350,7 +350,7 @@ sap.ui.define([
 				//Pressed Edit
 				var oClone = $.extend(true, {}, oEvent.getSource().getBindingContext().getObject()),
 					oUrl = new URL(oClone.__metadata.media_src);
-				oClone.Icon = "/EXPO_PODIUM_API" + oUrl.pathname;
+				oClone.Icon = "/EXPO_PODWAY_API" + oUrl.pathname;
 				that.getModel("worklistView").setProperty("/oAddOption", oClone);
 				that.getModel("worklistView").setProperty("/sDialogMode", "E");
 				that._DeviceAccessibilityDialog();
@@ -445,7 +445,7 @@ sap.ui.define([
 				oViewModel = this.getModel("worklistView"),
 				that = this,
 				settings = {
-					url: "/EXPO_PODIUM_API" + oUrl.pathname,
+					url: "/EXPO_PODWAY_API" + oUrl.pathname,
 					data: imageData,
 					method: "PUT",
 					headers: this.getModel().getHeaders(),

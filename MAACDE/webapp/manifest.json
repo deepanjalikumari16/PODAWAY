@@ -31,7 +31,8 @@
 						"parameters": {},
 						"additionalParameters": "allowed"
 					},
-					"semanticObject": "Manage",
+                    "semanticObject": "Manage",
+                    
 					"action": "Place",
 					"title": "Places to Avoid"
 				},
@@ -40,7 +41,8 @@
 						"parameters": {},
 						"additionalParameters": "allowed"
 					},
-					"semanticObject": "Manage",
+                    "semanticObject": "Manage",
+                   
 					"action": "Condition",
 					"title": "Accessibility Conditions"
 				},
@@ -49,7 +51,8 @@
 						"parameters": {},
 						"additionalParameters": "allowed"
 					},
-					"semanticObject": "Manage",
+                    "semanticObject": "Manage",
+                   
 					"action": "Device",
 					"title": "Assistive Devices"
 				}

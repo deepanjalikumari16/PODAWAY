@@ -1003,7 +1003,7 @@ sap.ui.define([
 					 	fd.append("file", oImage.Image );*/
 
 				var settings = {
-					url: "/EXPO_PODIUM_API/api/v2/odata.svc" + sPath + "/$value",
+					url: "/EXPO_PODWAY_API/api/v2/odata.svc" + sPath + "/$value",
 					//	data : fd,
 					data: oImage.Image,
 					method: "PUT",

@@ -861,20 +861,20 @@ sap.ui.define([
 			var sPath = oEvent.getSource().getBindingContext().getPath(),
 				oButton = oEvent.getSource();
 			// create popover
-			if (!this._oPopover) {
+			if (!this._oPopover1) {
 				Fragment.load({
 					name: "Assignment_List.Assignment_List.view.MobileNumberDialog",
 					controller: this
-				}).then(function (pPopover) {
-					this._oPopover = pPopover;
-					this.getView().addDependent(this._oPopover);
-					this._oPopover.bindElement(sPath);
-					this._oPopover.openBy(oButton);
+				}).then(function (pPopover1) {
+					this._oPopover1 = pPopover1;
+					this.getView().addDependent(this._oPopover1);
+					this._oPopover1.bindElement(sPath);
+					this._oPopover1.openBy(oButton);
 
 				}.bind(this));
 			} else {
-				this._oPopover.openBy(oButton);
-				this._oPopover.bindElement(sPath);
+				this._oPopover1.openBy(oButton);
+				this._oPopover1.bindElement(sPath);
 			}
 		},
 

@@ -26,7 +26,71 @@
 				"i18n": "i18n/defaultGroupId.properties"
 			},
 			"payload": {
-				"viz": []
+				"viz": [{
+					"id": "com.coil.podway.MAACDE-0-1627014475932",
+					"appId": "com.coil.podway.MAACDE",
+					"vizId": "Manage-Place"
+				}, {
+					"id": "com.coil.podway.MAACDE-1-1627014475932",
+					"appId": "com.coil.podway.MAACDE",
+					"vizId": "Manage-Condition"
+				}, {
+					"id": "com.coil.podway.MAACDE-2-1627014475932",
+					"appId": "com.coil.podway.MAACDE",
+					"vizId": "Manage-Device"
+				}, {
+					"id": "com.coil.podway.MAFA-3-1627014475932",
+					"appId": "com.coil.podway.MAFA",
+					"vizId": "Manage-Facility"
+				}, {
+					"id": "com.coil.podway.Manage_FAQ-4-1627014475932",
+					"appId": "com.coil.podway.Manage_FAQ",
+					"vizId": "Manage-FAQ"
+				}, {
+					"id": "Assignment_List.Assignment_List-5-1627014475932",
+					"appId": "Assignment_List.Assignment_List",
+					"vizId": "Manage-Assignment"
+				}, {
+					"id": "com.coil.podway.MAAD-6-1627014475932",
+					"appId": "com.coil.podway.MAAD",
+					"vizId": "Manage-User"
+				}, {
+					"id": "com.coil.podway.Manage_Event_Info-7-1627014475932",
+					"appId": "com.coil.podway.Manage_Event_Info",
+					"vizId": "Manage-Info"
+				}, {
+					"id": "com.coil.podway.MAVET-8-1627014475932",
+					"appId": "com.coil.podway.MAVET",
+					"vizId": "Manage-Initiative"
+				}, {
+					"id": "com.coil.podway.MAVET-9-1627014475932",
+					"appId": "com.coil.podway.MAVET",
+					"vizId": "Manage-Attraction"
+				}, {
+					"id": "com.coil.podway.ManageVisitor-10-1627014475932",
+					"appId": "com.coil.podway.ManageVisitor",
+					"vizId": "Manage-Visitor"
+				}, {
+					"id": "com.coil.podway.Dashboard-11-1627014475932",
+					"appId": "com.coil.podway.Dashboard",
+					"vizId": "Dashboard-Display"
+				}, {
+					"id": "com.coil.podway.VisitorJourney-12-1627014475932",
+					"appId": "com.coil.podway.VisitorJourney",
+					"vizId": "Manage-Journey"
+				}, {
+					"id": "com.coil.podway.MDM_Data",
+					"appId": "com.coil.podway.MDM_Data",
+					"vizId": "Manage-MDM"
+				}, {
+					"id": "com.coil.podway.Groups-14-1627014475932",
+					"appId": "com.coil.podway.Groups",
+					"vizId": "Manage-Group"
+				}, {
+					"id": "com.coil.podway.Notifications-15-1627014475932",
+					"appId": "com.coil.podway.Notifications",
+					"vizId": "Manage-Notification"
+				}]
 			}
 		}],
 		"sites": [{
