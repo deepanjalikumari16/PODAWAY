@@ -721,19 +721,20 @@ sap.ui.define([
 			}
 
 			//Lat Lng optional for offers
-			if (data.EventAttractionTypeId !== 2) {
-				if (+data.Longitude == 0 || +data.Latitude == 0) {
-					oReturn.IsNotValid = true;
-					oReturn.sMsg.push("MSG_LAT_LNG");
-					aCtrlMessage.push({
-						message: "MSG_LAT_LNG",
-						target: "/oDetails/Longitude"
-					});
-					aCtrlMessage.push({
-						message: "MSG_LAT_LNG",
-						target: "/oDetails/Latitude"
-					});
-				} else if (+data.Latitude < -90 || +data.Latitude > 90) {
+			// if (data.EventAttractionTypeId !== 2) {
+			// 	if (+data.Longitude == 0 || +data.Latitude == 0) {
+			// 		oReturn.IsNotValid = true;
+			// 		oReturn.sMsg.push("MSG_LAT_LNG");
+			// 		aCtrlMessage.push({
+			// 			message: "MSG_LAT_LNG",
+			// 			target: "/oDetails/Longitude"
+			// 		});
+			// 		aCtrlMessage.push({
+			// 			message: "MSG_LAT_LNG",
+			// 			target: "/oDetails/Latitude"
+			// 		});
+            //     } else 
+                if (+data.Latitude < -90 || +data.Latitude > 90) {
 					oReturn.IsNotValid = true;
 					oReturn.sMsg.push("MSG_ERR_LAT");
 
@@ -751,7 +752,7 @@ sap.ui.define([
 					});
 
 				}
-			}
+			// }
 
 			if (data.EventAttractionTypeId === 2 && (+data.Latitude < -90 || +data.Latitude > 90)) {
 				oReturn.IsNotValid = true;

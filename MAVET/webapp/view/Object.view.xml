@@ -60,7 +60,7 @@
 									<core:Item key="{Id}" text="{Title}"/>
 								</MultiComboBox>
 							</VBox>
-							<VBox visible="{= +${objectView>EventAttractionTypeId} === 2 }" >
+							<VBox>
 								<Label text="{i18n>LblReferenceLink}"/>
 								<Input  value="{objectView>ReferenceLink}"  />
 							</VBox>
@@ -88,7 +88,7 @@
 						<uxap:ObjectPageSubSection>
 						<l:Grid width="100%" defaultSpan="XL6 L6 M6 S12">
 							<VBox>
-								<Label required="{= ${objectView>EventAttractionTypeId} !== 2 }" text="{i18n>LblCoordinates}" />
+								<Label text="{i18n>LblCoordinates}" />
 								<HBox>
 								<Input width="100%" description="{i18n>TxtLatitude}" value="{objectView>Latitude}" showValueHelp="true" valueHelpRequest="onMap"/>
 								<Input width="100%" description="{i18n>TxtLongitude}" value="{objectView>Longitude}" showValueHelp="true" valueHelpRequest="onMap"/>
