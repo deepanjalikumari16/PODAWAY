@@ -63,9 +63,9 @@
 								<Column>
 									<Text text="{i18n>colAssistance}"/>
 								</Column>
-								<Column width="7%">
+								<!-- <Column width="7%">
 									<Text text="{i18n>colNavigate}"/>
-								</Column>
+								</Column> -->
 							</columns>
 						</Table>
 					</uxap:ObjectPageSubSection>
@@ -96,9 +96,9 @@
 								<Column>
 									<Text text="{i18n>colAssistance}"/>
 								</Column>
-								<Column  width="7%">
+								<!-- <Column  width="7%">
 									<Text text="{i18n>colNavigate}"/>
-								</Column>
+								</Column> -->
 							</columns>
 						</Table>
 					</uxap:ObjectPageSubSection>
@@ -129,9 +129,9 @@
 								<Column>
 									<Text text="{i18n>colAssistance}"/>
 								</Column>
-								<Column  width="7%">
+								<!-- <Column  width="7%">
 									<Text text="{i18n>colNavigate}"/>
-								</Column>
+								</Column> -->
 							</columns>
 						</Table>
 					</uxap:ObjectPageSubSection>
@@ -162,9 +162,9 @@
 								<Column>
 									<Text text="{i18n>colAssistance}"/>
 								</Column>
-								<Column  width="7%">
+								<!-- <Column  width="7%">
 									<Text text="{i18n>colNavigate}"/>
-								</Column>
+								</Column> -->
 							</columns>
 						</Table>
 					</uxap:ObjectPageSubSection>

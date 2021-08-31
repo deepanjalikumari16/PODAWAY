@@ -329,7 +329,37 @@ sap.ui.define([
 			} else {
 				this.byId("openDialog").open();
 			}
-		},
+        },
+        
+        onReAssignNow: function (oEvent) {
+			var oView = this.getView();
+			var oObject = oEvent.getSource().getBindingContext().getObject();
+			this.getModel("worklistView").setProperty("/assigneeId", oObject.AssigneeId);
+            this.getModel("worklistView").setProperty("/preAssigneeId", oObject.AssigneeId);
+			var sPath = oEvent.getSource().getBindingContext().getPath();
+			var data = this.getModel().getData(sPath);
+			this.getModel("worklistView").setProperty("/assignmentId", data.Id);
+			// create dialog lazily
+			if (!this.byId("openReassignDialog")) {
+				// load asynchronous XML fragment
+				Fragment.load({
+					id: oView.getId(),
+					name: "Assignment_List.Assignment_List.view.ReassignDialog",
+					controller: this
+				}).then(function (oDialog) {
+					// connect dialog to the root view 
+					//of this component (models, lifecycle)
+					oView.addDependent(oDialog);
+					oDialog.bindElement({
+						path: sPath,
+						model: "worklistView"
+					});
+					oDialog.open();
+				});
+			} else {
+				this.byId("openReassignDialog").open();
+			}
+        },
 
 		onStartAssignment: function (oEvent) {
 			var that = this;
@@ -391,7 +421,11 @@ sap.ui.define([
 
 		closeDialog: function () {
 			this.byId("openDialog").close();
-		},
+        },
+        
+        closeReassignDialog: function () {
+			this.byId("openReassignDialog").close();
+        },
 
 		closeStartDialog: function () {
 			this.byId("openStartDialog").close();

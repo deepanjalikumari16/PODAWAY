@@ -1,0 +1,21 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:f="sap.ui.layout.form">
+	<Dialog id="openReassignDialog" title="{i18n>Reassign}">
+		<VBox class="sapUiSmallMargin">
+			<f:SimpleForm id="SimpleFormDisplay354Reassign" editable="true" layout="ResponsiveGridLayout" labelSpanXL="3" labelSpanL="3"
+				labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="4" emptySpanL="4" emptySpanM="4" emptySpanS="0" columnsXL="1"
+				columnsL="1" columnsM="1" singleContainerFullSize="false">
+				<f:content>
+					<Label text="{i18n>colTeamManager}"/>
+					<ComboBox selectedKey="{worklistView>/assigneeId}"
+						items="{ path: '/UserSet', filters : [ { path : 'IsArchived' , operator : 'EQ' , value1 : false }, { path : 'RoleId', operator : 'EQ', value1 : 2 } ] }">
+						<core:Item key="{Id}" text="{FirstName} {LastName}"/>
+					</ComboBox>
+				</f:content>
+			</f:SimpleForm>
+		</VBox>
+		<buttons>
+			<Button text="{i18n>AssignNow}" enabled="{= ${worklistView>/assigneeId} !== ${worklistView>/preAssigneeId}}" press=".assignNow"/>
+			<Button text="{i18n>cancel}" press=".closeReassignDialog"/>
+		</buttons>
+	</Dialog>
+</core:FragmentDefinition>

@@ -224,11 +224,11 @@ sap.ui.define([
 					text: "{Comments}"
 				}));
 
-				oColumnListTemplate.addCell(new sap.m.Button({
-					type: "Transparent",
-					icon: "sap-icon://locate-me",
-					press: this.onNavigate.bind(this)
-				}));
+				// oColumnListTemplate.addCell(new sap.m.Button({
+				// 	type: "Transparent",
+				// 	icon: "sap-icon://locate-me",
+				// 	press: this.onNavigate.bind(this)
+				// }));
 
 				return oColumnListTemplate;
 

@@ -87,7 +87,7 @@
 												press="onAssignNow"/>
 											<Button text="{i18n>btnReassign}"
 												visible="{= (${worklistView>/loggedUserRoleId} === 1 || ${worklistView>/loggedUserRoleId} === 2) &amp;&amp; ${AssigneeId} !== null}"
-												press="onAssignNow" class="sapUiSmallMarginEnd"/>
+												press="onReAssignNow" class="sapUiSmallMarginEnd"/>
 											<Button text="{i18n>btnStartAssignment}" visible="{= ${worklistView>/loggedUserRoleId} === 2}" press="onStartAssignment"/>
 										</VBox>
 										<Text text="{path: 'CreatedAt', type: 'sap.ui.model.odata.type.DateTime', formatOptions: { pattern: 'dd MMM yyyy, hh:mm a' } }"/>
