@@ -57,7 +57,7 @@
 								<Column width="10%">
 									<Text text="{i18n>colIncidentType}"/>
 								</Column>
-								<Column width="10%" visible="{= (${worklistView>/loggedUserRoleId} === 1) }">
+								<Column width="10%">
 									<Text text="{i18n>colAssignTeamManager}"/>
 								</Column>
 								<!--<Column width="19%">-->
@@ -81,9 +81,9 @@
 										<Button text="{= ${PODConditions}.length }" visible="{= ${PODConditions}.length !== 0}" press="onPodCategory"/>
 										<ObjectStatus text="{ServiceType/IncidentType/IncidentType}"
 											state="{= ${ServiceType/IncidentType/IncidentType} === 'Emergency' ? 'Error' : 'Success' }"/>
-										<Text text="{Assignee/FirstName} {Assignee/LastName}" visible="{= (${worklistView>/loggedUserRoleId} === 1) }"/>
+										<Text text="{Assignee/FirstName} {Assignee/LastName}"/>
 										<VBox>
-											<Button text="{i18n>btnAssignNow}" visible="{= ${worklistView>/loggedUserRoleId} === 1 &amp;&amp; ${AssigneeId} === null}"
+											<Button text="{i18n>btnAssignNow}" visible="{= (${worklistView>/loggedUserRoleId} === 1 || ${worklistView>/loggedUserRoleId} === 2) &amp;&amp; ${AssigneeId} === null}"
 												press="onAssignNow"/>
 											<Button text="{i18n>btnReassign}"
 												visible="{= (${worklistView>/loggedUserRoleId} === 1 || ${worklistView>/loggedUserRoleId} === 2) &amp;&amp; ${AssigneeId} !== null}"
@@ -133,7 +133,7 @@
 								<Column width="10%">
 									<Text text="{i18n>colIncidentType}"/>
 								</Column>
-								<Column width="10%" visible="{= (${worklistView>/loggedUserRoleId} === 1) }">
+								<Column width="10%">
 									<Text text="{i18n>colAssignTeamManager}"/>
 								</Column>
 								<Column width="15%">
@@ -154,7 +154,7 @@
 										<Button text="{= ${PODConditions}.length }" visible="{= ${PODConditions}.length !== 0}" press="onPodCategory"/>
 										<ObjectStatus text="{ServiceType/IncidentType/IncidentType}"
 											state="{= ${ServiceType/IncidentType/IncidentType} === 'Emergency' ? 'Error' : 'Success' }"/>
-										<Text text="{Assignee/FirstName} {Assignee/LastName}" visible="{= (${worklistView>/loggedUserRoleId} === 1) }"/>
+										<Text text="{Assignee/FirstName} {Assignee/LastName}"/>
 										<HBox>
 											<Button text="{i18n>btnMarkAsComplete}" press="onMarkasComplete"/>
 										</HBox>
@@ -201,7 +201,7 @@
 								<Column width="10%">
 									<Text text="{i18n>colIncidentType}"/>
 								</Column>
-								<Column width="10%" visible="{= (${worklistView>/loggedUserRoleId} === 1) }">
+								<Column width="10%">
 									<Text text="{i18n>colAssignTeamManager}"/>
 								</Column>
 								<Column width="10%">
@@ -222,7 +222,7 @@
 										<Button text="{= ${PODConditions}.length }" visible="{= ${PODConditions}.length !== 0}" press="onPodCategory"/>
 										<ObjectStatus text="{ServiceType/IncidentType/IncidentType}"
 											state="{= ${ServiceType/IncidentType/IncidentType} === 'Emergency' ? 'Error' : 'Success' }"/>
-										<Text text="{Assignee/FirstName} {Assignee/LastName}" visible="{= (${worklistView>/loggedUserRoleId} === 1) }"/>
+										<Text text="{Assignee/FirstName} {Assignee/LastName}"/>
 										<ObjectStatus text="{i18n>colCompleted}" state="Success"/>
 										<Text text="{path: 'CreatedAt', type: 'sap.ui.model.odata.type.DateTime', formatOptions: { pattern: 'dd MMM yyyy, hh:mm a' } }"/>
 										<HBox>
@@ -266,7 +266,7 @@
 								<Column width="10%">
 									<Text text="{i18n>colIncidentType}"/>
 								</Column>
-								<Column width="10%" visible="{= (${worklistView>/loggedUserRoleId} === 1) }">
+								<Column width="10%">
 									<Text text="{i18n>colAssignTeamManager}"/>
 								</Column>
 								<Column width="10%">
@@ -287,7 +287,7 @@
 										<Button text="{= ${PODConditions}.length }" visible="{= ${PODConditions}.length !== 0}" press="onPodCategory"/>
 										<ObjectStatus text="{ServiceType/IncidentType/IncidentType}"
 											state="{= ${ServiceType/IncidentType/IncidentType} === 'Emergency' ? 'Error' : 'Success' }"/>
-										<Text text="{Assignee/FirstName} {Assignee/LastName}" visible="{= (${worklistView>/loggedUserRoleId} === 1) }"/>
+										<Text text="{Assignee/FirstName} {Assignee/LastName}"/>
 										<ObjectStatus text="{i18n>colCancelled}" state="Error"/>
 										<Text text="{path: 'CreatedAt', type: 'sap.ui.model.odata.type.DateTime', formatOptions: { pattern: 'dd MMM yyyy, hh:mm a' } }"/>
 										<HBox>

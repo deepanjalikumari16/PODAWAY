@@ -400,12 +400,12 @@ sap.ui.define([
 		loadVolunteer: function () {
 			var oViewModel = this.getModel("worklistView");
 			var loggedUserId = oViewModel.getProperty("/loggedUserId");
-			var managerFilter = new Filter("ManagerId", FilterOperator.EQ, loggedUserId);
+			// var managerFilter = new Filter("ManagerId", FilterOperator.EQ, loggedUserId);
 			var oCombo = this.getView().byId("dropdown");
 			var afilter1 = [new Filter("RoleId", FilterOperator.EQ, 4),
 				new Filter("IsArchived", FilterOperator.EQ, false),
-				new Filter("IsAvailable", FilterOperator.EQ, true),
-				managerFilter
+				new Filter("IsAvailable", FilterOperator.EQ, true)
+				// managerFilter
 			];
 			var oItemTemplate = new sap.ui.core.ListItem({
 				text: "{FirstName} {LastName}",
